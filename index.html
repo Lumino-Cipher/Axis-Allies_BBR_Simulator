@@ -16,8 +16,8 @@
 
         .svg-wrapper {
             display: block; 
-            width: 100%;
             position: relative; 
+            box-sizing: content-box;
         }
 
         /* Style for the SVG element itself */
@@ -133,7 +133,7 @@
         }
 
         .svg-wrapper::-webkit-scrollbar-thumb {
-            background: linear-gradient(45deg, #007bff, #66ccff); /* Your blue gradient */
+            background: linear-gradient(45deg, #007bff, #66ccff); /* blue gradient */
             border-radius: 12px;
             border: 3px solid #282c34; /* Border matching body background */
             box-shadow: 0 0 10px rgba(0, 123, 255, 0.7), inset 0 0 6px rgba(0,0,0,0.3);
@@ -156,6 +156,28 @@
             fill-opacity: 1.0 !important; /* Ensure it's fully visible */
         }
 
+        /* Highlight style for adjacent territories on unit click */
+        .adjacent-highlight {
+            fill: #00FFFF !important; /* A vibrant cyan color */
+            fill-opacity: 0.4 !important; /* Semi-transparent so original color is visible */
+            stroke: #000000 !important; /* A matching solid stroke */
+            stroke-width: 1px !important; /* A thick, noticeable border */
+        }
+
+        /* Style for the selected unit marker */
+        .selection-marker-outline {
+            fill: none;
+            stroke: #FFA500; /* Bright Orange */
+            stroke-width: 2;
+            stroke-dasharray: 4 2; /* Dashed line effect */
+            rx: 4; /* Rounded corners */
+        }
+
+        .selection-marker-triangle {
+            fill: #FFA500; /* Bright Orange */
+            stroke: none;
+        }
+
         /* Updated styles for IPC display bar */
         .ipc-display-bar {
             position: sticky;
@@ -172,7 +194,7 @@
             box-sizing: border-box;
         }
         .ipc-square {
-            box-sizing: border-box; /* <-- ADD THIS LINE */
+            box-sizing: border-box;
             flex-shrink: 0;
             margin: 0;
             border: 1px solid #555;
@@ -613,29 +635,31 @@
 
         .side-tabs-container {
             position: fixed;
-            top: 50%;
-            right: 0;
-            transform: translateY(-50%);
+            bottom: 110px;
+            right: 20px;
+            top: unset;
+            transform: none;
             z-index: 1005;
             display: flex;
-            flex-direction: column; /* This keeps the tabs stacked vertically */
+            flex-direction: column;
             gap: 2px;
         }
 
         .side-tab {
-            background-color: #6D5C4C; /* Dark, woody brown */
-            color: #E0D8B0; /* Creamy off-white text */
-            padding: 5px;
+            background-color: #6D5C4C;
+            color: #E0D8B0;
+            padding: 5px 8px;
             cursor: pointer;
             border: 2px solid rgba(224, 216, 176, 0.2);
             border-right: none;
-            border-radius: 10px 0 0 10px;
-            box-shadow: -2px 2px 5px rgba(0,0,0,0.3);
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
             transition: background-color 0.2s ease;
             font-weight: bold;
-            font-family: 'Times New Roman', serif; /* Vintage font */
-            white-space: nowrap; /* Ensures text stays on one line */
-            height: 10px;
+            font-family: 'Times New Roman', serif;
+            white-space: nowrap;
+            height: auto;
+            font-size: 12px;
         }
 
         .side-tab:hover {
@@ -662,8 +686,8 @@
             overflow: hidden; /* Ensure content is clipped if overflow */
             color: #E0D8B0;
             font-family: 'Georgia', serif;
-            background-color: rgba(45, 35, 25, 0.97); /* Keep your base background color */
-            background-image: url('https://www.transparenttextures.com/patterns/paper.png'); /* Or use a local path to your texture */
+            background-color: rgba(45, 35, 25, 0.97); /* Keep base background color */
+            background-image: url('https://www.transparenttextures.com/patterns/paper.png');
             background-blend-mode: overlay; /* Adjust blend mode for desired effect (e.g., multiply, screen, overlay) */
         }
 
@@ -740,6 +764,97 @@
         .panel-content ul {
             padding-left: 20px;
         }
+
+
+        /* ==================================================== */
+        /* ==   NEW STYLES FOR UNIT MOVEMENT AND SELECTION   == */
+        /* ==================================================== */
+
+        /* Enhanced Selection Marker */
+        .selection-marker-glow {
+            filter: drop-shadow(0 0 5px #00FFFF) drop-shadow(0 0 10px #00FFFF);
+        }
+
+        .selection-marker-outline {
+            fill: none;
+            stroke: #00FFFF; /* Bright Cyan */
+            stroke-width: 2.5;
+            stroke-dasharray: 5 3;
+            rx: 5;
+        }
+
+        .selection-marker-triangle {
+            fill: #00FFFF; /* Bright Cyan */
+            stroke: none;
+        }
+
+        /* Movement Arrow Styles */
+        .movement-arrow-group {
+            cursor: pointer;
+            transition: opacity 0.2s ease-in-out;
+        }
+        .movement-arrow-group:hover {
+            opacity: 0.7;
+        }
+        .movement-arrow-shadow {
+            fill: none;
+            stroke: black;
+            stroke-width: 8px;
+            stroke-linecap: round;
+            opacity: 0.5;
+            filter: blur(4px);
+        }
+        .movement-arrow-path {
+            fill: none;
+            stroke: #FFFF00; /* Bright Yellow */
+            stroke-width: 3px;
+            stroke-linecap: round;
+        }
+
+        /* Arrow Unit Count Styles */
+        .arrow-count-circle {
+            fill: #6D5C4C; /* Vintage Brown */
+            stroke: #E0D8B0; /* Creamy White */
+            stroke-width: 2px;
+        }
+        .arrow-count-text {
+            font-family: 'Times New Roman', serif;
+            font-size: 16px;
+            font-weight: bold;
+            fill: #E0D8B0; /* Creamy White */
+            text-anchor: middle;
+            dominant-baseline: middle;
+            pointer-events: none;
+        }
+
+        /* Unit Splitter Popup Styles */
+        .unit-splitter-popup {
+            display: none; /* Hidden by default */
+            position: absolute;
+            background-color: #6D5C4C;
+            color: #E0D8B0;
+            border: 2px solid #E0D8B0;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            z-index: 2000;
+            font-family: 'Times New Roman', serif;
+        }
+        .unit-splitter-popup label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        .unit-splitter-popup input[type="range"] {
+            width: 100%;
+        }
+        .unit-splitter-popup button {
+            background-color: #8C7B6A;
+            color: #E0D8B0;
+            border: 1px solid #E0D8B0;
+            padding: 5px 10px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -795,32 +910,32 @@
             <!-- Japan -->
             <div class="rd-power-card">
                 <div class="rd-flag-circle" style="background-image: url('flags/Japan.png');"></div>
-                <div class="rd-stage-text">P2</div>
+                <div class="rd-stage-text">P1</div>
             </div>
             <!-- Italy -->
             <div class="rd-power-card">
                 <div class="rd-flag-circle" style="background-image: url('flags/Italy.png');"></div>
-                <div class="rd-stage-text">P3</div>
+                <div class="rd-stage-text"></div>
             </div>
             <!-- USSR -->
             <div class="rd-power-card">
                 <div class="rd-flag-circle rd-flag-ussr" style="background-image: url('flags/USSR.png');"></div>
-                <div class="rd-stage-text">H</div>
+                <div class="rd-stage-text">P1</div>
             </div>
             <!-- US -->
             <div class="rd-power-card">
                 <div class="rd-flag-circle" style="background-image: url('flags/US.png');"></div>
-                <div class="rd-stage-text">A</div>
+                <div class="rd-stage-text">P1</div>
             </div>
             <!-- UK -->
             <div class="rd-power-card">
                 <div class="rd-flag-circle" style="background-image: url('flags/UK.png');"></div>
                 <div class="rd-stage-text">P1</div>
             </div>
-            <!-- France -->
+            <!-- Commonwealth -->
             <div class="rd-power-card">
-                <div class="rd-flag-circle" style="background-image: url('flags/France.png');"></div>
-                <div class="rd-stage-text">P1</div>
+                <div class="rd-flag-circle" style="background-image: url('flags/Commonwealth.png');"></div>
+                <div class="rd-stage-text"></div>
             </div>
         </div>
         <div class="ipc-display-bar" id="ipcDisplayBar"></div>
@@ -907,7 +1022,17 @@
             </div>
         </div>
     </div>
+    <div id="unitSplitter" class="unit-splitter-popup">
+        <label for="unitCountSlider">Select number of units to move:</label>
+        <input type="range" id="unitCountSlider" min="1" max="10" step="1">
+        <span id="sliderValue">10</span>
+        <br>
+        <button id="confirmSplitBtn">Confirm</button>
+        <button id="cancelSplitBtn">Cancel</button>
+    </div>
     <script>
+        const mapContainer = document.getElementById('map-container'); // <-- ADD THIS LINE
+
         const svgWrapper = document.getElementById('svgWrapper');
         let currentSvgElement = null; // Reference to the injected <svg> element
         let zoomLevel = 1.0;
@@ -920,7 +1045,7 @@
         // Editable text settings storage { "territoryName": { "x": 123, "y": 456, "fontSize": 14, "ipcsX": 100, "ipcsY": 400, "ipcsFontSize": 16, "words": [] } }
         const textSettings = {}; // This will now be populated from labels.json
 
-        // Define your dark mode color palette for each data-power value
+        // Dark mode color palette for each data-power value
         const powerColors = {
             'US': '#4CAF50', // A muted green
             'UK': '#2199F3', // A soft blue
@@ -940,6 +1065,10 @@
         const LAND_UNIT_SIZE = 30; // SVG units for land unit image width/height
         const NEUTRAL_LAND_UNIT_SIZE = 45; // Larger size for neutral units
 
+        const FACILITY_UNIT_TYPES = ["Major Industrial Complex", "Minor Industrial Complex", "Air Base", "Naval Base"];
+        const AXIS_POWERS = new Set(['Germany', 'Italy', 'Japan']);
+        const ALLIED_POWERS = new Set(['France', 'UK', 'US', 'USSR', 'China', 'Commonwealth']);
+
         // New mapping for specific sea unit sizes based on logical scale
         const SEA_UNIT_TYPE_SIZES = {
             'TPT': 45, // Transport baseline
@@ -950,7 +1079,6 @@
             'BTS': 75  // Battleship: largest
         };
 
-        // Add these with your other global variables
         let setupData = null; // To store the loaded setup.json data
         const airUnitTypes = ['FTR', 'TBR', 'SBR']; // Fighter, Tactical Bomber, Strategic Bomber
 
@@ -971,25 +1099,47 @@
         const INTER_UNIT_SPACING = 1; // Reduced spacing between unit groups/labels
 
         const UNIT_IMAGE_MAP = {
-            'INF': 'units/infantry.png',
-            'ART': 'units/artillery.png',
-            'MECH': 'units/mechanized-infantry.png',
-            'CAV': 'units/cavalry.png',
-            'AAA': 'units/anti-aircraft.png',
-            'TANK': 'units/tank.png',
-            'FTR': 'units/fighter.png',
-            'TBR': 'units/tactical-bomber.png',
-            'SBR': 'units/strategic-bomber.png',
-            'BTS': 'units/battleship.png',
-            'ACC': 'units/aircraft-carrier.png',
-            'CSR': 'units/cruiser.png',
-            'DTR': 'units/destroyer.png',
-            'TPT': 'units/transport.png',
-            'SUB': 'units/submarine.png',
-            "Air Base": 'units/air-base.png',
-            "Naval Base": 'units/naval-base.png',
-            "Major Industrial Complex": 'units/major-industrial-complex.png',
-            "Minor Industrial Complex": 'units/minor-industrial-complex.png',
+            'INF': 'Units/infantry.png',
+            'ART': 'Units/artillery.png',
+            'MECH': 'Units/mechanized-infantry.png',
+            'CAV': 'Units/cavalry.png',
+            'AAA': 'Units/anti-aircraft.png',
+            'TANK': 'Units/tank.png',
+            'FTR': 'Units/fighter.png',
+            'TBR': 'Units/tactical-bomber.png',
+            'SBR': 'Units/strategic-bomber.png',
+            'BTS': 'Units/battleship.png',
+            'ACC': 'Units/aircraft-carrier.png',
+            'CSR': 'Units/cruiser.png',
+            'DTR': 'Units/destroyer.png',
+            'TPT': 'Units/transport.png',
+            'SUB': 'Units/submarine.png',
+            "Air Base": 'Units/air-base.png',
+            "Naval Base": 'Units/naval-base.png',
+            "Major Industrial Complex": 'Units/major-industrial-complex.png',
+            "Minor Industrial Complex": 'Units/minor-industrial-complex.png',
+        };
+
+        const UNIT_ABBREVIATION_TO_PROFILE_NAME = {
+            'INF': 'Infantry',
+            'ART': 'Artillery',
+            'MECH': 'Mechanized Infantry',
+            'CAV': 'Cavalry',
+            'AAA': 'Anti-aircraft Artillery',
+            'TANK': 'Tank',
+            'FTR': 'Fighter',
+            'TBR': 'Tactical Bomber',
+            'SBR': 'Strategic Bomber',
+            'BTS': 'Battleship',
+            'ACC': 'Aircraft Carrier',
+            'CSR': 'Cruiser',
+            'DTR': 'Destroyer',
+            'TPT': 'Transport',
+            'SUB': 'Submarine',
+            "Air Base": "Air Base",
+            "Naval Base": "Naval Base",
+            "Major Industrial Complex": "Major Industrial Complex",
+            "Minor Industrial Complex": "Minor Industrial Complex"
         };
 
         const SEA_UNIT_TYPES = ['BTS', 'ACC', 'CSR', 'DTR', 'TPT', 'SUB'];
@@ -1019,6 +1169,28 @@
             'Mobilize New Units',
             'Collect Income'
         ];
+
+        const technologyResearchStatus = {
+            // Major powers start the game with a free technology in Phase 1 (P1).[1]
+            Germany: { researchPhase: 'P1' },
+            Japan: { researchPhase: 'P1' },
+            USSR: { researchPhase: 'P1' },
+            US: { researchPhase: 'P1' },
+            UK: { researchPhase: 'P1' },
+
+            // Italy is a minor power and starts the game with no active research.[1]
+            // Its state is 'Inactive' to indicate it is eligible to start research later.
+            Italy: { researchPhase: 'Inactive' },
+            Commonwealth: { researchPhase: 'Inative'},
+
+            // France and China are explicitly forbidden from participating in R&D.[1]
+            // Status is set to 'Not Participating' to reflect this permanent rule.
+            France: { researchPhase: 'Not Participating' },
+            China: { researchPhase: 'Not Participating' }
+
+        };
+
+        let totalIpcsByPower = {};
 
         // --- Get elements for the sticky bar ---
         const roundInfoEl = document.getElementById('roundInfo');
@@ -1443,11 +1615,11 @@
             const infrastructureItems = infrastructureData.filter(item => item.type === 'railway' || item.type === 'road');
 
             // Find the first element that likely represents a territory label or IPC number.
-            // This assumes your labels/IPCs are rendered as <text> elements or are within a group
+            // This assumes labels/IPCs are rendered as <text> elements or are within a group
             // that contains a <text> element early in the SVG's rendering order.
             const firstLabelOrIpcElement = currentSvgElement.querySelector('text');
 
-            // Iterate through your infrastructure data and draw each railway and road
+            // Iterate through infrastructure data and draw each railway and road
             infrastructureData.forEach(item => {
                 if (item.type === 'railway') {
                     const railwayGroup = createRailroadTrack(item.coordinates);
@@ -1458,11 +1630,9 @@
                         currentSvgElement.appendChild(railwayGroup); // Fallback: put on top if no text found
                     }
                 } else if (item.type === 'road') {
-                    // Assuming createRoadPath function exists based on previous context.
-                    // Replace with your actual road drawing logic if different.
                     const roadOutline = document.createElementNS("http://www.w3.org/2000/svg", "path");
                     roadOutline.setAttribute('d', `M${item.coordinates.map(p => `${p.x},${p.y}`).join('L')}`);
-                    roadOutline.setAttribute('stroke', 'black'); // You can adjust this color as desired
+                    roadOutline.setAttribute('stroke', 'black');
                     roadOutline.setAttribute('stroke-width', '6'); // Increased from 5 for prominence
                     roadOutline.setAttribute('fill', 'none');
 
@@ -1741,7 +1911,7 @@
          * @returns {number} The estimated width.
          */
         function estimateTextWidth(text, fontSize) {
-            return text.length * (fontSize * 0.6); // Adjust 0.6 as needed for your font
+            return text.length * (fontSize * 0.6);
         }
 
         /**
@@ -2322,7 +2492,7 @@
                 // Give infrastructure JSON highest priority
                 if (SPECIAL_INFRASTRUCTURE_UNITS.includes(unitStack.unitType)) { // Check if it's an infrastructure unit first
                     
-                    // ADD THIS LOG
+
                     console.log(`Processing infrastructure unit: ${unitStack.unitType} in ${territory}.`);
 
                     if (infrastructureCoordinates && infrastructureCoordinates[territory] && Array.isArray(infrastructureCoordinates[territory])) {
@@ -2334,16 +2504,16 @@
                             unitStack.x = infraUnitCoords.x;
                             unitStack.y = infraUnitCoords.y;
                             
-                            // ADD THIS LOG
+
                             console.log(`SUCCESS: Found and applied coordinates for ${unitStack.unitType} in ${territory}:`, {x: unitStack.x, y: unitStack.y});
 
                             return; // ✅ Do not allow override by general coordinates
                         } else {
-                            // ADD THIS LOG
+                            
                             console.warn(`WARN: No specific coordinate entry for unit type "${unitStack.unitType}" found in territory "${territory}" inside infrastructure-coordinates.json. It will be auto-placed.`);
                         }
                     } else {
-                        // ADD THIS LOG
+                        
                         console.warn(`WARN: No coordinates found for territory "${territory}" in the infrastructureCoordinates object. ${unitStack.unitType} will be auto-placed.`);
                     }
                 }
@@ -2493,8 +2663,9 @@
                     unitGroupElement.setAttribute('transform', `translate(${foundPlacement.x}, ${foundPlacement.y})`);
                     unitLayerGroup.appendChild(unitGroupElement);
 
-                    // Find the unit's profile to get its movement capacity
-                    const unitProfile = unitProfileData.find(p => p.unit_type === unitType);
+                    // Find the unit's profile using the new mapping to get its movement capacity
+                    const profileName = UNIT_ABBREVIATION_TO_PROFILE_NAME[unitType] || unitType;
+                    const unitProfile = unitProfileData.find(p => p.unit_type.toLowerCase() === profileName.toLowerCase());
                     const movementCapacity = unitProfile ? unitProfile.movement_capacity : 0;
 
                     // Generate a unique ID for the unit group
@@ -2696,7 +2867,7 @@
                         }
                     }
 
-                    // You can log to the console to verify the result
+                    // Log to the console to verify the result
                     console.log("Processed Territories by Country (1940 setup):", territoriesByCountry);
 
                 } else {
@@ -2988,13 +3159,13 @@
         function applyZoom() {
             if (!currentSvgElement || !originalViewBox) return;
 
-            const wrapperWidth = svgWrapper.clientWidth;
-            const wrapperHeight = svgWrapper.clientHeight;
+            const viewportWidth = mapContainer.clientWidth;
+            const viewportHeight = mapContainer.clientHeight;
 
             // Calculate the current center in SVG coordinates before zoom
             const svgPoint = currentSvgElement.createSVGPoint();
-            svgPoint.x = svgWrapper.scrollLeft + wrapperWidth / 2;
-            svgPoint.y = svgWrapper.scrollTop + wrapperHeight / 2;
+            svgPoint.x = mapContainer.scrollLeft + viewportWidth / 2;
+            svgPoint.y = mapContainer.scrollTop + viewportHeight / 2;
 
             // Transform client coordinates to SVG user coordinates
             const CTM = currentSvgElement.getScreenCTM();
@@ -3024,16 +3195,16 @@
                     return;
                 }
 
-                // Transform the previous SVG center point to new screen coordinates
                 const centerAfterZoomScreen = centerBeforeZoomSvg.matrixTransform(newCTM);
+                const newScrollX = centerAfterZoomScreen.x - mapContainer.clientWidth / 2;
+                const newScrollY = centerAfterZoomScreen.y - mapContainer.clientHeight / 2;
 
-                // Calculate new scroll position to keep that screen point centered
-                const newScrollX = centerAfterZoomScreen.x - wrapperWidth / 2;
-                const newScrollY = centerAfterZoomScreen.y - wrapperHeight / 2;
+                // CORRECTED: Apply scroll to mapContainer and clamp with correct values
+                const maxScrollX = mapContainer.scrollWidth - mapContainer.clientWidth;
+                const maxScrollY = mapContainer.scrollHeight - mapContainer.clientHeight;
 
-                // Apply scroll position, clamping to valid ranges
-                svgWrapper.scrollLeft = Math.max(0, Math.min(newScrollX, currentSvgElement.scrollWidth - wrapperWidth));
-                svgWrapper.scrollTop = Math.max(0, Math.min(newScrollY, currentSvgElement.scrollHeight - wrapperHeight));
+                mapContainer.scrollLeft = Math.max(0, Math.min(newScrollX, maxScrollX));
+                mapContainer.scrollTop = Math.max(0, Math.min(newScrollY, maxScrollY));
             });
         }
 
@@ -3061,6 +3232,28 @@
 
         // --- Drag and Drop Functions ---
 
+        let isDragging = false;
+        let mouseMovedDuringDrag = false;
+        let currentDraggedUnit = null;
+        let dragOffsetX, dragOffsetY;
+        let startDragX, startDragY;
+        let initialPlacedInTerritory = null;
+        let isSpecialUnitDragging = false;
+        let selectedUnit = null;
+        let highlightedTerritories = [];
+
+        // Global array to store movement arrow data
+        // Each item: { element, startUnit, endTerritoryName, count }
+        let movementArrows = [];
+
+        // References to the unit splitter popup
+        const unitSplitterPopup = document.getElementById('unitSplitter');
+        const unitCountSlider = document.getElementById('unitCountSlider');
+        const sliderValueDisplay = document.getElementById('sliderValue');
+        const confirmSplitBtn = document.getElementById('confirmSplitBtn');
+        const cancelSplitBtn = document.getElementById('cancelSplitBtn');
+
+
         /**
          * Converts screen coordinates to SVG coordinates.
          * @param {number} clientX - The clientX from a mouse/touch event.
@@ -3077,10 +3270,171 @@
 
 
         /**
+         * Highlights all territories a unit can reach based on its movement points, type, and alliance.
+         * Uses a breadth-first search algorithm and applies tiered coloring for distance.
+         * This version stores original territory colors before applying highlights to ensure proper restoration.
+         * @param {string} startTerritory - The name of the territory where the unit starts.
+         * @param {number} movementPoints - The maximum movement distance.
+         * @param {string} unitPower - The power controlling the unit.
+         * @param {string} unitType - The type of the unit.
+         */
+        function highlightReachableTerritories(startTerritory, movementPoints, unitPower, unitType) {
+            // Define the colors for each movement tier.
+            const TIER_COLORS = ['#00FFFF', '#33CCFF', '#6699FF', '#9966FF', '#CC33FF', '#FF00FF']; // Cyan -> Sky Blue -> Blue -> Purple -> Pink -> Magenta
+            const unitAlliance = AXIS_POWERS.has(unitPower) ? AXIS_POWERS : ALLIED_POWERS;
+            const isAirUnit = airUnitTypes.includes(unitType);
+            const isSeaUnit = SEA_UNIT_TYPES.includes(unitType);
+            const isLandUnit = !isAirUnit && !isSeaUnit;
+
+            // Setup for the Breadth-First Search (BFS)
+            const queue = [{ territoryName: startTerritory, distance: 0 }];
+            const visited = new Map(); // Stores { territoryName: distance } to track shortest paths
+            visited.set(startTerritory, 0);
+
+            // --- Main Pathfinding Loop ---
+            while (queue.length > 0) {
+                const { territoryName, distance } = queue.shift();
+
+                // Stop exploring this path if we are at the movement limit
+                if (distance >= movementPoints) {
+                    continue;
+                }
+
+                const adjacencies = territoryAdjacencies[territoryName]?.adjacent_to || [];
+
+                for (const adjName of adjacencies) {
+                    const pathElements = currentSvgElement.querySelectorAll(`[data-name="${adjName}"]`);
+                    if (pathElements.length === 0) continue;
+                    const pathElement = pathElements[0]; // Use the first path for data checks
+
+                    // --- RULE 1: Universal Conditions ---
+                    if (pathElement.getAttribute('data-power') === 'Impassable') continue;
+                    if (visited.has(adjName) && visited.get(adjName) <= distance + 1) continue;
+
+                    // --- RULE 2: Unit-Specific Traversal ---
+                    let canTraverse = false;
+                    const isAdjSeaZone = !isNaN(Number(adjName));
+
+                    if (isAirUnit) {
+                        canTraverse = true; // Air units can traverse both land and sea
+                    } else if (isSeaUnit) {
+                        if (isAdjSeaZone) canTraverse = true; // Sea units only traverse sea zones
+                    } else if (isLandUnit) {
+                        if (!isAdjSeaZone) {
+                            canTraverse = true; // Land units traverse land
+                        } else {
+                            // Land units can enter a sea zone if an allied transport is present
+                            const hasAlliedTransport = placedUnitsData.some(unit =>
+                                unit.placedIn === adjName && unit.unitType === 'TPT' && unitAlliance.has(unit.power)
+                            );
+                            if (hasAlliedTransport) canTraverse = true;
+                        }
+                    }
+
+                    if (!canTraverse) continue;
+
+                    // If we can traverse, mark this territory as visited
+                    visited.set(adjName, distance + 1);
+
+                    // --- RULE 3: Stop Pathfinding at Hostile Borders ---
+                    const adjPower = pathElement.getAttribute('data-power');
+                    const adjAlliance = AXIS_POWERS.has(adjPower) ? AXIS_POWERS : (ALLIED_POWERS.has(adjPower) ? ALLIED_POWERS : null);
+                    const isFriendlyTerritory = adjAlliance === unitAlliance;
+                    
+                    // Only continue exploring from this new territory if it's friendly.
+                    // Sea zones are always considered "friendly" for traversal purposes.
+                    if (isFriendlyTerritory || isAdjSeaZone) {
+                        queue.push({ territoryName: adjName, distance: distance + 1 });
+                    }
+                }
+            }
+
+            // --- Apply Coloring ---
+            for (const [territoryName, distance] of visited.entries()) {
+                if (distance > 0) { // Don't highlight the start territory (distance 0)
+                    const colorIndex = Math.min(distance - 1, TIER_COLORS.length - 1);
+                    const fillColor = TIER_COLORS[colorIndex];
+                    
+                    const pathsToHighlight = currentSvgElement.querySelectorAll(`[data-name="${territoryName}"]`);
+                    pathsToHighlight.forEach(path => {
+                        // **FIX:** Store original styles before changing them
+                        highlightedTerritories.push({
+                            element: path,
+                            originalFill: path.style.fill,
+                            originalOpacity: path.style.fillOpacity,
+                            originalStroke: path.style.stroke,
+                            originalStrokeWidth: path.style.strokeWidth
+                        });
+
+                        // Apply new highlight styles
+                        path.style.fill = fillColor;
+                        path.style.fillOpacity = '0.4';
+                        path.style.stroke = '#000000'; // Same outline for all tiers
+                        path.style.strokeWidth = '1px';
+                    });
+                }
+            }
+        }
+
+        /**
+         * Handles clicking a unit to select/deselect, trigger multi-tiered highlighting, and apply a selection marker.
+         * @param {SVGElement} clickedUnit - The unit <g> element that was clicked.
+         */
+        function handleUnitClick(clickedUnit) {
+            // **FIX:** Restore original styles on previously highlighted territories
+            highlightedTerritories.forEach(highlight => {
+                const el = highlight.element;
+                el.style.fill = highlight.originalFill;
+                el.style.fillOpacity = highlight.originalOpacity;
+                el.style.stroke = highlight.originalStroke;
+                el.style.strokeWidth = highlight.originalStrokeWidth;
+            });
+            highlightedTerritories = [];
+
+            // Remove marker from the previously selected unit
+            if (selectedUnit) {
+                toggleUnitSelectionMarker(selectedUnit, false);
+            }
+
+            // If the clicked unit was already the selected one, deselect it and we're done.
+            if (selectedUnit === clickedUnit) {
+                selectedUnit = null;
+                return;
+            }
+
+            // This is a new selection.
+            selectedUnit = clickedUnit;
+            const unitType = selectedUnit.getAttribute('data-unit-type');
+
+            // Add the selection marker to the newly selected unit
+            toggleUnitSelectionMarker(selectedUnit, true);
+
+            // Condition: Ignore path highlighting if the clicked unit is a facility.
+            if (FACILITY_UNIT_TYPES.includes(unitType)) {
+                return;
+            }
+
+            // Get all necessary info from the unit's data attributes
+            const unitPower = selectedUnit.getAttribute('data-power');
+            const territoryName = selectedUnit.getAttribute('data-placed-in');
+            const movementRemaining = parseInt(selectedUnit.getAttribute('data-movement-remaining'), 10);
+
+            // If unit has no movement left or is invalid, don't highlight anything.
+            if (!movementRemaining || movementRemaining <= 0) {
+                return;
+            }
+
+            // Call the powerful highlighting function with all the unit's details.
+            highlightReachableTerritories(territoryName, movementRemaining, unitPower, unitType);
+        }
+
+
+        /**
          * Starts the drag operation for a unit.
          * @param {Event} event - The mouse or touch event.
          */
         function startDrag(event) {
+            mouseMovedDuringDrag = false;
             console.log("%c--- Unit Clicked ---", "color: yellow; font-weight: bold; background-color: black; padding: 2px 5px;");
             const clickedUnit = event.currentTarget;
             const unitData = {
@@ -3099,6 +3453,7 @@
 
             isDragging = true;
             currentDraggedUnit = event.currentTarget; // The 'g' element
+
 
             // --- MOVEMENT BONUS LOGIC ---
             // This bonus is applied only once at the start of a unit's first move.
@@ -3206,11 +3561,74 @@
         }
 
         /**
+         * Adds or removes a selection marker (outline and triangles) from a unit group.
+         * THIS FUNCTION HAS BEEN UPDATED FOR A MORE VISUALLY ATTRACTIVE STYLE.
+         * @param {SVGElement} unitGroup - The unit <g> element to mark.
+         * @param {boolean} show - True to show the marker, false to remove it.
+         */
+        function toggleUnitSelectionMarker(unitGroup, show) {
+            if (!unitGroup) return;
+
+            const existingMarker = unitGroup.querySelector('.selection-marker');
+            if (existingMarker) {
+                existingMarker.remove();
+            }
+
+            if (!show) return;
+
+            const image = unitGroup.querySelector('.unit-token');
+            if (!image) return;
+
+            const imgX = parseFloat(image.getAttribute('x'));
+            const imgY = parseFloat(image.getAttribute('y'));
+            const imgWidth = parseFloat(image.getAttribute('width'));
+            const imgHeight = parseFloat(image.getAttribute('height'));
+
+            const PADDING = 5;
+            const TRIANGLE_SIZE = 7;
+
+            const markerGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            markerGroup.classList.add('selection-marker', 'selection-marker-glow'); // Added glow class
+
+            const outlineRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            outlineRect.setAttribute('x', imgX - PADDING);
+            outlineRect.setAttribute('y', imgY - PADDING);
+            outlineRect.setAttribute('width', imgWidth + 2 * PADDING);
+            outlineRect.setAttribute('height', imgHeight + 2 * PADDING);
+            outlineRect.classList.add('selection-marker-outline');
+            markerGroup.appendChild(outlineRect);
+
+            const cx = imgX + imgWidth / 2;
+            const cy = imgY + imgHeight / 2;
+
+            const topTriangle = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+            topTriangle.setAttribute('points', `${cx},${imgY - PADDING - TRIANGLE_SIZE} ${cx - TRIANGLE_SIZE / 1.5},${imgY - PADDING} ${cx + TRIANGLE_SIZE / 1.5},${imgY - PADDING}`);
+            
+            const bottomTriangle = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+            bottomTriangle.setAttribute('points', `${cx},${imgY + imgHeight + PADDING + TRIANGLE_SIZE} ${cx - TRIANGLE_SIZE / 1.5},${imgY + imgHeight + PADDING} ${cx + TRIANGLE_SIZE / 1.5},${imgY + imgHeight + PADDING}`);
+
+            const leftTriangle = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+            leftTriangle.setAttribute('points', `${imgX - PADDING - TRIANGLE_SIZE},${cy} ${imgX - PADDING},${cy - TRIANGLE_SIZE / 1.5} ${imgX - PADDING},${cy + TRIANGLE_SIZE / 1.5}`);
+
+            const rightTriangle = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+            rightTriangle.setAttribute('points', `${imgX + imgWidth + PADDING + TRIANGLE_SIZE},${cy} ${imgX + imgWidth + PADDING},${cy - TRIANGLE_SIZE / 1.5} ${imgX + imgWidth + PADDING},${cy + TRIANGLE_SIZE / 1.5}`);
+
+            [topTriangle, bottomTriangle, leftTriangle, rightTriangle].forEach(tri => {
+                tri.classList.add('selection-marker-triangle');
+                markerGroup.appendChild(tri);
+            });
+
+            unitGroup.insertBefore(markerGroup, unitGroup.firstChild);
+        }
+
+        /**
          * Handles the drag movement of a unit.
          * @param {Event} event - The mouse or touch event.
          */
         function drag(event) {
             if (!isDragging || !currentDraggedUnit) return;
+
+            mouseMovedDuringDrag = true;
 
             event.preventDefault(); // Prevent scrolling on touch devices
 
@@ -3370,6 +3788,10 @@
                     placedUnitsData[unitIndex].y = finalY;
                 }
 
+                if (!mouseMovedDuringDrag) {
+                    handleUnitClick(currentDraggedUnit);
+                }
+
                 // Remove highlight from the original territory (only if it was highlighted)
                 if (!isSpecialUnitDragging) {
                     const originalTerritoryPaths = currentSvgElement.querySelectorAll(`polygon[data-name="${initialPlacedInTerritory}"], path[data-name="${initialPlacedInTerritory}"]`);
@@ -3407,8 +3829,7 @@
         loadAndStyleSvg('map.svg').then(() => {
             console.log("SVG loaded and styled. Calculating and displaying IPCs...");
             calculateAndDisplayIPCs("setup 1940");
-            drawOtherLabels(); // <-- ADD THIS LINE
-            // The call to positionRdBar(); can remain if you need it.
+            drawOtherLabels();
         }).catch(error => {
             console.error("Error during map loading or IPC calculation:", error);
         });
@@ -3464,7 +3885,7 @@
                 const territoryIpcs = getTerritoryIpcsFromSvg(currentSvgElement);
 
                 // 3. Calculate total IPCs for each playable power
-                const totalIpcsByPower = {};
+                totalIpcsByPower = {};
                 // Define the exact list of powers to be included in the IPC calculation
                 const playablePowers = ['China', 'Commonwealth', 'France', 'Germany', 'Italy', 'Japan', 'UK', 'US', 'USSR'];
 
@@ -3583,21 +4004,28 @@
             if (!currentSvgElement) return;
 
             const ipcDisplayBar = document.getElementById('ipcDisplayBar');
-            const mapWidth = currentSvgElement.getAttribute('width');
+            const rdDisplayBar = document.getElementById('rdDisplayBar'); // Get the R&D bar
+            const mapWidth = svgWrapper.scrollWidth; // This correctly includes the padding
 
-            if (mapWidth && ipcDisplayBar) {
-                // Set the entire bar's width to match the map
-                ipcDisplayBar.style.width = `${mapWidth}px`;
+            if (mapWidth) {
+                // Set the width of BOTH bars to match the new, wider wrapper
+                if (ipcDisplayBar) {
+                    ipcDisplayBar.style.width = `${mapWidth}px`;
+                }
+                if (rdDisplayBar) {
+                    rdDisplayBar.style.width = `${mapWidth}px`;
+                }
 
-                const squares = ipcDisplayBar.querySelectorAll('.ipc-square');
-                if (squares.length > 0) {
-                    // Calculate the width for each individual square
-                    const squareWidth = parseFloat(mapWidth) / squares.length;
-                    squares.forEach(square => {
-                        square.style.width = `${squareWidth}px`;
-                        // Optional: Make squares perfectly square
-                        square.style.height = `${squareWidth}px`; 
-                    });
+                // The rest of the logic for the IPC squares remains the same
+                if (ipcDisplayBar) {
+                    const squares = ipcDisplayBar.querySelectorAll('.ipc-square');
+                    if (squares.length > 0) {
+                        const squareWidth = parseFloat(mapWidth) / squares.length;
+                        squares.forEach(square => {
+                            square.style.width = `${squareWidth}px`;
+                            square.style.height = `${squareWidth}px`;
+                        });
+                    }
                 }
             }
         }
@@ -3704,6 +4132,246 @@
             });
         });
     });
+
+    /* ============================================= */
+    /* ==   NEW LOGIC FOR UNIT MOVEMENT & ARROWS  == */
+    /* ============================================= */
+
+    /**
+     * Main handler for clicks on the map, which triggers unit movement.
+     */
+    function handleMapClick(event) {
+        // Only proceed if a unit is selected and it wasn't a right-click
+        if (!selectedUnit || event.button === 2) return;
+
+        const clickedElement = event.target;
+        const territoryName = clickedElement.getAttribute('data-name');
+        if (!territoryName) return;
+
+        // Check if the clicked territory is one of the highlighted, reachable ones
+        const isHighlighted = highlightedTerritories.some(h => h.element.getAttribute('data-name') === territoryName);
+
+        if (isHighlighted) {
+            const totalUnits = parseInt(selectedUnit.getAttribute('data-count'), 10);
+            
+            if (totalUnits > 1) {
+                showUnitSplitter(selectedUnit, territoryName, event);
+            } else {
+                // If only one unit, commit the move directly
+                commitMove(selectedUnit, territoryName, 1);
+            }
+        }
+    }
+
+    // Add the new listener to the SVG container
+    document.addEventListener('DOMContentLoaded', () => {
+        // We must wait until currentSvgElement is loaded
+        const observer = new MutationObserver((mutations, obs) => {
+            const svg = document.querySelector('.svg-content');
+            if (svg) {
+                svg.addEventListener('click', handleMapClick);
+                obs.disconnect(); // Stop observing once SVG is found
+            }
+        });
+        observer.observe(document.body, { childList: true, subtree: true });
+    });
+
+    /**
+     * Shows and configures the unit splitter popup.
+     */
+    function showUnitSplitter(startUnit, endTerritoryName, event) {
+        const totalUnits = parseInt(startUnit.getAttribute('data-count'), 10);
+        
+        // Configure slider
+        unitCountSlider.max = totalUnits;
+        unitCountSlider.value = totalUnits;
+        sliderValueDisplay.textContent = totalUnits;
+
+        // Update slider value display on input
+        unitCountSlider.oninput = () => {
+            sliderValueDisplay.textContent = unitCountSlider.value;
+        };
+
+        // Position and show popup near the mouse click
+        unitSplitterPopup.style.left = `${event.clientX + 15}px`;
+        unitSplitterPopup.style.top = `${event.clientY}px`;
+        unitSplitterPopup.style.display = 'block';
+
+        // Handle confirm button click
+        confirmSplitBtn.onclick = () => {
+            const unitsToMove = parseInt(unitCountSlider.value, 10);
+            if (unitsToMove > 0) {
+                commitMove(startUnit, endTerritoryName, unitsToMove);
+            }
+            unitSplitterPopup.style.display = 'none';
+        };
+
+        // Handle cancel button click
+        cancelSplitBtn.onclick = () => {
+            unitSplitterPopup.style.display = 'none';
+        };
+    }
+
+    /**
+     * Commits a unit move by drawing an arrow and updating unit counts.
+     */
+    function commitMove(startUnit, endTerritoryName, moveCount) {
+        // Update the count of the original unit stack
+        const originalCount = parseInt(startUnit.getAttribute('data-count'), 10);
+        const newCount = originalCount - moveCount;
+        updateUnitStackVisuals(startUnit, newCount);
+        
+        // Get coordinates for the arrow
+        const startCoords = getElementCentroid(startUnit);
+        const endTerritoryElement = currentSvgElement.querySelector(`[data-name="${endTerritoryName}"]`);
+        const endCoords = getElementCentroid(endTerritoryElement);
+
+        if (startCoords && endCoords) {
+            drawArrow(startUnit, endTerritoryName, startCoords, endCoords, moveCount);
+        }
+
+        // A move has been made, so deselect the unit and clear highlights
+        handleUnitClick(selectedUnit); // This effectively deselects by clicking the same unit again
+    }
+
+    /**
+     * Updates the visual representation (count number and circle) of a unit stack.
+     */
+    function updateUnitStackVisuals(unit, newCount) {
+        unit.setAttribute('data-count', newCount);
+        
+        let countCircle = unit.querySelector('.unit-count-circle');
+        let countText = unit.querySelector('.unit-count-text');
+
+        if (newCount <= 1) {
+            // If count is 1 or less, remove the count display
+            if (countCircle) countCircle.remove();
+            if (countText) countText.remove();
+             if (newCount === 0) {
+                // Optional: If the stack is empty, hide or remove the unit itself
+                 unit.style.display = 'none';
+            }
+        } else {
+            // If count is greater than 1, update or create the display
+            if (!countCircle || !countText) {
+                // Re-create them if they were removed (e.g., when a move is cancelled)
+                // This part is simplified; a full implementation would reconstruct them properly.
+                // For now, we just update the text.
+                console.warn("Count elements not found, cannot re-create visually. Only data-count updated.");
+            } else {
+                countText.textContent = newCount;
+            }
+        }
+    }
+    
+    /**
+     * Draws a curved arrow with a count on the map.
+     */
+    function drawArrow(startUnit, endTerritoryName, startCoords, endCoords, count) {
+        const unitLayer = currentSvgElement.querySelector('#unit-layer');
+        if (!unitLayer) return;
+
+        // Define arrowhead marker
+        let defs = currentSvgElement.querySelector('defs');
+        if (!defs.querySelector('#arrowhead')) {
+            const marker = document.createElementNS('http://www.w3.org/2000/svg', 'marker');
+            marker.setAttribute('id', 'arrowhead');
+            marker.setAttribute('viewBox', '0 0 10 10');
+            marker.setAttribute('refX', '8');
+            marker.setAttribute('refY', '5');
+            marker.setAttribute('markerWidth', '6');
+            marker.setAttribute('markerHeight', '6');
+            marker.setAttribute('orient', 'auto-start-reverse');
+            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            path.setAttribute('d', 'M 0 0 L 10 5 L 0 10 z');
+            path.setAttribute('fill', '#FFFF00');
+            marker.appendChild(path);
+            defs.appendChild(marker);
+        }
+
+        // Create a group for the whole arrow entity
+        const arrowGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        arrowGroup.classList.add('movement-arrow-group');
+
+        // Calculate a random curve control point
+        const midX = (startCoords.x + endCoords.x) / 2;
+        const midY = (startCoords.y + endCoords.y) / 2;
+        const dx = endCoords.x - startCoords.x;
+        const dy = endCoords.y - startCoords.y;
+        const length = Math.sqrt(dx*dx + dy*dy);
+        const curveFactor = (Math.random() - 0.5) * 0.8; // Random curve amount and direction
+        const controlX = midX + curveFactor * dy;
+        const controlY = midY - curveFactor * dx;
+
+        const pathData = `M ${startCoords.x} ${startCoords.y} Q ${controlX} ${controlY} ${endCoords.x} ${endCoords.y}`;
+
+        // Create shadow and path
+        const shadowPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        shadowPath.setAttribute('d', pathData);
+        shadowPath.classList.add('movement-arrow-shadow');
+
+        const arrowPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        arrowPath.setAttribute('d', pathData);
+        arrowPath.classList.add('movement-arrow-path');
+        arrowPath.setAttribute('marker-end', 'url(#arrowhead)');
+        
+        arrowGroup.appendChild(shadowPath);
+        arrowGroup.appendChild(arrowPath);
+
+        // Calculate midpoint for the count circle using Bezier formula at t=0.5
+        const midPointX = 0.25 * startCoords.x + 0.5 * controlX + 0.25 * endCoords.x;
+        const midPointY = 0.25 * startCoords.y + 0.5 * controlY + 0.25 * endCoords.y;
+
+        // Create count circle and text
+        const countCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        countCircle.setAttribute('cx', midPointX);
+        countCircle.setAttribute('cy', midPointY);
+        countCircle.setAttribute('r', '15');
+        countCircle.classList.add('arrow-count-circle');
+        
+        const countText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        countText.setAttribute('x', midPointX);
+        countText.setAttribute('y', midPointY);
+        countText.textContent = count;
+        countText.classList.add('arrow-count-text');
+
+        arrowGroup.appendChild(countCircle);
+        arrowGroup.appendChild(countText);
+        
+        // Store data and add to map
+        const arrowData = { element: arrowGroup, startUnit: startUnit, endTerritoryName: endTerritoryName, count: count };
+        movementArrows.push(arrowData);
+
+        arrowGroup.addEventListener('click', () => {
+            removeArrow(arrowData);
+        });
+        
+        unitLayer.appendChild(arrowGroup);
+    }
+
+    /**
+     * Removes an arrow and returns the units to their original stack.
+     */
+    function removeArrow(arrowData) {
+        // Find the arrow in the global array
+        const index = movementArrows.findIndex(a => a === arrowData);
+        if (index === -1) return;
+
+        // Restore units to the starting stack
+        const { startUnit, count } = arrowData;
+        const currentCount = parseInt(startUnit.getAttribute('data-count'), 10);
+        const restoredCount = currentCount + count;
+        
+        // Make unit visible again if it was hidden
+        if (startUnit.style.display === 'none') {
+            startUnit.style.display = '';
+        }
+        updateUnitStackVisuals(startUnit, restoredCount);
+        
+        // Remove from DOM and array
+        arrowData.element.remove();
+        movementArrows.splice(index, 1);
+    }
     </script>
 </body>
 </html>
