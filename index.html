@@ -765,95 +765,116 @@
             padding-left: 20px;
         }
 
+        /* ============================================= */
+        /* == NEW STYLES FOR ARROWS, SLIDERS & MARKERS == */
+        /* ============================================= */
 
-        /* ==================================================== */
-        /* ==   NEW STYLES FOR UNIT MOVEMENT AND SELECTION   == */
-        /* ==================================================== */
-
-        /* Enhanced Selection Marker */
-        .selection-marker-glow {
-            filter: drop-shadow(0 0 5px #00FFFF) drop-shadow(0 0 10px #00FFFF);
-        }
-
+        /* Enhanced Style for the selected unit marker */
         .selection-marker-outline {
             fill: none;
-            stroke: #00FFFF; /* Bright Cyan */
-            stroke-width: 2.5;
-            stroke-dasharray: 5 3;
-            rx: 5;
+            stroke: #FFD700; /* A brighter Gold color */
+            stroke-width: 3; /* Thicker */
+            stroke-dasharray: 6 3; /* Longer dashes */
+            rx: 6;
+            /* Add a glowing effect */
+            filter: drop-shadow(0 0 5px #FFD700) drop-shadow(0 0 10px #FFD700);
         }
 
         .selection-marker-triangle {
-            fill: #00FFFF; /* Bright Cyan */
-            stroke: none;
+            fill: #FFD700; /* Match the gold color */
+            stroke: #000;
+            stroke-width: 0.5px;
+            filter: drop-shadow(0 0 3px #000);
         }
 
-        /* Movement Arrow Styles */
+        /* Style for the movement arrows */
         .movement-arrow-group {
+            pointer-events: all;
             cursor: pointer;
-            transition: opacity 0.2s ease-in-out;
+            /* Apply a single drop shadow to the entire group for a clean effect */
+            filter: drop-shadow(0px 1px 3px rgba(0,0,0,0.7));
         }
-        .movement-arrow-group:hover {
-            opacity: 0.7;
+
+        /* This layer is now the dark blue outline */
+        .movement-arrow-outline {
+           fill: none;
+           stroke: #005F99; /* Dark Blue */
+           stroke-width: 5px; /* Thinner outline */
+           stroke-linecap: round;
+           stroke-linejoin: round;
         }
-        .movement-arrow-shadow {
-            fill: none;
-            stroke: black;
-            stroke-width: 8px;
-            stroke-linecap: round;
-            opacity: 0.5;
-            filter: blur(4px);
-        }
+        
+        /* This is the main, bright blue line with a glow effect */
         .movement-arrow-path {
             fill: none;
-            stroke: #FFFF00; /* Bright Yellow */
-            stroke-width: 3px;
+            stroke: #33CFFF; /* Bright Sky Blue */
+            stroke-width: 2.5px; /* Thinner main line */
             stroke-linecap: round;
+            stroke-linejoin: round;
+            /* The glow effect using multiple drop shadows on the path itself */
+            filter: drop-shadow(0 0 3px #33CFFF) drop-shadow(0 0 6px #33CFFF);
+        }
+        
+        /* The shadow path is no longer needed with this new style, but we'll leave the class here */
+        .movement-arrow-shadow {
+            display: none;
         }
 
-        /* Arrow Unit Count Styles */
-        .arrow-count-circle {
-            fill: #6D5C4C; /* Vintage Brown */
-            stroke: #E0D8B0; /* Creamy White */
-            stroke-width: 2px;
+        /* Style for the unit count circle on an arrow */
+        .arrow-unit-count-circle {
+            fill: #005F99; /* Dark blue to match the new theme */
+            stroke: #33CFFF; /* Light blue outline */
+            stroke-width: 1.5px;
+            filter: drop-shadow(0 0 2px #000);
         }
-        .arrow-count-text {
+
+        .arrow-unit-count-text {
             font-family: 'Times New Roman', serif;
-            font-size: 16px;
+            font-size: 12px;
             font-weight: bold;
-            fill: #E0D8B0; /* Creamy White */
+            fill: white; /* White text for high contrast */
+            text-shadow: 1px 1px 2px black;
             text-anchor: middle;
             dominant-baseline: middle;
             pointer-events: none;
         }
 
-        /* Unit Splitter Popup Styles */
-        .unit-splitter-popup {
-            display: none; /* Hidden by default */
+        /* Style for the unit split slider popup */
+        .unit-split-slider-container {
             position: absolute;
-            background-color: #6D5C4C;
-            color: #E0D8B0;
-            border: 2px solid #E0D8B0;
+            background-color: rgba(45, 35, 25, 0.95);
+            border: 2px solid #8C7B6A;
             border-radius: 8px;
             padding: 15px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.5);
             z-index: 2000;
-            font-family: 'Times New Roman', serif;
+            color: #E0D8B0;
+            font-family: 'Georgia', serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
         }
-        .unit-splitter-popup label {
-            display: block;
-            margin-bottom: 10px;
+
+        .unit-split-slider-container label {
+            font-weight: bold;
         }
-        .unit-splitter-popup input[type="range"] {
-            width: 100%;
+
+        .unit-split-slider-container input[type="range"] {
+            width: 200px;
         }
-        .unit-splitter-popup button {
-            background-color: #8C7B6A;
+
+        .unit-split-slider-container button {
+            background-color: #6D5C4C;
             color: #E0D8B0;
             border: 1px solid #E0D8B0;
-            padding: 5px 10px;
-            margin-top: 10px;
+            padding: 5px 15px;
+            border-radius: 5px;
             cursor: pointer;
+        }
+
+        .unit-split-slider-container button:hover {
+            background-color: #8C7B6A;
         }
     </style>
 </head>
@@ -1021,14 +1042,6 @@
                 <textarea style="width: 100%; height: 95%; box-sizing: border-box;"></textarea>
             </div>
         </div>
-    </div>
-    <div id="unitSplitter" class="unit-splitter-popup">
-        <label for="unitCountSlider">Select number of units to move:</label>
-        <input type="range" id="unitCountSlider" min="1" max="10" step="1">
-        <span id="sliderValue">10</span>
-        <br>
-        <button id="confirmSplitBtn">Confirm</button>
-        <button id="cancelSplitBtn">Cancel</button>
     </div>
     <script>
         const mapContainer = document.getElementById('map-container'); // <-- ADD THIS LINE
@@ -2965,7 +2978,7 @@
                 // Set initial class and dimensions
                 newSvgElement.classList.add('svg-content');
 
-                // NEW: Ensure the main SVG allows filter effects to extend visually
+                // Ensure the main SVG allows filter effects to extend visually
                 newSvgElement.style.overflow = 'visible';
 
                 // Clear previous SVG content and append the new one
@@ -3241,17 +3254,8 @@
         let isSpecialUnitDragging = false;
         let selectedUnit = null;
         let highlightedTerritories = [];
-
-        // Global array to store movement arrow data
-        // Each item: { element, startUnit, endTerritoryName, count }
-        let movementArrows = [];
-
-        // References to the unit splitter popup
-        const unitSplitterPopup = document.getElementById('unitSplitter');
-        const unitCountSlider = document.getElementById('unitCountSlider');
-        const sliderValueDisplay = document.getElementById('sliderValue');
-        const confirmSplitBtn = document.getElementById('confirmSplitBtn');
-        const cancelSplitBtn = document.getElementById('cancelSplitBtn');
+        let drawnArrows = [];
+        let unitSplitPromiseResolver = null;
 
 
         /**
@@ -3268,6 +3272,231 @@
             return point.matrixTransform(svgMatrix.inverse());
         }
 
+        /**
+         * Draws a randomly curved, high-contrast arrow between two points on the SVG.
+         * Places the arrow layer behind the starting unit.
+         * @param {object} startPos - {x, y} coordinates of the start point.
+         * @param {object} endPos - {x, y} coordinates of the end point.
+         * @param {SVGElement} startUnit - The unit group element where the arrow originates.
+         * @returns {SVGElement} The created <g> element containing the arrow.
+         */
+        function drawCurvedArrow(startPos, endPos, startUnit) {
+            const svgNS = 'http://www.w3.org/2000/svg';
+            const arrowGroup = document.createElementNS(svgNS, 'g');
+            arrowGroup.classList.add('movement-arrow-group');
+
+            // --- Path Calculation (no changes here) ---
+            const dx = endPos.x - startPos.x;
+            const dy = endPos.y - startPos.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            const midpoint = { x: (startPos.x + endPos.x) / 2, y: (startPos.y + endPos.y) / 2 };
+            const perpendicular = { x: -dy / distance, y: dx / distance };
+            const curveFactor = distance * (Math.random() * 0.25 - 0.125);
+            const controlPoint = {
+                x: midpoint.x + perpendicular.x * curveFactor,
+                y: midpoint.y + perpendicular.y * curveFactor
+            };
+            const pathData = `M ${startPos.x} ${startPos.y} Q ${controlPoint.x} ${controlPoint.y} ${endPos.x} ${endPos.y}`;
+
+            // --- Path Elements (no changes here) ---
+            const outlinePath = document.createElementNS(svgNS, 'path');
+            outlinePath.setAttribute('d', pathData);
+            outlinePath.classList.add('movement-arrow-outline');
+            const arrowPath = document.createElementNS(svgNS, 'path');
+            arrowPath.setAttribute('d', pathData);
+            arrowPath.classList.add('movement-arrow-path');
+            
+            const startCircle = document.createElementNS(svgNS, 'circle');
+            startCircle.setAttribute('cx', startPos.x);
+            startCircle.setAttribute('cy', startPos.y);
+            startCircle.setAttribute('r', 4); // A small, visible circle
+            startCircle.setAttribute('fill', '#33CFFF');
+            startCircle.setAttribute('stroke', '#005F99');
+            startCircle.setAttribute('stroke-width', '1.5px');
+            startCircle.classList.add('arrow-start-circle'); // Add a class for easy selection
+
+            // --- Arrowhead (made larger) ---
+            const angle = Math.atan2(endPos.y - controlPoint.y, endPos.x - controlPoint.x);
+            const arrowHeadLength = 18; // Larger for better visibility
+            const arrowHeadWidth = 10;  // Larger for better visibility
+            const arrowHeadPathData = `M 0,0 L -${arrowHeadLength},-${arrowHeadWidth} L -${arrowHeadLength},${arrowHeadWidth} z`;
+            const arrowHead = document.createElementNS('svg', 'path');
+            arrowHead.setAttribute('d', arrowHeadPathData);
+            arrowHead.setAttribute('fill', '#33CFFF');
+            arrowHead.setAttribute('stroke', '#005F99');
+            arrowHead.setAttribute('stroke-width', '1.5px');
+            arrowHead.setAttribute('transform', `translate(${endPos.x}, ${endPos.y}) rotate(${angle * 180 / Math.PI})`);
+
+            // --- Assemble the Arrow Group ---
+            arrowGroup.appendChild(outlinePath);
+            arrowGroup.appendChild(arrowPath);
+            arrowGroup.appendChild(startCircle); // Add the new start circle
+            arrowGroup.appendChild(arrowHead);
+            
+            arrowGroup.addEventListener('click', () => {
+                if (confirm('Do you want to remove this movement arrow?')) {
+                    arrowGroup.remove();
+                    drawnArrows = drawnArrows.filter(a => a.arrowElement !== arrowGroup);
+                }
+            });
+            // This is the key to fixing the layering issue.
+            startUnit.parentNode.insertBefore(arrowGroup, startUnit);
+            
+            return arrowGroup;
+        }
+
+        /**
+         * Shows a slider popup to let the user choose how many units to move.
+         * @param {number} maxUnits - The total number of units in the stack.
+         * @param {Event} event - The mouse event to position the popup.
+         * @returns {Promise<number|null>} A promise that resolves with the selected number of units, or null if canceled.
+         */
+        function showUnitSplitSlider(maxUnits, event) {
+            // Remove any existing slider first
+            const existingSlider = document.querySelector('.unit-split-slider-container');
+            if (existingSlider) {
+                existingSlider.remove();
+            }
+
+            const container = document.createElement('div');
+            container.className = 'unit-split-slider-container';
+            container.style.left = `${event.clientX}px`;
+            container.style.top = `${event.clientY}px`;
+
+            container.innerHTML = `
+                <label for="unit-slider">Move Units: <span id="slider-value">${maxUnits}</span> / ${maxUnits}</label>
+                <input type="range" id="unit-slider" min="1" max="${maxUnits}" value="${maxUnits}">
+                <button id="slider-ok-btn">OK</button>
+            `;
+
+            document.body.appendChild(container);
+
+            const slider = container.querySelector('#unit-slider');
+            const valueSpan = container.querySelector('#slider-value');
+            const okBtn = container.querySelector('#slider-ok-btn');
+
+            slider.addEventListener('input', () => {
+                valueSpan.textContent = slider.value;
+            });
+
+            // This creates a promise that we can resolve later when the user clicks "OK"
+            return new Promise(resolve => {
+                unitSplitPromiseResolver = resolve; // Store the resolver function globally
+
+                okBtn.addEventListener('click', () => {
+                    const value = parseInt(slider.value, 10);
+                    container.remove();
+                    if (unitSplitPromiseResolver) {
+                        unitSplitPromiseResolver(value); // Resolve the promise with the value
+                        unitSplitPromiseResolver = null; // Clear it
+                    }
+                });
+
+                // Optional: handle closing if user clicks away (resolves with null)
+                // For simplicity, we'll stick to the OK button for now.
+            });
+        }
+        
+        /**
+         * Adds a text circle to the middle of an arrow path.
+         * @param {SVGElement} arrowElement - The arrow's <g> element.
+         * @param {number} count - The number to display in the circle.
+         */
+        function addUnitCountToArrow(arrowElement, count) {
+            const path = arrowElement.querySelector('.movement-arrow-path');
+            if (!path) return;
+
+            const midPoint = path.getPointAtLength(path.getTotalLength() / 2);
+            const svgNS = 'http://www.w3.org/2000/svg';
+
+            const circle = document.createElementNS(svgNS, 'circle');
+            circle.setAttribute('cx', midPoint.x);
+            circle.setAttribute('cy', midPoint.y);
+            circle.setAttribute('r', 12); // Smaller radius for the circle
+            circle.classList.add('arrow-unit-count-circle');
+
+            const text = document.createElementNS(svgNS, 'text');
+            text.setAttribute('x', midPoint.x);
+            text.setAttribute('y', midPoint.y);
+            text.textContent = count;
+            text.classList.add('arrow-unit-count-text');
+
+            arrowElement.appendChild(circle);
+            arrowElement.appendChild(text);
+        }
+
+        /**
+         * Redraws all arrows connected to a specific unit based on its new position.
+         * This updates the arrow path, arrowhead, start circle, and unit count display.
+         * @param {SVGElement} unitElement - The unit <g> element that is moving.
+         * @param {number} newUnitX - The new top-left X coordinate of the unit.
+         * @param {number} newUnitY - The new top-left Y coordinate of the unit.
+         */
+        function redrawUnitArrows(unitElement, newUnitX, newUnitY) {
+            const arrowsToUpdate = drawnArrows.filter(arrow => arrow.startUnit === unitElement);
+            if (arrowsToUpdate.length === 0) return;
+
+            const unitImage = unitElement.querySelector('.unit-token');
+            const unitWidth = parseFloat(unitImage.getAttribute('width'));
+            const unitHeight = parseFloat(unitImage.getAttribute('height'));
+            
+            // The new starting position for the arrows is the unit's current center
+            const newStartPos = {
+                x: newUnitX + unitWidth / 2,
+                y: newUnitY + unitHeight / 2
+            };
+
+            arrowsToUpdate.forEach(arrow => {
+                const endPos = arrow.endPos; // Retrieve the stored end position
+                
+                // 1. Recalculate the curve and path data
+                const dx = endPos.x - newStartPos.x;
+                const dy = endPos.y - newStartPos.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                const midpoint = { x: (newStartPos.x + endPos.x) / 2, y: (newStartPos.y + endPos.y) / 2 };
+                const perpendicular = { x: -dy / distance, y: dx / distance };
+                const curveFactor = distance * 0.1; // Use a consistent curve factor during drag for stability
+                const controlPoint = {
+                    x: midpoint.x + perpendicular.x * curveFactor,
+                    y: midpoint.y + perpendicular.y * curveFactor
+                };
+                const newPathData = `M ${newStartPos.x} ${newStartPos.y} Q ${controlPoint.x} ${controlPoint.y} ${endPos.x} ${endPos.y}`;
+
+                // 2. Update all visual components of the arrow
+                const arrowGroup = arrow.arrowElement;
+                const mainPath = arrowGroup.querySelector('.movement-arrow-path');
+                const outlinePath = arrowGroup.querySelector('.movement-arrow-outline');
+                const startCircle = arrowGroup.querySelector('.arrow-start-circle');
+                const arrowhead = arrowGroup.querySelector('path:not([class])');
+                const countCircle = arrowGroup.querySelector('.arrow-unit-count-circle');
+                const countText = arrowGroup.querySelector('.arrow-unit-count-text');
+
+                // Update paths
+                if (mainPath) mainPath.setAttribute('d', newPathData);
+                if (outlinePath) outlinePath.setAttribute('d', newPathData);
+                
+                // Update start circle position
+                if (startCircle) {
+                    startCircle.setAttribute('cx', newStartPos.x);
+                    startCircle.setAttribute('cy', newStartPos.y);
+                }
+
+                // Update arrowhead rotation
+                if (arrowhead) {
+                    const newAngle = Math.atan2(endPos.y - controlPoint.y, endPos.x - controlPoint.x);
+                    arrowhead.setAttribute('transform', `translate(${endPos.x}, ${endPos.y}) rotate(${newAngle * 180 / Math.PI})`);
+                }
+
+                // Update position of unit count circle and text
+                if (countCircle && countText && mainPath) {
+                    const midPoint = mainPath.getPointAtLength(mainPath.getTotalLength() / 2);
+                    countCircle.setAttribute('cx', midPoint.x);
+                    countCircle.setAttribute('cy', midPoint.y);
+                    countText.setAttribute('x', midPoint.x);
+                    text.setAttribute('y', midPoint.y);
+                }
+            });
+        }
 
         /**
          * Highlights all territories a unit can reach based on its movement points, type, and alliance.
@@ -3357,19 +3586,80 @@
                     
                     const pathsToHighlight = currentSvgElement.querySelectorAll(`[data-name="${territoryName}"]`);
                     pathsToHighlight.forEach(path => {
-                        // **FIX:** Store original styles before changing them
+                        const territoryClickHandler = async (event) => {
+                            event.stopPropagation(); // Prevent other clicks
+
+                            const totalUnitsInStack = parseInt(selectedUnit.getAttribute('data-count'), 10);
+                            
+                            // Calculate how many units from this stack are already assigned to arrows
+                            let unitsAlreadyMoved = 0;
+                            drawnArrows.forEach(arrow => {
+                                if (arrow.startUnit === selectedUnit) {
+                                    unitsAlreadyMoved += arrow.units;
+                                }
+                            });
+
+                            const availableUnits = totalUnitsInStack - unitsAlreadyMoved;
+
+                            // If no units are available, inform the user and stop.
+                            if (availableUnits <= 0) {
+                                alert("All units from this stack have already been assigned a move.");
+                                return;
+                            }
+
+                            // Corrected Arrow Start Position: Center of the unit's background circle
+                            const unitTransform = selectedUnit.transform.baseVal.getItem(0).matrix;
+                            const unitImage = selectedUnit.querySelector('.unit-token');
+                            const unitWidth = parseFloat(unitImage.getAttribute('width'));
+                            const unitHeight = parseFloat(unitImage.getAttribute('height'));
+                            const startPos = {
+                                x: unitTransform.e + unitWidth / 2,
+                                y: unitTransform.f + unitHeight / 2 // This now correctly centers the arrow
+                            };
+                            const endPos = getSvgCoordinates(event.clientX, event.clientY);
+                            
+                            let unitsToMove = 1; // Default for single units
+
+                            // If more than one unit is available, show the slider.
+                            if (availableUnits > 1) {
+                                unitsToMove = await showUnitSplitSlider(availableUnits, event);
+                            }
+
+                            if (unitsToMove === null || unitsToMove === 0) return; // User canceled or chose 0
+
+                            const arrowElement = drawCurvedArrow(startPos, endPos, selectedUnit);
+                            
+                            // Add unit count circle only if the stack had more than one unit to begin with.
+                            if (totalUnitsInStack > 1) {
+                                addUnitCountToArrow(arrowElement, unitsToMove);
+                            }
+
+                            // Add the new arrow to our global tracking array
+                            drawnArrows.push({
+                                arrowElement: arrowElement,
+                                startUnit: selectedUnit,
+                                targetTerritory: territoryName,
+                                units: unitsToMove,
+                                endPos: endPos // Add this line to store the destination
+                            });
+                        };
+                        
+                        // Store original styles and add the new click handler
                         highlightedTerritories.push({
                             element: path,
                             originalFill: path.style.fill,
                             originalOpacity: path.style.fillOpacity,
                             originalStroke: path.style.stroke,
-                            originalStrokeWidth: path.style.strokeWidth
+                            originalStrokeWidth: path.style.strokeWidth,
+                            clickHandler: territoryClickHandler
                         });
 
+                        path.addEventListener('click', territoryClickHandler);
+                        
                         // Apply new highlight styles
                         path.style.fill = fillColor;
                         path.style.fillOpacity = '0.4';
-                        path.style.stroke = '#000000'; // Same outline for all tiers
+                        path.style.stroke = '#000000';
                         path.style.strokeWidth = '1px';
                     });
                 }
@@ -3388,6 +3678,10 @@
                 el.style.fillOpacity = highlight.originalOpacity;
                 el.style.stroke = highlight.originalStroke;
                 el.style.strokeWidth = highlight.originalStrokeWidth;
+                el.style.cursor = 'pointer'; // Reset cursor
+                if (highlight.clickHandler) {
+                    el.removeEventListener('click', highlight.clickHandler); // IMPORTANT: Remove the listener
+                }
             });
             highlightedTerritories = [];
 
@@ -3562,34 +3856,39 @@
 
         /**
          * Adds or removes a selection marker (outline and triangles) from a unit group.
-         * THIS FUNCTION HAS BEEN UPDATED FOR A MORE VISUALLY ATTRACTIVE STYLE.
          * @param {SVGElement} unitGroup - The unit <g> element to mark.
          * @param {boolean} show - True to show the marker, false to remove it.
          */
         function toggleUnitSelectionMarker(unitGroup, show) {
             if (!unitGroup) return;
 
+            // First, remove any existing marker from this unit to prevent duplicates
             const existingMarker = unitGroup.querySelector('.selection-marker');
             if (existingMarker) {
                 existingMarker.remove();
             }
 
+            // If we are just hiding the marker, we are done.
             if (!show) return;
 
             const image = unitGroup.querySelector('.unit-token');
-            if (!image) return;
+            if (!image) {
+                console.warn("Could not find unit image to apply marker.");
+                return;
+            }
 
             const imgX = parseFloat(image.getAttribute('x'));
             const imgY = parseFloat(image.getAttribute('y'));
             const imgWidth = parseFloat(image.getAttribute('width'));
             const imgHeight = parseFloat(image.getAttribute('height'));
 
-            const PADDING = 5;
-            const TRIANGLE_SIZE = 7;
+            const PADDING = 4; // Space between unit image and marker outline
+            const TRIANGLE_SIZE = 6; // The height/width of the triangles
 
             const markerGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-            markerGroup.classList.add('selection-marker', 'selection-marker-glow'); // Added glow class
+            markerGroup.classList.add('selection-marker');
 
+            // 1. Create the dashed outline rectangle
             const outlineRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
             outlineRect.setAttribute('x', imgX - PADDING);
             outlineRect.setAttribute('y', imgY - PADDING);
@@ -3598,26 +3897,32 @@
             outlineRect.classList.add('selection-marker-outline');
             markerGroup.appendChild(outlineRect);
 
+            // 2. Create the four triangles
             const cx = imgX + imgWidth / 2;
             const cy = imgY + imgHeight / 2;
 
+            // Top Triangle
             const topTriangle = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
-            topTriangle.setAttribute('points', `${cx},${imgY - PADDING - TRIANGLE_SIZE} ${cx - TRIANGLE_SIZE / 1.5},${imgY - PADDING} ${cx + TRIANGLE_SIZE / 1.5},${imgY - PADDING}`);
-            
+            topTriangle.setAttribute('points', `${cx},${imgY - PADDING - TRIANGLE_SIZE} ${cx - TRIANGLE_SIZE},${imgY - PADDING} ${cx + TRIANGLE_SIZE},${imgY - PADDING}`);
+
+            // Bottom Triangle
             const bottomTriangle = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
-            bottomTriangle.setAttribute('points', `${cx},${imgY + imgHeight + PADDING + TRIANGLE_SIZE} ${cx - TRIANGLE_SIZE / 1.5},${imgY + imgHeight + PADDING} ${cx + TRIANGLE_SIZE / 1.5},${imgY + imgHeight + PADDING}`);
+            bottomTriangle.setAttribute('points', `${cx},${imgY + imgHeight + PADDING + TRIANGLE_SIZE} ${cx - TRIANGLE_SIZE},${imgY + imgHeight + PADDING} ${cx + TRIANGLE_SIZE},${imgY + imgHeight + PADDING}`);
 
+            // Left Triangle
             const leftTriangle = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
-            leftTriangle.setAttribute('points', `${imgX - PADDING - TRIANGLE_SIZE},${cy} ${imgX - PADDING},${cy - TRIANGLE_SIZE / 1.5} ${imgX - PADDING},${cy + TRIANGLE_SIZE / 1.5}`);
-
+            leftTriangle.setAttribute('points', `${imgX - PADDING - TRIANGLE_SIZE},${cy} ${imgX - PADDING},${cy - TRIANGLE_SIZE} ${imgX - PADDING},${cy + TRIANGLE_SIZE}`);
+            
+            // Right Triangle
             const rightTriangle = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
-            rightTriangle.setAttribute('points', `${imgX + imgWidth + PADDING + TRIANGLE_SIZE},${cy} ${imgX + imgWidth + PADDING},${cy - TRIANGLE_SIZE / 1.5} ${imgX + imgWidth + PADDING},${cy + TRIANGLE_SIZE / 1.5}`);
+            rightTriangle.setAttribute('points', `${imgX + imgWidth + PADDING + TRIANGLE_SIZE},${cy} ${imgX + imgWidth + PADDING},${cy - TRIANGLE_SIZE} ${imgX + imgWidth + PADDING},${cy + TRIANGLE_SIZE}`);
 
             [topTriangle, bottomTriangle, leftTriangle, rightTriangle].forEach(tri => {
                 tri.classList.add('selection-marker-triangle');
                 markerGroup.appendChild(tri);
             });
 
+            // Insert the marker group as the first child, so it is drawn behind the unit's image
             unitGroup.insertBefore(markerGroup, unitGroup.firstChild);
         }
 
@@ -3629,67 +3934,27 @@
             if (!isDragging || !currentDraggedUnit) return;
 
             mouseMovedDuringDrag = true;
-
-            event.preventDefault(); // Prevent scrolling on touch devices
+            event.preventDefault();
 
             const clientX = event.type.startsWith('touch') ? event.touches[0].clientX : event.clientX;
             const clientY = event.type.startsWith('touch') ? event.touches[0].clientY : event.clientY;
 
             const svgPoint = getSvgCoordinates(clientX, clientY);
-
             let newX = svgPoint.x - dragOffsetX;
             let newY = svgPoint.y - dragOffsetY;
 
-            const unitType = currentDraggedUnit.getAttribute('data-unit-type');
-            const unitImageSize = getUnitSize(unitType);
-            const count = parseInt(currentDraggedUnit.getAttribute('data-count'));
-
-            let groupWidth = unitImageSize;
-            let groupHeight = unitImageSize;
-            if (count > 1 && !SPECIAL_INFRASTRUCTURE_UNITS.includes(unitType)) {
-                groupHeight = unitImageSize + (UNIT_COUNT_CIRCLE_RADIUS * 2);
-                groupWidth = Math.max(groupWidth, (UNIT_COUNT_CIRCLE_RADIUS * 2));
-            } else if (SPECIAL_INFRASTRUCTURE_UNITS.includes(unitType)) {
-                groupHeight = unitImageSize + SPECIAL_UNIT_TEXT_FONT_SIZE * 1.5;
+            // Move the unit visually
+            currentDraggedUnit.setAttribute('transform', `translate(${newX}, ${newY})`);
+            
+            // Update the unit's data in our global array
+            const unitIndex = placedUnitsData.findIndex(u => u.element === currentDraggedUnit);
+            if (unitIndex !== -1) {
+                placedUnitsData[unitIndex].x = newX;
+                placedUnitsData[unitIndex].y = newY;
             }
 
-
-            const potentialUnitRect = {
-                x: newX,
-                y: newY,
-                width: groupWidth,
-                height: groupHeight
-            };
-
-            if (isSpecialUnitDragging) {
-                // Special units can be dragged anywhere visually
-                currentDraggedUnit.setAttribute('transform', `translate(${newX}, ${newY})`);
-                const unitIndex = placedUnitsData.findIndex(u => u.element === currentDraggedUnit);
-                if (unitIndex !== -1) {
-                    placedUnitsData[unitIndex].x = newX;
-                    placedUnitsData[unitIndex].y = newY;
-                }
-            } else {
-                // Regular units are restricted to valid drop zones
-                let isWithinAnyValidZone = false;
-                for (const dropZone of validDropZones) {
-                    if (isRectInPath(dropZone.pathElement, potentialUnitRect)) {
-                        isWithinAnyValidZone = true;
-                        break;
-                    }
-                }
-
-                if (isWithinAnyValidZone) {
-                    currentDraggedUnit.setAttribute('transform', `translate(${newX}, ${newY})`);
-                    const unitIndex = placedUnitsData.findIndex(u => u.element === currentDraggedUnit);
-                    if (unitIndex !== -1) {
-                        placedUnitsData[unitIndex].x = newX;
-                        placedUnitsData[unitIndex].y = newY;
-                    }
-                }
-                // If not within any valid zone, the transform is not updated,
-                // effectively "sticking" the unit at the boundary of the last valid position.
-            }
+            // Redraw any arrows connected to this unit
+            redrawUnitArrows(currentDraggedUnit, newX, newY);
         }
 
         /**
@@ -3778,7 +4043,10 @@
                 }
 
                 currentDraggedUnit.setAttribute('transform', `translate(${finalX}, ${finalY})`);
+                redrawUnitArrows(currentDraggedUnit, finalX, finalY);
                 currentDraggedUnit.setAttribute('data-placed-in', finalPlacedInTerritory);
+
+
 
                 // Update the placedUnitsData array with the final territory and position
                 const unitIndex = placedUnitsData.findIndex(u => u.element === currentDraggedUnit);
@@ -4132,246 +4400,6 @@
             });
         });
     });
-
-    /* ============================================= */
-    /* ==   NEW LOGIC FOR UNIT MOVEMENT & ARROWS  == */
-    /* ============================================= */
-
-    /**
-     * Main handler for clicks on the map, which triggers unit movement.
-     */
-    function handleMapClick(event) {
-        // Only proceed if a unit is selected and it wasn't a right-click
-        if (!selectedUnit || event.button === 2) return;
-
-        const clickedElement = event.target;
-        const territoryName = clickedElement.getAttribute('data-name');
-        if (!territoryName) return;
-
-        // Check if the clicked territory is one of the highlighted, reachable ones
-        const isHighlighted = highlightedTerritories.some(h => h.element.getAttribute('data-name') === territoryName);
-
-        if (isHighlighted) {
-            const totalUnits = parseInt(selectedUnit.getAttribute('data-count'), 10);
-            
-            if (totalUnits > 1) {
-                showUnitSplitter(selectedUnit, territoryName, event);
-            } else {
-                // If only one unit, commit the move directly
-                commitMove(selectedUnit, territoryName, 1);
-            }
-        }
-    }
-
-    // Add the new listener to the SVG container
-    document.addEventListener('DOMContentLoaded', () => {
-        // We must wait until currentSvgElement is loaded
-        const observer = new MutationObserver((mutations, obs) => {
-            const svg = document.querySelector('.svg-content');
-            if (svg) {
-                svg.addEventListener('click', handleMapClick);
-                obs.disconnect(); // Stop observing once SVG is found
-            }
-        });
-        observer.observe(document.body, { childList: true, subtree: true });
-    });
-
-    /**
-     * Shows and configures the unit splitter popup.
-     */
-    function showUnitSplitter(startUnit, endTerritoryName, event) {
-        const totalUnits = parseInt(startUnit.getAttribute('data-count'), 10);
-        
-        // Configure slider
-        unitCountSlider.max = totalUnits;
-        unitCountSlider.value = totalUnits;
-        sliderValueDisplay.textContent = totalUnits;
-
-        // Update slider value display on input
-        unitCountSlider.oninput = () => {
-            sliderValueDisplay.textContent = unitCountSlider.value;
-        };
-
-        // Position and show popup near the mouse click
-        unitSplitterPopup.style.left = `${event.clientX + 15}px`;
-        unitSplitterPopup.style.top = `${event.clientY}px`;
-        unitSplitterPopup.style.display = 'block';
-
-        // Handle confirm button click
-        confirmSplitBtn.onclick = () => {
-            const unitsToMove = parseInt(unitCountSlider.value, 10);
-            if (unitsToMove > 0) {
-                commitMove(startUnit, endTerritoryName, unitsToMove);
-            }
-            unitSplitterPopup.style.display = 'none';
-        };
-
-        // Handle cancel button click
-        cancelSplitBtn.onclick = () => {
-            unitSplitterPopup.style.display = 'none';
-        };
-    }
-
-    /**
-     * Commits a unit move by drawing an arrow and updating unit counts.
-     */
-    function commitMove(startUnit, endTerritoryName, moveCount) {
-        // Update the count of the original unit stack
-        const originalCount = parseInt(startUnit.getAttribute('data-count'), 10);
-        const newCount = originalCount - moveCount;
-        updateUnitStackVisuals(startUnit, newCount);
-        
-        // Get coordinates for the arrow
-        const startCoords = getElementCentroid(startUnit);
-        const endTerritoryElement = currentSvgElement.querySelector(`[data-name="${endTerritoryName}"]`);
-        const endCoords = getElementCentroid(endTerritoryElement);
-
-        if (startCoords && endCoords) {
-            drawArrow(startUnit, endTerritoryName, startCoords, endCoords, moveCount);
-        }
-
-        // A move has been made, so deselect the unit and clear highlights
-        handleUnitClick(selectedUnit); // This effectively deselects by clicking the same unit again
-    }
-
-    /**
-     * Updates the visual representation (count number and circle) of a unit stack.
-     */
-    function updateUnitStackVisuals(unit, newCount) {
-        unit.setAttribute('data-count', newCount);
-        
-        let countCircle = unit.querySelector('.unit-count-circle');
-        let countText = unit.querySelector('.unit-count-text');
-
-        if (newCount <= 1) {
-            // If count is 1 or less, remove the count display
-            if (countCircle) countCircle.remove();
-            if (countText) countText.remove();
-             if (newCount === 0) {
-                // Optional: If the stack is empty, hide or remove the unit itself
-                 unit.style.display = 'none';
-            }
-        } else {
-            // If count is greater than 1, update or create the display
-            if (!countCircle || !countText) {
-                // Re-create them if they were removed (e.g., when a move is cancelled)
-                // This part is simplified; a full implementation would reconstruct them properly.
-                // For now, we just update the text.
-                console.warn("Count elements not found, cannot re-create visually. Only data-count updated.");
-            } else {
-                countText.textContent = newCount;
-            }
-        }
-    }
-    
-    /**
-     * Draws a curved arrow with a count on the map.
-     */
-    function drawArrow(startUnit, endTerritoryName, startCoords, endCoords, count) {
-        const unitLayer = currentSvgElement.querySelector('#unit-layer');
-        if (!unitLayer) return;
-
-        // Define arrowhead marker
-        let defs = currentSvgElement.querySelector('defs');
-        if (!defs.querySelector('#arrowhead')) {
-            const marker = document.createElementNS('http://www.w3.org/2000/svg', 'marker');
-            marker.setAttribute('id', 'arrowhead');
-            marker.setAttribute('viewBox', '0 0 10 10');
-            marker.setAttribute('refX', '8');
-            marker.setAttribute('refY', '5');
-            marker.setAttribute('markerWidth', '6');
-            marker.setAttribute('markerHeight', '6');
-            marker.setAttribute('orient', 'auto-start-reverse');
-            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-            path.setAttribute('d', 'M 0 0 L 10 5 L 0 10 z');
-            path.setAttribute('fill', '#FFFF00');
-            marker.appendChild(path);
-            defs.appendChild(marker);
-        }
-
-        // Create a group for the whole arrow entity
-        const arrowGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-        arrowGroup.classList.add('movement-arrow-group');
-
-        // Calculate a random curve control point
-        const midX = (startCoords.x + endCoords.x) / 2;
-        const midY = (startCoords.y + endCoords.y) / 2;
-        const dx = endCoords.x - startCoords.x;
-        const dy = endCoords.y - startCoords.y;
-        const length = Math.sqrt(dx*dx + dy*dy);
-        const curveFactor = (Math.random() - 0.5) * 0.8; // Random curve amount and direction
-        const controlX = midX + curveFactor * dy;
-        const controlY = midY - curveFactor * dx;
-
-        const pathData = `M ${startCoords.x} ${startCoords.y} Q ${controlX} ${controlY} ${endCoords.x} ${endCoords.y}`;
-
-        // Create shadow and path
-        const shadowPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-        shadowPath.setAttribute('d', pathData);
-        shadowPath.classList.add('movement-arrow-shadow');
-
-        const arrowPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-        arrowPath.setAttribute('d', pathData);
-        arrowPath.classList.add('movement-arrow-path');
-        arrowPath.setAttribute('marker-end', 'url(#arrowhead)');
-        
-        arrowGroup.appendChild(shadowPath);
-        arrowGroup.appendChild(arrowPath);
-
-        // Calculate midpoint for the count circle using Bezier formula at t=0.5
-        const midPointX = 0.25 * startCoords.x + 0.5 * controlX + 0.25 * endCoords.x;
-        const midPointY = 0.25 * startCoords.y + 0.5 * controlY + 0.25 * endCoords.y;
-
-        // Create count circle and text
-        const countCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-        countCircle.setAttribute('cx', midPointX);
-        countCircle.setAttribute('cy', midPointY);
-        countCircle.setAttribute('r', '15');
-        countCircle.classList.add('arrow-count-circle');
-        
-        const countText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-        countText.setAttribute('x', midPointX);
-        countText.setAttribute('y', midPointY);
-        countText.textContent = count;
-        countText.classList.add('arrow-count-text');
-
-        arrowGroup.appendChild(countCircle);
-        arrowGroup.appendChild(countText);
-        
-        // Store data and add to map
-        const arrowData = { element: arrowGroup, startUnit: startUnit, endTerritoryName: endTerritoryName, count: count };
-        movementArrows.push(arrowData);
-
-        arrowGroup.addEventListener('click', () => {
-            removeArrow(arrowData);
-        });
-        
-        unitLayer.appendChild(arrowGroup);
-    }
-
-    /**
-     * Removes an arrow and returns the units to their original stack.
-     */
-    function removeArrow(arrowData) {
-        // Find the arrow in the global array
-        const index = movementArrows.findIndex(a => a === arrowData);
-        if (index === -1) return;
-
-        // Restore units to the starting stack
-        const { startUnit, count } = arrowData;
-        const currentCount = parseInt(startUnit.getAttribute('data-count'), 10);
-        const restoredCount = currentCount + count;
-        
-        // Make unit visible again if it was hidden
-        if (startUnit.style.display === 'none') {
-            startUnit.style.display = '';
-        }
-        updateUnitStackVisuals(startUnit, restoredCount);
-        
-        // Remove from DOM and array
-        arrowData.element.remove();
-        movementArrows.splice(index, 1);
-    }
     </script>
 </body>
 </html>
