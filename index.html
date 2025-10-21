@@ -14,6 +14,31 @@
             color: #f0f0f0;
         }
 
+        /* --- Disable Text Selection --- */
+        body, #map-container, .svg-wrapper {
+            -webkit-user-select: none; /* Safari */
+            -moz-user-select: none;    /* Firefox */
+            -ms-user-select: none;     /* IE10+/Edge */
+            user-select: none;         /* Standard */
+        }
+
+        /* Prevent images and SVG content from being dragged */
+        .svg-content, .svg-content image, .svg-content img {
+            -webkit-user-drag: none;
+            -khtml-user-drag: none;
+            -moz-user-drag: none;
+            -o-user-drag: none;
+            user-drag: none;
+        }
+
+        /* Re-enable text selection for specific elements, like the Notes panel */
+        textarea {
+            -webkit-user-select: auto;
+            -moz-user-select: auto;
+            -ms-user-select: auto;
+            user-select: auto;
+        }
+
         .svg-wrapper {
             display: block; 
             position: relative; 
@@ -351,28 +376,12 @@
             width: 100%;
         }
 
-        /* Move scrollbar styling from .svg-wrapper to #map-container */
+        #map-container {
+            scrollbar-width: none; /* For Firefox */
+        }
+
         #map-container::-webkit-scrollbar {
-            width: 16px;
-            height: 16px;
-        }
-
-        #map-container::-webkit-scrollbar-track {
-            background: linear-gradient(135deg, #2c2c34, #3a3f47);
-            border: 2px solid #22252a;
-            border-radius: 12px;
-            box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-        }
-
-        #map-container::-webkit-scrollbar-thumb {
-            background: linear-gradient(45deg, #007bff, #66ccff);
-            border-radius: 12px;
-            border: 3px solid #282c34;
-            box-shadow: 0 0 10px rgba(0, 123, 255, 0.7), inset 0 0 6px rgba(0,0,0,0.3);
-        }
-
-        #map-container::-webkit-scrollbar-corner {
-            background: #282c34;
+            display: none; /* For Chrome, Safari, and other WebKit browsers */
         }
 
         html {
@@ -1044,7 +1053,11 @@
         </div>
     </div>
     <script>
-        const mapContainer = document.getElementById('map-container'); // <-- ADD THIS LINE
+        const mapContainer = document.getElementById('map-container');
+        let isAdjustingScroll = false;
+
+        mapContainer.addEventListener('mousedown', startPan);
+        mapContainer.addEventListener('wheel', handleWheelZoom, { passive: false });
 
         const svgWrapper = document.getElementById('svgWrapper');
         let currentSvgElement = null; // Reference to the injected <svg> element
@@ -1361,7 +1374,7 @@
          * Draws flags for neutral territories at fixed coordinates.
          * @param {SVGElement} svgElement - The root SVG element to draw on.
          */
-        async function drawNeutralFlags(svgElement) {
+        async function drawNeutralFlags(svgElement, unitLayer) { // Accept the new argument
             const FLAG_WIDTH = 21;
             const FLAG_HEIGHT = 14;
 
@@ -1370,9 +1383,9 @@
                 if (!response.ok) throw new Error('Failed to fetch neutral-flags.json');
                 const neutralFlagsData = await response.json();
 
-                const unitLayer = svgElement.querySelector('#unit-layer');
+                
                 if (!unitLayer) {
-                    console.error("Could not find '#unit-layer' to append flags to.");
+                    console.error("The 'unitLayer' argument was not provided to drawNeutralFlags.");
                     return;
                 }
                 
@@ -1465,35 +1478,40 @@
 
                 const svgDoc = currentSvgElement; // Use the globally available SVG element
 
-                // First, apply colors based on territories-by-power.json
-                for (const power in setupData) {
-                    if (powerColors[power]) {
-                        const territories = setupData[power].territories;
-                        territories.forEach(territoryName => {
-                            const pathElement = svgDoc.querySelector(`[data-name="${territoryName}"]`);
-                            if (pathElement) {
-                                pathElement.style.fill = powerColors[power];
-                                pathElement.setAttribute('data-power', power); // Ensure data-power is set
-                            } else {
-                                console.warn(`SVG element for territory '${territoryName}' not found.`);
-                            }
-                        });
-                    } else {
-                        console.warn(`No color defined for power: ${power}`);
-                    }
-                }
+                // Get all three SVG elements instead of just the middle one
+                const allSvgElements = document.querySelectorAll('.svg-content');
 
-                // Then, override neutral territory colors based on neutral-powers.json
-                for (const territoryName in neutralTerritoriesMap) {
-                    const pathElement = svgDoc.querySelector(`[data-name="${territoryName}"]`);
-                    if (pathElement) {
-                        const specificNeutralType = neutralTerritoriesMap[territoryName];
-                        if (powerColors[specificNeutralType]) {
-                            pathElement.style.fill = powerColors[specificNeutralType];
-                            pathElement.setAttribute('data-power', specificNeutralType); // Update data-power attribute
+                allSvgElements.forEach(svgDoc => {
+                    // First, apply colors based on territories-by-power.json
+                    for (const power in setupData) {
+                        if (powerColors[power]) {
+                            const territories = setupData[power].territories;
+                            territories.forEach(territoryName => {
+                                const pathElement = svgDoc.querySelector(`[data-name="${territoryName}"]`);
+                                if (pathElement) {
+                                    pathElement.style.fill = powerColors[power];
+                                    pathElement.setAttribute('data-power', power);
+                                } else {
+                                    console.warn(`SVG element for territory '${territoryName}' not found.`);
+                                }
+                            });
+                        } else {
+                            console.warn(`No color defined for power: ${power}`);
                         }
                     }
-                }
+
+                    // Then, override neutral territory colors
+                    for (const territoryName in neutralTerritoriesMap) {
+                        const pathElement = svgDoc.querySelector(`[data-name="${territoryName}"]`);
+                        if (pathElement) {
+                            const specificNeutralType = neutralTerritoriesMap[territoryName];
+                            if (powerColors[specificNeutralType]) {
+                                pathElement.style.fill = powerColors[specificNeutralType];
+                                pathElement.setAttribute('data-power', specificNeutralType);
+                            }
+                        }
+                    }
+                });
 
             } catch (error) {
                 console.error('Error loading or applying territory colors:', error);
@@ -1710,53 +1728,52 @@
 
         // --- UPDATED FUNCTION TO DRAW OTHER LABELS ---
         async function drawOtherLabels() {
-            const svg = currentSvgElement;
+            // Get all three SVG elements
+            const allSvgElements = document.querySelectorAll('.svg-content');
 
-            // --- Load Oil & Resources from oil-resources.json ---
             try {
-                const response = await fetch('oil-resources.json');
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status} for oil-resources.json`);
-                }
-                const data = await response.json();
+                // Fetch all necessary data ONCE before the loop
+                const oilResourcesResponse = await fetch('oil-resources.json');
+                if (!oilResourcesResponse.ok) throw new Error('Failed to fetch oil-resources.json');
+                const oilResourcesData = await oilResourcesResponse.json();
 
-                // Find the "Oil" object in the array and get its coordinates
-                const oilCoords = data.find(item => item.Oil)?.Oil;
-                if (oilCoords) {
-                    oilCoords.forEach(coord => {
-                        createImage(svg, 'units/oil.png', coord.x, coord.y, 50);
-                    });
-                }
+                const otherSetupResponse = await fetch('other-setup.json');
+                if (!otherSetupResponse.ok) throw new Error('Failed to fetch other-setup.json');
+                const otherSetupData = await otherSetupResponse.json();
 
-                // Find the "Resources" object in the array and get its coordinates
-                const resourceCoords = data.find(item => item.Resources)?.Resources;
-                if (resourceCoords) {
-                    resourceCoords.forEach(coord => {
-                        createImage(svg, 'units/resources.png', coord.x, coord.y, 50);
-                    });
-                }
+                const oilCoords = oilResourcesData.find(item => item.Oil)?.Oil;
+                const resourceCoords = oilResourcesData.find(item => item.Resources)?.Resources;
+                const victoryCitiesData = otherSetupData.find(d => d.type === 'victory city');
+
+                // Now, iterate and draw on each SVG
+                allSvgElements.forEach(svg => {
+                    // Draw Oil icons
+                    if (oilCoords) {
+                        oilCoords.forEach(coord => {
+                            createImage(svg, 'units/oil.png', coord.x, coord.y, 50);
+                        });
+                    }
+
+                    // Draw Resource icons
+                    if (resourceCoords) {
+                        resourceCoords.forEach(coord => {
+                            createImage(svg, 'units/resources.png', coord.x, coord.y, 50);
+                        });
+                    }
+
+                    // Draw Victory City icons and text
+                    if (victoryCitiesData) {
+                        victoryCitiesData.cities.forEach(city => {
+                            createVictoryCityIcon(svg, city.x, city.y, 6);
+                            createText(svg, city.city, city.x, city.y + 10, 'victory-city-text');
+                        });
+                    }
+                });
             } catch (error) {
                 console.error("Error loading or processing oil-resources.json:", error);
             }
 
-            // --- Load Victory Cities from other-setup.json (This part remains) ---
-            try {
-                const response = await fetch('other-setup.json');
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status} for other-setup.json`);
-                }
-                const otherSetupData = await response.json();
-                const victoryCitiesData = otherSetupData.find(d => d.type === 'victory city');
-
-                if (victoryCitiesData) {
-                    victoryCitiesData.cities.forEach(city => {
-                        createVictoryCityIcon(svg, city.x, city.y, 6);
-                        createText(svg, city.city, city.x, city.y + 10, 'victory-city-text');
-                    });
-                }
-            } catch (error) {
-                console.error("Error loading or processing other-setup.json for victory cities:", error);
-            }
+            
         }
 
         // Helper function to create an image element and append it to the SVG
@@ -2503,9 +2520,8 @@
                 const territory = unitStack.territory;
 
                 // Give infrastructure JSON highest priority
-                if (SPECIAL_INFRASTRUCTURE_UNITS.includes(unitStack.unitType)) { // Check if it's an infrastructure unit first
+                if (SPECIAL_INFRASTRUCTURE_UNITS.includes(unitStack.unitType)) { 
                     
-
                     console.log(`Processing infrastructure unit: ${unitStack.unitType} in ${territory}.`);
 
                     if (infrastructureCoordinates && infrastructureCoordinates[territory] && Array.isArray(infrastructureCoordinates[territory])) {
@@ -2517,7 +2533,6 @@
                             unitStack.x = infraUnitCoords.x;
                             unitStack.y = infraUnitCoords.y;
                             
-
                             console.log(`SUCCESS: Found and applied coordinates for ${unitStack.unitType} in ${territory}:`, {x: unitStack.x, y: unitStack.y});
 
                             return; // ✅ Do not allow override by general coordinates
@@ -2529,12 +2544,17 @@
                         
                         console.warn(`WARN: No coordinates found for territory "${territory}" in the infrastructureCoordinates object. ${unitStack.unitType} will be auto-placed.`);
                     }
-                }
-                // Use general unit coordinates only if infrastructure wasn't matched
-                if (availableCoords[territory] && availableCoords[territory].length > 0) {
-                    const coord = availableCoords[territory].shift();
-                    unitStack.x = coord.x;
-                    unitStack.y = coord.y;
+                
+                
+                // Only run this block if it's NOT an infrastructure unit
+                } else { 
+                    
+                    // Use general unit coordinates only if infrastructure wasn't matched
+                    if (availableCoords[territory] && availableCoords[territory].length > 0) { 
+                        const coord = availableCoords[territory].shift();
+                        unitStack.x = coord.x;
+                        unitStack.y = coord.y;
+                    }
                 }
             });
 
@@ -2974,6 +2994,8 @@
                 const parser = new DOMParser();
                 const svgDoc = parser.parseFromString(svgText, 'image/svg+xml');
                 const newSvgElement = svgDoc.documentElement;
+                newSvgElement.removeAttribute('height');
+                newSvgElement.removeAttribute('width');
 
                 // Set initial class and dimensions
                 newSvgElement.classList.add('svg-content');
@@ -2981,10 +3003,35 @@
                 // Ensure the main SVG allows filter effects to extend visually
                 newSvgElement.style.overflow = 'visible';
 
-                // Clear previous SVG content and append the new one
-                svgWrapper.innerHTML = '';
-                svgWrapper.appendChild(newSvgElement);
-                currentSvgElement = newSvgElement; // Update the global reference
+                svgWrapper.innerHTML = ''; // Clear the wrapper
+                svgWrapper.style.display = 'flex'; // Use flexbox to lay out clones horizontally
+
+                // Create a container for the original map and its bars
+                const originalMapGroup = document.createElement('div');
+                originalMapGroup.appendChild(newSvgElement);
+
+                // Move the R&D and IPC bars from the document into this group
+                const rdBar = document.getElementById('rdDisplayBar');
+                const ipcBar = document.getElementById('ipcDisplayBar');
+                if (rdBar) originalMapGroup.appendChild(rdBar);
+                if (ipcBar) originalMapGroup.appendChild(ipcBar);
+
+                // Clone the entire group (map + bars) twice
+                const leftCloneGroup = originalMapGroup.cloneNode(true);
+                const rightCloneGroup = originalMapGroup.cloneNode(true);
+
+                // Append the clones and the original to the wrapper
+                svgWrapper.appendChild(leftCloneGroup);
+                svgWrapper.appendChild(originalMapGroup);
+                svgWrapper.appendChild(rightCloneGroup);
+
+                // Get references to all three SVG elements for cloned rendering
+                const allSvgElements = [
+                    leftCloneGroup.querySelector('.svg-content'),
+                    originalMapGroup.querySelector('.svg-content'),
+                    rightCloneGroup.querySelector('.svg-content')
+                ];
+                currentSvgElement = allSvgElements[1]; // Keep middle one as a primary reference
 
                 // Create dedicated <g> elements for layering to control render order
                 const backgroundLabelsGroup = newSvgElement.ownerDocument.createElementNS('http://www.w3.org/2000/svg', 'g');
@@ -2993,23 +3040,26 @@
                 const unitLayerGroup = newSvgElement.ownerDocument.createElementNS('http://www.w3.org/2000/svg', 'g');
                 unitLayerGroup.setAttribute('id', 'unit-layer');
 
-                currentSvgElement.addEventListener('click', (event) => {
-                    if (!event.ctrlKey) return;
+                allSvgElements.forEach(svgEl => {
+                    svgEl.addEventListener('click', (event) => {
+                        if (!event.ctrlKey) return;
 
-                    const svgPoint = getSvgCoordinates(event.clientX, event.clientY);
-                    const coordString = `{ "x": ${svgPoint.x.toFixed(2)}, "y": ${svgPoint.y.toFixed(2)} }`;
+                        // Pass the specific SVG where the click occurred
+                        const svgPoint = getSvgCoordinates(event.clientX, event.clientY, event.currentTarget);
+                        const coordString = `{ "x": ${svgPoint.x.toFixed(2)}, "y": ${svgPoint.y.toFixed(2)} }`;
 
-                    navigator.clipboard.writeText(coordString)
-                        .then(() => {
-                            console.log("Copied to clipboard:", coordString);
-                        })
-                        .catch(err => {
-                            console.error("Clipboard write failed:", err);
-                        });
+                        navigator.clipboard.writeText(coordString)
+                            .then(() => {
+                                console.log("Copied to clipboard:", coordString);
+                            })
+                            .catch(err => {
+                                console.error("Clipboard write failed:", err);
+                            });
 
-                    // Prevent default click
-                    event.stopPropagation();
-                    event.preventDefault();
+                        // Prevent default click
+                        event.stopPropagation();
+                        event.preventDefault();
+                    });
                 });
 
 
@@ -3060,7 +3110,7 @@
                     }
                 });
 
-                cssRules += `polygon, path { cursor: pointer; fill-opacity: 0.8; transition: fill 0.3s ease, fill-opacity 0.3s ease, stroke 0.3s ease, stroke-width 0.3s ease; }`;
+                cssRules += `polygon, path { cursor: default; fill-opacity: 0.8; transition: fill 0.3s ease, fill-opacity 0.3s ease, stroke 0.3s ease, stroke-width 0.3s ease; }`;
                 cssRules += `.hover-highlight { fill-opacity: 1.0 !important; stroke: #fff !important; stroke-width: 1 !important; }`;
 
                 styleElement.textContent = cssRules;
@@ -3074,84 +3124,91 @@
                     defs.appendChild(styleElement);
                 }
 
-                // Add event listeners for hover effects on all territory parts
-                const allTerritoryPaths = newSvgElement.querySelectorAll('polygon[data-name], path[data-name]');
+                // Add event listeners for hover effects on all territory parts in all three SVGs
+                allSvgElements.forEach(svgEl => {
+                    const allTerritoryPaths = svgEl.querySelectorAll('polygon[data-name], path[data-name]');
+                    allTerritoryPaths.forEach(path => {
+                        path.addEventListener('mouseover', () => {
+                            const territoryName = path.getAttribute('data-name');
+                            if (territoryName) {
+                                // Highlight the territory across all three maps
+                                svgWrapper.querySelectorAll(`[data-name="${territoryName}"]`).forEach(part => part.classList.add('hover-highlight'));
+                            }
+                        });
 
-                allTerritoryPaths.forEach(path => {
-                    path.addEventListener('mouseover', () => {
-                        const territoryName = path.getAttribute('data-name');
-                        if (territoryName) {
-                            const sameTerritories = newSvgElement.querySelectorAll(`polygon[data-name="${territoryName}"], path[data-name="${territoryName}"]`);
-                            sameTerritories.forEach(part => part.classList.add('hover-highlight'));
-                        }
-                    });
-
-                    path.addEventListener('mouseout', () => {
-                        const territoryName = path.getAttribute('data-name');
-                        if (territoryName) {
-                            const sameTerritories = newSvgElement.querySelectorAll(`polygon[data-name="${territoryName}"], path[data-name="${territoryName}"]`);
-                            sameTerritories.forEach(part => part.classList.remove('hover-highlight'));
-                        }
+                        path.addEventListener('mouseout', () => {
+                            const territoryName = path.getAttribute('data-name');
+                            if (territoryName) {
+                                // Remove highlight from the territory across all three maps
+                                svgWrapper.querySelectorAll(`[data-name="${territoryName}"]`).forEach(part => part.classList.remove('hover-highlight'));
+                            }
+                        });
                     });
                 });
 
                 // Generate unit colorization filters using the new logic
                 generateColorFilters(newSvgElement);
 
-                // --- Function Call Order ---
+                // --- Function Call Order (Applied to all three map clones) ---
 
-                // 1. Add territory names and IPCs
-                await addTerritoryLabels(newSvgElement, textSettings, territoryIpcs);
-
-                // 2. Draw static infrastructure (railways, roads) - they will be behind labels and units
-                drawInfrastructure(newSvgElement, otherSetupData);
-                
-                // 3. Add background labels (CONVOY, SHIPYARD) to their dedicated group
-                newSvgElement.appendChild(backgroundLabelsGroup);
-                drawConvoyAndShipyardLabels(backgroundLabelsGroup, seazoneLabelsData);
-
-                // 4. Add the unit layer group to the SVG DOM
-                newSvgElement.appendChild(unitLayerGroup);
-
-                // 5. Fetch infrastructure coordinates
-
+                // Fetch infrastructure coordinates once, before the loop
                 let infrastructureCoords = null;
-
                 try {
-                    const infraResponse = await fetch('infrastructure-coordinates.json');
-                    if (infraResponse.ok) {
-                        const rawInfraCoords = await infraResponse.json();
-                        infrastructureCoords = {};
-
-                        for (const entry of rawInfraCoords) {
-                            const { territory, unitType, x, y } = entry;
-                            if (!infrastructureCoords[territory]) {
-                                infrastructureCoords[territory] = [];
-                            }
-                            infrastructureCoords[territory].push({ unitType, x, y });
-                        }
-                        console.log("Loaded infrastructure positions from infrastructure-coordinates.json");
-                    } else {
-                        console.warn("Could not load infrastructure-coordinates.json");
+                    const infraResponse = await fetch('infrastructure-coordinates.json?v=' + new Date().getTime());
+                    
+                    // Add check for successful fetch
+                    if (!infraResponse.ok) {
+                        throw new Error(`HTTP error! status: ${infraResponse.status} for infrastructure-coordinates.json`);
                     }
+
+                    // Read the JSON data from the response and assign it
+                    infrastructureCoords = await infraResponse.json(); 
+                    
+                    console.log("Loaded infrastructure positions from infrastructure-coordinates.json", infrastructureCoords);
                 } catch (e) {
                     console.error("Error loading infrastructure-coordinates.json:", e);
                 }
 
-                // 6. Place units into their dedicated group
-                placeUnits(
-                    newSvgElement,
-                    setupData,
-                    textSettings,
-                    smallIslandsMap,
-                    territoryAdjacencies,
-                    unitCoordinatesToUse,
-                    infrastructureCoords,
-                    unitProfileData,
-                    unitLayerGroup // Pass the defined unit layer group
-                );
+                for (const svgEl of allSvgElements) {
+                    // Create dedicated <g> layers for each SVG instance
+                    const backgroundLabelsGroup = svgEl.ownerDocument.createElementNS('http://www.w3.org/2000/svg', 'g');
+                    backgroundLabelsGroup.setAttribute('id', `background-labels-layer-${Math.random().toString(36).substr(2, 9)}`);
 
-                await drawNeutralFlags(newSvgElement);
+                    const unitLayerGroup = svgEl.ownerDocument.createElementNS('http://www.w3.org/2000/svg', 'g');
+                    unitLayerGroup.setAttribute('id', `unit-layer-${Math.random().toString(36).substr(2, 9)}`);
+
+                    // Generate unique filters for each SVG
+                    generateColorFilters(svgEl);
+
+                    // 1. Add territory names and IPCs
+                    await addTerritoryLabels(svgEl, textSettings, territoryIpcs);
+
+                    // 2. Draw static infrastructure (railways, roads)
+                    drawInfrastructure(svgEl, otherSetupData);
+                    
+                    // 3. Add background labels (CONVOY, SHIPYARD)
+                    svgEl.appendChild(backgroundLabelsGroup);
+                    drawConvoyAndShipyardLabels(backgroundLabelsGroup, seazoneLabelsData);
+
+                    // 4. Add the unit layer
+                    svgEl.appendChild(unitLayerGroup);
+
+                    // 5. Place units
+                    placeUnits(
+                        svgEl,
+                        setupData,
+                        textSettings,
+                        smallIslandsMap,
+                        territoryAdjacencies,
+                        unitCoordinatesToUse,
+                        infrastructureCoords,
+                        unitProfileData,
+                        unitLayerGroup
+                    );
+
+                    // 6. Draw neutral flags
+                    await drawNeutralFlags(svgEl, unitLayerGroup);
+                }
 
                 // Apply initial zoom after content is loaded and styled
                 applyZoom();
@@ -3165,59 +3222,65 @@
         }
 
 
-        /**
-         * Applies the current zoom level to the SVG element.
-         * Adjusts SVG intrinsic dimensions for scrolling and centers the view.
-         */
         function applyZoom() {
-            if (!currentSvgElement || !originalViewBox) return;
+            if (!originalViewBox || !svgWrapper.hasChildNodes()) return;
 
-            const viewportWidth = mapContainer.clientWidth;
-            const viewportHeight = mapContainer.clientHeight;
+            const allMapGroups = svgWrapper.children;
+            if (allMapGroups.length < 3) return;
 
-            // Calculate the current center in SVG coordinates before zoom
-            const svgPoint = currentSvgElement.createSVGPoint();
-            svgPoint.x = mapContainer.scrollLeft + viewportWidth / 2;
-            svgPoint.y = mapContainer.scrollTop + viewportHeight / 2;
+            const middleMapGroup = allMapGroups[1];
+            const widthBefore = middleMapGroup.getBoundingClientRect().width;
 
-            // Transform client coordinates to SVG user coordinates
-            const CTM = currentSvgElement.getScreenCTM();
-            if (!CTM) {
-                console.warn("Could not get CTM for SVG element.");
-                return;
-            }
-            const centerBeforeZoomSvg = svgPoint.matrixTransform(CTM.inverse());
-
-            // Scale SVG's layout size based on its original viewBox
+            // 1. Calculate new dimensions for the SVG map
             const scaledWidth = originalViewBox.width * zoomLevel;
             const scaledHeight = originalViewBox.height * zoomLevel;
 
-            // Apply the new dimensions
-            currentSvgElement.setAttribute('width', scaledWidth);
-            currentSvgElement.setAttribute('height', scaledHeight);
-
-            updateIpcBarLayout();
-
-            // After setting new dimensions, recalculate the CTM (it might change)
-            // and then determine the new scroll position to keep the logical center visible.
-            // Use requestAnimationFrame to ensure layout updates are processed
+            // 2. Apply new dimensions to all three SVG elements
+            const svgElements = svgWrapper.querySelectorAll('.svg-content');
+            svgElements.forEach(svg => {
+                svg.setAttribute('width', String(scaledWidth));
+                svg.setAttribute('height', String(scaledHeight));
+            });
+            // 3. Defer the rest of the logic to ensure the browser has updated the layout
             requestAnimationFrame(() => {
-                const newCTM = currentSvgElement.getScreenCTM();
-                if (!newCTM) {
-                    console.warn("Could not get new CTM after scaling.");
-                    return;
+                const widthAfter = middleMapGroup.getBoundingClientRect().width;
+                if (widthAfter === 0) return;
+
+                // Update the main wrapper to hold all three groups
+                svgWrapper.style.width = `${widthAfter * 3}px`;
+                
+                // 4. Calculate new scroll position to keep the view centered
+                const viewportWidth = mapContainer.clientWidth;
+                const scrollLeftBefore = mapContainer.scrollLeft;
+                const zoomRatio = widthAfter / (widthBefore || 1);
+
+                // Find where the center of the screen was pointing within the middle map
+                const centerOffsetInMap = (scrollLeftBefore + viewportWidth / 2) - widthBefore;
+                const newCenterOffset = centerOffsetInMap * zoomRatio;
+                let newScrollLeft = (widthAfter + newCenterOffset) - (viewportWidth / 2);
+
+                // On the very first load, center the middle map
+                if (scrollLeftBefore === 0) {
+                    newScrollLeft = widthAfter;
                 }
 
-                const centerAfterZoomScreen = centerBeforeZoomSvg.matrixTransform(newCTM);
-                const newScrollX = centerAfterZoomScreen.x - mapContainer.clientWidth / 2;
-                const newScrollY = centerAfterZoomScreen.y - mapContainer.clientHeight / 2;
+                // Also keep the vertical view centered
+                const viewportHeight = mapContainer.clientHeight;
+                const scrollTopBefore = mapContainer.scrollTop;
+                const heightBefore = mapContainer.scrollHeight;
+                const verticalRatio = (scrollTopBefore + viewportHeight / 2) / (heightBefore || 1);
+                const newScrollTop = (middleMapGroup.getBoundingClientRect().height * verticalRatio) - (viewportHeight / 2);
 
-                // CORRECTED: Apply scroll to mapContainer and clamp with correct values
-                const maxScrollX = mapContainer.scrollWidth - mapContainer.clientWidth;
-                const maxScrollY = mapContainer.scrollHeight - mapContainer.clientHeight;
+                // 5. Apply the new scroll position
+                isAdjustingScroll = true;
+                mapContainer.scrollLeft = newScrollLeft;
+                mapContainer.scrollTop = Math.max(0, newScrollTop);
 
-                mapContainer.scrollLeft = Math.max(0, Math.min(newScrollX, maxScrollX));
-                mapContainer.scrollTop = Math.max(0, Math.min(newScrollY, maxScrollY));
+                updateIpcBarLayout();
+
+                requestAnimationFrame(() => {
+                    isAdjustingScroll = false;
+                });
             });
         }
 
@@ -3228,6 +3291,13 @@
          * @param {KeyboardEvent} event - The keyboard event object.
          */
         document.addEventListener('keydown', (event) => {
+
+            // Check for Ctrl+A or Cmd+A
+            if ((event.ctrlKey || event.metaKey) && (event.key === 'a' || event.key === 'A')) {
+                event.preventDefault();
+                return;
+            }
+
             if (!currentSvgElement) return; // Ensure SVG is loaded
 
             if (event.key === '=' || event.key === '+') { // Zoom in
@@ -3243,6 +3313,117 @@
             }
         });
 
+
+        /**
+         * Starts the pan operation for the map.
+         * @param {Event} event - The mouse or touch event.
+         */
+        function startPan(event) {
+            // Only pan if the click is not on a unit (this lets unit drag take priority)
+            if (event.target.closest('.unit-stack-group')) {
+                return;
+            }
+            // Only pan with the left mouse button
+            if (event.button !== 0) {
+                return;
+            }
+
+            isPanning = true;
+            panStartX = event.clientX;
+            panStartY = event.clientY;
+            scrollStartX = mapContainer.scrollLeft;
+            scrollStartY = mapContainer.scrollTop;
+            
+            // Add listeners to the document to handle panning anywhere
+            document.addEventListener('mousemove', pan);
+            document.addEventListener('mouseup', endPan);
+            document.addEventListener('mouseleave', endPan); // Also stop if mouse leaves window
+        }
+
+        /**
+         * Handles the pan movement of the map.
+         * @param {Event} event - The mouse or touch event.
+         */
+        function pan(event) {
+            if (!isPanning) return;
+
+            event.preventDefault(); // Prevent text selection
+
+            const dx = event.clientX - panStartX;
+            const dy = event.clientY - panStartY;
+
+            // Scroll the container
+            mapContainer.scrollLeft = scrollStartX - dx;
+            mapContainer.scrollTop = scrollStartY - dy;
+        }
+
+        /**
+         * Ends the pan operation.
+         * @param {Event} event - The mouse or touch event.
+         */
+        function endPan(event) {
+            isPanning = false;
+
+            // Remove the global listeners
+            document.removeEventListener('mousemove', pan);
+            document.removeEventListener('mouseup', endPan);
+            document.removeEventListener('mouseleave', endPan);
+        }
+
+        // --- Event Listener for Wraparound Scrolling ---
+        mapContainer.addEventListener('scroll', () => {
+            if (isAdjustingScroll || !svgWrapper.hasChildNodes() || svgWrapper.children.length < 3) return;
+
+            const mapWidth = svgWrapper.children[1].getBoundingClientRect().width;
+            if (mapWidth === 0) return; // Avoid errors if the map isn't rendered yet
+
+            const scrollLeft = mapContainer.scrollLeft;
+            const buffer = 5; // A small pixel buffer to prevent precision issues
+
+            // If scrolled to the right clone, jump back to the middle
+            if (scrollLeft >= (mapWidth * 2) - buffer) {
+                isAdjustingScroll = true;
+                mapContainer.scrollLeft -= mapWidth;
+            } 
+            // If scrolled to the left clone, jump forward to the middle
+            else if (scrollLeft <= buffer) {
+                isAdjustingScroll = true;
+                mapContainer.scrollLeft += mapWidth;
+            }
+
+            // Release the lock after the browser has processed the scroll change
+            if (isAdjustingScroll) {
+                requestAnimationFrame(() => { isAdjustingScroll = false; });
+            }
+        });
+
+        /**
+         * Handles zooming with the mouse wheel or touchpad.
+         * @param {WheelEvent} event - The wheel event.
+         */
+        function handleWheelZoom(event) {
+            if (!currentSvgElement) return;
+
+            event.preventDefault(); // Prevent default page scroll
+            event.stopPropagation(); // Stop it from bubbling
+
+            const zoomSpeed = 0.05; // Matches the keydown zoom step
+
+            if (event.deltaY < 0) {
+                // Zoom In (scroll up / pinch out)
+                if (zoomLevel < 5.0) {
+                    zoomLevel = Math.min(5.0, zoomLevel + zoomSpeed);
+                    applyZoom();
+                }
+            } else if (event.deltaY > 0) {
+                // Zoom Out (scroll down / pinch in)
+                if (zoomLevel > 0.2) {
+                    zoomLevel = Math.max(0.2, zoomLevel - zoomSpeed);
+                    applyZoom();
+                }
+            }
+        }
+
         // --- Drag and Drop Functions ---
 
         let isDragging = false;
@@ -3257,6 +3438,12 @@
         let drawnArrows = [];
         let unitSplitPromiseResolver = null;
 
+        let isPanning = false;
+        let panStartX, panStartY;
+        let scrollStartX, scrollStartY;
+
+
+
 
         /**
          * Converts screen coordinates to SVG coordinates.
@@ -3264,9 +3451,9 @@
          * @param {number} clientY - The clientY from a mouse/touch event.
          * @returns {SVGPoint} An SVGPoint object with x and y in SVG user units.
          */
-        function getSvgCoordinates(clientX, clientY) {
-            const svgMatrix = currentSvgElement.getScreenCTM();
-            const point = currentSvgElement.createSVGPoint();
+        function getSvgCoordinates(clientX, clientY, svgElement) {
+            const svgMatrix = svgElement.getScreenCTM();
+            const point = svgElement.createSVGPoint();
             point.x = clientX;
             point.y = clientY;
             return point.matrixTransform(svgMatrix.inverse());
@@ -3499,179 +3686,294 @@
         }
 
         /**
-         * Highlights all territories a unit can reach based on its movement points, type, and alliance.
-         * Uses a breadth-first search algorithm and applies tiered coloring for distance.
-         * This version stores original territory colors before applying highlights to ensure proper restoration.
+         * Highlights all territories a unit can reach based on its movement points and specific rules for unit type.
+         * This new version implements distinct logic for land, air, and sea units.
          * @param {string} startTerritory - The name of the territory where the unit starts.
          * @param {number} movementPoints - The maximum movement distance.
          * @param {string} unitPower - The power controlling the unit.
          * @param {string} unitType - The type of the unit.
          */
         function highlightReachableTerritories(startTerritory, movementPoints, unitPower, unitType) {
-            // Define the colors for each movement tier.
-            const TIER_COLORS = ['#00FFFF', '#33CCFF', '#6699FF', '#9966FF', '#CC33FF', '#FF00FF']; // Cyan -> Sky Blue -> Blue -> Purple -> Pink -> Magenta
+            // --- SETUP & CONSTANTS ---
+            const ATTACK_HIGHLIGHT_COLOR = '#E74C3C'; // A strong, clear red for attacks
+            const PASSABLE_HIGHLIGHT_COLOR = '#3498DB'; // A pleasant, clear blue for movement-only
             const unitAlliance = AXIS_POWERS.has(unitPower) ? AXIS_POWERS : ALLIED_POWERS;
             const isAirUnit = airUnitTypes.includes(unitType);
             const isSeaUnit = SEA_UNIT_TYPES.includes(unitType);
             const isLandUnit = !isAirUnit && !isSeaUnit;
+            const attackableSpaces = new Set();
+            const passableSpaces = new Set();
 
-            // Setup for the Breadth-First Search (BFS)
-            const queue = [{ territoryName: startTerritory, distance: 0 }];
-            const visited = new Map(); // Stores { territoryName: distance } to track shortest paths
-            visited.set(startTerritory, 0);
+            // --- HELPER FUNCTIONS ---
 
-            // --- Main Pathfinding Loop ---
-            while (queue.length > 0) {
-                const { territoryName, distance } = queue.shift();
+            /**
+             * Gets the string name of the power controlling a territory.
+             * @param {string} territoryName - The name of the territory.
+             * @returns {string|null} The power name (e.g., "Germany", "Impassable") or null if not found.
+             */
+            const getTerritoryPower = (territoryName) => {
+                const path = svgWrapper.querySelector(`[data-name="${territoryName}"]`);
+                return path ? path.getAttribute('data-power') : null;
+            };
 
-                // Stop exploring this path if we are at the movement limit
-                if (distance >= movementPoints) {
-                    continue;
+            /**
+             * Determines if a territory is hostile to the moving unit based on complex alliance rules.
+             * @param {string} territoryName - The name of the target territory.
+             * @param {string} movingUnitPower - The power of the unit that is moving.
+             * @returns {boolean} True if the territory is considered an enemy.
+             */
+            const isEnemyTerritory = (territoryName, movingUnitPower) => {
+                const targetPower = getTerritoryPower(territoryName);
+                if (!targetPower || targetPower === 'Impassable') return false;
+
+                const movingUnitAlliance = AXIS_POWERS.has(movingUnitPower) ? 'Axis' : 'Allies';
+
+                if (movingUnitAlliance === 'Allies') {
+                    return AXIS_POWERS.has(targetPower) || targetPower === 'Neutral' || targetPower === 'Pro-Axis Neutral';
+                } else { // Moving unit is Axis
+                    return ALLIED_POWERS.has(targetPower) || targetPower === 'Neutral' || targetPower === 'Pro-Allied Neutral';
+                }
+            };
+
+            /**
+             * Checks if a sea zone contains any enemy sea units.
+             * @param {string} zoneName - The name of the sea zone.
+             * @returns {boolean} True if enemy units are present.
+             */
+            const seaZoneHasEnemyUnits = (zoneName) => {
+                return placedUnitsData.some(unit =>
+                    unit.placedIn === zoneName &&
+                    SEA_UNIT_TYPES.includes(unit.unitType) &&
+                    !unitAlliance.has(unit.power)
+                );
+            };
+            
+            /**
+             * A unified check for air units to determine if a land or sea space is a valid attack target.
+             * @param {string} zoneName - The name of the territory or sea zone.
+             * @param {string} movingUnitPower - The power of the attacking air unit.
+             * @returns {boolean} True if the space is a valid attack target.
+             */
+            const isAttackableByAir = (zoneName, movingUnitPower) => {
+                 const targetPower = getTerritoryPower(zoneName);
+                 if (!targetPower || targetPower === 'Impassable') return false;
+                 // Sea zones are attackable if they contain any enemy units (sea or land).
+                 if (!isNaN(Number(zoneName))) {
+                     return placedUnitsData.some(unit => unit.placedIn === zoneName && !unitAlliance.has(unit.power));
+                 }
+                 // Land territories are attackable if they are enemy-controlled.
+                 return isEnemyTerritory(zoneName, movingUnitPower);
+            };
+
+
+            // --- LOGIC FOR LAND UNITS ---
+            if (isLandUnit) {
+                const adjacencies1 = territoryAdjacencies[startTerritory]?.adjacent_to || [];
+                const friendlyBridgeTerritories = new Set();
+
+                for (const adjName of adjacencies1) {
+                    const power = getTerritoryPower(adjName);
+                    if (!power || power === 'Impassable') continue;
+                    
+                    if (isEnemyTerritory(adjName, unitPower)) {
+                        attackableSpaces.add(adjName);
+                    } else {
+                        friendlyBridgeTerritories.add(adjName);
+                    }
                 }
 
-                const adjacencies = territoryAdjacencies[territoryName]?.adjacent_to || [];
-
-                for (const adjName of adjacencies) {
-                    const pathElements = currentSvgElement.querySelectorAll(`[data-name="${adjName}"]`);
-                    if (pathElements.length === 0) continue;
-                    const pathElement = pathElements[0]; // Use the first path for data checks
-
-                    // --- RULE 1: Universal Conditions ---
-                    if (pathElement.getAttribute('data-power') === 'Impassable') continue;
-                    if (visited.has(adjName) && visited.get(adjName) <= distance + 1) continue;
-
-                    // --- RULE 2: Unit-Specific Traversal ---
-                    let canTraverse = false;
-                    const isAdjSeaZone = !isNaN(Number(adjName));
-
-                    if (isAirUnit) {
-                        canTraverse = true; // Air units can traverse both land and sea
-                    } else if (isSeaUnit) {
-                        if (isAdjSeaZone) canTraverse = true; // Sea units only traverse sea zones
-                    } else if (isLandUnit) {
-                        if (!isAdjSeaZone) {
-                            canTraverse = true; // Land units traverse land
-                        } else {
-                            // Land units can enter a sea zone if an allied transport is present
-                            const hasAlliedTransport = placedUnitsData.some(unit =>
-                                unit.placedIn === adjName && unit.unitType === 'TPT' && unitAlliance.has(unit.power)
-                            );
-                            if (hasAlliedTransport) canTraverse = true;
+                if (movementPoints > 1) {
+                    for (const bridgeTerritory of friendlyBridgeTerritories) {
+                        const adjacencies2 = territoryAdjacencies[bridgeTerritory]?.adjacent_to || [];
+                        for (const adjName2 of adjacencies2) {
+                            if (adjName2 === startTerritory || adjName2 === bridgeTerritory) continue;
+                            
+                            const power = getTerritoryPower(adjName2);
+                            if (!power || power === 'Impassable') continue;
+                            
+                            if (isEnemyTerritory(adjName2, unitPower)) {
+                                attackableSpaces.add(adjName2);
+                                passableSpaces.add(bridgeTerritory); 
+                            }
                         }
                     }
+                }
+            }
 
-                    if (!canTraverse) continue;
+            // --- LOGIC FOR SEA UNITS ---
+            else if (isSeaUnit) {
+                const adjacencies1 = territoryAdjacencies[startTerritory]?.adjacent_to || [];
 
-                    // If we can traverse, mark this territory as visited
-                    visited.set(adjName, distance + 1);
+                for (const adjName1 of adjacencies1) {
+                     const power = getTerritoryPower(adjName1);
+                     if (power === 'Impassable' || isNaN(Number(adjName1))) continue;
 
-                    // --- RULE 3: Stop Pathfinding at Hostile Borders ---
-                    const adjPower = pathElement.getAttribute('data-power');
-                    const adjAlliance = AXIS_POWERS.has(adjPower) ? AXIS_POWERS : (ALLIED_POWERS.has(adjPower) ? ALLIED_POWERS : null);
-                    const isFriendlyTerritory = adjAlliance === unitAlliance;
-                    
-                    // Only continue exploring from this new territory if it's friendly.
-                    // Sea zones are always considered "friendly" for traversal purposes.
-                    if (isFriendlyTerritory || isAdjSeaZone) {
-                        queue.push({ territoryName: adjName, distance: distance + 1 });
+                    if (seaZoneHasEnemyUnits(adjName1)) {
+                        attackableSpaces.add(adjName1);
+                    } else {
+                        const adjacencies2 = territoryAdjacencies[adjName1]?.adjacent_to || [];
+                        for (const adjName2 of adjacencies2) {
+                            if (isNaN(Number(adjName2)) || adjName2 === startTerritory) continue;
+                            if (seaZoneHasEnemyUnits(adjName2)) {
+                                attackableSpaces.add(adjName2);
+                                passableSpaces.add(adjName1);
+                            }
+                        }
                     }
                 }
             }
 
-            // --- Apply Coloring ---
-            for (const [territoryName, distance] of visited.entries()) {
-                if (distance > 0) { // Don't highlight the start territory (distance 0)
-                    const colorIndex = Math.min(distance - 1, TIER_COLORS.length - 1);
-                    const fillColor = TIER_COLORS[colorIndex];
-                    
-                    const pathsToHighlight = currentSvgElement.querySelectorAll(`[data-name="${territoryName}"]`);
-                    pathsToHighlight.forEach(path => {
-                        const territoryClickHandler = async (event) => {
-                            event.stopPropagation(); // Prevent other clicks
+            // --- LOGIC FOR AIR UNITS ---
+            else if (isAirUnit) {
+                const distanceMap = new Map();
+                let queue = [{ territoryName: startTerritory, distance: 0 }];
+                distanceMap.set(startTerritory, 0);
 
-                            const totalUnitsInStack = parseInt(selectedUnit.getAttribute('data-count'), 10);
-                            
-                            // Calculate how many units from this stack are already assigned to arrows
-                            let unitsAlreadyMoved = 0;
-                            drawnArrows.forEach(arrow => {
-                                if (arrow.startUnit === selectedUnit) {
-                                    unitsAlreadyMoved += arrow.units;
+                while (queue.length > 0) {
+                    const { territoryName, distance } = queue.shift();
+                    if (distance >= movementPoints) continue;
+
+                    const adjacencies = territoryAdjacencies[territoryName]?.adjacent_to || [];
+                    for (const adjName of adjacencies) {
+                        const power = getTerritoryPower(adjName);
+                        if (power === 'Impassable') continue;
+
+                        if (!distanceMap.has(adjName)) {
+                            distanceMap.set(adjName, distance + 1);
+                            queue.push({ territoryName: adjName, distance: distance + 1 });
+                        }
+                    }
+                }
+
+                for (const [candidate, distanceFromStart] of distanceMap.entries()) {
+                    if (candidate === startTerritory) continue;
+
+                    if (isAttackableByAir(candidate, unitPower)) {
+                        const remainingMove = movementPoints - distanceFromStart;
+                        if (remainingMove < 0) continue;
+                        
+                        let canLand = false;
+                        let landingQueue = [{ territoryName: candidate, distance: 0 }];
+                        const landingVisited = new Set([candidate]);
+
+                        while (landingQueue.length > 0) {
+                            const { territoryName, distance } = landingQueue.shift();
+                            const targetPower = getTerritoryPower(territoryName);
+
+                            if (targetPower && unitAlliance.has(targetPower)) {
+                                canLand = true;
+                                break;
+                            }
+                            if (!isNaN(Number(territoryName))) {
+                                 if (placedUnitsData.some(u => u.placedIn === territoryName && u.unitType === 'ACC' && u.power === unitPower)) {
+                                    canLand = true;
+                                    break;
                                 }
-                            });
-
-                            const availableUnits = totalUnitsInStack - unitsAlreadyMoved;
-
-                            // If no units are available, inform the user and stop.
-                            if (availableUnits <= 0) {
-                                alert("All units from this stack have already been assigned a move.");
-                                return;
                             }
 
-                            // Corrected Arrow Start Position: Center of the unit's background circle
-                            const unitTransform = selectedUnit.transform.baseVal.getItem(0).matrix;
-                            const unitImage = selectedUnit.querySelector('.unit-token');
-                            const unitWidth = parseFloat(unitImage.getAttribute('width'));
-                            const unitHeight = parseFloat(unitImage.getAttribute('height'));
-                            const startPos = {
-                                x: unitTransform.e + unitWidth / 2,
-                                y: unitTransform.f + unitHeight / 2 // This now correctly centers the arrow
-                            };
-                            const endPos = getSvgCoordinates(event.clientX, event.clientY);
-                            
-                            let unitsToMove = 1; // Default for single units
-
-                            // If more than one unit is available, show the slider.
-                            if (availableUnits > 1) {
-                                unitsToMove = await showUnitSplitSlider(availableUnits, event);
+                            if (distance < remainingMove) {
+                                const adjacencies = territoryAdjacencies[territoryName]?.adjacent_to || [];
+                                for (const adjName of adjacencies) {
+                                    if (getTerritoryPower(adjName) !== 'Impassable' && !landingVisited.has(adjName)) {
+                                        landingVisited.add(adjName);
+                                        landingQueue.push({ territoryName: adjName, distance: distance + 1 });
+                                    }
+                                }
                             }
-
-                            if (unitsToMove === null || unitsToMove === 0) return; // User canceled or chose 0
-
-                            const arrowElement = drawCurvedArrow(startPos, endPos, selectedUnit);
-                            
-                            // Add unit count circle only if the stack had more than one unit to begin with.
-                            if (totalUnitsInStack > 1) {
-                                addUnitCountToArrow(arrowElement, unitsToMove);
-                            }
-
-                            // Add the new arrow to our global tracking array
-                            drawnArrows.push({
-                                arrowElement: arrowElement,
-                                startUnit: selectedUnit,
-                                targetTerritory: territoryName,
-                                units: unitsToMove,
-                                endPos: endPos // Add this line to store the destination
-                            });
-                        };
-                        
-                        // Store original styles and add the new click handler
-                        highlightedTerritories.push({
-                            element: path,
-                            originalFill: path.style.fill,
-                            originalOpacity: path.style.fillOpacity,
-                            originalStroke: path.style.stroke,
-                            originalStrokeWidth: path.style.strokeWidth,
-                            clickHandler: territoryClickHandler
-                        });
-
-                        path.addEventListener('click', territoryClickHandler);
-                        
-                        // Apply new highlight styles
-                        path.style.fill = fillColor;
-                        path.style.fillOpacity = '0.4';
-                        path.style.stroke = '#000000';
-                        path.style.strokeWidth = '1px';
-                    });
+                        }
+                        if (canLand) {
+                            attackableSpaces.add(candidate);
+                        }
+                    }
                 }
             }
+
+            // --- APPLY HIGHLIGHTS & CLICK HANDLERS ---
+            const applyHighlight = (territoryName, color, isAttackable) => {
+                const pathsToHighlight = svgWrapper.querySelectorAll(`[data-name="${territoryName}"]`);
+                pathsToHighlight.forEach(path => {
+                    const territoryClickHandler = async (event) => {
+                        event.stopPropagation();
+                        const totalUnitsInStack = parseInt(selectedUnit.getAttribute('data-count'), 10);
+                        let unitsAlreadyMoved = drawnArrows.reduce((sum, arrow) => (arrow.startUnit === selectedUnit) ? sum + arrow.units : sum, 0);
+                        const availableUnits = totalUnitsInStack - unitsAlreadyMoved;
+
+                        if (availableUnits <= 0) {
+                            // Using a custom modal/toast in the future would be better than alert.
+                            console.warn("All units from this stack have already been assigned a move.");
+                            return;
+                        }
+
+                        const unitTransform = selectedUnit.transform.baseVal.getItem(0).matrix;
+                        const unitImage = selectedUnit.querySelector('.unit-token');
+                        const unitWidth = parseFloat(unitImage.getAttribute('width'));
+                        const unitHeight = parseFloat(unitImage.getAttribute('height'));
+                        const startPos = { x: unitTransform.e + unitWidth / 2, y: unitTransform.f + unitHeight / 2 };
+                        const endPos = getSvgCoordinates(event.clientX, event.clientY, path.ownerSVGElement);
+
+                        let unitsToMove = 1;
+                        if (availableUnits > 1) {
+                            unitsToMove = await showUnitSplitSlider(availableUnits, event);
+                        }
+
+                        if (unitsToMove === null || unitsToMove === 0) return;
+
+                        const arrowElement = drawCurvedArrow(startPos, endPos, selectedUnit);
+                        if (totalUnitsInStack > 1) {
+                            addUnitCountToArrow(arrowElement, unitsToMove);
+                        }
+
+                        drawnArrows.push({
+                            arrowElement,
+                            startUnit: selectedUnit,
+                            targetTerritory: territoryName,
+                            units: unitsToMove,
+                            endPos
+                        });
+                    };
+
+                    highlightedTerritories.push({
+                        element: path,
+                        originalFill: path.style.fill,
+                        originalOpacity: path.style.fillOpacity,
+                        originalStroke: path.style.stroke,
+                        originalStrokeWidth: path.style.strokeWidth,
+                        clickHandler: isAttackable ? territoryClickHandler : null
+                    });
+
+                    if (isAttackable) {
+                        path.addEventListener('click', territoryClickHandler);
+                        path.style.cursor = 'crosshair';
+                    }
+
+                    path.style.fill = color;
+                    path.style.fillOpacity = '0.5';
+                    path.style.stroke = '#000000';
+                    path.style.strokeWidth = '1.5px';
+                });
+            };
+
+            // Apply highlights for passable territories first (not clickable)
+            for (const territoryName of passableSpaces) {
+                if (!attackableSpaces.has(territoryName)) {
+                    applyHighlight(territoryName, PASSABLE_HIGHLIGHT_COLOR, false);
+                }
+            }
+
+            // Apply highlights for attackable territories (clickable), which will draw over any passable highlights
+            for (const territoryName of attackableSpaces) {
+                applyHighlight(territoryName, ATTACK_HIGHLIGHT_COLOR, true);
+            }
         }
+
+
 
         /**
          * Handles clicking a unit to select/deselect, trigger multi-tiered highlighting, and apply a selection marker.
          * @param {SVGElement} clickedUnit - The unit <g> element that was clicked.
          */
         function handleUnitClick(clickedUnit) {
-            // **FIX:** Restore original styles on previously highlighted territories
+            // Restore original styles on previously highlighted territories
             highlightedTerritories.forEach(highlight => {
                 const el = highlight.element;
                 el.style.fill = highlight.originalFill;
@@ -3687,7 +3989,8 @@
 
             // Remove marker from the previously selected unit
             if (selectedUnit) {
-                toggleUnitSelectionMarker(selectedUnit, false);
+                const prevId = selectedUnit.getAttribute('id');
+                svgWrapper.querySelectorAll(`[id='${prevId}']`).forEach(unit => toggleUnitSelectionMarker(unit, false));
             }
 
             // If the clicked unit was already the selected one, deselect it and we're done.
@@ -3701,7 +4004,8 @@
             const unitType = selectedUnit.getAttribute('data-unit-type');
 
             // Add the selection marker to the newly selected unit
-            toggleUnitSelectionMarker(selectedUnit, true);
+            const newId = selectedUnit.getAttribute('id');
+            svgWrapper.querySelectorAll(`[id='${newId}']`).forEach(unit => toggleUnitSelectionMarker(unit, true));
 
             // Condition: Ignore path highlighting if the clicked unit is a facility.
             if (FACILITY_UNIT_TYPES.includes(unitType)) {
@@ -3796,7 +4100,7 @@
             const clientX = event.type.startsWith('touch') ? event.touches[0].clientX : event.clientX;
             const clientY = event.type.startsWith('touch') ? event.touches[0].clientY : event.clientY;
 
-            const svgPoint = getSvgCoordinates(clientX, clientY);
+            const svgPoint = getSvgCoordinates(clientX, clientY, currentDraggedUnit.ownerSVGElement);
             dragOffsetX = svgPoint.x - startDragX;
             dragOffsetY = svgPoint.y - startDragY;
 
@@ -3939,7 +4243,7 @@
             const clientX = event.type.startsWith('touch') ? event.touches[0].clientX : event.clientX;
             const clientY = event.type.startsWith('touch') ? event.touches[0].clientY : event.clientY;
 
-            const svgPoint = getSvgCoordinates(clientX, clientY);
+            const svgPoint = getSvgCoordinates(clientX, clientY, event.target.ownerSVGElement);
             let newX = svgPoint.x - dragOffsetX;
             let newY = svgPoint.y - dragOffsetY;
 
@@ -4190,73 +4494,75 @@
                     powersByIpcValue[ipcValue].push(powerName);
                 }
 
-                // 5. Display the results in 1-70 squares
-                const ipcDisplayBar = document.getElementById('ipcDisplayBar');
-                ipcDisplayBar.innerHTML = ''; // Clear previous content
+                // 5. Display the results in 1-70 squares for all three IPC bars
+                const allIpcBars = document.querySelectorAll('.ipc-display-bar');
+                allIpcBars.forEach(ipcDisplayBar => {
+                    ipcDisplayBar.innerHTML = ''; // Clear previous content
 
-                for (let i = 1; i <= 70; i++) {
-                    const square = document.createElement('div');
-                    square.classList.add('ipc-square');
+                    for (let i = 1; i <= 70; i++) {
+                        const square = document.createElement('div');
+                        square.classList.add('ipc-square');
 
-                    // Create the flags container
-                    const flagsContainer = document.createElement('div');
-                    flagsContainer.classList.add('ipc-flags-container');
+                        // Create the flags container
+                        const flagsContainer = document.createElement('div');
+                        flagsContainer.classList.add('ipc-flags-container');
 
-                    if (powersByIpcValue[i]) {
-                        const powersForThisIpc = powersByIpcValue[i];
+                        if (powersByIpcValue[i]) {
+                            const powersForThisIpc = powersByIpcValue[i];
 
-                        if (powersForThisIpc.length === 2) {
-                            flagsContainer.classList.add('vertical-split');
-                            powersForThisIpc.forEach(powerName => {
-                                const flagItem = document.createElement('div');
-                                flagItem.classList.add('flag-item');
-                                const flagImg = document.createElement('img');
-                                flagImg.src = `${powerName}.png`; // Adjust path as needed
-                                flagImg.alt = `${powerName} Flag`;
-                                flagImg.classList.add('flag-icon');
-                                flagItem.appendChild(flagImg);
-                                flagsContainer.appendChild(flagItem);
-                            });
-                        } else if (powersForThisIpc.length === 3) {
-                            flagsContainer.classList.add('horizontal-split');
-                             // To show "the center of the three flags", we'll just display them side-by-side
-                             // and rely on object-fit:cover and flexbox to handle the scaling/cropping.
-                            powersForThisIpc.forEach(powerName => {
-                                const flagItem = document.createElement('div');
-                                flagItem.classList.add('flag-item');
-                                const flagImg = document.createElement('img');
-                                flagImg.src = `${powerName}.png`; // Adjust path as needed
-                                flagImg.alt = `${powerName} Flag`;
-                                flagImg.classList.add('flag-icon');
-                                flagItem.appendChild(flagImg);
-                                flagsContainer.appendChild(flagItem);
-                            });
-                        } else { // For 1 power or more than 3
-                            powersForThisIpc.forEach(powerName => {
-                                const flagItem = document.createElement('div');
-                                flagItem.classList.add('flag-item');
-                                const flagImg = document.createElement('img');
-                                flagImg.src = `flags/${powerName}.png`;
-                                flagImg.alt = `${powerName} Flag`;
-                                flagImg.classList.add('flag-icon');
-                                flagItem.appendChild(flagImg);
-                                flagsContainer.appendChild(flagItem);
-                            });
+                            if (powersForThisIpc.length === 2) {
+                                flagsContainer.classList.add('vertical-split');
+                                powersForThisIpc.forEach(powerName => {
+                                    const flagItem = document.createElement('div');
+                                    flagItem.classList.add('flag-item');
+                                    const flagImg = document.createElement('img');
+                                    flagImg.src = `${powerName}.png`; // Adjust path as needed
+                                    flagImg.alt = `${powerName} Flag`;
+                                    flagImg.classList.add('flag-icon');
+                                    flagItem.appendChild(flagImg);
+                                    flagsContainer.appendChild(flagItem);
+                                });
+                            } else if (powersForThisIpc.length === 3) {
+                                flagsContainer.classList.add('horizontal-split');
+                                 // To show "the center of the three flags", we'll just display them side-by-side
+                                 // and rely on object-fit:cover and flexbox to handle the scaling/cropping.
+                                powersForThisIpc.forEach(powerName => {
+                                    const flagItem = document.createElement('div');
+                                    flagItem.classList.add('flag-item');
+                                    const flagImg = document.createElement('img');
+                                    flagImg.src = `${powerName}.png`; // Adjust path as needed
+                                    flagImg.alt = `${powerName} Flag`;
+                                    flagImg.classList.add('flag-icon');
+                                    flagItem.appendChild(flagImg);
+                                    flagsContainer.appendChild(flagItem);
+                                });
+                            } else { // For 1 power or more than 3
+                                powersForThisIpc.forEach(powerName => {
+                                    const flagItem = document.createElement('div');
+                                    flagItem.classList.add('flag-item');
+                                    const flagImg = document.createElement('img');
+                                    flagImg.src = `flags/${powerName}.png`;
+                                    flagImg.alt = `${powerName} Flag`;
+                                    flagImg.classList.add('flag-icon');
+                                    flagItem.appendChild(flagImg);
+                                    flagsContainer.appendChild(flagItem);
+                                });
+                            }
                         }
+                        
+                        square.appendChild(flagsContainer); // Add the container to the square
+
+                        const ipcNumberSpan = document.createElement('span');
+                        ipcNumberSpan.classList.add('ipc-number');
+                        ipcNumberSpan.textContent = i;
+                        square.appendChild(ipcNumberSpan); // Add the number on top
+
+                        ipcDisplayBar.appendChild(square);
                     }
-                    
-                    square.appendChild(flagsContainer); // Add the container to the square
-
-                    const ipcNumberSpan = document.createElement('span');
-                    ipcNumberSpan.classList.add('ipc-number');
-                    ipcNumberSpan.textContent = i;
-                    square.appendChild(ipcNumberSpan); // Add the number on top
-
-                    ipcDisplayBar.appendChild(square);
-                }
+                });
 
                 // Call the positioning function after content is added
-                updateIpcBarLayout();
+                updateIpcBarLayout();                
 
             } catch (error) {
                 console.error('Error calculating or displaying IPCs:', error);
@@ -4265,30 +4571,26 @@
             }
         }
 
-        /**
-     * Updates the width of the IPC bar and its squares to match the SVG map's width.
-     */
+
         function updateIpcBarLayout() {
-            if (!currentSvgElement) return;
+            const allMapGroups = svgWrapper.children;
+            if (allMapGroups.length < 3 || !currentSvgElement) return;
 
-            const ipcDisplayBar = document.getElementById('ipcDisplayBar');
-            const rdDisplayBar = document.getElementById('rdDisplayBar'); // Get the R&D bar
-            const mapWidth = svgWrapper.scrollWidth; // This correctly includes the padding
+            const mapWidth = currentSvgElement.getBoundingClientRect().width;
+            if (mapWidth <= 0) return;
 
-            if (mapWidth) {
-                // Set the width of BOTH bars to match the new, wider wrapper
-                if (ipcDisplayBar) {
-                    ipcDisplayBar.style.width = `${mapWidth}px`;
-                }
-                if (rdDisplayBar) {
-                    rdDisplayBar.style.width = `${mapWidth}px`;
-                }
+            // Update the bars in all three cloned groups
+            for (const group of allMapGroups) {
+                const ipcBar = group.querySelector('.ipc-display-bar');
+                const rdBar = group.querySelector('.rd-display-bar');
 
-                // The rest of the logic for the IPC squares remains the same
-                if (ipcDisplayBar) {
-                    const squares = ipcDisplayBar.querySelectorAll('.ipc-square');
+                if (ipcBar) ipcBar.style.width = `${mapWidth}px`;
+                if (rdBar) rdBar.style.width = `${mapWidth}px`;
+
+                if (ipcBar) {
+                    const squares = ipcBar.querySelectorAll('.ipc-square');
                     if (squares.length > 0) {
-                        const squareWidth = parseFloat(mapWidth) / squares.length;
+                        const squareWidth = mapWidth / squares.length;
                         squares.forEach(square => {
                             square.style.width = `${squareWidth}px`;
                             square.style.height = `${squareWidth}px`;
