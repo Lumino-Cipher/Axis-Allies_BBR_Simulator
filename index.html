@@ -183,10 +183,10 @@
 
         /* Highlight style for adjacent territories on unit click */
         .adjacent-highlight {
-            fill: #00FFFF !important; /* A vibrant cyan color */
-            fill-opacity: 0.4 !important; /* Semi-transparent so original color is visible */
-            stroke: #000000 !important; /* A matching solid stroke */
-            stroke-width: 1px !important; /* A thick, noticeable border */
+            fill: #FFD700 !important; /* A nice gold color */
+            fill-opacity: 0.3 !important; /* Semi-transparent */
+            stroke: #000000 !important;
+            stroke-width: 1px !important;
         }
 
         /* Style for the selected unit marker */
@@ -885,6 +885,31 @@
         .unit-split-slider-container button:hover {
             background-color: #8C7B6A;
         }
+
+        /* --- Texture Styles --- */
+        .svg-content.textures-on path[data-name],
+        .svg-content.textures-on polygon[data-name] {
+            fill-opacity: 1 !important;
+        }
+
+        /* Logic: If it's a number, it's a sea zone */
+        .svg-content.textures-on [data-name*="0"],
+        .svg-content.textures-on [data-name*="1"],
+        .svg-content.textures-on [data-name*="2"],
+        .svg-content.textures-on [data-name*="3"],
+        .svg-content.textures-on [data-name*="4"],
+        .svg-content.textures-on [data-name*="5"],
+        .svg-content.textures-on [data-name*="6"],
+        .svg-content.textures-on [data-name*="7"],
+        .svg-content.textures-on [data-name*="8"],
+        .svg-content.textures-on [data-name*="9"] {
+            fill: url(#seaTexture);
+        }
+
+        /* Apply land texture to everything else that has a data-name */
+        .svg-content.textures-on [data-name]:not([data-name*="0"]):not([data-name*="1"]):not([data-name*="2"]):not([data-name*="3"]):not([data-name*="4"]):not([data-name*="5"]):not([data-name*="6"]):not([data-name*="7"]):not([data-name*="8"]):not([data-name*="9"]) {
+            fill: url(#landTexture);
+        }
     </style>
 </head>
 <body>
@@ -895,6 +920,11 @@
 
         <div id="gameTimer" class="game-info-section game-timer">
             Time: 00:00:00
+        </div>
+
+        <div class="game-info-section">
+            <label for="textureToggle" style="cursor: pointer;">Textures</label>
+            <input type="checkbox" id="textureToggle" style="cursor: pointer;">
         </div>
 
         <div id="powerOrder" class="game-info-section power-order">
@@ -926,6 +956,18 @@
             <div class="vc-count">VCs: 10 (Axis) - 9 (Allies)</div>
             <div class="vc-bar-container">
                 <div class="vc-bar axis" style="width: 52.6%;"></div> <div class="vc-bar allies" style="width: 47.4%;"></div> </div>
+        </div>
+
+        <div class="game-info-section">
+            <label for="colorSchemeSelect">Scheme:</label>
+            <select id="colorSchemeSelect">
+                <option value="default">Default Vintage</option>
+                <option value="pastel">Pastel Comfort</option>
+                <option value="dark">Deep Umber</option>
+                <option value="contrast">High Contrast</option>
+                <option value="mono">Monochromatic</option>
+                <option value="sepia">Sepia Tone</option>
+            </select>
         </div>
     </div>
     <div id="map-container">
@@ -1054,6 +1096,50 @@
     </div>
     <script>
         const mapContainer = document.getElementById('map-container');
+
+        // --- Edge Scrolling Logic ---
+        const EDGE_SCROLL_ZONE = 50; // pixels from the edge to trigger scroll
+        const EDGE_SCROLL_SPEED = 20; // pixels per frame
+        let scrollInterval = null;
+
+        function startEdgeScroll(direction) {
+            if (scrollInterval) return; // Already scrolling
+
+            const scrollLoop = () => {
+                if (direction.includes('up')) mapContainer.scrollTop -= EDGE_SCROLL_SPEED;
+                if (direction.includes('down')) mapContainer.scrollTop += EDGE_SCROLL_SPEED;
+                if (direction.includes('left')) mapContainer.scrollLeft -= EDGE_SCROLL_SPEED;
+                if (direction.includes('right')) mapContainer.scrollLeft += EDGE_SCROLL_SPEED;
+                scrollInterval = requestAnimationFrame(scrollLoop);
+            };
+            scrollInterval = requestAnimationFrame(scrollLoop);
+        }
+
+        function stopEdgeScroll() {
+            if (scrollInterval) {
+                cancelAnimationFrame(scrollInterval);
+                scrollInterval = null;
+            }
+        }
+
+        mapContainer.addEventListener('mousemove', (e) => {
+            const rect = mapContainer.getBoundingClientRect();
+            let scrollDirection = '';
+
+            if (e.clientY < rect.top + EDGE_SCROLL_ZONE) scrollDirection += 'up';
+            if (e.clientY > rect.bottom - EDGE_SCROLL_ZONE) scrollDirection += 'down';
+            if (e.clientX < rect.left + EDGE_SCROLL_ZONE) scrollDirection += 'left';
+            if (e.clientX > rect.right - EDGE_SCROLL_ZONE) scrollDirection += 'right';
+
+            if (scrollDirection) {
+                startEdgeScroll(scrollDirection);
+            } else {
+                stopEdgeScroll();
+            }
+        });
+
+        mapContainer.addEventListener('mouseleave', stopEdgeScroll);
+
         let isAdjustingScroll = false;
 
         mapContainer.addEventListener('mousedown', startPan);
@@ -1072,7 +1158,7 @@
         const textSettings = {}; // This will now be populated from labels.json
 
         // Dark mode color palette for each data-power value
-        const powerColors = {
+        let powerColors = {
             'US': '#4CAF50', // A muted green
             'UK': '#2199F3', // A soft blue
             'USSR': '#DC143C', // A crimson red
@@ -1086,6 +1172,27 @@
             'Pro-Axis Neutral': '#C4A484', // A light brown for Pro-Axis
             'Pro-Allied Neutral': '#987654', // A darker brown for Pro-Allied
             'Impassable': '#333333' // Very dark for impassable areas
+        };
+
+        const colorSchemes = {
+            default: {
+                'US': '#4CAF50', 'UK': '#2199F3', 'USSR': '#DC143C', 'Germany': '#607D8B', 'Japan': '#FFC107', 'Italy': '#9C27B0', 'China': '#FF5722', 'Commonwealth': '#008B8B', 'France': '#3F51B5', 'Neutral': '#757575', 'Pro-Axis Neutral': '#C4A484', 'Pro-Allied Neutral': '#987654', 'Impassable': '#333333'
+            },
+            pastel: {
+                'US': '#A8D8B0', 'UK': '#A2CFFE', 'USSR': '#F6A5A5', 'Germany': '#B0BEC5', 'Japan': '#FFE082', 'Italy': '#CE93D8', 'China': '#FFCCBC', 'Commonwealth': '#B2DFDB', 'France': '#C5CAE9', 'Neutral': '#BDBDBD', 'Pro-Axis Neutral': '#D7CCC8', 'Pro-Allied Neutral': '#BCAAA4', 'Impassable': '#424242'
+            },
+            dark: {
+                'US': '#1B5E20', 'UK': '#0D47A1', 'USSR': '#B71C1C', 'Germany': '#263238', 'Japan': '#FF6F00', 'Italy': '#4A148C', 'China': '#BF360C', 'Commonwealth': '#004D40', 'France': '#1A237E', 'Neutral': '#212121', 'Pro-Axis Neutral': '#4E342E', 'Pro-Allied Neutral': '#3E2723', 'Impassable': '#000000'
+            },
+            contrast: {
+                'US': '#00E676', 'UK': '#2979FF', 'USSR': '#FF1744', 'Germany': '#FFFFFF', 'Japan': '#FFD600', 'Italy': '#D500F9', 'China': '#FF3D00', 'Commonwealth': '#18FFFF', 'France': '#3D5AFE', 'Neutral': '#9E9E9E', 'Pro-Axis Neutral': '#FAFAFA', 'Pro-Allied Neutral': '#BDBDBD', 'Impassable': '#212121'
+            },
+            mono: {
+                'US': '#42A5F5', 'UK': '#90CAF9', 'USSR': '#1E88E5', 'Germany': '#E53935', 'Japan': '#EF5350', 'Italy': '#F44336', 'China': '#BBDEFB', 'Commonwealth': '#64B5F6', 'France': '#2196F3', 'Neutral': '#9E9E9E', 'Pro-Axis Neutral': '#E0E0E0', 'Pro-Allied Neutral': '#BDBDBD', 'Impassable': '#212121'
+            },
+            sepia: {
+                'US': '#8D6E63', 'UK': '#A1887F', 'USSR': '#795548', 'Germany': '#5D4037', 'Japan': '#6D4C41', 'Italy': '#4E342E', 'China': '#BCAAA4', 'Commonwealth': '#9E9D24', 'France': '#D2B48C', 'Neutral': '#A9A9A9', 'Pro-Axis Neutral': '#D7CCC8', 'Pro-Allied Neutral': '#BCAAA4', 'Impassable': '#3E2723'
+            }
         };
 
         const LAND_UNIT_SIZE = 30; // SVG units for land unit image width/height
@@ -3124,6 +3231,35 @@
                     defs.appendChild(styleElement);
                 }
 
+                // --- Create Texture Patterns ---
+                const landTexturePattern = newSvgElement.ownerDocument.createElementNS('http://www.w3.org/2000/svg', 'pattern');
+                landTexturePattern.setAttribute('id', 'landTexture');
+                landTexturePattern.setAttribute('patternUnits', 'userSpaceOnUse');
+                landTexturePattern.setAttribute('width', '50');
+                landTexturePattern.setAttribute('height', '50');
+                const landTextureImage = newSvgElement.ownerDocument.createElementNS('http://www.w3.org/2000/svg', 'image');
+                landTextureImage.setAttribute('src', 'old-map.png');
+                landTextureImage.setAttribute('x', '0');
+                landTextureImage.setAttribute('y', '0');
+                landTextureImage.setAttribute('width', '50');
+                landTextureImage.setAttribute('height', '50');
+                landTexturePattern.appendChild(landTextureImage);
+                defs.appendChild(landTexturePattern);
+
+                const seaTexturePattern = newSvgElement.ownerDocument.createElementNS('http://www.w3.org/2000/svg', 'pattern');
+                seaTexturePattern.setAttribute('id', 'seaTexture');
+                seaTexturePattern.setAttribute('patternUnits', 'userSpaceOnUse');
+                seaTexturePattern.setAttribute('width', '80');
+                seaTexturePattern.setAttribute('height', '80');
+                const seaTextureImage = newSvgElement.ownerDocument.createElementNS('http://www.w3.org/2000/svg', 'image');
+                seaTextureImage.setAttribute('src', 'diagona-waves.png');
+                seaTextureImage.setAttribute('x', '0');
+                seaTextureImage.setAttribute('y', '0');
+                seaTextureImage.setAttribute('width', '80');
+                seaTextureImage.setAttribute('height', '80');
+                seaTexturePattern.appendChild(seaTextureImage);
+                defs.appendChild(seaTexturePattern);
+
                 // Add event listeners for hover effects on all territory parts in all three SVGs
                 allSvgElements.forEach(svgEl => {
                     const allTerritoryPaths = svgEl.querySelectorAll('polygon[data-name], path[data-name]');
@@ -3695,8 +3831,8 @@
          */
         function highlightReachableTerritories(startTerritory, movementPoints, unitPower, unitType) {
             // --- SETUP & CONSTANTS ---
-            const ATTACK_HIGHLIGHT_COLOR = '#E74C3C'; // A strong, clear red for attacks
-            const PASSABLE_HIGHLIGHT_COLOR = '#3498DB'; // A pleasant, clear blue for movement-only
+            const ATTACK_HIGHLIGHT_COLOR = 'rgba(196, 77, 51, 0.6)'; // A burnt orange/red
+            const PASSABLE_HIGHLIGHT_COLOR = 'rgba(218, 165, 32, 0.5)'; // A translucent gold
             const unitAlliance = AXIS_POWERS.has(unitPower) ? AXIS_POWERS : ALLIED_POWERS;
             const isAirUnit = airUnitTypes.includes(unitType);
             const isSeaUnit = SEA_UNIT_TYPES.includes(unitType);
@@ -4702,6 +4838,57 @@
             });
         });
     });
+
+    // --- Texture Toggle Logic ---
+    document.getElementById('textureToggle').addEventListener('change', function() {
+        const svgElements = document.querySelectorAll('.svg-content');
+        if (this.checked) {
+            svgElements.forEach(svg => svg.classList.add('textures-on'));
+        } else {
+            svgElements.forEach(svg => svg.classList.remove('textures-on'));
+        }
+    });
+
+    // --- Color Scheme Switching Logic ---
+        function applyColorScheme(schemeName) {
+            const newScheme = colorSchemes[schemeName];
+            if (!newScheme) {
+                console.error("Unknown color scheme:", schemeName);
+                return;
+            }
+
+            powerColors = newScheme; // Update the global colors object
+
+            // 1. Recolor territory paths
+            applyTerritoryColors(); // This existing function will now use the new `powerColors`
+
+            const allSvgElements = document.querySelectorAll('.svg-content');
+            allSvgElements.forEach(svg => {
+                // 2. Regenerate SVG filters for units with new colors
+                generateColorFilters(svg);
+
+                // 3. Update the filter on all existing unit images efficiently
+                const allUnitImages = svg.querySelectorAll('.unit-token');
+                allUnitImages.forEach(unitImage => {
+                    const unitGroup = unitImage.closest('.unit-stack-group');
+                    if (!unitGroup) return;
+
+                    const power = unitGroup.getAttribute('data-power');
+                    const unitType = unitGroup.getAttribute('data-unit-type');
+                    
+                    if (powerColors[power] && power !== 'Neutral' && !SPECIAL_INFRASTRUCTURE_UNITS.includes(unitType)) {
+                        const filterType = SEA_UNIT_TYPES.includes(unitType) ? 'sea' : 'land';
+                        unitImage.setAttribute('filter', `url(#colorize-${power}-${filterType})`);
+                    } else {
+                        unitImage.removeAttribute('filter');
+                    }
+                });
+            });
+        }
+
+        document.getElementById('colorSchemeSelect').addEventListener('change', function() {
+            applyColorScheme(this.value);
+        });
     </script>
 </body>
 </html>
