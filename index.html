@@ -910,9 +910,474 @@
         .svg-content.textures-on [data-name]:not([data-name*="0"]):not([data-name*="1"]):not([data-name*="2"]):not([data-name*="3"]):not([data-name*="4"]):not([data-name*="5"]):not([data-name*="6"]):not([data-name*="7"]):not([data-name*="8"]):not([data-name*="9"]) {
             fill: url(#landTexture);
         }
+
+
+
+
+
+
+
+        /* --- Start Game Screen --- */
+        #start-screen-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(20, 20, 20, 0.95);
+            z-index: 2000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            font-family: 'Georgia', serif;
+            color: #E0D8B0;
+            text-align: center;
+        }
+
+        .start-box {
+            background-color: #2d2319;
+            padding: 40px;
+            border-radius: 12px;
+            border: 3px solid #6D5C4C;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8);
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .start-box h1 {
+            font-size: 32px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #6D5C4C;
+            padding-bottom: 10px;
+        }
+
+        .setting-row {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .setting-row label {
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .setting-row select {
+            width: 100%;
+            padding: 10px;
+            background-color: #6D5C4C;
+            color: #E0D8B0;
+            border: 1px solid #8C7B6A;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .start-btn {
+            margin-top: 20px;
+            background-color: #8C7B6A;
+            color: #E0D8B0;
+            padding: 15px 40px;
+            font-size: 20px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .start-btn:hover {
+            background-color: #a69482;
+        }
+
+        /* --- Political Diagram Styles --- */
+        .political-status-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .status-card {
+            background: rgba(109, 92, 76, 0.2);
+            border: 1px solid #6D5C4C;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .status-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .status-text {
+            font-size: 13px;
+            line-height: 1.4;
+            color: #f0ead2;
+        }
+
+        .war-bonus {
+            color: #ffcc00;
+            font-weight: bold;
+            margin-top: 5px;
+            display: block;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .info-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px;
+            border-radius: 4px;
+        }
+
+        .info-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #8C7B6A;
+            display: block;
+        }
+
+        .info-value {
+            font-size: 18px;
+            font-weight: bold;
+            color: #E0D8B0;
+        }
+
+
+
+        /* --- Expandable Political/Objectives Accordion --- */
+        .no-accordion {
+            border: 1px solid #6D5C4C;
+            margin-bottom: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .no-accordion-header {
+            background: rgba(109, 92, 76, 0.4);
+            padding: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: bold;
+            font-size: 16px;
+            transition: background 0.2s;
+        }
+
+        .no-accordion-header:hover {
+            background: rgba(109, 92, 76, 0.6);
+        }
+
+        .no-accordion-content {
+            display: none;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            border-top: 1px solid #6D5C4C;
+        }
+
+        .no-accordion.expanded .no-accordion-content {
+            display: block;
+        }
+
+        .no-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            border-bottom: 1px dashed #555;
+            padding-bottom: 15px;
+        }
+
+        .no-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .no-text-content {
+            flex: 1;
+            font-size: 12px;
+            line-height: 1.4;
+            padding-right: 10px;
+        }
+
+        .no-title {
+            color: #ffcc00;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 3px;
+            font-size: 13px;
+        }
+
+        .no-svg-container {
+            width: 80px;
+            height: 80px;
+            flex-shrink: 0;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid #555;
+            border-radius: 4px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .no-svg-container svg {
+            width: 90%;
+            height: 90%;
+            filter: drop-shadow(0px 2px 3px rgba(0,0,0,0.8));
+        }
+
+
+        /* Grid layout for specific objective territories */
+        .no-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+            gap: 8px;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .no-icon-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 5px;
+            border-radius: 4px;
+            border: 1px solid rgba(109, 92, 76, 0.3);
+        }
+
+        .no-icon-label {
+            font-size: 10px;
+            margin-top: 5px;
+            text-align: center;
+            color: #E0D8B0;
+            width: 100%;
+            line-height: 1.2;
+            word-wrap: break-word;
+        }
+
+        /* New full-width container for Mare Nostrum */
+        .no-svg-fullwidth {
+            width: 100%;
+            height: auto;
+            max-height: 250px;
+            margin-top: 10px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid #555;
+            border-radius: 4px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        .no-svg-fullwidth svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.8));
+        }
+
+        /* Larger U-Boat Counter */
+        .u-boat-counter-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px dashed #6D5C4C;
+            border-radius: 8px;
+            width: 100%;
+        }
+
+        .u-boat-icon-large {
+            width: 80px; 
+            height: 40px;
+            filter: drop-shadow(0 0 5px #ffcc00);
+            object-fit: contain;
+        }
+
+        .u-boat-count-badge {
+            font-size: 20px;
+            font-weight: bold;
+            color: #ffcc00;
+            margin-top: 5px;
+        }
+
+        /* --- Enhanced IPC Display --- */
+        #sidebar-ipc {
+            font-size: 34px;
+            font-weight: bold;
+            color: #ffcc00;
+            background: linear-gradient(135deg, #4a3f35, #1a1410);
+            border: 2px solid #ffcc00;
+            border-radius: 8px;
+            padding: 10px 25px;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.8), 0 4px 10px rgba(0,0,0,0.5);
+            display: inline-block;
+            min-width: 80px;
+            margin-top: 5px;
+        }
+
+        /* --- 8-Way Resize Handles --- */
+        .resize-handle {
+            position: absolute;
+            z-index: 1000;
+        }
+        .resize-handle.n { top: -4px; left: 0; right: 0; height: 8px; cursor: n-resize; }
+        .resize-handle.s { bottom: -4px; left: 0; right: 0; height: 8px; cursor: s-resize; }
+        .resize-handle.e { top: 0; right: -4px; bottom: 0; width: 8px; cursor: e-resize; }
+        .resize-handle.w { top: 0; left: -4px; bottom: 0; width: 8px; cursor: w-resize; }
+        .resize-handle.ne { top: -4px; right: -4px; width: 12px; height: 12px; cursor: ne-resize; }
+        .resize-handle.nw { top: -4px; left: -4px; width: 12px; height: 12px; cursor: nw-resize; }
+        .resize-handle.se { bottom: -4px; right: -4px; width: 12px; height: 12px; cursor: se-resize; }
+        .resize-handle.sw { bottom: -4px; left: -4px; width: 12px; height: 12px; cursor: sw-resize; }
+
+        /* Disable the native CSS bottom-right resize for panels */
+        .draggable-panel {
+            resize: none !important; 
+        }
+        /* You can also safely delete `.draggable-panel::after` from your existing CSS if you want to remove the visual dots. */
+
+        /* --- Commonwealth Naval Counter --- */
+        .cw-naval-counter-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            background: rgba(0, 139, 139, 0.15); /* Dark Cyan tint */
+            border: 1px dashed #008B8B;
+            border-radius: 8px;
+            width: 100%;
+        }
+        .cw-naval-icon-large {
+            width: 80px; 
+            height: 40px;
+            filter: drop-shadow(0 0 5px #008B8B);
+            object-fit: contain;
+        }
+        .cw-naval-count-badge {
+            font-size: 20px;
+            font-weight: bold;
+            color: #48D1CC; /* Medium Turquoise */
+            margin-top: 5px;
+            text-shadow: 1px 1px 2px black;
+        }
+
+        /* --- Global Alliances & Neutrals --- */
+        .alliance-visual {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0,0,0,0.3);
+            padding: 10px;
+            border-radius: 6px;
+        }
+        .alliance-side {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 40%;
+        }
+        .alliance-side h4 {
+            margin: 0 0 10px 0;
+            color: #E0D8B0;
+            border-bottom: 1px solid #6D5C4C;
+            width: 100%;
+            text-align: center;
+        }
+        .alliance-flags img {
+            width: 30px;
+            margin: 2px;
+            border: 1px solid #222;
+            border-radius: 2px;
+        }
+        .alliance-vs {
+            font-size: 20px;
+            font-weight: bold;
+            color: #ff4444;
+        }
+        .neutral-columns {
+            display: flex;
+            justify-content: space-between;
+            gap: 5px;
+            margin-top: 10px;
+        }
+        .neutral-col {
+            flex: 1;
+            background: rgba(255,255,255,0.05);
+            border-radius: 4px;
+            padding: 5px;
+        }
+        .neutral-col h5 {
+            margin: 0 0 8px 0;
+            font-size: 11px;
+            text-align: center;
+            color: #aaa;
+            border-bottom: 1px dashed #555;
+            padding-bottom: 3px;
+        }
+        .neutral-flag-small {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 5px;
+            font-size: 10px;
+        }
+        .neutral-flag-small img {
+            width: 20px;
+            border: 1px solid #111;
+        }
     </style>
 </head>
 <body>
+    <div id="start-screen-overlay">
+        <div class="start-box">
+            <h1>Global War Setup</h1>
+            
+            <div class="setting-row">
+                <label for="sideSelect">Choose Side</label>
+                <select id="sideSelect" onchange="updatePowerOptions()">
+                    <option value="Axis">Axis Powers</option>
+                    <option value="Allies">Allied Powers</option>
+                </select>
+            </div>
+
+            <div class="setting-row">
+                <label for="powerSelect">Select Power</label>
+                <select id="powerSelect">
+                    </select>
+            </div>
+
+            <div class="setting-row">
+                <label for="yearSelect">Starting Year</label>
+                <select id="yearSelect">
+                    <option value="1940">1940 (Early War)</option>
+                    <option value="1942">1942 (Global Conflict)</option>
+                </select>
+            </div>
+
+            <button class="start-btn" onclick="startGame()">START GAME</button>
+        </div>
+    </div>
     <div id="stickyTopBar" class="sticky-top-bar">
         <div class="icon">⚙️</div> <div id="roundInfo" class="game-info-section round-info">
             Round: 1 (May 10, 1940)
@@ -1020,6 +1485,7 @@
         <div class="side-tab" data-target="panel-purchased">Purchased Units</div>
         <div class="side-tab" data-target="panel-battle">Battle Simulator</div>
         <div class="side-tab" data-target="panel-notes">Notes</div>
+        <div class="side-tab" onclick="togglePanel('gameInfoPanel')">Game Info</div>
     </div>
 
     <div id="panels-wrapper">
@@ -1092,6 +1558,34 @@
             <div class="panel-content">
                 <textarea style="width: 100%; height: 95%; box-sizing: border-box;"></textarea>
             </div>
+        </div>
+    </div>
+
+    <div id="gameInfoPanel" class="draggable-panel">
+        <div class="panel-header">
+            <span>STRATEGIC INFORMATION</span>
+            <span class="close-panel" onclick="togglePanel('gameInfoPanel')">×</span>
+        </div>
+        <div class="panel-content" id="game-info-content">
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">Current IPCs</span>
+                    <div id="sidebar-ipc" class="info-value">0</div>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">R&D Status</span>
+                    <div id="sidebar-rd" class="info-value">None</div>
+                </div>
+            </div>
+
+            <div class="info-item" style="margin-bottom: 15px;">
+                <span class="info-label">Purchase Queue</span>
+                <div id="sidebar-queue" class="status-text">Queue empty.</div>
+            </div>
+
+            <h3 style="border-bottom: 1px solid #6D5C4C; padding-bottom: 5px;">Political Status</h3>
+            <div id="political-diagram" class="political-status-container">
+                </div>
         </div>
     </div>
     <script>
@@ -1331,6 +1825,432 @@
         const powerOrderEl = document.getElementById('powerOrder');
         const phaseDisplayEl = document.getElementById('phaseDisplay');
         const victoryCitiesDisplayEl = document.getElementById('victoryCitiesDisplay');
+
+
+
+        const POWER_DATA = {
+            'Axis': ['Germany', 'Japan', 'Italy'],
+            'Allies': ['USSR', 'US', 'UK', 'China', 'France', 'Commonwealth']
+        };
+
+        const POLITICAL_RULES = {
+            'Germany': {
+                1940: "Starts at war with France, United Kingdom, and Commonwealth. Can declare war on U.S., Soviet Union, or China at start of Combat Move. Declaring war on one does not trigger others.",
+                1942: "At war with all Allied powers.",
+                bonus: "+3"
+            },
+            'Japan': {
+                1940: "At war only with China. Declaring war on UK/Commonwealth triggers both immediately. Can declare on US or USSR any time.",
+                1942: "At war with US, UK, Commonwealth, China, and France. Can declare war on Soviet Union at any time.",
+                bonus: "+4 / +1 (1942)"
+            },
+            'Italy': {
+                1940: "Starts at war with France, UK, and Commonwealth.",
+                1942: "At war with all Allied powers.",
+                bonus: "+1"
+            },
+            'USSR': {
+                1940: "Neutral. Cannot declare war on European Axis until Turn 4 (exceptions: attack on self, London falls, Axis take Madrid, or 10+ Axis units on East Front).",
+                1942: "At war with Germany and Italy. Can declare war on Japan at any time.",
+                bonus: "+2"
+            },
+            'US': {
+                1940: "Neutral. Restrictions: cannot move through China or end naval moves near Japan. Enters war if attacked, London falls, or North America territory lost. Automatic entry Turn 3.",
+                1942: "At war with all Axis powers.",
+                bonus: ""
+            },
+            'UK': {
+                1940: "At war with Germany and Italy. Neutral vs Japan until declared.",
+                1942: "At war with all Axis powers.",
+                bonus: "+3 / +1 (1942)"
+            }
+        };
+
+        function updatePowerOptions() {
+            const side = document.getElementById('sideSelect').value;
+            const powerSelect = document.getElementById('powerSelect');
+            powerSelect.innerHTML = '';
+            
+            POWER_DATA[side].forEach(p => {
+                const opt = document.createElement('option');
+                opt.value = p;
+                opt.textContent = p;
+                powerSelect.appendChild(opt);
+            });
+        }
+
+        function startGame() {
+            const power = document.getElementById('powerSelect').value;
+            const year = document.getElementById('yearSelect').value;
+            
+            // 1. Hide Overlay
+            document.getElementById('start-screen-overlay').style.display = 'none';
+            
+            // 2. Initialize Sidebar with chosen data
+            updateSidebarInfo(power, year);
+            
+            console.log(`Game Started: ${power} in ${year}`);
+        }
+
+        const NATIONAL_OBJECTIVES_DATA = {
+            'Germany': [
+                { title: "Neutrality Bonus", text: "+5 IPCs if Europe Axis are not at war with the Soviet Union.", territories: [] },
+                { title: "Eastern Front", text: "+5 IPCs for each territory held: Leningrad, Stalingrad, or Moscow.", territories: ["Russia City of Leningrad", "Russia City of Stalingrad", "Russia City of Moscow"] },
+                { title: "Middle East Oil", text: "+2 IPCs for each territory held: Iraq, Iran, Northwest Iran, or Caucasus.", territories: ["Iraq", "Iran", "Northwest Iran", "Caucasus"] },
+                { title: "British Conquest", text: "+5 IPCs if Germany controls London.", territories: ["United Kingdom"] },
+                { title: "African Presence", text: "+3 IPCs if at least one German land unit is in Egypt or El Alamein.", territories: ["Egypt", "Egypt City of El Alamein"] },
+                { title: "Scandinavia", text: "+5 IPCs if Germany controls Denmark and Norway while Sweden is not Allied-controlled.", territories: ["Denmark", "Norway", "Sweden"] },
+                { title: "U-Boat Menace", text: "+5 IPCs if Germany has at least 5 submarines on the map.", territories: [] },
+                { title: "French Puppet", text: "+2 IPCs if Germany has an armistice with France.", territories: ["France"] },
+                { title: "Italian Assistance", text: "+2 IPCs for each originally Italian territory Germany controls.", territories: [] }
+            ],
+            'Japan': [
+                { title: "China Conquest", text: "+10 IPCs if Japan controls all Chinese-marked territories.", territories: "ALL_CHINA" },
+                { title: "Peace with U.S.", text: "+10 IPCs if not at war with U.S., no attack on French Indo-China/Thailand.", territories: ["French Indo China", "Thailand"] },
+                { title: "Pacific Perimeter", text: "+3 IPCs per territory: Guam, Midway, Wake, Gilbert, Solomon, Line, Johnston, New Britain, Aleutian.", territories: ["Guam", "Midway", "Wake Island", "Gilbert Islands", "Solomon Islands", "Line Islands", "Johnston Island", "New Britain", "Aleutian Islands"], displayMode: 'grid' },
+                { title: "Strategic Hubs", text: "+5 IPCs per territory: Calcutta, Sydney, Honolulu, San Francisco.", territories: ["India", "New South Wales", "Hawaiian Islands", "Western United States"], displayMode: 'grid' },
+                { title: "Resource Islands", text: "+3 IPCs per territory: Sumatra, Java, Borneo, Celebes.", territories: ["Sumatra", "Java", "Borneo", "Celebes"], displayMode: 'grid' },
+                { title: "Capture of Calcutta", text: "+10 IPCs (One-time payment).", territories: ["India"] }
+            ],
+            'Italy': [
+                { title: "Roman Empire", text: "+5 IPCs if Italy owns 3: Gibraltar, Vichy France, Greece, Egypt.", territories: ["Gibraltar", "France City of Vichy", "Greece", "Egypt"] },
+                { title: "Mare Nostrum", text: "+5 IPCs if no Allied warships in the Mediterranean.", territories: ["92", "93", "94", "95", "96", "97", "98", "99"], specialRule: "Mediterranean" },
+                { title: "North African Empire", text: "+5 IPCs if Italy controls all of North Africa.", territories: ["Moroco City of Casablanca", "Spanish Morocco", "Morocco", "Algeria", "Tunisia", "Italian Libya", "Italian Lybia City of Tobruk"] },
+                { title: "Oil Control", text: "+2 IPCs per territory: Iraq, Iran, Northwest Iran.", territories: ["Iraq", "Iran", "Northwest Iran"] },
+                { title: "Strategic Outposts", text: "+1 IPC per territory: Kenya, Sudan, British Somaliland, Cyprus, El Alamein, Gibraltar.", territories: ["Kenya", "Sudan", "British Somaliland", "Cyprus", "Egypt City of El Alamein", "Gibraltar"], displayMode: 'grid' },
+                { title: "Home Defense", text: "+5 IPCs if Italy controls all its original territories.", territories: [] }
+            ],
+            'USSR': [
+                { title: "Core Defense", text: "+3 IPCs if controlling Siberia, Urals, and Ukraine.", territories: ["Siberia", "Urals", "Ukraine"] },
+                { title: "Lend-Lease/Buffer", text: "+5 IPCs if controlling 3: Leningrad, Stalingrad, Eastern Poland, Baltic States.", territories: ["Russia City of Leningrad", "Russia City of Stalingrad", "Eastern Poland", "Baltic States"] },
+                { title: "Liberation", text: "+2 IPCs for each originally German, Italian, or Pro-Axis territory controlled.", territories: [] },
+                { title: "Manchuria", text: "+7 IPCs if Soviet Union liberates Manchuria.", territories: ["Manchuria"] }
+            ],
+            'US': [
+                { title: "Island Hopping", text: "+3 IPCs per territory: Iwo Jima, Caroline, Marshall, Marianas, Taiwan, Hainan, Okinawa, Palau.", territories: ["Iwo Jima", "Caroline Islands", "Marshall Islands", "Marianas", "Formosa", "Hainan", "Okinawa", "Palau"], displayMode: 'grid' },
+                { title: "North Africa", text: "+3 IPCs if at least 2 ground units are in Casablanca.", territories: ["Morocco City of Casablanca"] },
+                { title: "Global Reach", text: "+1 IPC for every originally controlled U.S. territory held.", territories: [] },
+                { title: "Liberation of France", text: "+5 IPCs if US land unit in France or Normandy/Bordeaux.", territories: ["France", "Normandy Bordeaux"] }
+            ],
+            'UK': [
+                { title: "Far East Defense", text: "+5 IPCs if UK controls India, West India, and Malaya.", territories: ["India", "West India", "Malaya"] },
+                { title: "Middle East Oil", text: "+2 IPCs per territory: Iraq, Iran, Northwest Iran.", territories: ["Iraq", "Iran", "Northwest Iran"] },
+                { title: "Suez Security", text: "+5 IPCs if UK controls Egypt, Trans-Jordan, El Alamein.", territories: ["Egypt", "Trans-Jordan", "Egypt City of El Alamein"] }
+            ],
+            'Commonwealth': [
+                    { title: "Pacific Defense", text: "+3 IPCs if Axis do not control Dutch New Guinea, New Guinea, Java, Solomon Islands, New Britain, Celebes.", territories: ["Dutch New Guinea", "New Guinea", "Java", "Solomon Islands", "New Britain", "Celebes"], displayMode: 'grid' },
+                    { title: "Naval Presence", text: "+3 IPCs if Commonwealth has at least 5 naval surface warships on the map.", territories: "SPECIAL_CW_NAVAL" },
+                    { title: "Offensive Bonus", text: "+1 IPC per originally Axis or Pro-Axis territory controlled in Europe (Max +3).", territories: "DYNAMIC_CW_OFFENSE" }
+                ],
+            'China': [
+                { title: "Burma Road", text: "+6 IPCs if Burma Road is Allied controlled.", territories: ["India", "Burma", "Yunnan", "Szechwan"] }
+            ],
+            'France': [
+                { title: "Liberation of Paris", text: "+12 IPCs if Paris is liberated.", territories: ["France"] }
+            ]
+        };
+
+        // Define original ownership for dynamic objectives
+        const ORIGINAL_ITALIAN_TERRITORIES = ["Italy", "Northern Italy", "Southern Italy", "Sicily", "Sardinia", "Libya", "Italian Libya", "Italian Lybia City of Tobruk", "Italian Somaliland", "Eritrea", "Ethiopia", "Albania"];
+
+        // Creates a mini SVG showing the requested territories
+        function generateMiniMap(territories, power, specialRule) {
+            if (!territories || territories.length === 0) return null;
+            
+            let terrList = Array.isArray(territories) ? territories : [territories];
+            if (territories === "ALL_CHINA") {
+                terrList = ["Suiyuan", "Chahar", "Jehol", "Manchuria", "Shantung", "Kiangsu", "Kiangsi", "Hopeh", "Kweichow", "Shensi", "Szechwan", "Hupeh", "Anhwei", "Yunnan", "Hunan", "Kwangsi", "Kwangtung", "Kansu", "Tsinghai", "Sikang"];
+            }
+
+            const svgNS = 'http://www.w3.org/2000/svg';
+            const miniSvg = document.createElementNS(svgNS, 'svg');
+            const group = document.createElementNS(svgNS, 'g');
+            const mainSvg = document.querySelector('.svg-content');
+            if (!mainSvg) return null;
+
+            let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+
+            terrList.forEach(terrName => {
+                const elements = mainSvg.querySelectorAll(`[data-name="${terrName}"]`);
+                elements.forEach(el => {
+                    // Skip text labels so only polygons/paths are drawn
+                    if (el.tagName.toLowerCase() === 'text' || el.tagName.toLowerCase() === 'tspan') return;
+
+                    const clone = el.cloneNode(true);
+                    clone.removeAttribute('class');
+                    clone.style.stroke = '#ffffff';
+                    clone.style.strokeWidth = '1px';
+                    
+                    if (specialRule === "Mediterranean") {
+                        clone.style.stroke = '#3a5a78'; // Darker sea border
+                        clone.style.strokeWidth = '2px';
+                        const enemyPresent = placedUnitsData.some(u => u.placedIn === terrName && SEA_UNIT_TYPES.includes(u.unitType) && ALLIED_POWERS.has(u.power));
+                        // Dark gray if enemy present, otherwise Italian power color
+                        clone.style.fill = enemyPresent ? '#DC143C' : '#555'; 
+                    } else {
+                        const currentPower = el.getAttribute('data-power');
+                        clone.style.fill = powerColors[currentPower] || '#555';
+                    }
+                    group.appendChild(clone);
+
+                    const bbox = el.getBBox();
+                    minX = Math.min(minX, bbox.x);
+                    minY = Math.min(minY, bbox.y);
+                    maxX = Math.max(maxX, bbox.x + bbox.width);
+                    maxY = Math.max(maxY, bbox.y + bbox.height);
+                });
+            });
+
+            if (minX === Infinity) return null;
+            const pad = 10;
+            miniSvg.setAttribute('viewBox', `${minX - pad} ${minY - pad} ${maxX - minX + pad*2} ${maxY - minY + pad*2}`);
+            miniSvg.appendChild(group);
+            return miniSvg;
+        }
+
+        // Updated layout logic for proper positioning and fixed flags
+        function updateSidebarInfo(selectedPower, year) {
+            document.getElementById('sidebar-ipc').textContent = totalIpcsByPower[selectedPower] || 0;
+            const diagram = document.getElementById('political-diagram');
+            diagram.innerHTML = '';
+
+            const powersToDisplay = [...POWER_DATA.Axis, ...POWER_DATA.Allies];
+            powersToDisplay.forEach(p => {
+                const noData = NATIONAL_OBJECTIVES_DATA[p];
+                if (!noData) return;
+
+                const accordion = document.createElement('div');
+                accordion.className = 'no-accordion';
+                const header = document.createElement('div');
+                header.className = 'no-accordion-header';
+                
+                header.innerHTML = `<div class="power-flag" style="background-image: url('flags/${p}.png'); width: 30px; height: 20px; background-size: cover; background-position: center; border: 1px solid #222;"></div><span style="flex:1;">${p}</span><span>▼</span>`;
+                header.onclick = () => accordion.classList.toggle('expanded');
+
+                const content = document.createElement('div');
+                content.className = 'no-accordion-content';
+
+                noData.forEach(obj => {
+                    const item = document.createElement('div');
+                    item.className = 'no-item';
+
+                    const textDiv = document.createElement('div');
+                    textDiv.className = 'no-text-content';
+                    textDiv.innerHTML = `<span class="no-title">${obj.title}</span> ${obj.text}`;
+
+                    // SPECIAL CASE: U-Boat Menace
+                    if (obj.territories === "SPECIAL_U_BOAT") {
+                        item.style.flexDirection = 'column';
+                        item.style.alignItems = 'flex-start';
+                        item.appendChild(textDiv);
+                        
+                        // Fixed logic to use 'SUB' abbreviation
+                        const subCount = placedUnitsData.filter(u => u.power === 'Germany' && u.unitType === 'SUB').length;
+                        const container = document.createElement('div');
+                        container.className = 'u-boat-counter-container';
+                        container.style.marginTop = '10px';
+                        container.innerHTML = `
+                            <img src="units/submarine.png" class="u-boat-icon-large" style="filter: drop-shadow(0 0 5px ${powerColors['Germany']})">
+                            <div class="u-boat-count-badge">${subCount} Submarines</div>
+                        `;
+                        item.appendChild(container);
+                    } 
+                    // SPECIAL CASE: Commonwealth Naval Presence
+                    else if (obj.territories === "SPECIAL_CW_NAVAL") {
+                        item.style.flexDirection = 'column';
+                        item.style.alignItems = 'flex-start';
+                        item.appendChild(textDiv);
+                        
+                        const cwShips = placedUnitsData.filter(u => u.power === 'Commonwealth' && ['BTS', 'ACC', 'CSR', 'DTR'].includes(u.unitType)).length;
+                        const container = document.createElement('div');
+                        container.className = 'cw-naval-counter-container';
+                        container.style.marginTop = '10px';
+                        container.innerHTML = `
+                            <img src="units/cruiser.png" class="cw-naval-icon-large" style="filter: drop-shadow(0 0 5px #008B8B)">
+                            <div class="cw-naval-count-badge">${cwShips} Warships</div>
+                        `;
+                        item.appendChild(container);
+                    }
+                    // SPECIAL CASE: Mare Nostrum (Full Width)
+                    else if (obj.specialRule === "Mediterranean") {
+                        item.style.flexDirection = 'column';
+                        item.style.alignItems = 'flex-start';
+                        item.appendChild(textDiv);
+
+                        const miniMap = generateMiniMap(obj.territories, p, obj.specialRule);
+                        if (miniMap) {
+                            const svgContainer = document.createElement('div');
+                            svgContainer.className = 'no-svg-fullwidth';
+                            svgContainer.appendChild(miniMap);
+                            item.appendChild(svgContainer);
+                        }
+                    }
+                    // GRID MODE: Multiple icons or Dynamic territories
+                    else if (obj.displayMode === 'grid' || obj.territories === "DYNAMIC_ITALY" || obj.territories === "DYNAMIC_US_CORE" || obj.territories === "DYNAMIC_CW_OFFENSE") {
+                        item.style.flexDirection = 'column';
+                        item.style.alignItems = 'flex-start';
+                        item.appendChild(textDiv);
+                        
+                        let list = obj.territories;
+                        if (obj.territories === "DYNAMIC_ITALY") {
+                            list = ORIGINAL_ITALIAN_TERRITORIES.filter(t => {
+                                const path = document.querySelector(`[data-name="${t}"]`);
+                                return path && path.getAttribute('data-power') === 'Germany';
+                            });
+                        }
+                        if (obj.territories === "DYNAMIC_US_CORE") {
+                            list = Object.keys(territoryAdjacencies).filter(t => {
+                                // In 1940, everything US controls at the start is considered original
+                                const path = document.querySelector(`[data-name="${t}"]`);
+                                return path && window.setupData && window.setupData.find(pow => pow.name === 'US')?.territories.some(terr => terr.name === t);
+                            });
+                        }
+                        if (obj.territories === "DYNAMIC_CW_OFFENSE") {
+                            // Map original powers based on setupData
+                            let originalPowers = {};
+                            if (window.setupData) {
+                                window.setupData.forEach(pow => {
+                                    pow.territories.forEach(terr => originalPowers[terr.name] = pow.name);
+                                });
+                            }
+                            list = Object.keys(originalPowers).filter(t => {
+                                const orig = originalPowers[t];
+                                const isAxisOrig = ['Germany', 'Italy', 'Japan', 'Pro-Axis Neutral'].includes(orig);
+                                const currentPath = document.querySelector(`[data-name="${t}"]`);
+                                return isAxisOrig && currentPath && currentPath.getAttribute('data-power') === 'Commonwealth';
+                            });
+                        }
+
+                        if (Array.isArray(list) && list.length > 0) {
+                            const grid = document.createElement('div');
+                            grid.className = 'no-grid';
+                            list.forEach(terr => {
+                                const iconWrapper = document.createElement('div');
+                                iconWrapper.className = 'no-icon-wrapper';
+                                const miniMap = generateMiniMap(terr, p);
+                                if (miniMap) {
+                                    const svgContainer = document.createElement('div');
+                                    svgContainer.className = 'no-svg-container';
+                                    svgContainer.appendChild(miniMap);
+                                    iconWrapper.appendChild(svgContainer);
+                                    iconWrapper.innerHTML += `<div class="no-icon-label">${terr}</div>`;
+                                    grid.appendChild(iconWrapper);
+                                }
+                            });
+                            item.appendChild(grid);
+                        }
+                    }
+                    // DEFAULT: Single SVG on the LEFT
+                    else {
+                        item.style.flexDirection = 'row'; 
+                        item.style.alignItems = 'center';
+
+                        const miniMap = generateMiniMap(obj.territories, p, obj.specialRule);
+                        if (miniMap) {
+                            const svgContainer = document.createElement('div');
+                            svgContainer.className = 'no-svg-container';
+                            svgContainer.style.marginRight = '15px'; 
+                            svgContainer.appendChild(miniMap);
+                            item.appendChild(svgContainer); 
+                        }
+                        item.appendChild(textDiv); 
+                    }
+                    content.appendChild(item);
+                });
+
+                accordion.appendChild(header);
+                accordion.appendChild(content);
+                diagram.appendChild(accordion);
+            });
+
+            // --- APPEND GLOBAL ALLIANCES & NEUTRALS DROPDOWN ---
+            const relationsAccordion = document.createElement('div');
+            relationsAccordion.className = 'no-accordion';
+            const relHeader = document.createElement('div');
+            relHeader.className = 'no-accordion-header';
+            relHeader.innerHTML = `<span style="flex:1; text-align:center;">🌍 Global Alliances & Neutrals</span><span>▼</span>`;
+            relHeader.onclick = () => relationsAccordion.classList.toggle('expanded');
+            
+            const relContent = document.createElement('div');
+            relContent.className = 'no-accordion-content';
+            relContent.style.textAlign = 'center';
+
+            relContent.innerHTML += `
+                <div class="alliance-visual">
+                    <div class="alliance-side axis-side">
+                        <h4>Axis</h4>
+                        <div class="alliance-flags">
+                            <img src="flags/Germany.png"><img src="flags/Japan.png"><img src="flags/Italy.png">
+                        </div>
+                    </div>
+                    <div class="alliance-vs">⚔️</div>
+                    <div class="alliance-side allied-side">
+                        <h4>Allies</h4>
+                        <div class="alliance-flags">
+                            <img src="flags/US.png"><img src="flags/UK.png"><img src="flags/USSR.png">
+                            <br><img src="flags/China.png"><img src="flags/France.png"><img src="flags/Commonwealth.png">
+                        </div>
+                    </div>
+                </div>
+                <h4 style="margin-top: 15px; border-bottom: 1px solid #555; padding-bottom: 5px;">Neutral Powers Status</h4>
+                <div class="neutral-columns">
+                    <div class="neutral-col" id="neutrals-axis"><h5>Axis Taken</h5></div>
+                    <div class="neutral-col" id="neutrals-strict"><h5>Strict Neutral</h5></div>
+                    <div class="neutral-col" id="neutrals-allied"><h5>Allied Taken</h5></div>
+                </div>
+            `;
+
+            relationsAccordion.appendChild(relHeader);
+            relationsAccordion.appendChild(relContent);
+            diagram.appendChild(relationsAccordion);
+
+            // Populate neutral countries dynamically
+            const axisCol = relContent.querySelector('#neutrals-axis');
+            const strictCol = relContent.querySelector('#neutrals-strict');
+            const alliedCol = relContent.querySelector('#neutrals-allied');
+
+            const neutralsMap = {
+                'Venezuela': ['Venezuela'], 'Colombia': ['Colombia'], 'Ecuador': ['Ecuador'], 'Peru': ['Peru'], 'Bolivia': ['Bolivia'], 'Paraguay': ['Paraguay'], 'Uruguay': ['Uruguay'], 'Chile': ['Chile'], 'Netherlands': ['Suriname', 'Sumatra', 'Java', 'Celebes', 'Dutch New Guinea'], 'Portugal': ['Portugal', 'Azores', 'Portuguese Guinea', 'Angola', 'Mozambique'], 'Liberia': ['Liberia'], 'Switzerland': ['Switzerland'], 'Turkey': ['Marmara', 'Central Anatolia', 'Eastern Anatolia'], 'Saudi Arabia': ['Saudi Arabia'], 'Mongolia': ['Olgiy', 'Dzavhan', 'Dornod', 'Dornogobi'], 'Brazil': ['Brazil'], 'Spain': ['Galicia Navarra', 'Castilla', 'Aragon', 'Spanish Morocco', 'Rio de Oro'], 'Bulgaria': ['Bulgaria'], 'Iraq': ['Iraq'], 'Iran': ['Iran', 'Northwest Iran', 'Eastern Iran'], 'Thailand': ['Thailand'], 'Finland': ['Finland'], 'Argentina': ['Argentina'], 'Eire': ['Eire'], 'Yugoslavia': ['Yugoslavia'], 'Greece': ['Greece'], 'Crete': ['Crete']
+            };
+
+            for (const [nName, nTerrs] of Object.entries(neutralsMap)) {
+                let isAxis = false;
+                let isAllied = false;
+                
+                nTerrs.forEach(t => {
+                    const path = document.querySelector(`[data-name="${t}"]`);
+                    if (path) {
+                        const ctrl = path.getAttribute('data-power');
+                        if (AXIS_POWERS.has(ctrl)) isAxis = true;
+                        if (ALLIED_POWERS.has(ctrl)) isAllied = true;
+                    }
+                });
+
+                const flagDiv = document.createElement('div');
+                flagDiv.className = 'neutral-flag-small';
+                flagDiv.innerHTML = `<img src="flags/${nName}.png" onerror="this.src='flags/Neutral.png'" title="${nName}"> <span>${nName}</span>`;
+
+                if (isAxis) axisCol.appendChild(flagDiv);
+                else if (isAllied) alliedCol.appendChild(flagDiv);
+                else strictCol.appendChild(flagDiv);
+            }
+        }
+
+
+
+        // Helper to handle existing panel toggling
+        function togglePanel(id) {
+            const panel = document.getElementById(id);
+            if (panel) {
+                panel.classList.toggle('visible');
+            }
+        }
+
+        // Initial Call to set up power list
+        updatePowerOptions();
+
+
+        
 
         /**
          * Placeholder function to update round and date display.
@@ -4246,12 +5166,12 @@
 
             if (isSpecialUnitDragging) {
                 const territory = currentDraggedUnit.getAttribute('data-original-territory');
-                const paths = currentSvgElement.querySelectorAll(`polygon[data-name="${territory}"], path[data-name="${territory}"]`);
+                const paths = svgWrapper.querySelectorAll(`polygon[data-name="${territory}"], path[data-name="${territory}"]`);
                 paths.forEach(path => path.classList.add('highlighted-territory'));
             }
 
             if (!isSpecialUnitDragging) {
-                const paths = currentSvgElement.querySelectorAll(`polygon[data-name="${initialPlacedInTerritory}"], path[data-name="${initialPlacedInTerritory}"]`);
+                const paths = svgWrapper.querySelectorAll(`polygon[data-name="${initialPlacedInTerritory}"], path[data-name="${initialPlacedInTerritory}"]`);
                 paths.forEach(path => path.classList.add('highlighted-territory'));
             }
 
@@ -4405,7 +5325,7 @@
             isDragging = false;
             if (isSpecialUnitDragging && currentDraggedUnit) {
                 const territory = currentDraggedUnit.getAttribute('data-original-territory');
-                const paths = currentSvgElement.querySelectorAll(`polygon[data-name="${territory}"], path[data-name="${territory}"]`);
+                const paths = svgWrapper.querySelectorAll(`polygon[data-name="${territory}"], path[data-name="${territory}"]`);
                 paths.forEach(path => path.classList.remove('highlighted-territory'));
             }
 
@@ -4502,7 +5422,7 @@
 
                 // Remove highlight from the original territory (only if it was highlighted)
                 if (!isSpecialUnitDragging) {
-                    const originalTerritoryPaths = currentSvgElement.querySelectorAll(`polygon[data-name="${initialPlacedInTerritory}"], path[data-name="${initialPlacedInTerritory}"]`);
+                    const originalTerritoryPaths = svgWrapper.querySelectorAll(`polygon[data-name="${initialPlacedInTerritory}"], path[data-name="${initialPlacedInTerritory}"]`);
                     originalTerritoryPaths.forEach(path => path.classList.remove('highlighted-territory'));
                 }
                 
@@ -4837,6 +5757,8 @@
                 panel.style.cursor = 'default';
             });
         });
+
+        makePanelsResizable();
     });
 
     // --- Texture Toggle Logic ---
@@ -4889,6 +5811,56 @@
         document.getElementById('colorSchemeSelect').addEventListener('change', function() {
             applyColorScheme(this.value);
         });
+
+        // --- Custom 8-Way Panel Resizer Logic ---
+        function makePanelsResizable() {
+            const panels = document.querySelectorAll('.draggable-panel');
+            const handles = ['n', 's', 'e', 'w', 'ne', 'nw', 'se', 'sw'];
+            
+            panels.forEach(panel => {
+                handles.forEach(dir => {
+                    const handle = document.createElement('div');
+                    handle.className = `resize-handle ${dir}`;
+                    panel.appendChild(handle);
+                    
+                    let startX, startY, startWidth, startHeight, startTop, startLeft;
+                    
+                    handle.addEventListener('mousedown', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        
+                        startX = e.clientX;
+                        startY = e.clientY;
+                        // Get accurate dimensions without 'px'
+                        startWidth = parseInt(document.defaultView.getComputedStyle(panel).width, 10);
+                        startHeight = parseInt(document.defaultView.getComputedStyle(panel).height, 10);
+                        startTop = panel.offsetTop;
+                        startLeft = panel.offsetLeft;
+                        
+                        function doDrag(e) {
+                            if (dir.includes('e')) panel.style.width = (startWidth + e.clientX - startX) + 'px';
+                            if (dir.includes('s')) panel.style.height = (startHeight + e.clientY - startY) + 'px';
+                            if (dir.includes('w')) {
+                                panel.style.width = (startWidth - (e.clientX - startX)) + 'px';
+                                panel.style.left = (startLeft + (e.clientX - startX)) + 'px';
+                            }
+                            if (dir.includes('n')) {
+                                panel.style.height = (startHeight - (e.clientY - startY)) + 'px';
+                                panel.style.top = (startTop + (e.clientY - startY)) + 'px';
+                            }
+                        }
+                        
+                        function stopDrag() {
+                            document.documentElement.removeEventListener('mousemove', doDrag);
+                            document.documentElement.removeEventListener('mouseup', stopDrag);
+                        }
+                        
+                        document.documentElement.addEventListener('mousemove', doDrag);
+                        document.documentElement.addEventListener('mouseup', stopDrag);
+                    });
+                });
+            });
+        }
     </script>
 </body>
 </html>
