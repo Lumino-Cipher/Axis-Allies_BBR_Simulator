@@ -1,0 +1,2734 @@
+
+
+
+11l ()(tl)	1-\'l,II
+RESTRICTED
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Cf
+.
+
+........,	•
+
+RtJLES OF w.ARFARC
+WAR DEPAljTMENT FIELD MANUAL 6.7
+
+
+I
+
+
+
+
+
+
+• I
+
+
+
+
+
+
+
+
+
+
+'.,	•...
+
+
+
+,	!I,
+
+1lllf)(J't1 't1IIE lltf)f)l)ll1l't1II
+The Bloodbath Ruleset, which have come to be known as the "BBR", was designed to speed up the game of Axis and Allies 1940 (G40). Adding new elements with historical accuracy, and a round based system, G40 can easily be played in 8 hours or less. Not only can you now play G40 in a day, the BBR offers more replay value with the round cap and point system.
+
+Designed by siredblood, who has played Axis and Allies on and off since the 1980's, wanted a version of G40 which could be played in about 8 hours, and also have less predictable game outcomes. By add­ ing in new victory conditions and a solid ground for research and development, games are never the same.
+
+
+The BBR has changed Global 1940 to the point they are very different in gameplay, tactics, and time.
+
+If you enjoy longer games of Axis and Allies, and do not want to be restrained to a round limit, then the BBR is probably not for you.
+
+If you are looking for a change, I can guarantee the BBR will give you and your players a great gaming experience.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+- siredblood in 5th grade playing classic Axis and Allies.
+
+
+
+
+- siredblood in 2018, over 30 years later, promoting "War in the O.C." event, BBL
+
+
+The BBR was introduced to the public in April 2018 to help in promoting the War in the O.C. tournament held in September 2018.
+
+The feedback and approval from the event was huge, and with a few tweaks here and there, along with more testing finally brought the BBR to its official release about one year later.
+
+Coming from a house ruleset to an official release with a custom map and game aids in a year's time is a huge leap forward in providing the great Axis and Allies community another way to play the game we all love.
+
+It is our hope that these rules will bring you and your play group many games with different outcomes.
+
+It is strongly suggested that you have a good know­ ledge of G40 before you try this ruleset. Just in case you do not, this rule book covers everything from G40.
+
+Big thanks to a couple of my players, Jay and Albert, for without them pushing to show this ruleset to the community by having the War in the O.C., this would still only be our personal house ruleset.
+
+If you already know how to play Axis and Allies Global 1940, you will have no problem mastering the Blood­ bath Ruleset. Here is a brief summary of changes to Axis and Allies Global 1940 Second Edition.
+
+
+
+1- Some National Objective changes and additions
+2- Strategic bombers only perform one round of combat
+3- Victory conditions are based on the Axis Victory Scorecard
+4- Round limits
+5- Map changes such as IPC values and borders
+6- Progressive buy Research and Development
+7- New Combined Arms
+8- Naval Blockades
+9- Target Select abilities
+10- Integrated Railways
+11- Bombing raids do more damage
+12- Damaged capital ships run at 50% values
+13- Submerged submarines may not convoy disrupt
+14- Damaged battleships may not convoy disrupt
+15- Air Transports
+16- Full income United Kingdom
+17- Commonwealth is a playable nation
+18- Soviet Union Lend-Lease
+
+19- Soviet Union Mobile Production
+20- Trans-Siberian Railway
+21- Cavalrymen
+22- Italy can switch to Allies
+23- Kamikaze restrictions
+24- Argentina, Spain, and Thailand are Pro-Axis
+25- Battleships have built in AAA
+26- Anti-Aircraft gun units fire over fly overs
+27- AAA can be captured
+
+BBl Champs, Argothair and VK Cowboy
+- Orange County CA. September 2018
+
+28- United States Europe naval restrictions lifted on 3
+29- Mongolia and Turkey no longer strict neutral
+30- Other crap that wont fit on this page because Gargantua's victory pie is in the way
+
+
+
+
+
+
+
+
+
+BB3 teams who ranked first and second place Hambone, VK Cowboy, Siredblood, and GiJoe
+- Hiram GA. September 2020
+
+
+
+
+
+BBS Gold winners, Karl7, Gargantua, and DTroy
+- Hiram, GA. September 2022
+
+CllEl)l'J1S
+
+
+Argentina and Chile Rules	18
+Card Reference	49
+China Rules	18
+Combined Arms	30
+Components Needed	5
+Event Sequence	24
+Phase 1: Purchase/Repair/Demo units	24
+Phase 2: Combat Movement.	24
+Amphibious Assault.	25
+Blitzing	26
+Naval Blockade	27
+Phase 3: Conduct Combat.	28
+Strategic{Tactical Bombing Raids	28
+Naval Blockade	28
+Amphibious Assault.	28
+General Combat.	30
+Target Select.	31
+Phase 4: Noncombat Movement.	34
+Phase 5: Mobilize New Units	35
+Phase 6: Collect lncome	35
+Convoy	36
+France Rules	20
+Game Board	10
+Canals and Narrow Straits	10
+Tian-Kunlun Shan Pass	11
+Trans-Siberian Railway	11
+Lend-Lease	19
+Kamikaze	21
+Shipyards	35
+Convoy	36
+Oil Derricks	7
+Resources	7
+Game Setup	8
+Japan Rules	21
+Mongolia Rules	20
+Optional Rule	48
+Political Situation	12
+Neutral Territories	16
+Friendly Neutrals	17
+Unfriendly Neutrals	17
+Strict Neutrals	17
+Railways	37
+Research and Development	22
+Soviet Union Rules	19
+Spain/Portugal Rules	21
+Target Select	31
+Tournament Rules	50
+Unit Profiles	36
+Winning the War	6
+Victory conditions	6
+1942	48
+
+Play Testers: Albert Pan, Andrew Hesse, Col.Tef, Mark Movel, Dutch Lancaster, VK Cowboy, Gijoe, Absolutely Wartorn, Argothair, Luke, Dtroy, Corpo 24, Warparty (lol), Hambone, Zencube, Hilltop Pillbox, Dominic and Steve Jelso (Mo-Fo Brothers), and Jay
+
+Art Direction: siredblood
+Rulebook Development: siredblood
+Editing: Matt Todd, Dutch Lancaster, VK Cowboy, Paul Paella, The Chaplin, and Mathias Gregersen Cartography: siredblood
+Bloodbath Lead Game Design: siredblood
+Battle Board: Young Grasshopper and siredblood
+Tournament Seeding: Madman and siredblood
+
+Thanks to my good friend Mark Movel for pushing me towards house rules. Mark came over one day with some cavalry units and said, "We need to fix China". After that I was hooked!
+
+Special thanks to the entire Axis and Allies community for their support in the Bloodbath project and also for their support in the Map project. It is you guys that have been spreading the word about this ruleset, thank you my brothers!
+
+From top left: Dominic, Gijoe, Luke, Steve, Wartorn, Col. Tef, VK Cowboy, Zencube, Dtroy, siredblood, Hambone, Corpo 24, and Argothair
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-BBl September 2018
+The "OG.s"	Original Gamers
+
+C()lll,()NEN'I1S NEEl)EI)
+/l XIS	/l NII	/l I.I.II: S lj /UYII: S
+Axis and Allies Europe 1940 Second Edition game pieces or equivalent Axis and Allies Pacific 1940 Second Edition game pieces or equivalent
+IYl/lP
+Latest version of the siredblood map (886 uses the 885 map, check lower right corner for version number)
+1:1uuns/ /lIII s ( 11I: 1:o mm1:N nI: nl
+Bloodbath Production/Technology Chart Bloodbath 90 Card Deck Set
+Currency
+Bloodbath Battle Board
+m /lH I( l:HS /Jo I( l:N s
+32 Victory Point roundels
+30 Technology roundels (3 per tech)
+5 Air Transport roundels
+5 Submerged roundels
+5 Convoy markers
+2 Pro-Axis roundels
+1 Game Round Tracker 10 Blue Chips
+
+/lDDl"l"ION/H IINl"l"S
+3 Chinese cavalry units
+2 Chinese tanks
+4 Soviet cavalry units
+ll D I) 1·r10 N /l I. sLi11 p 1.11:s ( ll I: 1: 0 mmI:NI) I:I) !1
+80 Battle dice (hit dice)
+2 Large bags of chips
+1 Jar of salsa
+1 Large bag of M&M's or Skittles
+1  2-liter of soda
+1 Bottle of Captian Morgan spiced rum (21 and over)
+ELiHOPI:
+
+., -	'
+...	...
+'!'  t_;
+
+-,,.
+
+-.)!'::.
+.,,..  0
+
+A major change to the game is that in the BBR, the game is played to a specific round, determined prior to the start of the game. Unlike out of box (OOB) where a game can go on for days, the BBR has a round limit, as seen on the Axis Victory Score Card on the right.
+
+
+Another unique feature of the BBR are the victory conditions also seen on the Axis Victory Score Card. There are a total of 32 possible points of which the Axis must acquire 12 in an 8 round game, while 14 points are needed if playing a 10 round game. The points needed are the same if playing 1940 or 1942 (see "1942," page 48) setup.
+
+
+
+?TOKYO?WARSAW	?JUNEAU
+?RIO	?SHANGHAI  ?LONDON
+?ROME ?SAN FRAN.  ?BERLIN
+?PARIS ?HONG KONG?SYDNEY
+?CAIRO ?OTTAWA	?MANILA
+
+
+
+?STALINGRAD
+?CALCUTTA
+?LENINGRAD
+?HONOLULU
+?MOSCOW
+
+These points must be Axis controlled at the end of the final game round, as these points are not kept if the Allies take them from the Axis. The Victory points will shift from Axis to Allied and vice versa for the duration of the game. This does not matter until the final round. There will be instances where the final game round will not need to be completed, as there will be occasions where it is impossible for the Axis to acquire the needed points. This decision is generally made after Japan's final turn.
+
+The Axis can also win by taking and holding Washington for one game round.
+
+The Allies can also win by taking and holding Berlin or Tokyo for one game round.
+
+Playing 8 rounds is the recommended time.
+
+?WORLD OIL 1- Axis control 4 of 10 oil territories.
+?WORLD OIL 2- Axis control 8 of 10 oil territories.
+?ATLANTIC WALL- 5 ground units in each territory:
+Norway, Denmark, Normandy, and Holland.
+S. AFRICA- Axis control Union of S. Africa + SW Africa. RESOURCES- Axis control 3 of 5 resource territories.
+S. ASIA- Burma+Shan State.+Thailand+Malaya+FIC IMPERIAL - Japan has 55 on income tracker. CHINA- All Chinese marked territories.
+AFRICA HORN- Sudan+Kenya+Ethiopia+British Somaliland+ltalian Somaliland.
+MEDITERRANEAN- No Allied Territories in SZ 95-99 Also control at least 3 of the following: Egypt, Greece, Gibraltar, and Vichy France.
+PACIFIC ISLANDS- Control 5 U.S. CW, or U.K. Pac. Isl.
+REICH- Germany + Italy have 70 on income tracker.
+	J l
+
+
+It is recommended you use the Victory Point roundels to keep track of the current points obtained by the Axis.
+
+
+/lXIS \111:TOllY
+
+The Axis win by one of two ways:
+
+• The Axis control the amount of points needed that corresponds with number of game rounds played by the end of the final game round (most common).
+
+EXAMPLE:
+If playing an 8 round game, the Axis must control at least 12 points on the Axis Victory Scorecard by the end of round 8. Failure to do so will result in an Allied Victory.
+
+• In the event that the Axis take and hold Washington for a complete turn, or control it at the end of the final round, then the game is immediately ended with an Axis victory.
+
+IHI.II:IJ \111:TOllY
+
+The Allies win by one of three ways:
+
+• The Allies prevent the Axis from holding the game round points needed (Most common).
+
+• Capture and hold Berlin for 1 turn, or control it at the end of the finaI round.
+
+• Capture and hold Tokyo for 1 turn, or control it at the end of the finaI round
+
+ll7INNINf, '11IIE 117illl
+
+There are two types of points to gain in the BBR, there are 20 Victory Cities, and 12 Victory Objectives. These can be taken by the Axis in any combination to secure enough points for the Axis to win the game. The Axis will begin the game with some points already. The number of points the Axis begin the game with will change if playing the 1940 or 1942 setup.
+\I 11:"l"ltll\' 1:n II:S
+Victory Cities are marked on the map, notated either by a red star or a red circle. The stars represent capitals while the circles represent cities, see fig. 1. Below also shows the starting points the Axis have for the 1940 setup.
+
+
+The Axis Powers start with 5 points, they are as follows:
+
+
+
+
+
+
+	SEELOWQ	
+
+Other Victory Cities that can be captured are as follows:
+
+
+Tokyo Berlin Rome Warsaw Shanghai
+
+BERLIN*	POLAND
+.!I!.
+'iii"
+GERMANY
+WARSAW0
+
+- fig. 1
+
+Paris
+Hong Kong Manila Cairo London Honolulu Ottawa
+
+Rio de Janeiro Moscow Sydney Stalingrad Calcutta Leningrad San Francisco Juneau
+
+
+Victory Objectives are a combination of territories needed to secure a particular point. They are as follows:
+
+
+Imperial-
+Reich- World Oil 1-
+
+World Oil 2-
+
+Japan is collecting at least 55 IPC's on the income tracker, this does not include income from National Objectives or bonus income.
+
+Germany and Axis Italy have a combined income of at least 70 IPC's on the income tracker, this does not include National Objectives or bonus income.
+
+The Axis control at least 4/10 territories with oil derricks. See fig. 2. The Axis control at least 8/10 territories with oil derricks.
+
+Atlantic Wall-	The Axis have at least 5 ground units in the following territories: Norway, Denmark, Normandy, and Holland.
+
+Mediterranean- The Allies do not control any of the following territories: Malta, Cyprus, Crete, Sardinia, and Sicily. The Axis control at least 3 of the following territories: Egypt, Greece, Vichy France, and Gibraltar.
+
+
+
+
+- fig. 2
+
+Resources-
+
+
+South Asia- China-
+
+
+The Axis control at least 3/5 resource territories with resource markers. These include, Siberia, Urals, Ukraine, Manchuria, and Caucasus. See fig. 3.
+
+The Axis control the following territories: Burma, Shan State, Thailand, Malaya, and French lndo-China.
+
+The Axis control all Chinese marked territories, including any Chinese territories Japan starts the game with.
+
+
+
+
+
+
+
+- fig. 3
+
+Horn of Africa-	The Axis control the following territories: Kenya, Ethiopia, British Somaliland, Italian Somaliland, and the Sudan.
+South Africa-	The Axis control both Union of South Africa and South West Africa.
+
+Pacific Islands-	The Axis control any 5 of the Pacific Islands that are United States,
+United Kingdom, or Commonwealth originally owned. These include: Guam, Wake, Midway, Gilbert, Line, Johnston, Aleutian, Hawaii, Borneo, Philippines, Samoa.
+New Britain, Solomon, and Fiji.
+
+PII: I( It \\f Olll.lJ PII \\f EH
+The game consists of 9 nations; 3 Axis powers and
+6 Allied powers, however there are not 9 players. Recommended assignments are:
+
+6-Player Game
+Player 1: Germany
+Player 2: Japan
+Player 3: Italy
+Player 4: Soviet Union/France
+Player 5: United States/Commonwealth Player 6: United Kingdom/China
+
+5-Player Game
+Player 1: Germany/Italy
+Player 2: Japan
+Player 3: Soviet Union/France
+Player 4: United States/Commonwealth Player 5: United Kingdom/China
+
+4-Player Game (Recommended)
+Player 1: Germany/Italy
+Player 2: Japan
+Player 3: Soviet Union/United States/France Player 4: United Kingdom/China/Commonwealth
+
+3-Player Game
+Player 1: Germany/Italy/Japan
+Player 2: Soviet Union/United States/France Player 3: United Kingdom/China/Commonwealth
+
+2-Player Game
+Player 1: All Axis powers Player 2: All Allied powers
+
+Nit"l"IONltl. 1:HIUl"I"
+
+
+
+
+I	I I 1
+I:  I I I 1  I
+I
+I I  I I I I I I
+I
+
+
+
+
+Each nation has their own setup chart. These charts have two setup variants, 1940, which is the light column, (left) and 1942 which is the dark (right) column. Each of these scenarios provide its own unique strategies, but the game rules are the same with the exception of the order of play (see "Order of Play," page 24).
+
+l:ON"l"HOI. nlltHUEHS
+Control markers are used to show ownership of a territory. While the map shows the starting owners printed on the map, (1940 setup) these will change ownership as the game progresses. The BBR uses the insignias as shown below.
+
+• ·•	(lID
+0
+China	United States	Soviet Union
+.	0	0
+Commonwealth  United Kingdom	France
+
+PHO IJU1:HON 1:H1urr
+
+9047623 S8	IIESE/IIICH /INDDEIIEI.IIPIIIENT ·mm	BLOOo(JAm+IP1II}{]
+ACTIVE
+ACTIVE*IP1II}{]
+ACTIVE
+ACTIVEIP1II}{]
+ACTIVE
+ACTIVEGIP1II}{]
+ACTIVE
+ACTIVE(r)IP1II}{]
+ACTIVE
+ACTIVE0IP1II}{]
+ACTIVE
+ACTIVEYUIii SEOUEICE AND STARTllli IPCI FOR 19,0
+"84'&Q(liji\	1§"7
+'IP1II}{]
+ACTIVE
+ACTIVETUH SEQUENCE AND STARTllli IPCs FOR 19'2
+,.Q "'Q i!r.PIIIIIIUCTIIIN CH/1111'
+"Bt1J!Jit.r :J,,O'!)'!J-!J'IlJ:) :U.r.r-.:Sii2J@(r)ii@@ii@iiiiil2Jiiiiii@ii(r)iii/ii@ii@2Jil'?1:tJiiw'(r)ii,00ii41@4]@@iifflfflffl(r)ID(r)ii(r)ID(00(§ft)u(r)The Bloodbath map file has an option to have the income tracker printed directly on the map, or you can use the Production Chart to keep track of all the nations' income. Place a control marker from each nation on the starting income for each nation. The starting income is printed on the National Charts for both 1940 and 1942 as well as the Production Chart. If the control markers get mixed up simply count all the territory values that each nation currently controls.
+IHUrll: HOUND "l"HIU:nEH  (9
+The BBR is a round based game. so keeping track of what game round the game is currently on is important. Using the Production Chart, place the Game Round Tracker on the "1" if playing 1940, place it on the "4" if playing 1942.
+
+
+
+
+Pl./lS"l"II: l:HIPS
+
+f,J\)IE SE't1(J)) 1:orn·1 u1:n
+H/l"l""l"I.E 1111:E
+
+Plastic chips are used to save space by representing game unit pieces and mark damage during game play. A single gray chip represents 1 unit, brown represents 5 units, orange represents 1 damage point and blue is for frozen French units.
+
+EXAMPLE: To place 8 infantry units, stack up 1 brown chip with 2 gray chips, then top off the stack with one infantry unit.
+
+SETUP UNITS ON H 0/UllJ
+Determine if you are playing the 1940, or the 1942 setup. Once that has been decided, refer to your National Chart. It lists the number and type of unit to place on the territories or sea zones listed. See the United States example below.
+
+ astern Umte tates Central United States Western United States Alaska
+Hawaiian lslancts
+1	< Iceland
+1942 STARTING IPCs: 58   Midway
+SETUP: Right Column	Wake Island
+TURN SEQUENCE:	Guam
+_\'!• l r :: l,nd
+Major Industrial Complt>x 1942 Sea Zone 101 Minor Industrial Complex 1940 Sea Zone 10 Air BaSt'	Sea Zone 1l
+Naval Base	Sea Zone 13
+Sea Zone 26
+
+While it is perfectly fine to use numbered dice, it is strongly recommended you use hit dice for combat rolls. Numbered dice are still needed for game play.
+
+The Bloodbath Ruleset uses six sided dice (D6).
+H/l"l""l"I.E H 0/lHD
+The Battle Board is to help with combat, though it is not necessary to use it. The images on the board help guide with what values units attack and defend with. If you are the attacker, be sure to setup your units on the attacker side. If you are the defender, place your units on the defender side. This is important as the two sides of the Battle Board may have different values that represent the same unit.
+
+The Battle Board has 5 values ranging from 0-4 which correspond with the dice value of a unit. EXAMPLE: A damaged battleship has to roll a 2 or less to score
+a hit.
+Units shown in black roll at their normal values (see "Unit Profiles," page 36). Units in red represent damaged units and the units in yellow represent
+Combined Arms (see page 30).
+
+m.oo,6111 I
+
+Sea Zone 28
+Sea Zone 35
+
+All players now place their units according to their National Chart. In this example, if playing 1940, you would add two infantry units to Philippines, but you would not if playing 1942. Use chips to substitute units whenever you need to save space.
+
+AXIS
+
+• Germany controls the dark gray (or black) pieces
+• Japan controls the orange pieces
+• Italy controls the brown pieces
+
+ALLIES
+
+• Soviet Union controls the maroon pieces
+• United States controls the green pieces
+• China controls the light green pieces
+• United Kingdom uses the yellow (or tan) pieces
+• Commonwealth are the gray pieces
+• France controls the blue pieces
+\II1: HIHY PO IN"I" nuum EHS
+The 32 markers help keep track of the current game situation. When the Axis acquire a point, turn the roundel over from gray to red.
+
+"l-J,	. -:-;.,t..;-,°
+@
+
+
+
+
+
+
+
+
+IYIONEY
+It is recommended that each player is their own "banker" rather then designate a player as banker. This will save time all around the board. This is a gentlemen's game, if you cannot trust who you are playing with, it is highly recommended you tell that person to leave and find someone else.
+
+The currency used in this game is referred to as IPCs (Industrial Production Credits), commonly known as money. IPCs fuel the war effort for each nation, the more IPCs you are able to collect at the end of each turn will give you more buying power on the follow­ ing turn.
+
+Separate the money by denomination, then collect the amount of IPCs that is listed on your National Chart for the game you are playing, 1940 or 1942.
+
+If you do not have any game money, refer to the back of this book as to where you can get some.
+
+(j/llHE H 0/lllll
+The game board (map), depicts the world in 1940. With a few adjustments using the Control Markers it can depict the world for the 1942 setup.
+
+Europe Side and Pacific Side
+The map is divided in half, there is a Europe side and a Pacific side. See the map on page 5 for clarification.
+
+Land Territories and Sea Zones
+The map is divided into territories and sea zones, which are separated by a border. Sea zones are numbered 1-128, while territories have names and in most cases a number 1-20. The numbers in the sea zones are just for reference for setup, they do not have any game play value. The numbers on the territories however do have game play values. The territory numbers represent the IPC values of each territory.
+
+Territories and sea zones are always in one of the following conditions.
+
+Friendly: Controlled by you or an allied power Hostile: Controlled by a power you are at war with Neutral: Not controlled by any power
+
+Islands
+An island, or island group is a single territory that is surrounded by a single sea zone. Islands and island groups represent a single territory and not a group of islands with individual values.
+
+
+
+
+
+RONGE LAP	WOT JE
+Q;>O
+MARSHALL ISLANDS
+
+Canals and Narrow Straits
+There are two canals located on the game board. The Panama Canal connects the Pacific Ocean to the Caribbean Sea (sea zones 64 and 89), while the Suez Canal connects the Red Sea, (sea zone 81) to the Mediterranean Sea, (sea zone 98). A canal is not considered a space, therefore it does not block land movement. Land units can move freely between Trans-Jordan and Egypt. Central America which contains the Panama Canal, is one territory thus no land movement is required to cross the canal within Central America.
+
+There are three narrow straits on the game board. The Turkish Straits connect the Mediterranean and Black Sea (sea zones 99 and 100), the Strait of Gibraltar connects the Atlantic Ocean (sea zone 91) to the Mediterranean Sea (sea zone 92), and the Danish Straits connect the North and Baltic Seas (sea zones 112 and 113). Most narrow straits cannot be crossed by land units without the use of transport ships. However, Turkey is one territory that contains a narrow strait within it, therefore no land move­ ment or transport ship is required to cross the straits within Turkey.
+
+If you or an ally control a canal or a narrow strait at the start of your turn, you may then move sea units through it (you cannot use it in the same turn that you capture it). If a canal or narrow strait is controlled by a power not on your side, but with which you are not yet at war, you must ask permission to use it, which may be denied. You cannot move sea units through a canal or narrow strait that is controlled by a neutral territory or by a power with which you are at war.
+
+In order to control a canal or narrow strait, you must control their controlling land territory or territories. They are as follows:
+
+Suez Canal- Egypt and Trans-Jordan
+
+
+
+
+
+
+
+
+PHONPEI
+¦ 
+"ILI'9	JO
+
+Panama Canal- Central America Turkish Straits- Marmara Strait of Gibraltar- Gibraltar Danish Straits- Denmark
+
+EXCEPTION: Submarines of any power may pass through the Strait of Gibraltar regardless of which
+
+Above, the Marshall Islands is considered a single territory and not several territories. Islands which have no name label are non playable territories.
+
+Impassable
+These territories restrict movement and units may not move through or fly over these marked places on the map.
+
+power controls it.
+
+NOTE: Capital ships may not use the Turkish Straits.
+
+The movement of air units is completely unaffected by canals and straits, whether they are moving over land or sea. They can pass between sea zones that are connected by the canal or strait regardless who controls it.
+
+f,J\)fE Jlf)J\}l))  ()fJ\}I)  1:0Nnrui1:n
+
+
+Tian-Kunlun Shan Pass
+The pass separates China from the Soviet Union and restricts the movements of most units. The few units that may move into, or fly over the Tian-Kunlun Pass are as follows:
+
+Strategic Bombers- May fly over, but not land on Heavy Bombers- May fly over, but not land on Infantry- May move into the pass
+
+The pass counts as a movement space, but may not be captured by any nation at any time. This is also the only land space on the entire map that opposing forces can occupy at the same time as there is no combat on the pass. You may never use the railway (see "Railways," page 37) to move into or through at any time.
+
+The pass may be entered or exited from one of the following territories:
+
+China- Kansu, Tsinghai
+Soviet Union- Tunguska, Novosibirsk, Kazakh S.S.R.
+
+
+
+
+
+
+
+
+
+
+,I
+CITY OF
+SAMARA
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+EXAMPLE: The above shows one infantry entering the pass from Novosibirsk, then exits the pass into Tsinghai on the following turn.
+
+Trans-Siberian Railway
+The Trans-Siberian Railway runs from Moscow to Amur (Vladivostok). The railway may be entered or exited by the Soviet Union from the following territories:
+
+Moscow Samara Novosibirsk Tunguska Yenisey Yakut S.S.R. Buryatia Amur
+
+
+
+
+
+
+
+
+Only the Soviet Union may use this railway. The rail may never be used by an opposing or allied force. Each turn, the Soviet Union may move a single land unit along any territory represented by the railway. The unit boarding the railway must already be in one of the railway territories to use the railway. Once the unit exits the railway, the unit must remain there until the following turn.
+
+The railway can be disrupted by taking any territory that proceeds after Moscow, as Moscow is the hub of the railway. If Moscow falls, the railway is out of play until Moscow is liberated.
+
+
+
+
+
+
+
+
+
+
+
+
+EXAMPLE: If Japan captures Yakut S.S.R., then not only does Yakut S.S.R. lose the rail, but all territories that follow. Remember Moscow is the hub, not Amur, so Buryatia and Amur are now out of use as well. The railway in this example now only works from Moscow to Yenisey.
+
+
+
+The political situation slightly changes when playing 1940 vs. 1942. 1940 is more restrictive in the beginning, while in 1942, the restrictions are lifted as all nations are at war. While 1942 may sound more fun to play with­ out restrictions, it also forces you on historical paths up to 1942. While 1940 may have restrictions, it allows you to choose your path before the United States and the Soviet Union join the Allies. The minimum rounds to be played in 1940 is 8, while 1942 the minimum is 5 rounds (see "1942," page 48).
+
+Below are the restrictions for each nation, along with the national objectives. National objectives are historical goals and developments to bring up a nation's income. The national objectives for 1940 and 1942 are the same, however, some may not come into effect until that nation is at war.
+GERMANY
+Political Situation 1940: Germany is at war with France, the United Kingdom, and Commonwealth. Germany may declare war on the United States, the Soviet Union, or China at the beginning of the Combat Move phase of any of its turns. A state of war between Germany and one of these three powers will not affect its relations with the other two.
+
+Political Situation 1942: Germany is at war with France, the United Kingdom, China, the United States, the Soviet Union, China, and Commonwealth.
+
+National Objective and Bonus Income:
+
+Not at war with the Soviet Union
+• 5 IPCs If Europe Axis are not at war with the Soviet Union.
+At war with the Soviet Union
+• 5 IPCs Per territory if Germany controls Leningrad, Stalingrad, and or Moscow.
+At war with United Kingdom and France
+• 2 IPCs Per territory if Germany controls Iraq, Iran, Northwest Iran, or Caucasus.
+• 5 IPCs If Germany controls London.
+• 3 IPCs If there is at least one German land unit in Egypt, or El Alamein.
+• 5 IPCs If Germany controls both Denmark and Norway while Sweden is neither Pro-Allied nor Allied controlled.
+• 5 IPCs If Germany has at least 5 submarines on the map.
+• 2 IPCs If Germany has armistice with France.
+At war with Italy
+• 2 IPCs For each territory that Germany controls that was originally Italian.
+SOVIET UNION
+Political Situation 1940: The Soviet Union begins the game at war with no one. The Soviet Union may not declare war on any European Axis power before turn 4 unless first declared war upon by a European Axis power or London is captured by an Axis power. It may declare war on Japan at the beginning of the Combat Movement phase (see "Combat Movement," page 24) of any of its turns.
+
+EXCEPTION: The Soviet Union is immediately at war with European Axis if Marmara, Central Anatolia, or Eastern Anatolia are attacked by the Axis Powers on any turn.
+
+EXCEPTION: The Soviet Union may declare war with European Axis on turn 3 if any of the following has happened: Japan declared war on Soviet Union, Axis has taken control of Castilla (Madrid). or more than 10 Axis units are on the Eastern Front (Poland, Romania, and/or Hungary).
+
+Due to its separate treaties with Germany and Japan, if the Soviet Union is at war with Japan and not the European Axis, the Soviet Union must still abide by its not at war restrictions in Europe and the Middle East. This means the Soviet Union may not move into or land units in any territory other than that which belonged to the Soviet Union from the start of the game in Europe. It also means no Allied nation may move into or land units in any Soviet Union territory.
+
+Political Situation 1942: The Soviet Union is at war with Germany and Italy. The Soviet Union may declare war on Japan at the beginning of the Combat Movement phase of any of its turns.
+
+1:0N"l"INLiED
+
+National Objective and Bonus Income:
+
+At war with Germany and or Italy
+• 3 IPCs If the Soviet Union controls Siberia, Urals, and Ukraine.
+• 5 IPCs If the Soviet Union controls at least 3 of the following territories: Leningrad, Stalingrad, Eastern Poland and or the Baltic States.
+• 2 IPCs For each territory that the Soviet Union controls that was originally German, Italian, or Pro-Axis.
+At war with Japan
+• 7 IPCs If the Soviet Union liberates Manchuria. This is a one time payment and is not awarded again.
+
+JAPAN
+Political Situation 1940: At the beginning of the game, Japan is at war only with China and considers movement of units into China by any other Allied power as an act of war. When not yet at war with the United States, Japan may not end the movement of its sea units within 2 sea zones of the United States' mainland territories (Western United States and Alaska). Japan may declare war on the United Kingdom, Commonwealth, France, the United States, or the Soviet Union at the beginning of the Combat Movement phase on any of its turns. A declaration of war by Japan against either the United Kingdom, or Commonwealth will immediately result in a state of war between Japan and both of these two powers. A state of war between Japan and France or between Japan and the Soviet Union will not affect relations between Japan and the United States and vice versa. Japan may attack Dutch territories only if a state of war exists between them, the United Kingdom, and the Commonwealth.
+
+Political Situation 1942: Japan is at war with the United States, United Kingdom, Commonwealth, China, and France. Japan may declare war on the Soviet Union at the beginning of the Combat Movement phase on any turn.
+
+National Objective and Bonus Income:
+
+At war with China:
+• 10 IPCs If Japan controls all Chinese marked territories on the map.
+Not at War with the United States:
+• 10 IPCs If Japan is not at war with the United States, has not attacked French Inda-China, has not annexed Thailand, and has not made an unprovoked declaration of war against United Kingdom or Commonwealth.
+At War with the Western Allies (United States, United Kingdom/Commonwealth and or France):
+• 3 IPCs Per territory if Japan controls any of the following territories: Guam, Midway, Wake Island, Gilbert Islands, Solomon Islands, Line Islands, Johnston Island, New Britain, and or Aleutian Islands.
+• 5 IPCs Per territory if Axis powers control India (Calcutta), New South Wales (Sydney), Hawaiian Islands (Honolulu) and or Western United States (San Francisco).
+• 3 IPCs Per territory if Japan controls any of the following territories: Sumatra, Java, Borneo, and or Celebes.
+• 10 IPCs If Japan captures Calcutta. This is a one time payment and is not awarded again if Allies retake Calcutta allowing Japan to capture Calcutta again.
+UNITED STATES
+Political Situation 1940: The United States begins the game at war with no one. While it is not at war with Japan, the United States may not move into or through China or end the movement of its sea units in sea zones that border a Japan-controlled territory. While not at war with Germany or Italy, the United States must end naval movements on the Europe map only in sea zones that border a U.S. territory, with one exception: warships (not transports) may also conduct long-range patrols into sea zone 102. If the European Axis declare war on the Soviet Union, or not at war by turn 3, the Europe naval restrictions are lifted, and the United States may freely move their naval units on the Europe side of the map. However, may only end naval unit movements outside of a U.S. territory if no Axis surface warships are in the sea zone.
+
+United States may not declare war on any Axis power unless an Axis power either declares war on them first, or captures London or any territory in North America, or Japan makes an unprovoked declaration of war against the UK or Commonwealth. After which it may declare war on any or all Axis powers on its following turn. However, if it is not yet at war by the Collect Income phase of its third turn, the United States may declare war on any or all Axis powers at the beginning of that phase.
+
+Political Situation 1942: The United States is at war with Germany, Italy, and Japan.
+
+National Objective and Bonus Income:
+
+At war with any Axis power
+• 3 IPCs Per territory if the United States controls any of the following islands; lwo Jima, Caroline, Marshall, Marianas, Taiwan, Hainan, Okinawa, or Palau.
+• 3 IPCs If the United States has at least 2 ground units in Casablanca.
+• 10 IPCs If the United States is no longer neutral.
+• 1 IPC Per originally controlled United States territory. (U.S. starts with 17).
+• 5 IPCs If at least 1 U.S. land unit is in France or Normandy Bordeaux.
+• 	X IPCs Once the United States enters the war, a one time payment is issued on their collect income phase which varies by turn. Turn 1 =0, Turn 2 =15, turn 3 or higher= 30.
+
+Additional Rules:
+
+Once the United States is at war, their starting Minor Industrial Complexes are upgraded to Major at no cost.
+
+CHINA
+Political Situation 1940/1942: China begins the game at war with Japan. China cannot declare war on a European Axis power unless one of those powers first either declares war on China, or moves a unit into a territory of which Chinese units are allowed to move. A state of war between China and one Axis power will not affect its relations with another Axis power.
+
+National Objective and Bonus Income:
+
+At war with any Axis power
+• 6 IPCs If the Burma Road is Allied controlled. This consists of the following: India, Burma, Yunnan, and Szechwan.
+
+UNITED KINGDOM
+Political Situation 1940: The United Kingdom, along with France and Commonwealth begin the game at war with Italy and Germany. The United Kingdom may declare war on Japan at the beginning of the Combat Movement phase of any of its turns, resulting in a state of war between Japan, the United Kingdom, and Commonwealth. When not yet at war with Japan, the United Kingdom may not move units into or through China. It may, however, move units into Dutch territories as a Noncombat Movement at any time, as long as those territories have not been captured by an Axis power. It may actually take control of Dutch territories (gaining their IPC income) by moving land units into them. Additionally, the United Kingdom considers attacks against any Dutch territories to be acts of war against it directly. Once a Dutch territory has been captured by an Axis power, it may be captured and controlled by any power.
+
+Political Situation 1942: The United Kingdom is at war with Germany, Italy, and Japan.
+
+National Objective and Bonus Income:
+
+At war with Japan
+• 5 IPCs If the United Kingdom controls India, West India, and Malaya.
+At war with Europe Axis
+• 2 IPCs Per territory if United Kingdom controls Iraq, Iran, and or Northwest Iran.
+• 5 IPCs If United Kingdom controls Egypt, Trans-Jordan, and El Alamein.
+• 8 IPCs A one time payment is issued immediately in the event Portugal becomes Allied.
+Additional Rules:
+
+A maximum of 17 IPCs may be spent on the Pacific side of the map per turn. This does not include any facilities.
+
+If Japan declares war on U.K., add 1 U.K. Infantry to India at the place units phase for free, this is to represent the Indian Volunteer Army. This does not effect the 17 IPC restriction placed on the Pacific side of the map. This is voided if U.K. declares was on Japan.
+
+ITALY
+Political Situation 1940: At the beginning of the game, Italy is at war with France, the United Kingdom, and Commonwealth. Italy may declare war on the United States, the Soviet Union, or China at the beginning of the Combat Movement phase on any of its turns. A state of war between Italy and one of these three powers will not affect its relations with the other two.
+
+Political Situation 1942: Italy is at war with the Soviet Union, United States, United Kingdom, Commonwealth, and France. Italy may declare war on China at the beginning of the Combat Movement phase on any of its turns.
+
+National Objective and Bonus Income:
+
+At war with Allies:
+• 5 IPCs If there are no Allied surface warships in the Mediterranean Sea (sea zones 92 through 99).
+• 5 IPCs If Axis powers or Vichy France control at least 3 of the following territories: Gibraltar, Southern France, Greece, and Egypt (Cairo).
+• 5 IPCs If Axis powers control all of the following territories: Morocco, Algeria, Tunisia, Libya, Tobruk, and El Alamein.
+• 2 IPCs Per territory if Italy controls Iraq, Iran, and or Northwest Iran.
+• 1 IPC Per territory if Italy controls Kenya, Anglo-Egyptian Sudan, British Somaliland, Gibraltar, El Alamein, and or Cyprus.
+
+Fall of Rome:
+In the event of the Allies capturing Rome, Italy will immediately change from an Axis power to an Allied power. In addition, will automatically be in a state of war against the Axis for the duration of the game. Any territories or sea zones in which Axis and Italian units share, Italian units are immediately replaced with corresponding Axis units. In the event German and Japanese units are both with the Italian units, the Axis with the most units turns the Italians, and if the territory belongs to Italy, it is immediately changed to the accumulating Axis territory. Allied territories which were occupied by only Italian units are reverted back to the Allied power, if they have a capital, otherwise Italy keeps control. If Axis controlled, Italy takes control of the territory.
+
+At war with Axis:
+• 2 IPCs For each territory that Italy controls that was originally German, or Pro-Axis.
+• 5 IPCs If Italy controls all their original territories.
+
+COMMONWEALTH
+Political Situation 1940: Commonwealth begins the game at war with Germany and Italy. Commonwealth may declare war on Japan at the beginning of the Combat Movement phase on any of its turns, resulting in a state of war between Japan, Commonwealth and the United Kingdom. When not yet at war with Japan, Commonwealth may not move units into or through China. It may, however, move units into Dutch territories as a noncombat movement at any time, as long as those territories have not been captured by an Axis power. It may actually take control of Dutch territories (gaining their IPC income) by moving land units into them. Additionally, Commonwealth considers attacks against any Dutch territories to be acts of war against it directly.
+
+Political Situation 1942: Commonwealth begins the game at war with Germany, Italy, and Japan. Common­ wealth may move units into Dutch territories as a noncombat movement at any time, as long as those territories have not been captured by an Axis power, and may actually take control of Dutch territories (gaining their IPC income) by moving land units into them.
+
+NOTE: Commonwealth is the only nation to have two capitals. If either Sydney (on the Pacific side), or Ottawa (on the Europe side) are captured, all lPC's are surrendered to the capturing power and Commonwealth will have no Capital and not be able to collect IPC's until liberated.
+
+1:o Tl LiED
+
+National Objective and Bonus Income:
+
+At war with Japan
+• 3 IPCs Commonwealth has at least 5 naval surface warships on the map.
+• 3 IPCs If neither of the following are Axis controlled: Dutch New Guinea, New Guinea , New Britain, Java, Celebes, and or the Solomon Islands.
+At war in Europe
+• 1 IPCs Per territory Commonwealth controls that was originally Axis, or Pro-Axis (Max of 3).
+
+FRANCE
+Political Situation 1940: France is at war with Germany and Italy. France may declare war on Japan at the beginning of the Combat Movement phase on any of its turns.
+
+Political Situation 1942: France is at war with Germany, Japan and Italy. Even though there is no Capital for France, there are still a few units left to utilize for the Allies.
+
+National Objective and Bonus Income:
+At war with Germany and Italy
+• 12 IPCs If France is liberated by the Allies, France receives up to 12 IPCs' worth of units to be immediately placed in France. Any unit or units may be purchased as long as you do not exceed 12 IPCs' worth.
+
+DUTCH TERRITORIES
+Political Situation 1940: The Dutch territories begin the game uncontrolled, but are considered friendly to the Allied powers. United Kingdom and Commonwealth are free to take control of the Dutch East Indies by moving land units to those territories. Doing this is not considered a provocative act against Japan.
+
+Political Situation 1942: The Dutch East Indies have begun to be occupied by Japan. The remaining Dutch East Indies are considered friendly to the Allied powers. Any Allied power may take control by moving land units to these territories.
+
+Additional Setup: Place an air base in Celebes for both the 1940 and the 1942 setup.
+
+NEUTRAL TERRITORIES
+Political Situation 1940/42: Many countries tried to remain neutral. As the war became truly global, many neutrals were forced to join one side or the other. There are three types of neutral territories in this game: Pro-Allies, Pro-Axis, and strict neutral (non-aligned). Many neutral territories have their own standing army. This force is shown on the map in the form of an infantry or cavalry silhouette with a number next to it. These numbers indicate the number of units that will be placed on the map if the territory's neutrality is compromised. These units are placed free of charge. An important concept to understand is the difference between a neutral territory and a neutral power. There are only nine powers in the game (Germany, the Soviet Union, Japan, the United States, China, the United Kingdom, Italy, Commonwealth, and France). While some of these powers begin the game neutral, neutral territories begin the game not being controlled by any power. Each neutral territory is treated as a separate entity. Neutral territories are not linked to countries in any way.
+
+FRIENDLY NEUTRALS
+Friendly neutrals are neutral territories that are sympathetic to your alliance. For example, on the map Bulgaria and Iraq are shown as being Pro-Axis. These territories would be friendly neutrals to the Axis powers. A Pro­ Allied neutral would be considered a friendly neutral to the Allied Powers.
+
+Friendly neutrals may not be attacked, and air units may not fly over them. They can be moved into (but not through) as a noncombat move by land units of a power that is at war. This moves the territory out of their neutral status however. The first friendly power to do so places their national control marker on the former friendly neutral territory, and their national production level is adjusted upward by the value of the territory. With the territory's loss of neutrality in this way, its standing army is immediately activated. The units placed belong to the power that now controls the formerly neutral territory, and may be used freely at the beginning of that power's next turn.
+
+UNFRIENDLY NEUTRALS
+Neutrals that are friendly to the side opposing your side are said to be unfriendly neutrals. Example, Germany will have to fight its way into Yugoslavia, which is a Pro-Allied neutral territory.
+
+Moving into an unfriendly neutral is considered a combat move and must be resolved during the Conduct Combat phase. Before the neutral territory can be taken control of by the invading power, all of the neutral's standing army units must be eliminated. Air units cannot fly over an unfriendly neutral unless they are attacking it. Naval units which are unfriendly neutral do not block the movements of other naval units.
+
+When a neutral territory is invaded, it is no longer considered neutral, and immediately becomes part of the alliance opposing the power that attacked it. For example, if Germany attacked Yugoslavia, Yugoslavia would join the Allies. Also, its standing army units are immediately placed in it. Choose any power from among those on the side that the territory has joined, and use that power's infantry units to represent these forces. The player that controls the chosen power will control the territory's units for the duration of the battle. This player places the territory's units on the board and manages them when they conduct combat. Do not mix or confuse the territory's units with the units of another power, including the power managing the territory's pieces on the board.
+
+Capturing an unfriendly neutral gives the capturing player the IPC income of the territory. The invading power places its national control marker on the territory, and their national production level is adjusted upward by the value of the captured territory.
+
+If the attack upon the formerly neutral territory is unsuccessful (the territory is not captured), any remaining defending units stay in the territory but cannot move. The territory remains uncontrolled (place a national control marker on it face down to indicate its new status). Units from the aligned side can still move into it and take control of it and its remaining units in the same way as if it were a friendly neutral.
+
+
+STRICT NEUTRALS
+Switzerland is an example of a strict neutral. Strict neutrals have no particular leaning toward one side or the other. These neutrals can be controlled only by invading them. Strict neutrals are treat­ ed in exactly the same way as unfriendly neutrals, Exception: An attack by either alliance on a strict neutral territory (whether successful or not) will result in all remaining strict neutrals immediately becoming Pro-Allied or Pro-Axis, depending on who violated the strict neutral's neutrality. For example, if Germany attacks Switzerland, all the other strict neutrals on the map will take on a Pro-Allied status for all purposes.
+
+The territories are light in color, and do not say Pro-Axis or Allied. They are also identified by the empty roundel, see right.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+LYONO
+
+
+
+
+0 STUTTGART
+MUNICH 0
+
+ZERLA
+
+(;IIINil ll(JtES
+
+Chinese units have a limited range of occupation. They can only be moved into territories that have a Chinese nationality symbol. Chinese units cannot be loaded on transports. Kwangtung, Burma, Shan State, Thailand, Malaya and French Inda-China are special cases. While they are not Chinese territories, China can attack, occupy, and/or reinforce them once Japan is at war with United Kingdom. These are the only non- Chinese territories that Chinese units can occupy.
+
+China begins the game with one fighter; the Flying Tigers. It cannot leave the territories that Chinese occupation is restricted to, except for adjacent sea zones. The fighter must land in an allowed Chinese occupation territory and cannot land in a newly liberated territory. If it is destroyed, it is not replaceable.
+
+China also begins the game with three cavalry units, which are placed at the player's discretion. They may be placed together or separately in any territory China begins the game with.
+
+
+Above shows the only territories Chinese forces can move into other than Chinese marked territories.
+
+China can normally purchase infantry and cavalry only, but if the Burma Road is allied controlled, China may purchase artillery and a maximum of two tanks per game (must be purchased on separate turns). Cavalry is limited to three units in play. If China currently has three cavalry units in play during the purchase phase, China may not purchase any.
+
+China does not have industrial complexes, or air and naval bases. If a Japanese industrial complex is built on a Chinese territory then that territory is later re­ captured by the Chinese, or liberated by an Allied power, the industrial complex is removed from the game. Chinese territories have a Nationalist Chinese nationality symbol on them. Some of these territories begin the game already under Japanese control. They still are considered Chinese territories for purposes of original ownership.
+
+China does not have a capital like other nations do. During the game, each new unit can be mobilized on any Chinese territory that is controlled by China, in­ cluding those captured in the current turn, with the exception of tanks, which must be placed in Yunnan, or Szechwan.
+
+If all Chinese territories are captured by Japan, China retains its IPC's in hope of liberation and does not give them to Japan. Allied units may be moved into China, but they are not considered Chinese and are controlled by the player who owns them.
+
+If a Chinese marked territory is captured by the Allies and it has an air base or naval base, China takes control of it. These are not removed from the game like an industrial complex. China may use the air base with their fighter, but may not scramble. Also, if the air base or naval base become damaged, China may not repair it. These bases can be used by Allied forces as normal.
+
+
+1lll(,EN't1IN1l 1\NI) CllltE ll(JtES
+Argentina and Chile are the only two territories that are effected by the German IPC tracker for territory income (not national objectives). The values are determined at the collect income phase on any given turn.
+
+• Germany is collecting at least 53 IPCs - Argentina becomes German, the standing army is activated and the territory also becomes German, however does not gain the IPC value for the territory until their next turn.
+• Germany is collecting at least 56 IPC's - Chile becomes a Pro-Axis territory.
+Additional Setup: Place a naval base in Argentina for both the 1940 and the 1942 setup.
+NOTE: If Argentina is captured before becoming German, the standing army transport is auto killed.
+
+S()VIE'J1 IJNl()N lllJtES
+The Soviet Union has several rules which only apply to them. They are as follows:
+
+Trans-Siberian Railway See "Trans-Siberian Railway," page 11.
+Lend-Lease Mobile Production
+
+LEND-LEASE
+
+To represent Allied aid, the Soviet Union has the opportunity to receive free units or IPCs during the game. The Soviet Union must be at war with Germany or Italy before Lend-Lease can take effect. Once the Soviet Union is at war with the Europe Axis, the Soviet player will roll one die per Lend-Lease icon during the Collect Income phase and be awarded according to the die roll. The awarded unit must be placed where indicated by the die roll. It is also possible for the Axis to deny the Allied aid by occupying certain sea zones containing the Lend-Lease icon (see fig. 4) or capturing the designated locations for the aid.
+
+If sea zone 126 or sea zone 04 is hostile, the power occupying the sea zone will roll 1 die per warship. Each sea zone must be rolled separately. If a 3 or less is rolled, no supplies can be awarded for that lend-lease sea zone.
+
+NOTE: If the destination (Amur or Archangel) of the aid is captured by the Axis, or Moscow has fallen, no aid may be awarded.
+
+
+EUROPE AID (Archangel)
+
+1- One Artillery
+2- One Mechanized Infantry
+3- One Tank
+4 - Two Artillery
+5 - One fighter
+6 - One Tank & One Artillery
+
+MOBILE PRODUCTION
+
+
+
+
+
+
+
+-Fig. 4
+
+PACIFIC AID (Amur)
+
+1- One Artillery
+2- One Mechanized Infantry
+3- Two IPC's
+4 - Three IPC's
+5 - Five IPC's
+6 - Seven IPC's
+
+
+To represent the mobility of production the Soviet Union had, minor industrial complexes (not major) may be moved to an adjacent originally controlled Soviet Union territory with an IPC value of 1 or greater. You may only have 1 industrial complex per territory at any given time.
+
+A minor industrial complex may be moved one space per turn to an adjacent originally controlled Soviet Union territory at the cost of 2 IPCs during the Purchase Units phase. Once an industrial complex is moved, the pro­ duction of that factory is reduced by one unit on that turn. It is then back up to full production the following turn, unless it moves again.
+
+Movement of an industrial complex negates the railway for that turn, no movement bonus can be attached to units from that complex on the same turn the industrial complex moves. The railway will be reinstated the following turn, provided the minor industrial complex does not move again.
+
+If the minor industrial complex is damaged, it cannot be moved until the damage is fully repaired. You may repair and pay to move the minor industrial complex on the same turn.
+
+BLACK SEA/ TURKEY
+
+If the Black Sea becomes compromised, which is done by the Axis attacking Marmara, Central Anatolia, or Eastern Anatolia, the Soviet Union will immediately be in a state of war with Germany and Italy. In addition, any remaining standing army in the Turkish territories will become Soviet Union pieces and will be controlled by the Soviet Union player for game play purposes. The Soviet Union however, may not claim the Turkish territories nor collect the IPCs from the territory value unless those territories are liberated from the Axis.
+
+ll()N(,()tl1l ll(JtES
+Due to their mutual border conflict with Japan in 1939, the Soviet Union and Mongolia have a special relation­ ship. The Mongolian territories (Olgiy, Dzavhan, Dornod, and Dornogobi) will never become Pro-Axis unless one or more of them is attacked by the Soviet Union. Also, if Japan attacks any Soviet-controlled territory that is adjacent to any Mongolian territory, all Mongolian territories that are still neutral or Pro-Allied, or have joined the Allies as a result of a failed Japanese attack, are placed under the control of the Soviet Union at the end of Japan's Conduct Combat phase. The Soviet player will then place national control markers on those territories.
+
+This is done in the same manner as though the Soviet Union had moved land units into a friendly neutral territory (see "Friendly Neutrals," page 10). These territories have Soviet control markers placed on them, and their standing army units are placed on the board using Soviet pieces and are controlled by the Soviet Union player from then on. This occurs regardless of the state of relations between the Soviet Union and Japan at the time of the attack, with one exception: If the Soviet Union attacks Korea or any Japan-controlled territory bordering these Mongolian territories while Mongolia is still neutral, Mongolia will remain neutral and not ally itself with the Soviet Union.
+
+
+
+
+
+
+
+
+
+
+
+
+
+KOREA
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+KI•
+
+
+EXAMPLE 1:
+If Japan attacks any Soviet Union territory which borders a Mongolian territory such as Amur, Mongolian territories will be­ come part of the Soviet Union.
+
+EXAMPLE 2:
+If Japan attacks any Mongolian territory while they are still neutral, all remaining Mongolian territories will become part of the Soviet Union.
+
+EXAMPLE 3:
+If the Soviet Union attacks Manchuria or Korea while Mongolia is a still neutral, Mongolia will remain a neutral for the remainder of the game.
+
+
+
+
+-fig. 5
+
+l llilN( E ll(JtES
+
+
+While the BBR does not have a playable Vichy France, armistice can still be made between Germany and France. Once Normandy Bordeaux and France (Paris) are Axis controlled, armistice may be made by Germany provided that Germany takes control of France, city of Vichy. This can all be done on the same turn, or between multiple turns. Armistice may not be made if Vichy is attacked before Normany Bordeaux and Paris are Axis controlled.
+
+Once Vichy France is captured by Germany (Germany is the only power which can activate armistice) they have 2 options, either take the territory and collect the territory IPC's, (see "Conclude Combat," page 33) or activate armistice with France. If armistice is chosen, the territory remains French and a single French infantry unit is placed in the territory. Place a blue chip under the newly placed infantry and all other French units that are not with any other Allied units or stationed in London. These chipped units are now frozen assets and considered neutral and may be attacked at anytime by either Allied or Axis powers. Any French territories which are vacant, or with blue chipped units are now considered neutral and fall under the unfriendly neutral rules (see "Unfriendly Neutrals," page 17). If the city Vichy is retaken by any nation, the armistice is broken and all chipped French units are returned to the France player on the collect income phase of the current turn. Armistice may be broken by any power.
+
+NOTE: If armistice is made between Germany and France, the invading German units must retreat from Vichy France on the following turn. If they do not, Germany must attack Vichy France possibly breaking the armistice.
+
+Spain begins the game as Pro-Axis, however due to the treaty between Portugal and the United kingdom, annexing any Spanish territory could effect Portugal's war status. If any Spanish marked territory is attacked by the Allies, see fig. 6, all remaining Spanish marked territories will immediately become German, and all remaining Spanish territories will be activated with German units. In addition, if not already in effect, Argentina will also become a German territory and their standing army will be activated with German units.
+
+If any Pro-Axis Spanish marked territory is annexed by an Axis player (not an Allied player forcing the annex), all Portuguese marked territories, see fig 6, will become United Kingdom territories, immediately activating the standing armies of those territories to United Kingdom units.
+
+Portugal begins the game as neutral and will react differently to being attacked by Allied or Axis countries.
+
+
+If any Portuguese territory is attacked by the Allies, their remaining territories will never join the United Kingdom. All Spanish territories will immediately become German, and the standing armies will be activated with German units. If any Portuguese territory is attacked by the Axis, all remaining Portuguese territories will become United Kingdom, and the standing armies will be activated with United Kingdom units.
+
+
+
+
+
+-fig. 6
+
+
+,J1ll,1lN ll(JtES
+Kamikaze Strike:
+The Japanese player has the ability to make a special defensive strike. Kamikaze strikes may only occur after one of two conditions are met, they are as follows:
+
+• At least one of the following islands are captured or re-captured by the Allies: Philippines, Marianas, Okinawa, Guam, and or lwo Jima.
+• Japan achieved at least 37 IPCs on the tracker and has fallen to making 36 IPCs or less from territory income,
+not including national objectives.
+
+Once at least one of these conditions is met, Japan is allowed to make six Kamikaze strikes during the game. These strikes can only be made in sea zones that contain the Kamikaze symbol, see fig. 7. They are: Japan, Okinawa, lwo Jima, Formosa, the Marianas, Hokkaido, and the Philippines. If an Allied player has moved ships into one of the sea zones of the territories above during the Combat Movement phase, the Japanese player can announce that he or she intends to launch a kamikaze strike.
+A kamikaze strike can target any surface warship. Submarines and transports may not be targeted.
+
+
+The Japanese player must declare how many kamikaze strikes will be made, in which sea zones they will be used, and which enemy ship will be attacked by each kamikaze before any dice are rolled. More than one kamikaze strike can be made against the same ship. Kamikaze units have an attack roll of 2 or less. If a hit is scored, it must be applied to the chosen unit. Sea units that are successfully destroyed by a kamikaze strike (capital ships still take two hits) are immediately removed and do not fire back. A kamikaze strike does not prevent a bombardment supporting an amphibious assault.
+
+NOTE: The conditions to use kamikaze strikes does not come into effect during the conduct combat phase.
+
+
+
+
+-fig. 7
+
+llESE1lllf II 1\NI) l)EVEtf)l•)IEN'l1
+It H O tiT IIE SE,uuat ,u D I) E\f EI.0 P IYII:N ...
+Research and Development is a turn progressive system, and is optional for each nation. The stages consist of Phase 1 (Pl), Phase 2 (P2), Phase 3 (P3) and Hold (H). Only one tech can be in development at one time.and you may cancel your research at any time. You may also cancel your current research and start a new research at anytime, but you forfeit all IPCs already spent and you must start over by paying 4 IPCs and going to Phase 1. There are 10 technologies available to choose from.
+
+Jl \f /l 11./l H I. E JE1:H N O I.0 HI ES
+
+• Self Propelled Artillery
+• Super Battleships
+• Heavy Bombers
+• Super Carriers
+• HeavyTanks
+
+
+SI: I. 1: PHO P I: I. I. I: D ftHT 11. I. I: H V
+Artillery now supports 2 Infantry or Mechanized. Artillery movement is now 2 up from 1. May Blitz with tank originating from same territory.
+
+
+SU P I: H HI.\ TT I. I: SH I P S
+Battleships attack and defend with 2 dice, one at 4, and one at 2, this in­ cludes shore bombardments. Battle­ ships also take 3 hits up from 2 and are considered fully operational with 1 hit. AAA defend at 2 up from 1.
+If I: /Hf V H O mH I: H S
+Bombers now roll 2@3 on attacks up from 2@2. Bombers also roll 2 dice on bombing raids. Bombers may be reclassified as a cargo plane (see Strategic Bomber", page 42).
+
+SUP I:H I:ll HlllI:HS
+• 
+Improved Transports
+• Super Submarines
+• Jet Fighters
+• Improved Shipyards
+• Radar and Air Traffic Control
+
+
+lmPHO\fl:IJ THllNSPOHTS
+Transports may now carry 3 ground units up from 2. If 3 units are trans­ ported, 1 must be an infantry. Also, transports now defend at 1.
+
+
+SU PI: H SU Hm /UI IN I: S
+Submarines attack at 3 up from 2. Destroyers now only detect up to 3 submarines each, all the remaining submarines may either submerge, Strike, or Target Select (see "Sub­ marines", page 31).
+I1: T  I:I 1;H T I: HS
+Fighters now attack at 4 up from 3. Fighters also intercept and escort at 2 up from 1.
+
+
+
+lmPHO\fl:IJ SHIPVI.\HDS
+
+Carriers now may carry 3 planes up from 2. Carriers also take 3 hits up from 2. Carriers are now considered fully operational with 1 hit.
+
+Naval units cost less to produce. Minor industrial complexes may now build capital ships. Ship cost:
+• 
+Submarine 5
+• Transport	5
+• Destroyer	7
+• Cruiser	10
+• Carrier	13
+• Battleship	16
+
+If I: /Hf V T ll N I( S
+Tanks now attack at 4 up from 3.
+
+ll ll nIUI	ll N II  IL T. I:.
+Anti-Aircraft units, and Facility fire is increased to 2. Air bases now may scramble 6 (up to 3 may be allied), up from 3, and increases air unit movement by 2, up from 1.
+
+llESEJ\llC(f  J\NJ) J)EVEtf)}))JEN'J1 1:0NT1Nli1:n
+Research and Development (R&D) takes place before the game begins, and at the top of every round. If playing 1940 for example, R&D will take place before Germany's turn. Use the Technology Chart to keep track of your developments. France and China may not participate in this phase.
+
+Before the Game Begins:
+Each major power; Germany, the Soviet Union, Japan, the United States, and the United Kingdom will take part in this pre-game phase. Going around in turn sequence, these powers will select any one of the technology roundels and place upside down in Phase 1 for free. Keep your technology a secret from your opponents, do not let them know what you have until you have developed and used it.
+
+Top of Every Round:
+All nations (including minor powers) may participate in R&D at this time. Going around in turn sequence, each nation has the option to buy into, or advance their technology. Technology is not mandatory, and you may skip turns in advancing your technology.
+
+• To begin a technology, or abandon a technology and pick a new one, pay 4 IPCs to the bank and choose your technology roundel. Once you have chosen, place the roundel in Pl (H if 1942) upside down next to your nation.
+• To advance your technology out of the current phase it is in, see the different phases below. If you are in Pl, you will go to "Phase 1 (Pl)" below.
+PH/lSE 'I ( P'I)
+Progressing to Phase 2 costs 4 IPCs, move your technology roundel from Pl to P2.
+
+PH/lSE 2. ( PZ)
+Progressing to Phase 3 costs 4 IPCs, move your technology roundel from P2 to P3.
+
+PH/lSE	I ( P I)
+
+Now is the time you get to try to activate your technology. Roll l numbered die, if you get a 6, your technology is activated. Move your technology roundel to activated. Do not reveal your tech to your opponents at this time, you will reveal it when you use it, either in an attack or in defense. You also pay 6 IPCs at this time.
+
+If you failed to roll a 6, move your marker to H and whatever was rolled, you pay that amount of IPCs.
+EXAMPLE: If you rolled a 3, you now pay 3 IPCs.
+
+PH/lSE H (PH)
+Phase H is for "HOLD" as your technology roundel will remain here until you activate it by rolling a 5 or 6. At this time you may buy up to 10 dice for 1 IPC each. If you roll a 5 or 6 you activate your technology. Remove your technology roundel from Hand place into an activated slot (upside down as you do not reveal your technology until you use it).
+
+If you fail to roll a 5 or 6, your technology roundel will remain in holding until the top of the next round, where you then may try again to roll a 5 or 6 by buying new dice, as dice are discarded after use.
+
+EVEN'I1 SE(IIJENCE
+
+
+On your turn you will follow this six-part event sequence as outlined below. When you complete the entire sequence, your turn is over. Play then continues to the next designated player who then completes the entire sequence. After all nations have completed the event sequence, one round of the game is over. Move the Game Round Tracker up by one. Once you have completed the final game round, the game is over. Before each round begins, Research and Development is resolved.
+
+This is a round and point based game as outlined in "Winning the War," page 6.
+OHII EH 01: P1./l \'
+
+Phase 1 part 1: Repair/ Demo Units
+Pay to remove or add damage on facilities, or remove the facility itself. Facilities are industrial complexes, air and naval bases. Each point of damage costs 1 IPC to remove. Once at war, you may demo your own facilities for 12 IPCs each removing the facility from the board. You may pay 5 IPCs each to add up to 12 points of damage to your facilities, you may not exceed max Heavy damage as described on page 28.
+
+Repairs and demo take effect immediately, and the controlling player can use repaired facilities during the rest of this turn. Capital ships in sea zones serviced by operative friendly naval bases (including those repaired in this turn) are also repaired at this time. There is no IPC cost to repair these ships. Your air transports are reverted back to bombers, remove
+
+1940
+• Technology Research
+• Germany
+• Japan
+• United States
+• United Kingdom
+• China
+• Italy
+• Commonwealth
+• France
+• Soviet Union
+
+1:\11:N"I" Sl:IIIJl:Nl:I:
+
+1942
+• Technology Research
+• Soviet Union
+• Japan
+• United States
+• United Kingdom
+• Germany
+• China
+• Italy
+• Commonwealth
+• France
+
+any "Air Transport" markers (unless loaded with multinational units). Your submarines now surface, remove any "Submerged" markers.
+
+Phase 1 part 2: Purchase new Units
+You may buy as many units of any type as you can afford. Select all the units you wish to buy. You do not have to spend all of your IPCs.
+
+Place the purchased units aside for everyone to see, once you leave this phase of the event sequence, you may not go back and change your purchase.
+
+These units will deploy later in the event sequence.
+
+These events must be performed in order, once you have acknowledged you are done with the current phase of the event sequence, proceed to the next phase. You may not go back and revisit a phase you have already completed. The event sequence is as follows:
+
+Phase 1. Purchase/ Repair/ Demo Units. Phase 2. Combat Movement.
+Phase 3. Conduct Combat. Phase 4. Noncombat Movement. Phase 5. Mobilize New Units.
+Phase 6. Collect Income.
+
+Note that players may choose to do some of these events, or all of them.
+
+PHllSE l	P1im:HllSI: / Hl:IJfllH / 11mm IINITS
+In this phase, you may spend IPCs for additional units to be used in future turns. All the units listed on your power's National Card are available for purchase. You may also repair damaged or demo any facilities, surface submarines, and reset air trans­ ports back to strategic or heavy bombers. You are not required to spend any IPCs, you may save and carry over into the next round. IPCs are paid to the bank.
+
+PIf /lSI: Z: 1:0 mH /l ·r m O \f I: mI: N T
+Movement in this game is separated into combat movement and noncombat movement phases. During the Combat Move phase, all movement must result in combat, with a few exceptions (see below). Movement into a hostile territory counts as a combat movement whether that space is occupied or not. Additional movement that does not result in combat occurs during the Noncombat Move phase (phase 4). Move as many of your units into as many hostile territories and sea zones as you wish. You can move into a single hostile space from different spaces, as long as each moving unit can reach that space with a legal move. You can move units through friendly spaces en route to hostile spaces during this phase. However, units may not end their movement in friendly spaces during the Combat Movement phase except in four instances:
+
+• Tanks and mechanized infantry that have blitzed through an unoccupied hostile space (see "Tanks, Mechanized Infantry and Blitzing," on page 26),
+• Sea units that will be participating in an amphibious assault from an uncontested sea zone,
+• Sea units moving from a hostile sea zone to escape combat as their combat move, and or
+• Sea units moving into a sea zone containing only enemy submarines and or transports in order to attack those units. (Remember that such a sea zone is not considered hostile).
+
+If you move all of your units out of a territory you control, you still retain control of that territory until an enemy moves into and captures it. Units from the same faction can freely share territories, sea zones, space on aircraft carriers and transports with one another. These shared events must be agreed upon by both powers. All combat movement is considered to take place at the same time. Thus, you cannot move a unit, then conduct combat, then move that unit again during this phase. The only exceptions to this are land units making an amphibious assault that is preceded by a sea battle (see "Amphibious Assaults" on this page), as they must unload after the sea battle is successfully completed, or Naval Block­ ades (see "Naval Blockades," on page 27). You cannot move additional units into a battle once an attack has begun.
+
+A land or sea unit can move a number of spaces up to their move value. Land units must stop when they enter a hostile space. Thus, a unit with a move value of two could move into a friendly space, and then a hostile space, or just into a hostile space. Enemy sea units only stop the movement of three units each (see "Naval Blockade," page 27). Enemy submarines and transports do not block any of your naval move­ ment spaces nor does it prevent loading, or offload­ ing in that sea zone. (A lone transport may not con­ duct an amphibious assault without a warship with an attack value from the attacking player if a lone enemy submarine is in the sea zone). As the moving player, you have the option of attacking an enemy submarine and or transport that shares a sea zone with you. However, if a warship chooses to attack a submarine, or sink a lone transport, that warship must end its movement in that sea zone.
+
+
+
+
+
+
+
+
+EXAMPLE: Above shows a tank from Romania being stopped in Bessarabia after moving one space, even though the tank has two movement spaces.
+
+Air units may fly over enemy territories and units as if they were friendly provided the territory does not have any AAA (see "Anti-Aircraft Gun," page 40). Air units may not however fly over Pro-Axis, Pro-Allied, or strict neutral territories. Strategic and heavy bombers may fly over the Tian-Kunlun Shan Pass.
+
+Sea Units starting in a Hostile Sea Zone
+At the beginning of the Combat Move phase, you may already have sea units in spaces containing enemy units that were there at the start of your turn. For example, an enemy may have built new sea units in a sea zone where you have surface warships. Then when your turn comes around again, you are sharing that sea zone with enemy forces. If you are sharing a sea zone with enemy surface warships (not submarines and or transports). this situation requires you to do one of the following:
+
+• Remain in the sea zone and conduct combat.
+• Leave the sea zone, then load units if desired, and conduct combat elsewhere.
+• Leave the sea zone, then load units, and return to the same sea zone to conduct combat, (you may not load units while in a hostile sea zone).
+• Leave the sea zone and conduct no combat. Once these sea units have moved and or participated in combat, they may not move , or participate in the Noncombat Move phase of the turn.
+
+Air Units
+An air unit that moves in the Combat Move phase must generally reserve part of their move value for the Noncombat Move phase, at which point it has to return to a safe landing spot using their remaining movement. An air unit's movement in any complete turn is limited to its total move value. Thus, strategic bombers, which have a value of 6, cannot move six spaces to get to a hostile space. It must save enough movement points to get to a friendly territory where it can land. A fighter or tactical bomber can move its full four spaces to attack in a sea zone instead of saving movement, but only if a carrier could be there for it to land on by the conclusion of the Mobilize New Units phase. Air units attacking territories that have anti-aircraft guns or sea zones that have battleships will be fired upon. This includes territories containing anti-aircraft guns that are being flown over.
+
+Aircraft performing Bombing Raids are not subject to AAA fire from the destination AAA (provided there is one), but they are fired upon by facility or base AAA.
+
+Amphibious Assault
+Amphibious assaults are announced during the Combat Move phase. Amphibious assaults take place by attacking a coastal territory, or island group from a non-hostile sea zone by offloading land units from transports onto the territory which you are trying to capture.
+
+EVEN'f  SE(}(JENCE  1:0NT1Nu1:n
+
+
+Moving transports and their cargo into a sea zone in which you plan to make an amphibious assault counts as a combat move, even if there are no defending surface warships or scrambled air units there. This is also true of any battleships and or cruisers that will support the assault. Amphibious assaults must be announced during this phase.
+
+If an amphibious assault involves or could involve a sea combat, any air units and naval warships that are participating in the assault must move to either the sea zone or the land territory. They will then participate only in the part of the assault to which they have moved. Their target area must be stated before the defender decides if there will be a scramble (if possible). If the attacker loses the sea battle, the land battle may not occur.
+
+Special Combat Movement
+A number of units can make special moves during this phase. These are described in detail below.
+
+Aircraft Carriers
+Any fighters or tactical bombers onboard an aircraft­ carrier launch before the carrier moves and move independently of the carrier. These air units can make a combat move from the carrier's sea zone, or they can remain in the sea zone until the Non­ combat Move phase. Guest aircraft belonging to a friendly power on board another power's carrier must remain on board as cargo, if the carrier moves in combat. They cannot take part in combat and are destroyed if the carrier is destroyed. Whether it moves during the Combat Move or Noncombat Move phase, an aircraft carrier allows friendly fighters and tactical bombers to land on it in the sea zone where it finishes its move.
+
+Submarines
+Submarines are capable of moving undetected due to their ability to submerge. For this reason, they have special movement rules. If there are no enemy destroyers present, a submarine can move through a sea zone containing enemy warships without stop­ ping. However, if a submarine enters a sea zone containing an enemy destroyer during the Combat Move phase, its movement ends immediately and combat will result.
+
+
+
+
+
+
+EXAMPLE: The submarine can move past the battle­ ship and into the next sea zone.
+
+Tanks, Mechanized Infantry, and Blitzing
+A tank can "blitz" by moving through an unoccupied hostile territory as the first part of a move that can end in a friendly or hostile territory. In addition, one mechanized infantry unit can move along with each blitzing tank provided they both originated from the same territory. The complete move must occur during the Combat Move phase. The blitzing units establish control of the first territory before they move to the next. Place your control marker on the first territory and adjust the national production levels as you blitz. A blitzing tank (and mechanized infantry) that encounters enemy units, including an anti-aircraft gun, industrial complex, air base, or naval base in the first territory it enters must stop there, in this instance, blitzing is not allowed.
+
+ITV
+EGYPT
+
+
+
+Blitzing Example 1: You may not blitz through anti­ aircraft guns or facilities.
+
+
+EGYPT
+CITY OF
+EL ALAMEIN	EGYPT
+t>
+Blitzing Example 2: You may blitz through hostile unoccupied territories.
+
+Transports
+A transport can load units while in any friendly sea zone along its route, including the sea zone it started in. If a transport loads land units during the Combat Move phase, it must offload those units to attack a hostile territory as part of an amphibious assault, or it must retreat during the sea combat step of the amphibious assault sequence while attempting to do so. A transport that is part of an amphibious assault must end its movement in a friendly sea zone (or one that could become friendly as a result of sea combat) from which it can conduct the assault.
+
+However, a transport is not allowed to offload land units for an amphibious assault in a sea zone with any ignored enemy submarines unless at least one warship with an attack value belonging to the power attacking is also present in the sea zone at the end of the Combat Movement phase.
+
+Naval Blockade
+While enemy land units block your land units from their full movement value by entering a hostile land territory, this is not the case for naval units. While a sea zone may be considered hostile for other reasons, such as loading a transport and non combat move­ ment, enemy surface warships (submarines and transports do not block movements) only block the movement of three units each.
+
+To go through a Naval Blockade, you must destroy it prior to proceeding to your combat destination.
+
+Naval Blockades follow a sequence as follows:
+
+1. Combat Movement
+2. Choose Blocked Units
+3. Conduct Blockade Combat
+4. Move to Combat Destination
+5. Conduct Target Combat
+
+STEP 1: Combat movement
+Each enemy surface warship will block up to three of your surface warships. Make sure you bring in enough attack power to clear the blockade and hit your target destination. All ships you plan to attack the blockade with, and plan to move past the block­ ade, must all be moved into the sea zone containing the blockade at this time. Note that ships designated to move past the blockade (step 2) do not get to attack nor be casualties in step 3. You also may bring in air support to help in attacking the blockade, provided you have a safe landing space for the aircraft. You also need to make your target destination known verbally and/or mark the map with a chip.
+
+Lone transports may not move past a blockade with­ out at least one surface warship with an attack value which also was chosen at the blockade.
+
+STEP 2: Choose blocked units
+You must choose three warships per every enemy surface warship. You may also chose more than three. Transports may not be chosen as blocked, submarines may not be chosen as blocked if block­ ade does not contain a destroyer. Air units do not affect the amount of ships blocked.
+
+Once you have decided which ships will be blocked, and which will continue past the blockade, split them up in two different groups. The group you choose to move past, do not participate in step 3, they do not get to attack, nor be chosen as casualties.
+
+STEP 3: Conduct blockade combat
+Conduct combat as described in, "Conduct Combat" on page 28.
+
+If the blockade is destroyed, the attacker now goes to step 4, if the blockade was not destroyed, the ships that were chosen to move past the blockade must remain in the hostile sea zone with the block­ ade until next turn, this includes any loaded trans­ ports.
+
+Note that if the attack failed, and the ships set aside to pass the blockade were meant to rendezvous with other units, those units which made it to the target destinations from other routes, must still commit at least one round of battle before being allowed to retreat.
+
+STEP 4: Move to combat destinations
+Move the ships you set aside to go past the blockade to their combat destinations. They may be joined with other attacking units that came from a different route. Your combat destination may be in the same sea zone such as for an amphibious assault.
+
+STEP 5: Conduct target combat
+Proceed to the Conduct Combat phase.
+
+EXAMPLE: The United States wants to capture the island of Okinawa, but the Japanese navy stands in their way. The Japanese destroyer in sea zone 18 can only block three warships while the other sea zone can block six warships. The United States then moves into sea zone 18 with one aircraft carrier and two destroyers that will be the three units selected to be blocked. The transport carrying one artillery unit will be escorted by the cruiser to Okinawa if sea zone 18 is made friendly.
+
+
+    CO VO	
+<I
+'ii	 ;_j_C_,	fer
+[AST	OKINAWA	.. 1a..t  !+11
+SEAu
+CHINA
+
+NGHAI
+
+-
+,;;, Ji!.
+
+
+19
+
+	,illfl..,_.u ..
+'ii••  '01
+
+AO  '
+,u••&>,
+
+'1'T' :ea-M,
+--  •,t,A successful battle in sea zone 18 allows the cruiser to escort the transport to Okinawa.
+
+EVEN'I1  SE(l(JENCE  1:0NTINUED
+
+
+Plfl!SI: I: t:ONDUl:T t:nmH/lT
+All combat movement must be completed before you
+can resolve any situations. Combat is resolved by rolling dice. This is often referred to as "firing". No new units may be moved into battle as reinforcements once Conduct Combat has begun. Each combat situation is resolved separately, territory by territory, or sea zone.
+
+Resolving combat follows a sequence as follows:
+
+1. Strategic and Tactical Bombing Raids
+2. Naval Blockades
+3. Amphibious Assaults
+4. General Combat (Territory and sea zone)
+
+Strategic and Tactical Bombing Raids
+A strategic or tactical bombing raid is a direct attack on a facility. During this step, you can bomb enemy facilities with your strategic bombers and heavy bombers. You can also hit air and naval bases (not industrial complexes) with your tactical bombers. When you damage these facilities, their capabilities are decreased or eliminated, your enemy must then spend IPCs to repair them to restore those capabilities. Repairs can be made by the controlling player during their Purchase and Repair Units phase.
+
+To conduct a bombing raid, the attacker moves their bombers to the territory on the map containing the target(s). A base may be strategically and tactically bombed at the same time. Both attacking and de­ fending fighters (not tactical bombers) can also participate in strategic bombing raids as escorts and interceptors. Escort fighters protect the bombers, and they can come from any territory or sea zone. They cannot participate in any other battles during that turn, even a battle in the territory in which the bombing raid is set, whether or not the defender commits any interceptors.
+
+Any number of fighters based in a territory that is being strategically and/or tactically bombed can be assigned to participate in the defense of that territory's facilities as interceptors, whether or not there are escorts. The number of defending fighters that will intercept is decided by the defender after the attacker's Combat Move phase is completed, and before the Conduct Combat phase begins. These fighters cannot participate in other battles during that turn, including a battle in the territory in which the bombing raid is occurring. They must remain in their original territory after the battle. If that territory is captured, they can move one space to land in a friendly territory or aircraft carrier. If no landing space is available, the fighters are lost.
+
+If the defender has elected to commit fighter interceptors, an air battle will be fought immediately before the bombing raid is conducted. Only one air battle is fought in each territory, even if more than one facility in that territory is being bombed. This air battle is resolved in the same way as a normal combat, with the following exceptions:
+
+• The attacking bombers and fighter escorts and the defending fighter interceptors will be the only units participating in this special combat.
+• The combat lasts for only one round.
+• All of the air units have attack and defense values of 1.
+
+After the air battle is complete, or if there were no defending fighter interceptors, surviving fighter escorts are considered to have retreated. They do not participate in the actual bombing raid, and are not subject to antiaircraft fire, and will remain in the territory until the Noncombat Move phase. Any surviving attacking bombers carry out the bombing raid. If the territory offers more than one target, the bombers may be divided into groups, and each assigned a specific target (tactical bombers may not attack industrial complexes). Each industrial complex, air base, and naval base has its own anti­ aircraft system. If there is an anti-aircraft artillery unit in the targeted territory, do not roll for it. Those units are used to protect combat units. Each complex and base rolls one die against each bomber directly attacking it (regardless of the number of bombers). For each "1" rolled, a bomber of the attacker's choice is immediately removed.
+
+After resolving the anti-aircraft, surviving bombers each roll one die (heavy bombers roll two dice). Add 2 to each bomber rolled for a strategic, or heavy bomber (but not for tactical bombers), then total the results. To mark the damage done by the attacking bomber(s), place 1 damage chip under the targeted industrial complex or base per damage point rolled.
+
+Facilities have a max damage cap, and cannot be hit more than the cap. Damage exceeding these limits are not applied. Strategic, heavy, and tactical bomb­ ers apply different damage caps, they are as follows:
+Facility	Tactical I Strategic I Heavy
+Minor Industrial	O	10	15
+A bomber that performed a bombing raid may not participate in any other combat this turn and is retreated during the Noncombat Movement phase.
+
+Naval Blockade
+During this step you will resolve each blockade you announced during the Combat Move phase. These battles are performed prior to Amphibious Assaults, as often times blockades need to be resolved to see if the Amphibious Assault can happen.
+
+Follow the battle sequence as described on page 30 "General Combat".
+
+Amphibious Assaults
+During this step you will resolve each amphibious assault you announced during the Combat Move phase.
+
+Amphibious Assault Sequence
+l. Sea Combat
+2. Battleship & Cruiser Bombardment
+3. Land Combat
+
+Step 1. Sea Combat:
+If there are defending surface warships and/or scrambled air units, (see "Scramble" under Air Base in Unit Profiles page 38) sea combat occurs. If there are only defending submarines and or transports, the attacker can choose to ignore those units or conduct sea combat. If sea combat occurs, conduct the sea combat using the rules for General Combat (see pg. 30), then go to step 3 (Land Combat), or go step 2 (Bombardment) if applicable.
+
+Step 2. Battleship & Cruiser Bombardment: Any attacking battleships or cruisers that were not in combat in the sea zone from which you are offloading units from transports may now conduct a onetime bombardment of one coastal territory or island group being attacked. The number of ships that can make bombardment attacks is limited to one ship per land unit being offloaded from the transports in that coastal territory. If more than one territory or island group is being attacked and there are multiple battleships and/or cruisers, each ship may support only one assault. However, the ships' bombardment may be split in any way that the attacker chooses.so long as the number of ships supporting each assault does not exceed the number of seaborne land units in that assault. Choosing to destroy enemy transports or attacking enemy submarines in step 1 (above), counts as a combat and prevents the battleship and cruiser bombardment from taking place. Roll one die for each battleship and cruiser that can conduct bombardment. Battleships hit on a die roll of a "4" or less, and cruisers hit on a "3" or less.
+
+Note that damaged battleships may not perform naval bombardments. For each hit, the defender will move a defending unit behind the casualty strip. These casualties will be able to defend during the land combat step before they are eliminated. Each battleship or cruiser can only bombard one coastal territory per turn.
+
+Step 3. Land Combat:
+If there was no sea battle or the sea zone has been cleared of all defending enemy units except trans­ ports and submerged submarines, and the attacker still has land units committed to the coastal territory, move all attacking and defending units to the battle strip and conduct combat using the general combat rules (pg. 30). Remember to put casualties from bombardment (if any) behind the casualty strip. Attacking land units can come from transports, sea or air, and they can come from neighboring territories that are adjacent to the attacked territory. Any land units offloading from a single transport can only be offloaded into a single hostile territory. If no land units (carried as cargo) survived the sea combat, or if the attacking sea units withdrew from the sea combat, then any other units that were designated to participate in the land attack (including air units) must still conduct one round of land combat in a regular attack on the intended hostile territory before they can retreat.
+
+If the attacker does not have any attacking land or air units left, the amphibious assault is over.
+
+Keep the attacking overland units and seaborne land units separated on the battle strip. Attacking seaborne units cannot retreat. Attacking overland land units and air units can retreat (between rounds of combat). All attacking overland land units must retreat together as a group. They can only retreat to where at least one of them originated and must all retreat at the same time and to the same place. A retreat may happen at the conclusion of any round of combat.
+
+Attacking air units, whether involved in the sea combat or the attack on the coastal territory, can retreat according to the attacker retreat rules (Condition B-Attacker Retreats, pg.32). If there is a retreat, air units and overland units (if any) must retreat at the same time. Air units will land during the Noncombat Movement phase.
+
+EVEN'I1 SE(IIJENCE 1:o Tl LiED
+
+
+Air Units
+Each attacking air unit can participate in the sea battle or the attack on the coastal territory; it can­ not do both. The attacking player must declare which air units are involved in each part of the attack and may not change their assignments later. Scrambled air units are placed after the amphibious assault is announced and attacking air units are assigned to the sea battle or the coastaI territory. At the end of the amphibious assault, all air units remain in place; they will land during the Non­ combat Movement phase.
+
+Air units defending in a territory can only fight in that territory. They cannot participate in the sea combat. The exception to this rule is fighters and tactical bombers that are defending on an island or coastal territory that has an operative air base. Such air units can be scrambled to an adjacent sea zone where they participate in its defense. Strategic bombers cannot be scrambled.
+
+Combined Arms
+In some instances, a mix of unit types activates enhanced unit abilities. For example, an infantry unit matched with an artillery unit enables the infantry to attack at 2. See the following chart for details. (See also "Unit Profiles," page 37).
+
+Some unit types require one-to-one pa1nng with another unit type and may be paired with more than one other unit type. Each unit may be paired with only one other unit at the same time, but may be paired with different units at different times during the same turn. For example, an individual artillery unit may not be paired with both an infantry and a mechanized infantry during the same combat round in the Conduct Combat phase in order to make both units attack at 2. However, the same mechanized infantry unit may be paired with a tank during the Combat Move phase in order to blitz, and then be paired with an artillery in the Conduct Combat phase in order to attack at 2.
+
+
+
+General Combat
+In this step, you resolve combat in each space that contains your units and enemy units. Combat is resolved by following the General Combat sequence (below). Combat in each space takes place at the same time, but each affected territory or sea zone is resolved separately and completely before re­ solving combat in the next contested space. The attacker decides the order of spaces in which each combat occurs. No new units can enter as reinforce­ ments once combat has begun. Attacking and de­ fending units in each space are considered to fire at the same time, but for ease of play you roll dice in sequence: attacker first, then defender.
+
+General Combat Sequence
+1. Place units along the Battle Board
+2. Submarines Strike, Target Select or submerge and tactical bombers Target Select
+
+
++---.
+(1) Mech. Infantry (1) Artillery
+
++------
+
+...	+
+(1M) ech. Infantry  (1) Tank
+
+
+
+(1) Tactical Bomber (1) Fighter
+Ir?!I +	l .o1.l I
+(1) Transport (1) Transport
+.i.!T
+
+
+
+
+
+
+
+Attacks@2
+(1) Infantry
+...	Attacks@2
+(1) Mech. Infantry
+
+Attacks@4
+(1) Tactical Bomber
+
+...	CanBlitz
+(1) Mech. Infantry
+
+Attacks@4
+(1) Tactical Bomber
+I rt?I I	Defends@  1
+(1) Transport
+Can Hit Subs
+
+3. Attacking units fire
+4. Defending units fire
+
+:i::
+
++	h  •lb 
+(ALL)	(1) Destroyer
+
+
+L	.M,
+
+5. Remove defender's casualties
+6. Press attack or retreat
+7. Conclude combat
+
+C	.. .  L.	+	4-:,,J.
+(1) Battleship	(1) Cruiser
+
+:4-.ielb	Defends@ 4
+(1)Crulser
+
+Step 1. Place Units Along the Battle Board
+The Battle Board has two sides, labeled "Attacker" and "Defender". Place all of the attacking and de­ fending units from the battle onto their respective sides, aligned with the numbered columns that have those units' names and silhouettes. Facilities do not participate in general combat, as they may only be attacked by strategic or tactical bombing raids. The number in a unit's column identifies that unit's roll­ ing value. An attacking or defending unit must roll its column's attack or defense value number or less in order to score a hit.
+
+In a sea battle, place any cargo (whether your own units or an ally's) beside the transport ship or on the aircraft carrier (guest air units) that is carrying it. Cargo does not roll, nor can it take a hit. It is lost with the ship carrying it if that ship is destroyed.
+
+If you are attacking in a sea zone that already con­ tained friendly units, your ally's units are not placed along the Battle Board and remain out of play.
+
+Step 2. Target Select, Strike or Submerge
+This step is specific to attacking and defending sub­ marines, and attacking tactical bombers, and takes place before General Combat steps 3-5 occur.
+
+Submarines
+Attacking submarines can choose to Target Select or submerge while defending submarines may choose to Strike or submerge.
+
+However, if the opposing side has a destroyer in the battle, the attacking or defending submarines can­ not submerge, Strike, or Target Select and combat proceeds with your submarines firing with your other units.
+
+Attacking or defending submarines that choose to submerge are removed from the Battle Board and placed back on the map in the contested sea zone, removing them from the battle sequences. Place a "Submerged" marker under the unit, it will remain in this state until the controlling players turn.
+
+Note: Decision on whether to fire or submerge must be made before any dice are rolled. The attacking player decides first.
+
+Attacking submarines conducting a Target Select now choose a naval target, more than one can be assigned to the same target. Submarines which roll a "2" ("3" if super submarine) or less score a hit. If a hit is scored, it must be applied to the chosen unit which is moved behind the casualty strip.
+
+Defending submarine(s) conducting a Strike now roll. Submarines which roll a "l" or less score a hit. The attacker chooses the casualty and moves the unit behind the casualty strip.
+
+NOTE: Undamaged capital ships that are hit only one time are not removed.
+
+NOTE: Target Select made by attacking submarines may choose an enemy transport. This is the only scenario where a transport is a valid target.
+
+Once all attacking and defending submarines that made a Target Select or Strike attack have fired, the casualties they have generated are removed from the game and this step (step 2 submarines) is over for this round of combat. As long as attacking and/or defending submarines remain and no opposing destroyers, this step is repeated during each round of combat. Any hits made during this step that do not destroy units (such as battleships and carriers) remain in effect until they are repaired.
+
+Tactical Bombers
+Attacking tactical bombers can choose to Target Select. However, by choosing to Target Select, the tactical bomber may not utilize Combined Arms for the entire battle. For tactical bombers not attacking with a Target Select, combat proceeds with your tactical bombers firing with your other units.
+
+Each attacking tactical bomber conducting a Target Select now chooses a target (transports, infantry, submarines, and air units may not be targeted). More than one can be assigned to the same target. Each tactical bomber which rolls a "3" (you cannot combine arms) or less scores a hit. If a hit is scored it must be applied to the chosen unit which is moved behind the casualty strip.
+
+Once all attacking tactical bombers that conducted a Target Select attack have fired, the casualties they have generated are removed from the game and this step (step 2 tactical bombers) is over. Any hits made during this step that do not destroy units (such as battleships and carriers) remain in effect until they are repaired.
+
+Note: Target Select for tactical bombers is only for the first round of combat unlike submarines. After the first round, proceed to step 3.
+
+Note: Tactical bombers do not get to utilize Combined Arms for the entire battle if they used Target Select.
+
+Note: AAA fire negates Target Select.
+
+EVEN'I1 SE(IIJENCE 1:o Tl LiED
+Step 3. Attacking Units Fire (Land and Sea Battles)
+Battle dice, or hit dice, are recommended, but not mandatory. For the purpose of this rule book, this section will be as if you do not have battle dice.
+
+Roll one die for each attacking unit with an attack value that did not fire or submerge in step 2. Roll for units with the same attack value at the same time. For example, roll all units with an attack value of "3" at the same time. An attacking unit scores a hit if you roll its attack value or less. After the attacking player has roll­ ed for all attacking units, the defender chooses one unit for each hit scored and moves it behind the casualty strip. All units behind the casualty strip will return fire in step 4.
+
+Step 4. Defending Units Fire (Land and Sea Battles)
+Defending units roll one die for each unit with a defense value, including units behind the casualty strip that did not fire or submerge in step 2. Roll for units with the same defense value at the same time. A defending unit scores a hit if you roll its defense value or less. After the defending player has rolled for each defending unit with a defense value, the attacker chooses one unit for each hit scored and removes it from play.
+
+Specific to Sea Battles: In both steps 3 and 4, submarines that fired in step 2 cannot fire again during the same combat round. If there is an enemy destroyer in the battle, submarines fire in step 3 or 4 rather than step 2. Remember that in sea battles hits from air units cannot be assigned to submarines unless there is a destroyer present that is friendly to the air units in the battle, and hits can only be assigned to transports if there are no other eligible units, unless Target Selected by an attacking (not defending) submarine.
+
+Defenseless Transport:
+In a sea battle, if the defender only has a single transport and the attacker has units that are capable of attacking more than one round, the defending transport is destroyed, along with its cargo. You do not have to resolve combat.
+
+Step S. Remove Defender's Casualties (Land and Sea Battles)
+Remove the defender's units that are behind the casualty strip from play.
+
+Step 6. Press Attack or Retreat
+Combat rounds (steps 2-5) continue unless one of the following two conditions occurs (in this order):
+
+
+
+::aill	\i,,,r
+24
+-·---
+;a....	IF11:	;a	••
+EXAMPLE: Two United States destroyers move into sea zone 24 to attack a Japanese destroyer. The Japanese destroyer kills one of the United States destroyers, the remaining destroyer may retreat rather than attack again, but is restricted to one of the two sea zones from which the two attacking units came from.
+
+alkr
+a:41	fer
+7	24
+
+Condition A-Loss of All Units
+Once all units that can either fire or retreat on one or both sides have been destroyed, the combat ends. If a player has combat units remaining along the Battle Board, that player wins the combat. Players that have units remaining along the Battle Board return those units to the contested space on the map. In a sea battle, if both sides have only transports remaining, the attacker's transports can remain in the contested sea zone or retreat, if possible.
+
+Condition B-Attacker Retreats
+The attacker (never the defender) can retreat during this step. Move all attacking land and sea units in that combat that are on the battle board to a single adjacent friendly space from which at least one of the attacking units moved. In the case of sea units, that space must have been friendly at the start of the turn. All such units must retreat together to the same territory or sea zone, regardless of where they came from.
+
+Step 7. Conclude Combat
+If you win a combat as the attacker in a territory and you have one or more surviving land units there, you take control of it. Otherwise, it remains in the defender's control. (If all units on both sides were destroyed, the territory remains in the defender's control.) Sea units cannot take control of a territory; they must stay at sea.
+
+Air units cannot capture a territory. If your attack force has only air units remaining, you cannot occupy the territory you attacked, even if there are no enemy units remaining. Air units must return to a friendly territory or carrier during the Noncombat Movement phase. Until then, they stay at the space where they fought.
+
+Remove surviving land units that are along the Battle Board and place them in the newly conquered territory. Place your control marker on the territory and adjust the national production levels. Your national production increases by the value of the captured territory; the loser's production decreases by the same amount.
+
+Any industrial complex, air base, and or naval base located in the captured territory is now controlled by your side (see Liberating a Territory, below). If you capture an industrial complex, you cannot mobilize new units there until your next turn. If you capture an air base or naval base, you cannot use the added flight or sea movement or receive repairs until your next turn. Any damage previously inflicted on a facility remains in place until it is repaired. If you capture a major industrial complex, it is reduced to a minor industrial complex, any damage on the major complex is transferred to the minor industrial complex up to the max value of being bombed by a strategic bomber.
+
+Liberating a Territory
+If you capture a territory that was originally controll­ ed by another member of your side, you "liberate" the territory. You do not take control of it; instead, the original controller regains the territory and the national production level is adjusted. Any industrial complex, air base, and or naval base in that territory reverts to the original controller of the territory. The Dutch territories and French Inda-China are exceptions. If you capture one of these territories from Japan, it is not liberated, but becomes controll­ ed by you. If the original controller's (player whose territory you just liberated) capital is in enemy hands at the end of the turn in which you would otherwise have liberated the territory, you capture the territory, you adjust your national production level, and you can use any industrial complex, air base, and naval
+
+base there until the original controller's capital is liberated. The liberating player may not use these newly liberated facilities until the player's next turn.
+
+Capturing and Liberating Capitals
+If you capture a territory containing an enemy capital (noted by a red star around the city name), follow the same rules as for capturing a territory. Add the captured territory's income value to your national production level. In addition, you collect all unspent IPCs from the original controller of the captured capital. For example, if Japan captures Sydney while the Commonwealth player is holding 21 IPCs, those IPCs are immediately transferred to Japan's player. You collect these IPCs even if your own capital is in enemy hands. If a Capital falls more than once, the capitals IPCs are forfeited to the bank.
+
+In the case of Japan or Berlin and its capture signify­ ing an allied victory, or Washington being captured signifying an Axis victory, you still add the captured territory's income value to your national production level and you collect any unspent IPCs it may have. The Axis and or Allies will have one more turn (unless it is the final round), using their existing forces to try to liberate that capital.
+
+The original controller of the captured capital is still in the game but cannot collect income from any territories they still control and cannot buy new units. The player skips all but the Combat Move, Conduct Combat, and Noncombat Move phases until their capital is liberated. If that power or one on its side liberates the capital, the original controller can once again collect income from territories they control, including any reverting territories.
+
+If a capital is liberated, the industrial complex, air base, and naval base in that capital territory revert ownership to the original controller of the capital. Other territories and industrial complexes, air bases, and naval bases that were originally controlled by the newly liberated capital's controller but are currently in the hands of friendly powers also revert control.
+
+You do not collect IPCs from the controlling power when you liberate a capital. For example, if the United Kingdom's player takes New South Wales from Japan's player, Japan's player does not surrender any IPCs.
+
+Capturing a Victory City
+Axis gain points by capturing Victory Cities. Players should keep a close eye on cities with a red circle or star as outlined in "Winning the War" page 7.
+
+EVEN'I1 SE(l(JENCE  1:0NTINUED
+
+
+Multinational Forces
+Units on the same side can share a territory or sea zone, constituting a multinational force. Such forces can defend together, but they cannot attack together.
+
+Each attacking power moves and fires its own units on its own turn. An attacking fighter or tactical bomber can launch from an aircraft carrier owned by an ally, but the ally's carrier can not move until its controller's turn. Similarly, an attacking carrier can carry an ally's fighter or tactical bomber as cargo, but the ally's air unit cannot participate in an attack by that carrier.
+
+An attacking land unit can assault a coastal territory from an ally's transport, but only on the owner of the attacking land unit's turn.
+
+Multinational Defense:
+When a space containing a multinational force is attacked, all its units defend together. If the defend­ ing units belong to powers under the control of different players, those players mutually determine the casualties. If they cannot agree, the attacker chooses.
+
+Transporting Multinational Forces:
+Transports (air or naval) belonging to a friendly power can load and offload your land units. This is a three-step process:
+
+1. You load your land units aboard the friendly trans­ port on your turn.
+2. The transport's controller moves it (or not) on that player's turn.
+3. You offload your land units on your next turn.
+
+
+PH/lSI: iJ: NnN1:nm1111·r mnu1:m1:N·r
+
+In this phase, you can move any of your units that did not move in the Combat Movement phase or participated in combat during your turn. You will also land all your air units that participated in the Conduct Combat phase. This is a good time to gather your units, either to fortify vulnerable territories or to reinforce units at the front.
+
+Only air units and submarines can move through hostile spaces during this phase.
+
+Stranded defending air units also land during this phase. These are carrier air units whose aircraft carrier has been damaged or destroyed in combat or scrambled air units or fighter interceptors (see "Conduct Combat", pg. 28) whose original territory is now under enemy control. These units are allowed movement of up to one space to find a friendly territory or carrier on which to land. If no landing space can be found, they are lost. This movement occurs before the acting player makes any non­ combat movements.
+
+Land Units:
+A land unit can move into any friendly territory, including territories that were captured in the current turn. It cannot move into a hostile territory (not even one that contains no combat units but is enemy-controlled). Note, this is the only phase in which anti-aircraft guns can move.
+
+Air Units:
+An air unit must end its move in an eligible landing space. Air units can land in any territory that was friendly at the start of your turn. Only fighters and tactical bombers can land in a sea zone with a friendly carrier present. A landing spot must be available on the carrier. Additionally:
+
+• A fighter or tactical bomber can land in a sea zone (even a hostile one) that is adjacent to an industrial complex you own if you will be mobil­ izing an aircraft carrier that you previously purchased in that zone during the Mobilize New Units phase.
+• In order for a fighter or tactical bomber to land on a carrier, both units must END their move­ ment in the same sea zone.
+• You must have a carrier move, remain in place, or be mobilized during the Mobilize New Units phase to pick up a fighter or tactical bomber that would end its noncombat movement in a sea zone. You cannot deliberately move an air unit out of range of a potential safe landing space.
+
+Air units that cannot move to an eligible landing space by the end of the Noncombat Move phase are destroyed. This includes stranded defending air units (see above).
+
+No air units can land in any territory that was hostile at the start of your turn, including any territory that was just captured by you this turn.
+
+Sea Units:
+A sea unit can move through any friendly sea zone, but cannot move into or through a hostile sea zone.
+
+Unlike other sea units, submarines can move through and even into hostile sea zones in the Non­ combat Move phase. However, a submarine must end its movement when it enters a sea zone con­ taining one or more enemy destroyers.
+
+Transports can move to friendly coastal territories and load or offload cargo, unless they loaded, moved, offloaded, or were involved in combat during the Combat Move or Conduct Combat phase.
+
+Aircraft carriers can move to sea zones to allow friendly fighters and tactical bombers to land. They must move there, range permitting, if they did not move in the Combat Move phase and the friendly sea zone is the only valid landing zone for the air units. An aircraft carrier and a fighter or tactical bomber must both end their moves in the same sea zone in order for the air unit to land on the carrier.
+PH/lSI: i: IYIOHII.IZI: Nl:\\f UNITS
+Move the newly purchased units to eligible spaces you have controlled since the start of your turn. You may not use industrial complexes that you captured or purchased this turn. You can never use an industrial complex owned by a friendly power.
+
+The number of units that can be produced by each industrial complex each turn is limited to 10 for major industrial complexes and 3 for minor ones. For each damage marker (plastic orange chip) that is under a given industrial complex, one less unit can be mobilized by that factory. Industrial complexes are never destroyed. They can be heavily damaged, however, and can be damaged to the point where they have at least as many damage markers as they have production ability. In this case, no new units can enter the game through that factory until it is repaired.
+
+NOTE: Minor industrial complexes that were upgrad­ ed to a major industrial complex may still produce 3.
+
+Restrictions on Placement
+You can place land units and strategic bombers only in territories containing eligible industrial complexes. Land units cannot enter play on transports.
+
+You can place sea units only in sea zones adjacent to territories containing eligible industrial complexes. New sea units can enter play even in a hostile sea zone. No combat occurs because the Conduct Combat phase is over.
+
+Note that capital ships may not be built at a minor industrial complex unless
+the placement sea zone has a shipyard marker in that sea zone. See right.
+
+Capital ships can always be placed in a sea zone attached to a major in-
+dustrial complex controlled by your power.
+
+You can place fighters and tactical bombers into territories containing an industrial complex controlled by your power from the start of your turn, or on an aircraft carrier owned by your power in a sea zone (even a hostile one) adjacent to a territory with such an industrial complex. The aircraft carrier can be either a new one currently being mobilized, or an existing one already in place. You cannot place a new fighter or tactical bomber on a carrier owned by a friendly power.
+
+Place new industrial complexes in any territory that you have controlled since the start of your turn. Major industrial complexes can only be built on territories with an IPC value of 3 or higher, the territory must also have your national marker printed on the map. Minor industrial complexes can only be built on territories with an IPC value of 2 or higher. You cannot have more than one industrial complex per territory. Industrial complexes may not be built on islands.
+
+Any territory you owned at the beginning of your turn, you can place air and naval bases. You cannot have more than one of each base on a territory.
+
+NOTE: The United Kingdom may only place up to 17 IPCs worth of units on the Pacific side of the map per turn. However, a single battleship may be placed.
+
+PH/lSE Ii: l:01.1.1:1:·r INI:0In1:
+
+In this phase, you earn production income to finance future attacks and strategies. Look up your power's national production level (indicated by your control marker) on the Production Chart and collect that number of IPCs from the bank. This is the amount of IPC income you have generated. Note: You may have reached your national objectives. This awards your economy an extra boost of 1 or more IPCs per turn and is called "bonus income". However, before you can actually receive this income, you must check for any losses incurred by air and naval attacks against your shipping routes (see next page).
+
+EVEN'I1  SE(l(JENCE  1:0NTINUl:D
+Conduct Convoy Disruptions
+The economy of many nations is often based on moving tons of resources across vast spans of ocean. In war time, and especially during World War 11, this movement was vital. Cargo ships (not to be confused with the game's transport ships, which carry military units) often formed convoys for mutual support and protection. These convoys are subject to attack by enemy warships.
+
+There are three conditions that all must exist for this kind of attack to occur:
+• The sea zone must have a "Convoy symbol" image, (see right)
+• The sea zone must be adjacent to one or more of your controlled islands or territories.
+• At least one warship belonging to a power with which you are at war must be in the sea zone.
+
+Convoy attacks on "Convoy" sea zones are conducted in the following manner:
+
+Each enemy warship (except for aircraft carriers) and carrier-based air units in the sea zone might cause the loss of IPCs from your income for the turn. Attacker chooses one of the two ways to conduct the convoy.
+• The owners of enemy battleships, cruisers, and or destroyers roll one die for each such unit, and the owners of enemy submarines and or air units roll two dice for each such unit. Any rolls of a "4" or higher are ignored. The results of these rolls that are a "3" or less are totaled resulting the number of the total convoy damage suffered in the disruption.
+• The number of convoying warships is the resulting number of the total convoy damage suffered in the disruption.
+
+However, this number might be limited. Each disrupted convoy cannot lose more IPCs than the total IPC value of your controlled territories or islands adjacent to the sea zone. Also, a single territory cannot lose more IPCs than its own IPC value from multiple disrupted adjacent convoys. After these limits are applied, the final total is subtracted from your income for the turn.
+
+Note: China is not subject to convoy disruptions. A review of the map, specifically looking for such situations, is the responsibility of all the players. This is a step in this phase of the turn. For the phase to be successful, all players should be on the look out for such convoy attack situations and point them out.
+
+EXCEPTION: Submerged submarines and damaged battleships may not disrupt sea zones, thus they may not attack convoys.
+
+
+
+
+
+This section will provide detailed information about the pieces used in the game, such as cost, movement, and combat values. Understanding the strengths and weaknesses of the following units is one of the keys to victory. Some units have technology upgrades (see "Research and Development," page 22).
+
+INDUS"l"Hl/11. 1:nmPl.l:Xl:S  /lND H11s1:s ( I:111:11.1·n1:s)
+Industrial complexes, air bases, and naval bases have different functions, but each also has several points in common. None of these facilities can attack, defend, or move. They are not placed on the Battle Board. How­ ever, each can defend against a strategic or tactical bombing raid. Before bombers can attack a targeted facility, they will be fired on by the built-in air defenses of the facility. The facility's controlling player rolls a die for each attacking bomber. Each roll of" 1" scores a hit and eliminates a bomber of the attacker's choice.
+
+Facilities cannot be moved or transported. EXCEPTION: see "Soviet Union Rules," page 19.
+
+If a territory is captured, any facilities there are also captured. The capturing power (and in the case of bases, its allies) can use them on the turn after they are captured.
+
+(JNI't1 l1llf)l ItES
+
+Newly purchased industrial complexes, air bases, and naval bases are placed on the map during the Mobilize New Units phase. They cannot be placed on newly captured territories. A territory must have an IPC value of 2 or higher before a minor industrial complex can be built on it. Major industrial complexes can only be built on originally controlled (not captured) territories with an IPC value of 3 or higher. Industrial complexes cannot be built on islands (see "Islands," page 10). Air bases can be built on any controlled territory. Naval bases can be built on controlled territories with a coastline, including islands. Only one facility of each type (industrial complex, air base, and naval base) may exist in each territory.
+
+Damaged Factories and Bases:
+Industrial complexes and bases can be damaged by enemy bombers (see "Strategic and Tactical Bombing Raids," page 28). Damage markers can be removed at a cost of l lPC each. These repairs are paid for (and the damage markers are removed) during the Purchase and Repair Units phase of the turn.
+
+
+Figures below are for minor/major
+IN11 lJ S THI /l I. 1:0m PI.I:X
+
+
+
+You may not use the railway to move over, into, or through canals, passes, or enemy territories.
+
+COST:		
+ATTACK:		 DEFENSE: MOVEMENT: DAMAGE CAPACITY: BUILD CAPACITY: TECH UPGRADE:
+
+Unit Characteristics:
+
+12/30
+0		
+Anti-aircraft		
+0		
+15/25
+3/10
+Improved Shipyards
+
+
+The railway is for noncombat movement only, also you may not move into newly captured or liberated territories. You or an ally must have had the territory at the start of your turn to be able to use the railway to move into or through it.
+
+EXAMPLE: Even though the infantry in Iran can use the railway to move up to 3 spaces, in this situation
+
+There are two types of industrial complexes, major
+and minor. Major industrial complexes can produce up to any 10 combat (land, air, or sea) units each per turn. Minor industrial complexes can produce up to 3 combat units per turn. A minor industrial complex may not build capital ships unless adjacent to a ship­ yard (see "Restrictions on Placement", page 35).
+
+A minor industrial complex can be upgraded to a major one at a cost of 20 IPCs. The industrial complex to be upgraded must be located on an originally controlled (not captured) territory that you have controlled since the beginning of your turn and that has an IPC value of 3 or higher. You cannot place your new units at an industrial complex owned by a friendly power. Even if you liberate a territory with an industrial complex in it, you cannot use the complex; the original controller can use it on their next turn.If you capture it, you can use it on your next turn. You can use an industrial complex that you controlled at the beginning of your turn.
+
+Integrated Railways:
+Both minor and major industrial complexes are considered to have a railway attached to the facility. During the Noncombat Movement phase land units beginning their movement from an operational friendly industrial complex may move up to 3 spaces of movement. The number of units that can use the railway of an industrial complex each turn is limited to the IPC value of the territory.
+
+the infantry can only move 2 as the Suez Canal is blocking the railway movement (see below).
+
+
+
+
+
+
+
+
+
+
+
+
+
+Subject to Damage:
+For each damage marker that is under an industrial complex (see above), that complex can mobilize 1 less unit. Industrial complexes can have at least as many damage markers as they have production ability. In such a case, no new units can enter the game through that complex until it is repaired. A damaged minor complex may not be upgraded, so any damage on the industrial complex must be repaired at the same time that the upgrade is purchased. Any damage to an industrial complex also renders the integrated railway as non-operative.
+
+(JNI't1 l1llf)l ItES
+
+
+
+/UH H /lSI:
+COST:		 ATTACK: DEFENSE: MOVEMENT:
+DAMAGE CAPACITY: RANGE CAPACITY: TECH UPGRADE:
+
+Scramble:
+
+
+
+
+15
+0
+Anti-aircraft
+0
+6/10/15
++1 Air Movement Radar
+
+Unit Characteristics:
+Increased Air Unit Range: When taking off from a friendly territory that has an operative air base, air units gain 1 additional point of movement range. At that point fighters and tactical bombers can move 5 spaces, and strategic bombers can move 7 spaces.
+
+Subject to Damage:
+An air base is considered to be inoperative if it has any damage points. It then cannot increase air unit range or allow air units to scramble.
+
+Scrambling is a special movement that the defender can make. It must be done after all of the attacker's combat movements have been completed. The attacker may not change any combat movements or attacks after the defender has scrambled. Up to 3 fighters and or tactical bombers located on each island or coastal territory that has an operative air base can be scrambled to defend against attacks in the sea zones adjacent to those territories. You can scramble to help friendly units in adjacent sea zones that are under attack. They can also be scrambled to resist amphibious assaults from adjacent sea zones, whether or not the territory being assaulted is the territory containing the air base. They may defend against the enemy ships conducting the amphibious assault even if friendly ships are not present.
+
+In situations where a sea zone is adjacent to more than one territory containing an air base (sea zone 109 and Scotland and United Kingdom, for example), each of the territories can scramble up to 3 fighters and or tactical bombers. In situations where a territory containing an air base is adjacent to more than one sea zone (United Kingdom and sea zones 109 and 110, for example), the territory may still only scramble up to 3 fighters and or tactical bombers, but they may be split between the sea zones in any combination.
+
+Scrambled fighters and tactical bombers are defending, so refer to their defense values and abilities when resolving combat. They are treated as normal defending units in their sea zones. As defenders, they may not retreat. They cannot participate in any other battles during that turn, including a battle in the territory from which they were scrambled.
+
+After all combat is completed, each surviving scrambled air unit must return to the territory from which it was scrambled. If the enemy has captured that territory, the unit can move 1 space to land in a friendly territory or on a friendly aircraft carrier. If no such landing space is available, the unit is lost.
+
+
+
+N/HI/H H /l SI:
+COST: ATTACK: DEFENSE: MOVEMENT:
+DAMAGE CAPACITY: RANGE CAPACITY: TECH UPGRADE:
+
+i.i 
+15
+0
+Anti-aircraft		
+0
+6/10/15
++1 Naval Movement NONE
+
+Unit Characteristics:
+All sea zones that border a territory containing an operative naval base are considered to be serviced by that naval base. Sea zones serviced by a naval base confer the benefits of that base onto all friendly sea units in those zones.
+
+Subject to Damage:
+A naval base is considered to be inoperative if it has any damage points. It then cannot service sea zones, increase sea unit range, or conduct repairs.
+
+Increased Sea Unit Range:
+All sea units beginning their movement from a sea zone serviced by an operative friendly naval base gain 1 additional point of movement range. Sea units in this position can move 3 spaces instead of 2.
+Repairs:
+Capital ships (aircraft carriers and battleships) can be repaired by moving those units to a sea zone serviced by an operative controlled or friendly naval base. Damaged ships are repaired at no IPC cost during the Purchase and Repair Units phase of their owning player's turn if they are in a sea zone serviced by an operative friendly naval base, including one repaired in the current turn.
+
+(JNI't1 l1llf)l ItES
+
+l.llNII  IINl"l"S
+Infantry, artillery, mechanized infantry, tanks, cavalry, and anti-aircraft artillery can conduct combat only in territories. Only infantry, artillery, mechanized infantry, and tanks can capture hostile territories or convert friendly neutrals. All can be carried by transports.
+
+
+INt=/lNTHY
+COST:			  ATTACK:			 DEFENSE: MOVEMENT: DAMAGE CAPACITY: TECH UPGRADE:
+
+
+
+/lHT11.1.1:HY
+COST:		 ATTACK:
+DEFENSE: MOVEMENT: DAMAGE CAPACITY: TECH UPGRADE:
+
+
+
+3
+1
+2		
+1		
+1
+NONE		
+
+
+
+
+
+4		
+2
+2		
+1
+1
+Self-Propelled Artillery
+
+
+Unit Characteristics:
+Supported by Artillery: When an infantry attacks along with an artillery, the infantry's attack increas­ es to 2. Each infantry must be matched one-for-one with a supporting artillery unit. If your infantry out­ number your artillery, the excess infantry units still have an attack of 1. For example, if you attack with 2 artillery and 5 infantry, 2 of your infantry have an attack of 2 and the rest have an attack of 1. Infantry are not supported by artillery on defense.
+
+Unit Characteristics:
+Supports Infantry and Mechanized Infantry: When an infantry or mechanized infantry attacks along with an artillery its attack increases to 2. Each infantry or mechanized infantry must be matched one-for-one with a supporting artillery unit. Artillery does not support infantry or mechanized infantry on defense.
+
+
+
+
+m I: I:H/l NI ZI:D I N1: /l NTHY
+
+
+Unit Characteristics: Blitz:
+
+COST:		
+ATTACK: DEFENSE: MOVEMENT:
+DAMAGE CAPACITY: TECH UPGRADE:
+
+4		
+1		
+2		
+2		
+1		
+NONE		
+
+A mechanized infantry unit must normally stop when it enters an enemy controlled territory. However, when paired one-for-one with a tank, it can make a blitz movement (see "Tanks..," page 26) along with that tank. The movement of both units must start and end in the same territories.
+
+
+Supported by Artillery:
+When mechanized infantry attacks along with an artillery, the mechanized infantry's attack increases to 2. Each mechanized infantry must be matched one-for-one with a supporting artillery unit. If your mechanized infantry outnumber your artillery, the excess mechanized infantry units still have an attack of 1. For example, if you attack with 2 artillery and 5 mechanized infantry, 2 of your mechanized infantry have an attack of 2 and the rest have an attack of 1. Mechanized infantry are not supported by artillery on defense.
+
+
+
+T/lNI(
+COST:		 ATTACK:
+DEFENSE: MOVEMENT: DAMAGE CAPACITY: TECH UPGRADE:
+
+
+
+6
+3
+3		
+2
+1
+Heavy Tanks
+
+Unit Characteristics:
+Tanks can "blitz" through an unoccupied hostile territory and end up in a friendly or hostile territory. This complete move must occur during the Combat Move phase. By blitzing, the tank captures the first territory before it moves to the next. The second territory can be friendly or hostile, or even where the tank came from. A tank may not blitz through a territory that contains an enemy unit, or facility.
+
+(JNI't1 l1llf)l ItES
+
+Combined Arms:
+Tanks can be combined with tactical bombers or mechanized infantry.
+
+• Combining a tank and a tactical bomber increases the tactical bomber's attack value from 3 to 4 (see "Tactical Bombers," page 42).
+• Each mechanized infantry unit combined with a tank can blitz along with it (see "Mechanized Infantry," page 39).
+
+
+/lNTI - /l Ill I:ll /lr T 1; tJN
+
+Unit Characteristics:
+An anti-aircraft artillery (AAA) unit cannot move
+
+COST:
+ATTACK:		 DEFENSE: MOVEMENT: DAMAGE CAPACITY: TECH UPGRADE:
+
+
+
+Air Defense:
+
+5		
+0
+1
+1 Non Com only
+1
+Radar
+
+during the Combat Movement phase (other than being carried on a transport if the unit was loaded on a prior turn).
+
+AAA has a combat value of 0. This means that an AAA unit cannot fire in the defending units fire step. It can, however, be taken as a casualty. If a territory containing only AAA units is attacked, the AAA units are captured.
+
+An AAA unit can fire at an air unit only when that unit attacks land and or air units in the territory containing that AAA unit. AAA units fire only once, before the first round of combat. Each AAA unit in the territory may fire up to 3 shots, but each attacking air unit may be fired upon only once. In other words, the total number of air defense dice rolled is 3 times the number of AAA units, or the number of attacking air units, whichever is the less. For example, 5 fighters attacking a territory containing 2 AAA units would have 5 shots fired against them while those same 5 fighters would have only 3 shots fired against them if there were only 1 defending AAA unit.
+
+Once the number of air defense dice is determined, the dice are rolled. For each "l" rolled, the attacker must choose an air unit as a casualty. These casualties are removed immediately and will not participate in the re­ mainder of the battle. This AAA fire occurs immediately before normal combat occurs in the territory containing the AAA unit. AAA units do not defend facilities against strategic or tactical bombing. Facilities have their own built-in air defenses (see "Industrial Complexes and Bases (Facilities)." page 36).
+
+Enemy Fly Overs:
+Any air units that fly over enemy anti-aircraft guns during the Combat Movement phase are subject to anti-air­ craft fire. If a unit flies over more than one territory containing enemy guns, it is subject to multiple attacks (one per territory). The same 3 shot rule applies as described above. In the event there are fly overs and an air attack on the territory the AAA is in, the defender must choose to fire at the fly over, or the territory invasion (may not split up the shots). If there are multiple AAA guns in the territory, different AAA guns may attack different targets.
+
+Unattended Units:
+AAA units that are left unattended, (meaning there are no other unit types in the territory) may be captured by enemy forces. If an opposing ground force attacks said territory with the unattended units, the attacking force replaces the captured AAA unit(s) with one from their country upon taking the territory.
+
+
+
+1:
+
+
+MOVEMENT: DAMAGE CAPACITY: TECH UPGRADE:
+
+
+
+
+
+
+2
+1
+NONE
+
+Unit Characteristics:
+Cavalry can "blitz" through an unoccupied hostile territory and end up in a friendly or hostile territory. This complete move must occur during the Combat Move phase. By blitzing, the cavalry captures the first territory before it moves to the next. The second territory can be friendly or hostile, or even where the cavalry came from. A cavalry may not blitz through a territory that contains an enemy unit, or facility.
+
+(JNI't1 l1llf)l ItES
+
+/lm IJNl"l'S
+Fighters, tactical bombers, and strategic bombers can attack and defend in territories. All can attack in sea zones. Fighters and tactical bombers stationed on carriers can defend in sea zones. All air units can land only in friendly territories or, in the case of fighters and tactical bombers, on friendly aircraft carriers. Your air units cannot land in territories you just captured, whether they were involved in the combat or not, or in territories you just converted from friendly neutrals. Air units can move through hostile territories and sea zones as if they were friendly. However, they are exposed to antiaircraft fire during combat whenever they attack a hostile territory that contains an AAA unit. When conducting strategic or tactical bombing raids, bombers are only exposed to the antiaircraft fire from the industrial complex or base, not any AAA units in the territory.
+
+Each time an air unit crosses a boundary between spaces, whether territories or sea zones, it uses 1 move­ ment point.
+
+Fighters and tactical bombers in a territory that has an operative air base can be scrambled and moved to the adjacent sea zones if they come under attack (see "Scramble," page 38).
+
+You cannot deliberately send air units into combat situations that place them out of range of a place to land afterward. In the Combat Move phase, prior to rolling any battles, you must be able to demonstrate some possible way (however remote the possibility is) for all your attacking air units to land safely that turn. This could include a combination of combat moves. It could also include noncombat moves by a carrier or the mobilization of a new carrier.
+
+Once possible landing zones for all attacking air units have been demonstrated, you have no obligation to guarantee those landing zones for air units in the course of battle. For example, aircraft carriers may freely retreat or be taken as casualties, even if doing so leaves air units with no place to land after combat (such air units will be destroyed at the end of the Noncombat Move phase). However, during noncombat movement and new unit mobilization, you must provide for safe landing of as many air units as possible after all combats are resolved.
+
+If you declared that a carrier will move during the Noncombat Move phase to provide a safe landing zone for a fighter or a tactical bomber moved in the Combat Move phase, you must follow through and move the carrier to its planned location in the Noncombat Move phase unless the air unit has landed safely elsewhere or has been destroyed before then, or a combat required to clear an intervening sea zone failed to do so. Likewise, if you declared that a new carrier will be mobilized to provide a safe landing zone for a fighter or tactical bomber, it must be mobilized in that sea zone unless the air unit has landed safely elsewhere or has been destroyed.
+
+Air units can hit submarines only if a friendly destroyer is in the battle.
+
+
+
+1: I BHT l:ll
+COST:		 ATTACK: DEFENSE: MOVEMENT:
+DAMAGE CAPACITY: TECH UPGRADE:
+
+
+
+10
+3
+4
+4
+1
+Jet Fighters
+
+Unit Characteristics:
+Carrier Operations:
+Fighters can land on and take off from a carrier.
+
+Fighter Escorts and Interceptors:
+Fighters can participate in strategic and tactical bombing raids as escorts or interceptors. Any or all defending fighters based in a territory that is about to be bombed can participate in the defense of the industrial complex and or bases that are targeted. Escort fighters (those accompanying the bombers) can escort and protect the bombers, and they can originate from any territory or sea zone, range permitting (see "Strategic and Tactical Bombing Raids," page 28).
+
+(JNI't1 l1llf)l ItES
+
+
+
+T /l I: T I1: /l I. H mII
+COST: ATTACK: DEFENSE: MOVEMENT:
+
+HI:ll
+11
+3
+3		
+4		
+
+Unit Characteristics:
+Tactical bombers represent dive bombers in land operations and torpedo or dive bombers in naval operations which can Target Select. (See "Tactical Bombers," page 31).
+
+Carrier Operations:
+
+DAMAGE CAPACITY: TECH UPGRADE:
+
+Combined Arms:
+
+1		
+NONE		
+
+Tactical bombers can land on and take off from a carrier.
+
+Fighters can be combined with tactical bombers. A matched pair of a fighter and a tactical bomber increases the tactical bomber's attack value from 3 to 4.
+Tanks can be combined with tactical bombers. A matched pair of a tank and a tactical bomber increases the tactical bomber's attack value from 3 to 4.
+
+Tactical Bombing Raid:
+A tactical bomber can either participate in normal combat or make a direct attack against an enemy air or naval base. Such an attack on a facility is a tactical bombing raid (see "Strategic and Tactical Bombing Raids," page 28).
+
+Target Select:
+A tactical bomber has the option to Target Select land and naval units. Infantry, air units, and naval transports may not be targeted by tactical bombers. Opting to use Target Select negates the combined arms, if available, for the entire turn. Only attacking tactical bombers may Target Select (See "Target Select or Submerge," page 31). Air defense provided by anti-aircraft guns or battleships negates Target Select.
+
+
+sTll /l TI: (j II:	Hnm HI:ll
+
+Unit Characteristics:
+Attacking strategic bombers only participate in the
+
+COST:		 ATTACK:
+DEFENSE: MOVEMENT: DAMAGE CAPACITY: LOAD CAPACITY: TECH UPGRADE:
+
+12
+2@2
+1		
+6		
+1
+2 Infantry Heavy Bomber
+
+first round of combat, after which they must retreat, or be taken as a casualty.
+
+Strategic Bombing Raid:
+A strategic bomber can either participate in general combat or attack an enemy facility. Such an attack on a facility is a strategic bombing raid (see "Strategic and Tactical Bombing Raids," page 28).
+
+
+Air Transport:
+Strategic and heavy bombers may be reclassified as a transport or cargo plane at the Combat/Noncombat Movement phase. These units are then marked with a Transport marker after they end their movement, and will then remain at the new stats (see right) until the
+Repair Units phase on the following turn. Strategic bombers may only be used as a transport, while heavy bombers may be used as transport or cargo plane. Transported units must start from the same territory as the transport or cargo plane. Transport and cargo planes are subject to anti­ aircraft fire, if hit the plane and cargo are destroyed.
+
+Chosen Last:
+Air Transports can be chosen as casualties only if there are no other eligible units.
+
+• Combat Drops- May drop up to 6 units into a territory where other ground units are attacking. Dropped units may not exceed what is coming in from the land. No retreat for combat dropped units. Once dropped, the transport is considered retreated from combat and may not be used as a casualty.
+• Noncombat Drops - Max two unit drop per territory that you, or an ally owned at the beginning of your turn.
+
+(JNI't1 l1llf)l ItES
+
+Nl.l\f/.ll. IJNl"l"S
+Battleships, aircraft carriers, cruisers, destroyers, submarines, and transports move, attack, and defend in sea zones. They cannot move into territories. For the sake of these rules, the following are surface warships: carriers, battleships, cruisers, and destroyers. Transports are not warships. Submarines are not surface warships.
+
+All sea units can normally move up to 2 sea zones. An exception to this rule is ships in a sea zone that is serviced by an operative friendly naval base. You can move these ships 3 sea zones when departing from the naval base location (see "Naval Bases," page 38). Another exception to this rule is damaged capital ships. If a capital ship is damaged, it may only move 1 space. Naval units cannot move through hostile sea zones. If enemy units other than transports or submarines occupy a sea zone, the sea zone is hostile and your sea units end their movement and enter combat. Submarines are an exception: They can pass through a hostile sea zone without stopping, unless there is an enemy destroyer present (see "Destroyers," page 45).
+
+Some sea units can carry other units. Transports can carry only land units. Aircraft carriers can carry fighters and tactical bombers. Warships (except aircraft carriers) can conduct convoy disruptions.
+
+Capital ships:
+Battleships and Aircraft Carriers are capital ships, and they take 2 hits to destroy. If your capital ship takes 1 hit, it is then considered damaged. A damaged capital ship attacks, defends, and moves at 50% capacity. Defending capital ships which take a single hit on any round of combat, still defend with their full defense value. Adjust damaged units on the Battle Board to the damaged locations at the beginning of each round of combat. not in the middle of a round.
+
+EXAMPLE: A damaged battleship will attack with a "2" or less, down from a "4" or less.
+
+
+H /l TT I.I: SHI P	E3/4tllbA,E .
+
+Unit Characteristics:
+Battleships are capital ships and require 2 hits to destroy. If an undamaged battleship is hit once, even
+
+COST:		
+ATTACK: DEFENSE: MOVEMENT:
+DAMAGE CAPACITY: TECH UPGRADE:
+
+Offshore Bombardment:
+
+20
+4
+4		
+2
+2
+Super Battleship
+
+by a submarine's Target Select, place a damage chip under the unit. Do not remove an attacking battleship from play or move a defending battleship behind the casualty strip unless it takes a second hit. If a battleship survives a combat having taken 1 hit, it can be repaired by a visit to an operative friendly naval base (see "Naval Bases," page 38).
+
+Battleships (along with cruisers) can conduct offshore bombardment during an amphibious assault (see "Amphibious Assaults-Step 2. Battleship & Cruiser Bombardment," page 29). Damaged battleships cannot perform offshore bombardments.
+
+Air Defense:
+Battleships have built in AAA which can fire at air units when being attacked. Just like land based AAA units, battleship AAA also only fire once before the first round of combat. Each battleship unit in the sea zone may fire up to 3 shots, but each attacking air unit may be fired upon only once. In other words, the total number of air defense dice rolled is 3 times the number of battleship units, or the number of attacking air units, whichever is the less. For example, 5 fighters attacking a sea zone containing 2 battleships would have 5 shots fired against them, while those same 5 fighters would have only 3 shots fired against them if there were only 1 de­ fending battleship.
+
+Once the number of air defense dice is determined, the dice are rolled. For each "1" rolled, the attacker must choose an air unit as a casualty. These casualties are removed immediately and will not participate in the re­ mainder of the battle. This AAA fire occurs before the Conduct Combat phase.
+
+Enemy Fly Overs:
+Any air units that fly over an enemy battleship during the Combat Movement phase are subject to AAA fire.
+
+NOTE: A battleship must be fully operational to fire AAA.
+
+(JNI't1 l1llf)l ItES
+
+
+
+
+/lIH1:ll /l 1: "I" 1: /l llll11:H
+COST:	16
+ATTACK:	0
+
+·& I
+
+Unit Characteristics:
+Aircraft carriers are capital ships and require 2 hits to destroy. If an undamaged carrier is hit once, even by a submarine's Target Select, place a damage
+
+DEFENSE:	2		
+MOVEMENT:	2		
+DAMAGE CAPACITY:	2
+
+chip under the unit. Do not remove an attacking carrier from play or move a defending carrier behind the casualty strip unless it takes a second hit.
+
+LOAD CAPACITY: TECH UPGRADE:
+
+2 Units Super Carrier
+
+If a carrier survives a combat having taken 1 hit, it can be repaired by a visit to an operative friendly naval base (see "Naval Bases," page 38).
+
+
+Carry Aircraft:
+An aircraft carrier can carry up to 2 air units, including those belonging to friendly powers (provided both powers are at war). These air units may be of two types: fighters and tactical bombers. Air units on a friendly power's carrier are always treated as cargo on the carrier owner's turn.
+
+Carrier aircraft move independently of the carrier on their own turn. They move along with the carrier on its turn if they belong to different powers. On the air units' turn, they launch before the carrier moves, even if they are not leaving the sea zone themselves. It is possible for the carrier to make a combat movement while leaving its aircraft behind to make a noncombat movement later.
+
+During noncombat movement, fighters and tactical bombers may use their remaining movement to move into sea zones with carriers in order to land on them. Carriers may also move, providing that they did not move during combat movement or participate in combat. In fact, a carrier must move if it is able, or remain in place, in order to provide a landing space for an air unit that would not otherwise have one. Landing does not actually occur until the Mobilize New Units phase, so air units and carriers must end their movement in the same sea zone. Any air units that are not in an eligible landing space by the end of the Noncombat Move phase are de­ stroyed (note that this can include a sea zone in which a new carrier will be placed during the Mobilize New Units phase).
+
+A damaged carrier cannot conduct air operations, which means that no air units may take off from or land on it. Any guest air units that were on board the carrier as cargo at the time when it was damaged are trapped on­ board and cannot leave, attack, or defend until the carrier is repaired. Any air units that planned to land on the carrier must find another landing space by the end of noncombat movement or be destroyed. (See "Phase 4
+: Noncombat Movement," page 34.)
+
+Air Defense:
+Whenever an undamaged carrier is attacked, its aircraft (even those belonging to friendly powers) are considered to be defending in the air and fight normally, even if only submarines are attacking and the air units cannot hit them because there is no defending destroyer. Air units based on a defending carrier must land on the same carrier, if possible, after the battle. If that carrier is destroyed or damaged in combat, they must try to land on a different friendly carrier in the same sea zone, move 1 space to a friendly carrier or territory, or be destroyed. This movement occurs during the Noncombat Movement phase, before the acting player makes any noncombat movements.
+
+When a damaged carrier is attacked, any air units on board are considered cargo and cannot defend. If the carrier is lost, they are lost along with it.
+
+(JNI't1 l1llf)l ItES
+
+
+
+
+t:HUISl:H
+COST:		 ATTACK:
+DEFENSE:
+MOVEMENT: DAMAGE CAPACITY: TECH UPGRADE:
+
+
+
+12
+3
+3		
+2		
+1		
+NONE		
+
+Unit Characteristics:
+Offshore Bombardment:
+Cruisers (along with battleships) can conduct offshore bombardment during an amphibious assault (see "Amphibious Assaults- Step 2 Battle­ ship & Cruiser Bombardment," page 29).
+
+
+
+Combined Arms:
+Cruisers can be combined with battleships. A matched pair of a cruiser and a battleship increases the cruiser's defense value from 3 to 4.
+
+
+
+II I: STHII\'I:H
+COST: ATTACK: DEFENSE: MOVEMENT:
+DAMAGE CAPACITY: TECH UPGRADE:
+
+
+
+8
+2
+2
+2
+1
+NONE
+
+Unit Characteristics:
+Anti-Sub Vessel:
+Destroyers are specially equipped for anti-submarine warfare. As a result, they have the capability of cancelling many of the unit characteristics of enemy submarines.
+
+
+
+A destroyer cancels the Treat Hostile Sea Zones as Friendly unit characteristic of any enemy submarine that moves into the sea zone with it. This means that the submarine must immediately end its movement, whether combat or noncombat, upon entering the sea zone. If a submarine ends its combat movement in a sea zone with an enemy destroyer, combat will result.
+
+If a destroyer is in a battle, it cancels the following unit characteristics of all enemy submarines (not super submarines (see "Super Submarines," page 22) in that battle: Target Select, Surprise Strike, Submersible, and cannot be hit by air units. Note that destroyers belonging to a power friendly to the attacker that happen to be in the same sea zone as the battle do not actually participate in it, therefore they do not cancel any of these abilities of defending submarines.
+
+
+sumH	,ur I N1:		M,	
+COST:	6
+ATTACK:	2
+DEFENSE:	1
+MOVEMENT:	2
+DAMAGE CAPACITY:	1
+TECH UPGRADE:	Super Submarines
+
+Unit Characteristics:
+Submarines have several unit characteristics. Most of them are cancelled by the presence of an enemy destroyer.
+
+Target Select:
+Attacking submarines can make a Target Select, defending submarines can make a Surprise Strike by firing before any other units fire in a sea battle. As detailed in step 2 of the General Combat sequence (page 31), submarines make their rolls before any other units, unless an enemy destroyer is present. If neither side was eligible for a Surprise Strike or Target Select there is no step 2. Players move directly to step 3 of the General Combat sequence.
+
+(JNI't1 l1llf)l ItES
+
+Submersible:
+A submarine has the option of submerging. It can do this anytime it would otherwise make a Surprise Strike or Target Select. The decision is made before any dice are rolled by either side (the attacker decides first) and takes effect immediately. When a submarine submerges, it is immediately removed from the Battle Board and placed back on the map. As a result, it may no longer fire or take hits in that combat. However, a submarine cannot submerge if an enemy destroyer is present in the battle. Place a "Submerged" marker under the unit, it will remain submerged until the Repair Units phase of the controlling player's turn.
+
+Note: Submerged submarines may not disrupt sea zones, this includes both convoy and lend-lease.
+
+Treat Hostile Sea Zones as Friendly:
+A submarine can move through a sea zone that contains enemy units, either in combat or noncombat movement. However, if a submarine enters a sea zone containing an enemy destroyer, it must end its movement there. If it ends its combat move in a hostile sea zone, combat will occur.
+
+Does not Block Enemy Movement:
+The "stealth" ability of submarines also allows enemy ships to ignore their presence. Any sea zone that contains only enemy submarines does not stop the movement of a sea unit. Sea units ending their combat movement in a sea zone containing only enemy submarines may choose to attack them or not. Sea units can also end their noncombat movement in a sea zone containing only enemy submarines.
+
+Cannot Hit Air Units:
+When attacking or defending, submarines cannot hit air units.
+
+Cannot Be Hit by Air Units:
+When attacking or defending, hits scored by air units cannot be assigned to submarines unless there is a destroyer that is friendly to the air units in the battle.
+
+
+
+
+
+TH/lNSPOHT	• 1+11
+
+
+
+TECH UPGRADE:	Improved Transports
+
+Unit Characteristics:
+No Combat Value:
+Even though a transport can attack or defend, either alone or with other units, it has a combat value of 0. This means that a transport cannot fire in the attacking units' or the defending units' fire steps. Transports may not attack without being accompanied by at least 1 unit with an attack value, unless they are conducting an amphibious assault from a friendly sea zone that is free of enemy submarines.
+
+
+
+Combined Arms:
+A transport can be combined with another transport. A matched pair of transports increases one transports' defense value from Oto 1.
+
+(JNI't1 l1llf)l ItES
+
+Does not Block Enemy Movement:
+Any sea zone that contains only an enemy transport does not stop the movement of a sea unit. Air or sea units with an attack value, which can attack more than a single round, ending their combat movement in a sea zone containing only an enemy transport automatically destroys the transport (unless they are ignoring them to support an amphibious assault instead). This counts as a sea combat for those sea units. Sea units can also end their noncombat movement in a sea zone containing only an enemy transport, in which case there would be no combat.
+
+NOTE: A transport paired with another transport does block enemy movement.
+
+Chosen Last:
+Transports can be chosen as casualties only if there are no other eligible units (EXCEPTION: Submarines can Target Select transports). Normally this will occur when only transports are left, but it can also occur under other circumstances. For example, air units attacking transports and submarines will hit the transports because they cannot hit the submarines without a friendly destroyer present.
+
+Carry Land Units:
+A transport can carry land units belonging to you or to friendly powers (provided both powers are at war). Its capacity is any 1 land unit, plus 1 additional infantry. Thus, a full transport may carry 2 infantry or 1 tank, mechanized infantry, artillery, or AAA unit plus 1 infantry. A transport cannot carry an industrial complex, an air base, or a naval base. Land units on a transport are cargo; they cannot attack or defend while at sea and are destroyed if their transport is destroyed.
+
+Loading and Offloading:
+A transport can load cargo in friendly sea zones before, during, and after it moves. A transport can pick up cargo, move 1 sea zone, pick up more cargo, move 1 more sea zone, and offload the cargo at the end of its movement. It can also remain at sea with the cargo still aboard (but only if the cargo remaining aboard was loaded in a previous turn, was loaded this turn in the Noncombat Move phase, or was loaded this turn for an amphibious assault from which the transport retreated).
+
+Loading onto and or offloading from a transport counts as a land unit's entire move; it cannot move before loading or after offloading. Place the land units alongside the transport in the sea zone. If the transport moves in the Noncombat Move phase, any number of units aboard can offload into a single friendly territory.
+
+Land units belonging to friendly powers must load on their controller's turn, be carried on your turn, and off­ load on a later turn of their controller. This is true even if the transport remains in the same sea zone.
+
+Whenever a transport offloads, it cannot move again that turn. If a transport retreats, it cannot offload that turn. A transport cannot offload in two territories during a single turn, nor can it offload cargo onto another transport. A transport cannot load or offload while in a hostile sea zone. Remember that hostile sea zones contain enemy units, but that for purposes of determining the status of a sea zone, submarines and transports are ignored.
+
+A transport can load and offload units without moving from the friendly sea zone it is in (this is known as "bridging"). Each such transport is still limited to its cargo capacity. It can offload in only one territory, and once it offloads, it can't move, load, or offload again that turn.
+
+Amphibious Assaults:
+A transport can take part in an amphibious assault step of the Conduct Combat phase. That is the only time a transport can offload into a hostile territory. During an amphibious assault, a transport must either offload all units that were loaded during the Combat Move phase or retreat during sea combat. It can also offload any number of units owned by the transport's power that were already on board at the start of the turn.
+
+()I•'t1l()N1lt ll(JtES
+This section provides information pertaining to several unique scenarios that can happen once per game.
+
+• BLITZKRIEG: allows Germany to move through a hostile territory, and the defending units.
+• BANZAI CHARGE: allows Japanese infantry to attack at 2.
+• ALLIED COALITION: allows the United States and the United Kingdom to join forces.
+II 1.1·r:Z llll11:Ii:
+Once per game, Germany may declare Blitzkrieg to move through a single hostile territory, its defending units, and even any facilities to attack any adjacent territories as well. To do this, during the combat movement phase, the German player will determine which units are attacking the territory they are going to Blitzkrieg through and which units will be going through to attack any adjacent territories. Any unit chosen to attack an adjacent territory must have movments remaining to get there, In addition, units do not need to be paired as described on page 26, "Tanks, Mechanized Infantry, and Blitzing". During the conduct combat phase, the territory which the Blitzkrieg was announced must be resolved prior to any territories beyond the Blitzkrieg. If the Blitzkrieg attack fails, then any land units that utilized Blitzkrieg to attack the territories beyond must be retreated as described on page 32 step 6 condition B. Any other units that were designated to attack territories beyond the Blitzkrieg must still perform at least a one round of combat before retreating.
+HnN:z1u 1:1uuua:
+Once per game, the Japanese player may declare a Banzai Charge on their current conduct combat phase. If a Banzai Charge is announced, all territories Japan is attacking with 2 or more infantry, those infantry will now attack at 2 up from 1 for the first round of combat, after which any remaining attacking infantry will then revert back to attacking at 1 unless paired with an artillery as described on page 39.
+Ill.I.II:II  I: 0/U.l"l"ION:
+Once per game, the United States may declare Allied Coalition during their combat movement phase. Once the Allied Coalition is declared, the United States may now take control of any of the United Kingdom's units and use them as if they were United States units to perform a single attack. This attack can consist of any single territory, sea zone, bombing raid or an amphioxus assault which includes a sea zone battle and a territory battle. Once all the combat movements have been made, the combined United States and United Kingdom units will attack at the same time. Once the resolve combat phase has been completed, any United Kingdom unit that participated in combat will now return to the control of the United Kingdom player. These units may not however be used again until the following game round. Any territory captured by the Allied Coalition will be assigned to the United States, even in the event only United Kingdom units remain after the resolve combat phase.
+
+NOTE: Both United Kingdom and the United States do not combine or share techs.
+NOTE: Both United Kingdom and the United States may share Combined Arms.
+
+
+
+
+
+
+The 1942 setup is designed to be played in 5 rounds while still maintaining the integrity of the BBR. This setup is great for social media platforms, as those types of games can take months to complete. This 1942 setup is based off the Larry Harris setup, however it does have several changes that are seen on the National Charts.
+
+The game begins on round 4. Place the Game Round Tracker as described on page 8, "Game Round Tracker". Technology begins in phase H. After each major power picks a technology as described on page 23, "Before the Game Begins," each major power can then decide to continue with the research by following the directions described on page 23, "Phase: H (PH)".
+
+• Before the game begins, the United States is awarded an additional 20 IPCs to their starting income.
+
+From this point you will play the game as described in this manual as if you played up to this point with the 1940 setup. If playing the recommended 8 rounds, you will continue to play through round 8 which makes the 1942 setup a 5 round game (rounds 4-8).
+
+C1llll) llEl EllEN(;E
+The Bloodbath Ruleset has an optional 90 piece card deck, this is to help with rules so you do not have to refer to this book during game play. The cards are numbered 1-90. In the event you lose a card, this section will help you identify which cards you are missing. The references on this page are summarized, for a better understanding of the card in question refer to the page associated with the missing card.
+
+The card deck refers to the 1940 setup. The cards are the same for both 1940 and 1942, but the political situations are different (see "Political Situations," page 12).
+
+
+Rule Deck (Two Sets):
+1 + 18- Turn Sequence
+2 + 19- Unit Statistics
+3 + 20- Research and Development Chart 1
+4 + 21 Research and Development Chart 2
+5 + 22 Axis Victory Scorecard
+6 + 23 Combined Arms
+7 + 24 Naval Blockade
+8 + 25 Target Select
+9 + 26 Anti-Aircraft
+10 + 27 Amphibious Assault
+11 + 28 Scramble
+12 + 29 Railway
+13 + 30 Bombing Raid
+14 + 31 Submarine
+15 + 32 Transport
+16 + 33 Convoy Disruption
+17 + 34 Air Transports
+Germany:
+35- Political Situation
+36- 2 IPC Per if Germany controls Iraq, Iran, NW Iran or Caucasus
+37- 5 IPC Germany controls London
+38- 3 IPC Land unit in Egypt (Cairo) or El Alamein
+39- 5 IPC Denmark, Norway while Sweden neutral
+40- 5 IPC Per Leningrad, Stalingrad, Moscow
+41- 2 IPC Germany has armistice with France
+42- 5 IPC Five submarines on the map
+43- 5 IPC Europe Axis not at war with Soviet Union
+44- 2 IPC Per original Italian territories
+
+Soviet Union:
+45- Political Situation
+46- Trans-Siberian Rail
+47- Lend-Lease
+48- Soviet-Mongolian Defense
+49- Soviet Mobile Production
+50- 7 IPC Liberate Manchuria
+51- 3 IPC Siberia, Urals, Ukraine
+52- 5 IPC Own 3: Leningrad, Stalin, Baltic, E. Poland
+53- 2 IPC Per original German, Italian, Pro-Axis
+
+Japan:
+54- Political Situation
+57- Kamikaze
+56- Soviet-Mongolian Defense
+57- 10 IPC Japan captures Calcutta
+58- 
+3 IPC Per Guam, Mid, Wake, Gil, Sol, John, Ale, line, NB
+59- 5 IPC Per Calcutta, Sydney, Honolulu, San Fran
+60- 3 IPC per Control Sumatra, Java, Borneo, Celebes
+61- 10 IPC Japan controls all Chinese territories
+62- 10 IPC Not at war with U.S. only attacked China
+
+United States:
+63- Political Situation
+64- 3 IPC per Control lwo Jima, Caroline, Marshall, Marianas, Taiwan, Hainan, or Palau
+65- 3 IPC At least 2 units in Casablanca
+66- 10 IPC No longer neutral
+67- 1 IPC Per originally controlled territory
+68- X IPC One time payment based off turn 0-30
+69- 5 IPC U.S. land unit in France or Normandy
+
+China:
+70- Political Situation
+71- Chinese Unit Statistics
+72- 6 IPC Burma Road is Allied controlled
+
+United Kingdom:
+73- Political Situation
+74- 8 IPC One time payment if Portugal is Allied
+75- 5 IPC U.K. controls Egypt, Jordan, El Alamein
+76- 5 IPC U.K. controls India, West India, Burma and Malaya
+77- 2 IPC Per if U.K. control Iraq, Iran, NW Iran
+
+Italy:
+78- Political Situation
+79- 5 IPC Own 3: Gibraltar, V. France, Greece, Egypt
+80- 5 IPC No Allied warships in the Mediterranean
+81- 5 IPC North Africa less Egypt
+82- 2 IPC Per if Italy controls Iraq, Iran, NW Iran
+83- 1 IPC Per Kenya, Sudan, B Somaliland Cyprus, El Alamein, Gibraltar
+84- 2 IPC Per original German or Pro-Axis territory
+85- 5 IPC Control all original territories
+
+Commonwealth:
+86- Political Situation
+87- 3 IPC at least 5 naval surface warships
+88- 3 IPC Axis dont control Dutch NG, NG, java, Solomon, New Britain, or Celebes
+89- 1 IPC per Axis, or Pro-Axis territory (Max of 3)
+
+France:
+90- Political Situation/ 12 IPC if Paris is liberated
+
+'I1f)(JllN1lllEN'I1 ll(JtES
+This section provides information for scoring and seeding players/teams for a 3 day tournament.
+
+Just like playing BBR in a non-tournament setting, the Axis must still acquire 12 Victory Points. The differences are the game is timed, the amount of time given to each side is decided by the tournament host and may vary. In addition, the Axis are graded on how well they did, whether they win or lose. This is simply done by taking the actual number of Victory Points the Axis achieved, then reduce that number by the number of originally controlled Axis territories. The formula is simple, and is as follows:
+VP= Victory Points OT= originally controlled Axis territories	WIN= 20 S= Score If the Axis lose, the formula is: VP - OT= S
+If the Axis win, the formula is:	VP - OT+ WIN = S
+
+The Axis are not the only side to be graded, the Allies also have their points which is the amount of originally controlled axis territories (OT) they capture. The Allied formula is as follows:
+
+If the Allies lose, the formula is: OT= S
+If the Allies win, the formula is:	OT+ WIN = S
+There are some other factors that may come into play during a tournament game.
+• QUITTING: Leaving a game while in session. Be advised this can possibly ban you from future events.
+• RUN OUT OF TIME: Your teams timer runs out.
+• SHUT OUT: Winning the game early by taking and holding certain capitals as described on page 6, or your opponents either quit or run out of time.
+
+In the event one of the above happens in your game, your score may be penalizied, or rewarded based off the current round. The additional params that may need to be applied to S are as follows:
+QT= Quit/Timer SO= Shut Out PN= Penalty R= Reward 5= Round 5 6= Round 6 7= Round 7 8= Round 8 If QT<= 5 then PN = -20
+
+If QT= 6 then PN = -15 If QT= 7 then PN = -10 If QT = 8 then PN = -5
+
+If SO <= 5 then R = 15 If SO = 6 then R = 12 If SO= 7 then R =10
+If SO = 8 then R = 5
+
+Example: If your team quit or ran out of time on round 6, your score would be S - PN (which is your score from above, S, minus PN, which in this case PN = -15)
+
+
+
+Example: If your team had a shut out on round 7, your score would be S + R (which is your score from above, S, plus R, which in this case R = 10)
+
+
+Players Lifetime Score (PLS):
+Players Lifetime Score is based off the amount of wins and medal round play that's acquired in a sanctioned BBR tournament. Each win on day 1 and 2 are counted as 1 point. Medal round game points for winning are, Gold 8, Silver 6, Bronze 3, Iron 3. Medal round losses are counted as, Gold 3, Silver 2, Bronze 1, and Iron 1.
+
+Players Lifetime Average (PLA):
+Players Lifetime Average is based off the amount of PLS and sanctioned BBR tournaments attended. Divide PLS by tournaments attended for a players PLA. 10.0 is the highest.
+
+These are lifetime scores and will follow you for seeding placements in BBR tournaments. To see who the top players are at any given time, visit siredblood.com/community
+
+NOTE: Once a player enters their first tournament, they must return each season to keep their rating. PLA is deducted by the number of seasons missed times the number of seasons missed until a player returns. Once a player returns to the tournament scene and completes a tournament, the penalty is removed and PLA restored.
+
+Tournament Team Average (TTA):
+Team seeding is based off of a teams PLA (max 3 players). The total PLA of the team is divided by the number
+of teammates to get a teams TTA. If you have a teammate with a PLA of 2.1, one with 5.0, and another with 0.0, your team has a TTA of 2.36. Higher the TTA, the higher up a team will be in the seeding for day 1 matchups.
+
+'I1()(JllNil)IEN'I1 ll(JtES  1:0N"l"INUED
+Day 1 Seeding Matchup:
+Day 1 seeding is based off of each teams TTA and the amount of teams playing. If you have teams with the same TTA, determine which team places higher by the following methods (follow the order provided):
+
+• Gold Medals: Team with most Gold medals places higher.
+• Silver Medals: Team with most combined Gold and Silver medals.
+• Bronze Medals: Team with most combined Gold, Silver, and Bronze medals.
+• PLS: Team with most total PLS.
+
+Once the teams TTA has been established and those teams are numbered highest to lowest, that list will be cut in half. The top tier seeds will now be paired against the lower tier seeds in a random draw revealing your day 1 matchups. Once the matchups have been established, take the top tier teams list and cut that in half. The top half will play Axis and the lower half will play Allies. This will prevent the upper top seeds from prematurly playing each other on day 2.
+
+For each team that wins on day 1, each team member is awarded 1 PLS point.
+
+Day 2 Seeding Matchup:
+Now that day 1 is completed, half of the teams would have won, and the other half would have lost. This is why the games are graded, to determine which team won better and which team sucked the most.
+
+Once the scores have been determined for each team, they will be placed in one of two groups, Axis Score or Allies Score. The teams that played Axis will now be seeded based off their Axis score, and the teams that played
+
+Allies will also now be seeded based off their Allies score. If there is a tied score, the higher ranked team will be placed higher. The two
+
+Axis Top Tier:	Allies Top Tier:
+
+groups will then be cut in half to show four brackets, Axis top tier,
+
+Seed 1
+
+Seed 1
+
+Axis lower tier, Allies top tier, and Allies lower tier. If you have an odd number, and can not evenly cut the tiers in half, the lowest score from Axis will automatically be paired against the lowest scored Allies. All remaining teams will be paired based off their bracket.
+
+Seed 2	Seed 2
+Seed 3	Seed 3
+Axis Lower Tier:	Allies Lower Tier:
+
+The top Axis tier are paired against top Allies tier, and the lower Axis
+
+Seed 1
+
+Seed 1
+
+tier are paired against lower Allies tier. To determine the matchups, the Top Axis seed from the top Axis bracket is paired against the lowest Allies seed from the top Allies bracket and so on, see right..
+
+Seed 2	Seed 2
+Seed 3	Seed 3
+
+Once the matchups have been established, each team will now play the opposite side from day 1. Teams that played Axis on day 1 for example, will now play Allies on day 2.
+For each team that wins on day 2, each team member is awarded 1 PLS point.
+
+Day 3 Medal Round:
+Medal round is the day teams battle for the chance to place in the tournament. The placements are Gold for 1st, Silver for 2nd, Bronze for 3rd, and Iron (Optional) for 4th. Once day 2 is completed, the team scores from day 1 and day 2 are combined for their overall score and then seeded accordingly into a single column. Starting at the top of the column, the top seed will then choose which medal they would like to play for and take their place at that table and choose if they are Axis or Allies. The next seed will now choose which medal they would like to try for, they can now challenge seed 1 and play the side seed 1 didn't choose, or they can choose a different medal table and choose to play Axis or Allies. This will continue until the medal tables are full. If there is a tied score, the higher ranked team is placed higher.
+
+The medal round is based on non-tournament play, there is no score for Allies, just do the Axis control 12 VP's at the end of the game. Also, the game may be conceded at any time without fear of being banned.
+
+Once the winners have been established, each team member who won Gold will be awarded 8 PLS points, Silver team members awarded 6 PLS points, Bronze team members awarded 4 PLS points, Iron team members awarded 3 PLS points. Each team member who lost Gold will be awarded 3 PLS points, Silver team members awarded 2 PLS points, Bronze team members awarded 1 PLS point, Iron team members awarded 1 PLS point.
+
+Hosting a sanctioned Bloodbath Tournament:
+Sanctioned events is the only way to officially gain PLS. If you are thinking about hosting an event, make it official by getting it sanctioned. Contact siredblood as described on the back of this book to start the process.
+
+Don't win for nothing, make it official!
+
+
+
+
+
+
+
+
+
+
+
+
+QUESTIONS ABOUT THE BBR
+siredblood.com/community
+.
+RESOURCES
+visit  siredblood.com/community
+for	the	latest map, charts, cash, an·d other crap
+
+visit CombatMiniatures.org and HistoricalBoardGaming.com	,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+I{,
+1
+
+/'·
+foradditional  units  and accessortes.·
+
+CONTACT_M	.
+If	you have my number f(fei free to;.! •.
+call, if	you have my e	ail	feel / ·· free to write. Otherw ·se go to	·>.·
+·siredblood.com/com111:unity
+I
+
+
+
+
+
+ltltl)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+• 'o
+
+
+
+
+
+
+
+
+
+
+
+
+PRODUCTIONS_,,
+•
+• 
+.	.
+.<It·..••.
+·•	I,
+
+(c) 2019-2023 Siredblood Productions, Bloodbath Ruleset and logos are not•	,
+registered trademarks, but dont be a little bitch and steal my stuff.•
+All rights reserv ed I guess.
+V	'\
+
+D

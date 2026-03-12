@@ -207,20 +207,25 @@
         .ipc-display-bar {
             position: sticky;
             bottom: 0;
-            z-index: 100;            
+            width: 100vw; /* Stretch across viewport */
+            height: 43.429px; /* Fixed height so panels know how much room to leave */
+            z-index: 1005; /* Above map and panels */            
             display: flex;
             justify-content: flex-start;
-            align-items: center; 
-            padding: 5px 0; /* Added a little vertical padding */
-            background-color: rgba(30, 30, 30, 0.9);
+            align-items: center;
+            padding: 0;
             box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
-            overflow-y: hidden;
             white-space: nowrap; 
+            background: rgba(40, 44, 52, 0.95); /* Changed from transparent for visibility */
+            border-top: 2px solid #555;
             box-sizing: border-box;
+            overflow: hidden;
         }
         .ipc-square {
+            flex: 1 1 0;
+            width: auto;
+            height: 100%; /* Fill container height */
             box-sizing: border-box;
-            flex-shrink: 0;
             margin: 0;
             border: 1px solid #555;
             border-radius: 3px;
@@ -228,18 +233,20 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            font-family: 'Times New Roman', serif;
+            font-family: 'Serif';
             color: #E0D8B0;
             background: #6D5C4C;
-            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5), 1px 1px 3px rgba(0, 0, 0, 0.3);
-            position: relative;
-            overflow: hidden;
-            text-align: center;
             cursor: default;
             transition: transform 0.1s ease-in-out;
-            font-size: 14px; /* Smaller font for numbers */
-            font-weight: bold;
             text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.7);
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            text-align: center;
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5), 1px 1px 3px rgba(0, 0, 0, 0.3);
+            font-size: 15px;
+            font-weight: bold;
+            color: #fff;
         }
 
         .ipc-square:hover {
@@ -320,11 +327,12 @@
             align-items: center;
             gap: 15px;
             padding: 10px 0;
-            background-color: #282c34; /* Match the main background color */
+            background-color: #282c34; 
             height: 80px;
             width: 100%;
             box-sizing: border-box;
-            margin-top: 15px; /* Add some space above the bar */
+            margin-top: 15px; 
+            margin-bottom: 50px; /* Extra space to reach the bottom! */
         }
 
         /* Add this new class for the USSR flag crop */
@@ -639,139 +647,91 @@
         }
 
         /* ==================================================== */
-        /* ==   VINTAGE BROWN THEME SIDE TABS AND PANELS     == */
+        /* ==   VINTAGE BROWN THEME FIXED SIDE PANELS        == */
         /* ==================================================== */
 
-        .side-tabs-container {
+        /* Dropdown styles */
+        #dropdown-menu.visible { display: flex !important; }
+        .menu-item { padding: 10px 20px; cursor: pointer; color: #f0f0f0; white-space: nowrap; border-bottom: 1px solid #444; }
+        .menu-item:hover { background-color: #007bff; }
+        .menu-item:last-child { border-bottom: none; }
+
+        .side-panel {
             position: fixed;
-            bottom: 110px;
-            right: 20px;
-            top: unset;
-            transform: none;
-            z-index: 1005;
+            top: 35px; /* Changed to go all the way to the top */
+            bottom: 43.429px;
+            right: -460px; 
+            width: 450px;
+            background-color: rgba(45, 35, 25, 0.97);
+            background-image: url('https://www.transparenttextures.com/patterns/paper.png');
+            background-blend-mode: overlay;
+            border-left: 2px solid #8C7B6A;
+            box-shadow: -5px 0 20px rgba(0,0,0,0.6);
+            z-index: 1004;
             display: flex;
             flex-direction: column;
-            gap: 2px;
-        }
-
-        .side-tab {
-            background-color: #6D5C4C;
-            color: #E0D8B0;
-            padding: 5px 8px;
-            cursor: pointer;
-            border: 2px solid rgba(224, 216, 176, 0.2);
-            border-right: none;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-            transition: background-color 0.2s ease;
-            font-weight: bold;
-            font-family: 'Times New Roman', serif;
-            white-space: nowrap;
-            height: auto;
-            font-size: 12px;
-        }
-
-        .side-tab:hover {
-            background-color: #8C7B6A; /* A slightly lighter brown for hover */
-        }
-
-        .draggable-panel {
-            display: none; /* This correctly hides the panel by default */
-            position: absolute;
-            top: 20px; /* Initial top position */
-            right: 20px; /* Position from the right edge */
-            left: unset; /* Ensure left is not conflicting with right */
-            width: 450px; /* Keep existing width */
-            height: auto; /* Allow height to adjust based on content and max-height */
-            min-width: 250px;
-            min-height: 150px;
-            max-height: calc(100vh - 80px); /* Limit height: 100vh - (top bar height + some padding) */
-            border: 1px solid #8C7B6A;
-            border-radius: 8px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.6);
-            z-index: 1004;
-            flex-direction: column;
-            resize: both;
-            overflow: hidden; /* Ensure content is clipped if overflow */
+            transition: right 0.3s ease-in-out;
             color: #E0D8B0;
             font-family: 'Georgia', serif;
-            background-color: rgba(45, 35, 25, 0.97); /* Keep base background color */
-            background-image: url('https://www.transparenttextures.com/patterns/paper.png');
-            background-blend-mode: overlay; /* Adjust blend mode for desired effect (e.g., multiply, screen, overlay) */
         }
 
-        /* Vintage paper texture overlay */
-        .draggable-panel::before {
-            content: '';
+        .side-panel-resizer {
             position: absolute;
             top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            left: -10px; /* Wider hover space */
+            width: 20px;
+            height: 100%;
+            cursor: ew-resize;
+            z-index: 2010;
+        }
+        .side-panel-resizer:hover {
+            background: linear-gradient(to right, transparent 40%, rgba(255,255,255,0.2) 50%, transparent 60%);
+        }
+
+        .side-panel::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
             background-image: url('https://www.transparenttextures.com/patterns/cream-paper.png');
             opacity: 0.1;
-            pointer-events: none; /* Allows clicks to go through to the content */
+            pointer-events: none;
             z-index: -1;
         }
 
-        /* Visible handle for resizing the panel */
-        .draggable-panel::after {
-            content: '';
-            position: absolute;
-            bottom: 2px;
-            right: 2px;
-            width: 15px;
-            height: 15px;
-            background:
-                linear-gradient(135deg, rgba(224, 216, 176, 0) 0%, rgba(224, 216, 176, 0) 45%, rgba(224, 216, 176, 0.7) 50%, rgba(224, 216, 176, 0) 55%, rgba(224, 216, 176, 0) 100%),
-                linear-gradient(135deg, rgba(224, 216, 176, 0.7) 0%, rgba(224, 216, 176, 0) 10%, rgba(224, 216, 176, 0) 100%);
-            cursor: se-resize;
-            pointer-events: none; /* Allows the browser's resize to work underneath */
-        }
-
-
-        .draggable-panel.visible {
-            display: flex;
+        .side-panel.open {
+            right: 0; /* Slide in */
         }
 
         .panel-header {
-            background-color: #6D5C4C; /* Dark, woody brown */
+            background-color: #6D5C4C; 
             color: #E0D8B0;
-            padding: 8px 12px;
+            padding: 10px 15px;
             font-weight: bold;
-            cursor: move;
-            border-top-left-radius: 7px;
-            border-top-right-radius: 7px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-bottom: 1px solid #8C7B6A;
             font-family: 'Times New Roman', serif;
+            font-size: 16px;
         }
 
         .close-panel {
             cursor: pointer;
-            font-size: 16px;
+            font-size: 20px;
             font-family: Arial, sans-serif;
-            padding: 2px 6px;
+            padding: 0 5px;
             border-radius: 50%;
         }
 
         .close-panel:hover {
-            background-color: rgba(224, 216, 176, 0.2); /* Creamy highlight */
+            background-color: rgba(224, 216, 176, 0.2); 
         }
 
         .panel-content {
             padding: 15px;
             flex-grow: 1;
             overflow-y: auto;
-            /* Custom scrollbar for vintage feel */
-            scrollbar-color: #6D5C4C #4a3f35; /* thumb track */
+            scrollbar-color: #6D5C4C #4a3f35;
             scrollbar-width: thin;
-        }
-
-        .panel-content ul {
-            padding-left: 20px;
         }
 
         /* ============================================= */
@@ -1203,6 +1163,7 @@
             border: 1px dashed #6D5C4C;
             border-radius: 8px;
             width: 100%;
+            box-sizing: border-box;
         }
 
         .u-boat-icon-large {
@@ -1267,6 +1228,7 @@
             border: 1px dashed #008B8B;
             border-radius: 8px;
             width: 100%;
+            box-sizing: border-box;
         }
         .cw-naval-icon-large {
             width: 80px; 
@@ -1346,6 +1308,125 @@
             width: 20px;
             border: 1px solid #111;
         }
+
+        /* Fix for hover tooltips on symbols */
+        .note-symbol {
+            pointer-events: auto !important;
+            cursor: help;
+        }
+
+        /* Neutral Tab Category Styles */
+        .neutral-group-title {
+            font-weight: bold;
+            padding: 6px 8px;
+            margin-top: 10px;
+            text-align: center;
+            font-size: 0.95em;
+            border-bottom: 1px solid #555;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .neutral-item {
+            padding: 3px 12px;
+            font-size: 0.85em;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .neutral-sub-item {
+            padding-left: 25px;
+            font-style: italic;
+            font-size: 0.8em;
+            opacity: 0.8;
+        }
+
+        /* Category Specific Colors (Themed) */
+        .pro-axis-theme { background-color: #4a1a1a; color: #ffcccc; }
+        .strict-neutral-theme { background-color: #3d3d3d; color: #eeeeee; }
+        .pro-allies-theme { background-color: #1a2a4a; color: #ccdfff; }
+
+
+
+
+        /* --- Victory Progress Bar --- */
+        .victory-progress-container {
+            width: 100%;
+            height: 22px;
+            background-color: #1a1410;
+            border: 1px solid #6D5C4C;
+            border-radius: 4px;
+            margin: 10px 0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.8);
+        }
+
+        .victory-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #b32d00, #ff4444);
+            transition: width 0.4s ease-in-out;
+        }
+
+        .victory-progress-text {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-family: 'Georgia', serif;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 2px black;
+        }
+
+        .objective-status-icon {
+            font-size: 16px;
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+
+
+        /* ============================================= */
+        /* == BATTLE SIMULATOR DYNAMIC LOGIC          == */
+        /* ============================================= */
+
+        /* --- Enhanced Battle Simulator Styles --- */
+        .sim-qty-btn {
+            background: #6D5C4C; border: 1px solid #8C7B6A; color: #E0D8B0; 
+            width: 20px; height: 20px; border-radius: 3px; cursor: pointer;
+            display: flex; justify-content: center; align-items: center; font-weight: bold;
+        }
+        .sim-qty-btn:hover { background: #8C7B6A; }
+        .sim-qty-display {
+            width: 24px; text-align: center; background: transparent; border: none; 
+            color: #E0D8B0; font-family: 'Georgia', serif; font-weight: bold;
+        }
+        .sim-group-header {
+            font-family: 'Georgia', serif; font-size: 14px; font-weight: bold; color: #aaa;
+            border-bottom: 1px solid #555; margin: 10px 0 5px 0; padding-bottom: 2px;
+        }
+        .sim-select-mode polygon, .sim-select-mode path {
+            cursor: crosshair !important;
+        }
+        .sim-select-mode polygon:hover, .sim-select-mode path:hover {
+            fill-opacity: 0.5 !important; stroke: #FFD700 !important; stroke-width: 2 !important;
+        }
+        .pie-chart-container {
+            width: 80px; height: 80px; border-radius: 50%;
+            border: 2px solid #6D5C4C; box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+        .sim-history-dropdown {
+            width: 100%; background: #2d2319; color: #E0D8B0; border: 1px solid #6D5C4C; 
+            padding: 5px; margin-top: 10px; font-family: 'Georgia', serif;
+        }
+
+        #main-menu-btn {
+            z-index: 3000;
+        }
     </style>
 </head>
 <body>
@@ -1372,6 +1453,15 @@
                 <select id="yearSelect">
                     <option value="1940">1940 (Early War)</option>
                     <option value="1942">1942 (Global Conflict)</option>
+                </select>
+            </div>
+
+            <div class="setting-row">
+                <label for="roundsSelect">Game Length</label>
+                <select id="roundsSelect">
+                    <option value="8">8 Rounds (12 Points)</option>
+                    <option value="10">10 Rounds (14 Points)</option>
+                    <option value="12">12 Rounds (16 Points)</option>
                 </select>
             </div>
 
@@ -1423,7 +1513,7 @@
                 <div class="vc-bar axis" style="width: 52.6%;"></div> <div class="vc-bar allies" style="width: 47.4%;"></div> </div>
         </div>
 
-        <div class="game-info-section">
+        <div class="game-info-section" style="position: relative;">
             <label for="colorSchemeSelect">Scheme:</label>
             <select id="colorSchemeSelect">
                 <option value="default">Default Vintage</option>
@@ -1433,6 +1523,12 @@
                 <option value="mono">Monochromatic</option>
                 <option value="sepia">Sepia Tone</option>
             </select>
+            <div id="main-menu-btn" style="cursor: pointer; font-size: 20px; margin-left: 15px; padding: 0 5px;" onclick="document.getElementById('dropdown-menu').classList.toggle('visible')">☰</div>
+            <div id="dropdown-menu" style="display: none; position: absolute; top: 100%; right: 0; background: #282c34; border: 1px solid #555; border-radius: 4px; flex-direction: column; z-index: 2000; box-shadow: 0 5px 15px rgba(0,0,0,0.5);">
+                <div class="menu-item" onclick="openSidePanel('gameInfoPanel')">Game Info</div>
+                <div class="menu-item" onclick="openSidePanel('panel-battle')">Battle Simulator</div>
+                <div class="menu-item" onclick="openSidePanel('panel-notes')">Notes</div>
+            </div>
         </div>
     </div>
     <div id="map-container">
@@ -1475,96 +1571,28 @@
                 <div class="rd-stage-text"></div>
             </div>
         </div>
-        <div class="ipc-display-bar" id="ipcDisplayBar"></div>
-    </div>
-    <div class="side-tabs-container">
-        <div class="side-tab" data-target="panel-political">Political Situation</div>
-        <div class="side-tab" data-target="panel-objectives">National Objectives</div>
-        <div class="side-tab" data-target="panel-victory">Victory Points</div>
-        <div class="side-tab" data-target="panel-war">War Status</div>
-        <div class="side-tab" data-target="panel-purchased">Purchased Units</div>
-        <div class="side-tab" data-target="panel-battle">Battle Simulator</div>
-        <div class="side-tab" data-target="panel-notes">Notes</div>
-        <div class="side-tab" onclick="togglePanel('gameInfoPanel')">Game Info</div>
     </div>
 
-    <div id="panels-wrapper">
-        <div id="panel-political" class="draggable-panel">
-            <div class="panel-header">Political Situation <span class="close-panel">X</span></div>
-            <div class="panel-content">
-                <p>Placeholder for political rules, bullet points, etc.</p>
+    <div class="ipc-display-bar" id="ipcDisplayBar"></div>
+    
+    
+    <div id="panel-battle" class="side-panel">
+        <div class="panel-header">Battle Simulator <span class="close-panel" onclick="closeSidePanel('panel-battle')">×</span></div>
+        <div class="panel-content" id="battle-sim-content" style="display: flex; flex-direction: column;">
             </div>
-        </div>
+    </div>
 
-        <div id="panel-objectives" class="draggable-panel">
-            <div class="panel-header">National Objectives <span class="close-panel">X</span></div>
-            <div class="panel-content">
-                <p>Placeholder for national objectives for each power.</p>
-            </div>
-        </div>
-
-        <div id="panel-victory" class="draggable-panel">
-            <div class="panel-header">Victory Points <span class="close-panel">X</span></div>
-            <div class="panel-content">
-                <h4>Axis Victory Conditions:</h4>
-                <ul>
-                    <li><b>Rounds Played:</b>
-                        <ul>
-                            <li>8 rounds: 12 victory points</li>
-                            <li>9 rounds: 13 victory points</li>
-                            <li>10 rounds: 14 victory points</li>
-                        </ul>
-                    </li>
-                    <li><b>Victory Cities:</b> Each city held counts as one point.</li>
-                    <li><b>World Oil 1:</b> Axis control 4 of 10 oil territories.</li>
-                    <li><b>World Oil 2:</b> Axis control 8 of 10 oil territories.</li>
-                    <li><b>Resources:</b> Axis control 3 of 5 resource territories.</li>
-                    <li><b>Atlantic Wall:</b> Control Norway, Denmark, Normandy, Holland.</li>
-                    <li><b>South Africa:</b> Control Union of South African and South West Africa.</li>
-                    <li><b>South Asia:</b> Control Burma, Shan State, Thailand, Malaya, French Indo China.</li>
-                    <li><b>Imperial:</b> Japan earns 55 IPCs.</li>
-                    <li><b>China:</b> Control all Chinese marked territories.</li>
-                    <li><b>Africa Horn:</b> Control Sudan, Kenya, Ethiopia, British Somaliland, Italian Somaliland.</li>
-                    <li><b>Mediterranean:</b> No Allied territories in SZ 95-99, and also controlling at least three of the following: Egypt, Greece, Gibraltar, and Vichy France.</li>
-                    <li><b>Pacific Islands:</b> Control 5 originally US, Commonwealth, or UK Pacific islands.</li>
-                    <li><b>Reich:</b> Germany and Italy have a total of 70 IPCs together.</li>
-                </ul>
-            </div>
-        </div>
-
-        <div id="panel-war" class="draggable-panel">
-            <div class="panel-header">War Status <span class="close-panel">X</span></div>
-            <div class="panel-content">
-                <p>Placeholder for war status display (flags, lines, etc.).</p>
-            </div>
-        </div>
-        
-        <div id="panel-purchased" class="draggable-panel">
-            <div class="panel-header">Purchased Units <span class="close-panel">X</span></div>
-            <div class="panel-content">
-                 <p>Placeholder for a table of purchased units.</p>
-            </div>
-        </div>
-
-        <div id="panel-battle" class="draggable-panel">
-            <div class="panel-header">Battle Simulator <span class="close-panel">X</span></div>
-            <div class="panel-content">
-                <p>Placeholder for battle simulator inputs.</p>
-            </div>
-        </div>
-
-        <div id="panel-notes" class="draggable-panel">
-            <div class="panel-header">Notes <span class="close-panel">X</span></div>
-            <div class="panel-content">
-                <textarea style="width: 100%; height: 95%; box-sizing: border-box;"></textarea>
-            </div>
+    <div id="panel-notes" class="side-panel">
+        <div class="panel-header">Notes <span class="close-panel" onclick="closeSidePanel('panel-notes')">×</span></div>
+        <div class="panel-content">
+            <textarea style="width: 100%; height: 95%; box-sizing: border-box; background: rgba(0,0,0,0.2); color: #E0D8B0; border: 1px solid #8C7B6A; padding: 10px;"></textarea>
         </div>
     </div>
 
-    <div id="gameInfoPanel" class="draggable-panel">
+    <div id="gameInfoPanel" class="side-panel">
         <div class="panel-header">
             <span>STRATEGIC INFORMATION</span>
-            <span class="close-panel" onclick="togglePanel('gameInfoPanel')">×</span>
+            <span class="close-panel" onclick="closeSidePanel('gameInfoPanel')">×</span>
         </div>
         <div class="panel-content" id="game-info-content">
             <div class="info-grid">
@@ -1583,17 +1611,33 @@
                 <div id="sidebar-queue" class="status-text">Queue empty.</div>
             </div>
 
-            <h3 style="border-bottom: 1px solid #6D5C4C; padding-bottom: 5px;">Political Status</h3>
-            <div id="political-diagram" class="political-status-container">
+            <div id="dynamic-game-info-accordions">
+                
+                <div style="font-weight:bold; font-size: 18px; color: #E0D8B0; margin: 20px 0 10px 0; text-align: center; border-bottom: 1px solid #6D5C4C; padding-bottom: 5px;">🏛️ Political Situation</div>
+                <div class="political-status-container" id="political-diagram" style="padding: 0; background: transparent;">
                 </div>
+
+                <div class="no-accordion" id="victory-accordion">
+                    <div class="no-accordion-header" onclick="this.parentElement.classList.toggle('expanded')">
+                        <span style="flex:1;">🏆 Victory Conditions</span><span>▼</span>
+                    </div>
+                    <div class="no-accordion-content" id="victory-diagram" class="political-status-container">
+                    </div>
+                </div>
+
+            </div>
         </div>
     </div>
+
+    
+
+    
     <script>
         const mapContainer = document.getElementById('map-container');
 
         // --- Edge Scrolling Logic ---
-        const EDGE_SCROLL_ZONE = 50; // pixels from the edge to trigger scroll
-        const EDGE_SCROLL_SPEED = 20; // pixels per frame
+        const EDGE_SCROLL_ZONE = 30; // pixels from the edge to trigger scroll
+        const EDGE_SCROLL_SPEED = 8 // pixels per frame
         let scrollInterval = null;
 
         function startEdgeScroll(direction) {
@@ -1617,13 +1661,30 @@
         }
 
         mapContainer.addEventListener('mousemove', (e) => {
+            if ((typeof isDragging !== 'undefined' && isDragging) || (typeof isPanning !== 'undefined' && isPanning)) {
+                stopEdgeScroll();
+                return;
+            }
+
             const rect = mapContainer.getBoundingClientRect();
             let scrollDirection = '';
+            
+            let effectiveRight = rect.right;
+            const openPanel = document.querySelector('.side-panel.open');
+            if (openPanel) {
+                effectiveRight = window.innerWidth - openPanel.offsetWidth;
+            }
+
+            // The IPC bar is 43.429px tall. We set the bottom boundary to sit exactly above it.
+            const bottomBoundary = rect.bottom - 43.429; 
 
             if (e.clientY < rect.top + EDGE_SCROLL_ZONE) scrollDirection += 'up';
-            if (e.clientY > rect.bottom - EDGE_SCROLL_ZONE) scrollDirection += 'down';
+            
+            // Trigger scroll down ONLY if the mouse is above the IPC bar but within the scroll zone
+            if (e.clientY > bottomBoundary - EDGE_SCROLL_ZONE && e.clientY <= bottomBoundary) scrollDirection += 'down';
+            
             if (e.clientX < rect.left + EDGE_SCROLL_ZONE) scrollDirection += 'left';
-            if (e.clientX > rect.right - EDGE_SCROLL_ZONE) scrollDirection += 'right';
+            if (e.clientX > effectiveRight - EDGE_SCROLL_ZONE && e.clientX < effectiveRight) scrollDirection += 'right';
 
             if (scrollDirection) {
                 startEdgeScroll(scrollDirection);
@@ -1691,6 +1752,7 @@
 
         const LAND_UNIT_SIZE = 30; // SVG units for land unit image width/height
         const NEUTRAL_LAND_UNIT_SIZE = 45; // Larger size for neutral units
+        const STRATEGIC_BOMBER_SIZE = 42;
 
         const FACILITY_UNIT_TYPES = ["Major Industrial Complex", "Minor Industrial Complex", "Air Base", "Naval Base"];
         const AXIS_POWERS = new Set(['Germany', 'Italy', 'Japan']);
@@ -1778,11 +1840,13 @@
         let placedUnitsData = [];
 
         let territoriesByCountry = {};
+        let originalTerritoriesByCountry = {}
 
         // --- New Global Variables for Sticky Bar ---
         const gameStartDate = new Date('1940-05-10T00:00:00'); // May 10, 1940
         let gameStartTime = Date.now(); // Record when the game (page) started
         let currentRound = 1;
+        let targetGameRounds = 8;
         let currentTurnPowerIndex = 0; // 0 for Germany, 1 for Japan, etc.
         let currentPhaseIndex = 0; // 0 for Technology Research, 1 for Purchase...
 
@@ -1882,7 +1946,9 @@
         function startGame() {
             const power = document.getElementById('powerSelect').value;
             const year = document.getElementById('yearSelect').value;
-            
+            targetGameRounds = parseInt(document.getElementById('roundsSelect').value, 10);
+
+
             // 1. Hide Overlay
             document.getElementById('start-screen-overlay').style.display = 'none';
             
@@ -1895,12 +1961,12 @@
         const NATIONAL_OBJECTIVES_DATA = {
             'Germany': [
                 { title: "Neutrality Bonus", text: "+5 IPCs if Europe Axis are not at war with the Soviet Union.", territories: [] },
-                { title: "Eastern Front", text: "+5 IPCs for each territory held: Leningrad, Stalingrad, or Moscow.", territories: ["Russia City of Leningrad", "Russia City of Stalingrad", "Russia City of Moscow"] },
+                { title: "Eastern Front", text: "+5 IPCs for each territory held: Leningrad, Stalingrad, or Moscow.", territories: ["Russia City of Leningrad", "Russia City of Stalingrad", "Russia City of Moscow"], displayMode: 'context' },
                 { title: "Middle East Oil", text: "+2 IPCs for each territory held: Iraq, Iran, Northwest Iran, or Caucasus.", territories: ["Iraq", "Iran", "Northwest Iran", "Caucasus"] },
                 { title: "British Conquest", text: "+5 IPCs if Germany controls London.", territories: ["United Kingdom"] },
                 { title: "African Presence", text: "+3 IPCs if at least one German land unit is in Egypt or El Alamein.", territories: ["Egypt", "Egypt City of El Alamein"] },
                 { title: "Scandinavia", text: "+5 IPCs if Germany controls Denmark and Norway while Sweden is not Allied-controlled.", territories: ["Denmark", "Norway", "Sweden"] },
-                { title: "U-Boat Menace", text: "+5 IPCs if Germany has at least 5 submarines on the map.", territories: [] },
+                { title: "U-Boat Menace", text: "+5 IPCs if Germany has at least 5 submarines on the map.", territories: "SPECIAL_U_BOAT" },
                 { title: "French Puppet", text: "+2 IPCs if Germany has an armistice with France.", territories: ["France"] },
                 { title: "Italian Assistance", text: "+2 IPCs for each originally Italian territory Germany controls.", territories: [] }
             ],
@@ -1913,16 +1979,16 @@
                 { title: "Capture of Calcutta", text: "+10 IPCs (One-time payment).", territories: ["India"] }
             ],
             'Italy': [
-                { title: "Roman Empire", text: "+5 IPCs if Italy owns 3: Gibraltar, Vichy France, Greece, Egypt.", territories: ["Gibraltar", "France City of Vichy", "Greece", "Egypt"] },
+                { title: "Roman Empire", text: "+5 IPCs if Italy owns 3: Gibraltar, Vichy France, Greece, Egypt.", territories: ["Gibraltar", "France City of Vichy", "Greece", "Egypt"], displayMode: 'grid' },
                 { title: "Mare Nostrum", text: "+5 IPCs if no Allied warships in the Mediterranean.", territories: ["92", "93", "94", "95", "96", "97", "98", "99"], specialRule: "Mediterranean" },
                 { title: "North African Empire", text: "+5 IPCs if Italy controls all of North Africa.", territories: ["Moroco City of Casablanca", "Spanish Morocco", "Morocco", "Algeria", "Tunisia", "Italian Libya", "Italian Lybia City of Tobruk"] },
                 { title: "Oil Control", text: "+2 IPCs per territory: Iraq, Iran, Northwest Iran.", territories: ["Iraq", "Iran", "Northwest Iran"] },
-                { title: "Strategic Outposts", text: "+1 IPC per territory: Kenya, Sudan, British Somaliland, Cyprus, El Alamein, Gibraltar.", territories: ["Kenya", "Sudan", "British Somaliland", "Cyprus", "Egypt City of El Alamein", "Gibraltar"], displayMode: 'grid' },
+                { title: "Strategic Outposts", text: "+1 IPC per territory: Kenya, Sudan, British Somaliland, Cyprus, El Alamein, Gibraltar.", territories: ["Kenya", "Sudan", "British Somaliland", "Cyprus", "Egypt City of El Alamein", "Gibraltar"], displayMode: 'context' },
                 { title: "Home Defense", text: "+5 IPCs if Italy controls all its original territories.", territories: [] }
             ],
             'USSR': [
-                { title: "Core Defense", text: "+3 IPCs if controlling Siberia, Urals, and Ukraine.", territories: ["Siberia", "Urals", "Ukraine"] },
-                { title: "Lend-Lease/Buffer", text: "+5 IPCs if controlling 3: Leningrad, Stalingrad, Eastern Poland, Baltic States.", territories: ["Russia City of Leningrad", "Russia City of Stalingrad", "Eastern Poland", "Baltic States"] },
+                { title: "Core Defense", text: "+3 IPCs if controlling Siberia, Urals, and Ukraine.", territories: ["Siberia", "Urals", "Ukraine"], displayMode: 'context' },
+                { title: "Lend-Lease/Buffer", text: "+5 IPCs if controlling 3: Leningrad, Stalingrad, Eastern Poland, Baltic States.", territories: ["Russia City of Leningrad", "Russia City of Stalingrad", "Eastern Poland", "Baltic States"], displayMode: 'context' },
                 { title: "Liberation", text: "+2 IPCs for each originally German, Italian, or Pro-Axis territory controlled.", territories: [] },
                 { title: "Manchuria", text: "+7 IPCs if Soviet Union liberates Manchuria.", territories: ["Manchuria"] }
             ],
@@ -2008,6 +2074,130 @@
             return miniSvg;
         }
 
+        function generateContextMiniMap(targetTerritories) {
+            if (!targetTerritories || targetTerritories.length === 0) return null;
+            
+            const svgNS = 'http://www.w3.org/2000/svg';
+            const miniSvg = document.createElementNS(svgNS, 'svg');
+            const group = document.createElementNS(svgNS, 'g');
+            const mainSvg = document.querySelector('.svg-content');
+            if (!mainSvg) return null;
+
+            let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+            const targetElements = [];
+
+            // 1. Find bounding box of ONLY the target territories
+            targetTerritories.forEach(terrName => {
+                const elements = mainSvg.querySelectorAll(`[data-name="${terrName}"]`);
+                elements.forEach(el => {
+                    if (el.tagName.toLowerCase() === 'text' || el.tagName.toLowerCase() === 'tspan') return;
+                    targetElements.push(el);
+                    const bbox = el.getBBox();
+                    minX = Math.min(minX, bbox.x);
+                    minY = Math.min(minY, bbox.y);
+                    maxX = Math.max(maxX, bbox.x + bbox.width);
+                    maxY = Math.max(maxY, bbox.y + bbox.height);
+                });
+            });
+
+            if (minX === Infinity) return null;
+
+            // 2. Expand bounding box by 50px for our "context" border
+            const pad = 80;
+            const contextMinX = minX - pad;
+            const contextMinY = minY - pad;
+            const contextMaxX = maxX + pad;
+            const contextMaxY = maxY + pad;
+
+            // 3. Fast Spatial Filtering: Grab all paths and check if their BBox intersects our context box
+            const allPaths = mainSvg.querySelectorAll('polygon[data-name], path[data-name]');
+            allPaths.forEach(el => {
+                if (el.tagName.toLowerCase() === 'text' || el.tagName.toLowerCase() === 'tspan') return;
+                if (targetTerritories.includes(el.getAttribute('data-name'))) return; // Skip targets
+
+                const bbox = el.getBBox();
+                // AABB Collision Detection (Super fast math)
+                const intersects = !(bbox.x > contextMaxX || 
+                                     bbox.x + bbox.width < contextMinX || 
+                                     bbox.y > contextMaxY || 
+                                     bbox.y + bbox.height < contextMinY);
+
+                if (intersects) {
+                    const clone = el.cloneNode(true);
+                    clone.removeAttribute('class');
+                    clone.style.stroke = 'rgba(255, 255, 255, 0.4)'; // Brighter border
+                    clone.style.strokeWidth = '1px'; // Thicker border
+                    clone.style.fill = 'rgba(100, 100, 100, 0.5)'; // Lighter fill for context contrast
+                    group.appendChild(clone);
+                }
+            });
+
+            // 4. Append target elements on top so they pop
+            targetElements.forEach(el => {
+                const clone = el.cloneNode(true);
+                clone.removeAttribute('class');
+                clone.style.stroke = '#ffffff';
+                clone.style.strokeWidth = '1.5px';
+                const currentPower = el.getAttribute('data-power');
+                clone.style.fill = powerColors[currentPower] || '#555';
+                group.appendChild(clone);
+            });
+
+            miniSvg.setAttribute('viewBox', `${contextMinX} ${contextMinY} ${contextMaxX - contextMinX} ${contextMaxY - contextMinY}`);
+            miniSvg.appendChild(group);
+            return miniSvg;
+        }
+
+        function renderNeutralList() {
+            const container = document.getElementById('neutral-list');
+            if (!container) return;
+            container.innerHTML = ''; // Clear existing content
+
+            const categories = [
+                { key: 'Pro-Axis Neutral', label: 'Pro-Axis Neutral', theme: 'pro-axis-theme' },
+                { key: 'Neutral', label: 'Strict Neutral', theme: 'strict-neutral-theme' },
+                { key: 'Pro-Allies Neutral', label: 'Pro-Allies Neutral', theme: 'pro-allies-theme' }
+            ];
+
+            categories.forEach(cat => {
+                // Create Category Header
+                const header = document.createElement('div');
+                header.className = `neutral-group-title ${cat.theme}`;
+                header.textContent = cat.label;
+                container.appendChild(header);
+
+                // Populate Items
+                const items = neutralPowersData[cat.key];
+                items.forEach(item => {
+                    if (typeof item === 'string') {
+                        const div = document.createElement('div');
+                        div.className = `neutral-item ${cat.theme}`;
+                        div.textContent = item;
+                        container.appendChild(div);
+                    } else {
+                        // Handle nested countries (e.g., Spain, Netherlands)
+                        for (const [countryName, territories] of Object.entries(item)) {
+                            const countryDiv = document.createElement('div');
+                            countryDiv.className = `neutral-item ${cat.theme}`;
+                            countryDiv.style.fontWeight = 'bold';
+                            countryDiv.textContent = countryName;
+                            container.appendChild(countryDiv);
+
+                            territories.forEach(t => {
+                                const tDiv = document.createElement('div');
+                                tDiv.className = `neutral-item neutral-sub-item ${cat.theme}`;
+                                tDiv.textContent = t;
+                                container.appendChild(tDiv);
+                            });
+                        }
+                    }
+                });
+            });
+        }
+
+        // Call this function when the page loads
+        renderNeutralList();
+
         // Updated layout logic for proper positioning and fixed flags
         function updateSidebarInfo(selectedPower, year) {
             document.getElementById('sidebar-ipc').textContent = totalIpcsByPower[selectedPower] || 0;
@@ -2019,13 +2209,21 @@
                 const noData = NATIONAL_OBJECTIVES_DATA[p];
                 if (!noData) return;
 
-                const accordion = document.createElement('div');
-                accordion.className = 'no-accordion';
+                // Create an accordion for each power
+                const section = document.createElement('div');
+                section.className = 'no-accordion'; // Start closed by default
+                section.style.marginBottom = '0px'; // Removed bottom margin for a flush look
+                section.style.borderLeft = 'none';
+                section.style.borderRight = 'none';
+                section.style.borderRadius = '0';
+
                 const header = document.createElement('div');
                 header.className = 'no-accordion-header';
-                
-                header.innerHTML = `<div class="power-flag" style="background-image: url('flags/${p}.png'); width: 30px; height: 20px; background-size: cover; background-position: center; border: 1px solid #222;"></div><span style="flex:1;">${p}</span><span>▼</span>`;
-                header.onclick = () => accordion.classList.toggle('expanded');
+                header.onclick = (e) => {
+                    e.stopPropagation(); // Stop click from bubbling up
+                    section.classList.toggle('expanded');
+                };
+                header.innerHTML = `<div class="power-flag" style="background-image: url('flags/${p}.png'); width: 30px; height: 20px; background-size: cover; background-position: center; border: 1px solid #222; margin-right: 10px;"></div><span style="flex:1;">${p}</span><span>▼</span>`;
 
                 const content = document.createElement('div');
                 content.className = 'no-accordion-content';
@@ -2085,6 +2283,21 @@
                             item.appendChild(svgContainer);
                         }
                     }
+                    // CONTEXT MINI MAP MODE
+                    else if (obj.displayMode === 'context') {
+                        item.style.flexDirection = 'column';
+                        item.style.alignItems = 'flex-start';
+                        item.appendChild(textDiv);
+
+                        const miniMap = generateContextMiniMap(obj.territories);
+                        if (miniMap) {
+                            const svgContainer = document.createElement('div');
+                            svgContainer.className = 'no-svg-fullwidth';
+                            svgContainer.style.marginTop = '10px';
+                            svgContainer.appendChild(miniMap);
+                            item.appendChild(svgContainer);
+                        }
+                    }
                     // GRID MODE: Multiple icons or Dynamic territories
                     else if (obj.displayMode === 'grid' || obj.territories === "DYNAMIC_ITALY" || obj.territories === "DYNAMIC_US_CORE" || obj.territories === "DYNAMIC_CW_OFFENSE") {
                         item.style.flexDirection = 'column';
@@ -2106,15 +2319,15 @@
                             });
                         }
                         if (obj.territories === "DYNAMIC_CW_OFFENSE") {
-                            // Map original powers based on setupData
+                            // Map original powers based on our new originalTerritoriesByCountry variable
                             let originalPowers = {};
-                            if (window.setupData) {
-                                window.setupData.forEach(pow => {
-                                    pow.territories.forEach(terr => originalPowers[terr.name] = pow.name);
-                                });
+                            for (const [power, territories] of Object.entries(originalTerritoriesByCountry)) {
+                                territories.forEach(terr => { originalPowers[terr] = power; });
                             }
+                            
                             list = Object.keys(originalPowers).filter(t => {
                                 const orig = originalPowers[t];
+                                // Note: adjust 'Pro-Axis Neutral' to exactly match your keys if different
                                 const isAxisOrig = ['Germany', 'Italy', 'Japan', 'Pro-Axis Neutral'].includes(orig);
                                 const currentPath = document.querySelector(`[data-name="${t}"]`);
                                 return isAxisOrig && currentPath && currentPath.getAttribute('data-power') === 'Commonwealth';
@@ -2149,7 +2362,9 @@
                         if (miniMap) {
                             const svgContainer = document.createElement('div');
                             svgContainer.className = 'no-svg-container';
-                            svgContainer.style.marginRight = '15px'; 
+                            svgContainer.style.marginRight = '20px'; // Increased margin
+                            svgContainer.style.width = '120px'; // Larger map
+                            svgContainer.style.height = '120px'; // Larger map
                             svgContainer.appendChild(miniMap);
                             item.appendChild(svgContainer); 
                         }
@@ -2158,10 +2373,21 @@
                     content.appendChild(item);
                 });
 
-                accordion.appendChild(header);
-                accordion.appendChild(content);
-                diagram.appendChild(accordion);
+                section.appendChild(header);
+                section.appendChild(content);
+                diagram.appendChild(section);
             });
+
+            
+            // Insert a clear divider before the Global Information section
+            const globalDivider = document.createElement('div');
+            globalDivider.style.cssText = 'height: 1px; background: #8C7B6A; margin: 30px 10px 15px; opacity: 0.6;';
+            diagram.appendChild(globalDivider);
+
+            const globalHeader = document.createElement('div');
+            globalHeader.style.cssText = 'text-align: center; font-size: 13px; font-weight: bold; margin-bottom: 12px; color: #E0D8B0; text-transform: uppercase; letter-spacing: 2px; opacity: 0.8;';
+            globalHeader.textContent = "Global Statistics";
+            diagram.appendChild(globalHeader);
 
             // --- APPEND GLOBAL ALLIANCES & NEUTRALS DROPDOWN ---
             const relationsAccordion = document.createElement('div');
@@ -2176,33 +2402,106 @@
             relContent.style.textAlign = 'center';
 
             relContent.innerHTML += `
-                <div class="alliance-visual">
-                    <div class="alliance-side axis-side">
-                        <h4>Axis</h4>
-                        <div class="alliance-flags">
-                            <img src="flags/Germany.png"><img src="flags/Japan.png"><img src="flags/Italy.png">
-                        </div>
-                    </div>
-                    <div class="alliance-vs">⚔️</div>
-                    <div class="alliance-side allied-side">
-                        <h4>Allies</h4>
-                        <div class="alliance-flags">
-                            <img src="flags/US.png"><img src="flags/UK.png"><img src="flags/USSR.png">
-                            <br><img src="flags/China.png"><img src="flags/France.png"><img src="flags/Commonwealth.png">
+                <div class="diplomacy-diagram-container" style="margin-bottom: 10px;">
+                    <svg viewBox="0 0 300 250" width="100%" height="100%" style="background: rgba(0,0,0,0.2); border-radius: 5px; border: 1px solid #555;">
+                        <defs>
+                            <marker id="arrow-red" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto-start-reverse">
+                                <polygon points="0,0 6,3 0,6" fill="#ff4444" />
+                            </marker>
+                            <marker id="arrow-yellow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto-start-reverse">
+                                <polygon points="0,0 6,3 0,6" fill="#ffcc00" />
+                            </marker>
+                            <marker id="arrow-blue" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto-start-reverse">
+                                <polygon points="0,0 6,3 0,6" fill="#33CFFF" />
+                            </marker>
+                        </defs>
+                        
+                        <g transform="translate(15, 20)">
+                            <rect width="40" height="50" fill="rgba(255,255,255,0.05)" stroke="#555" rx="3"/>
+                            <image href="flags/Germany.png" x="5" y="5" width="30" height="18"/>
+                            <image href="flags/Italy.png" x="5" y="27" width="30" height="18"/>
+                        </g>
+                        <g transform="translate(15, 140)">
+                            <rect width="40" height="30" fill="rgba(255,255,255,0.05)" stroke="#555" rx="3"/>
+                            <image href="flags/Japan.png" x="5" y="6" width="30" height="18"/>
+                        </g>
+                        <g transform="translate(245, 10)">
+                            <rect width="40" height="70" fill="rgba(255,255,255,0.05)" stroke="#555" rx="3"/>
+                            <image href="flags/UK.png" x="5" y="5" width="30" height="16"/>
+                            <image href="flags/Commonwealth.png" x="5" y="25" width="30" height="16"/>
+                            <image href="flags/France.png" x="5" y="45" width="30" height="16"/>
+                        </g>
+                        <g transform="translate(245, 95)">
+                            <rect width="40" height="30" fill="rgba(255,255,255,0.05)" stroke="#555" rx="3"/>
+                            <image href="flags/USSR.png" x="5" y="6" width="30" height="18"/>
+                        </g>
+                        <g transform="translate(245, 140)">
+                            <rect width="40" height="30" fill="rgba(255,255,255,0.05)" stroke="#555" rx="3"/>
+                            <image href="flags/US.png" x="5" y="6" width="30" height="18"/>
+                        </g>
+                        <g transform="translate(245, 195)">
+                            <rect width="40" height="30" fill="rgba(255,255,255,0.05)" stroke="#555" rx="3"/>
+                            <image href="flags/China.png" x="5" y="6" width="30" height="18"/>
+                        </g>
+
+                        <g>
+                            <line x1="55" y1="45" x2="245" y2="45" stroke="transparent" stroke-width="20" class="diplomacy-hitbox" data-title="Germany &amp; Italy begin at war with France, UK, and Commonwealth." style="cursor: pointer;" />
+                            <line x1="55" y1="45" x2="245" y2="45" stroke="#ff4444" stroke-width="2" marker-end="url(#arrow-red)" marker-start="url(#arrow-red)" pointer-events="none" />
+                            
+                            <line x1="55" y1="165" x2="245" y2="210" stroke="transparent" stroke-width="20" class="diplomacy-hitbox" data-title="Japan begins at war with China. China cannot declare war on anyone unless attacked." style="cursor: pointer;" />
+                            <line x1="55" y1="165" x2="245" y2="210" stroke="#ff4444" stroke-width="2" marker-end="url(#arrow-red)" marker-start="url(#arrow-red)" pointer-events="none" />
+
+                            <line x1="55" y1="145" x2="245" y2="70" stroke="transparent" stroke-width="20" class="diplomacy-hitbox" data-title="Japan can declare war on UK/CW/France anytime, and vice versa. Declaring on UK acts as war against CW, and vice versa." style="cursor: pointer;" />
+                            <line x1="55" y1="145" x2="245" y2="70" stroke="#ffcc00" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#arrow-yellow)" marker-start="url(#arrow-yellow)" pointer-events="none" />
+
+                            <line x1="55" y1="155" x2="245" y2="110" stroke="transparent" stroke-width="20" class="diplomacy-hitbox" data-title="Japan and USSR can declare war on each other anytime." style="cursor: pointer;" />
+                            <line x1="55" y1="155" x2="245" y2="110" stroke="#ffcc00" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#arrow-yellow)" marker-start="url(#arrow-yellow)" pointer-events="none" />
+
+                            <path d="M 55 158 Q 150 140 245 152" fill="none" stroke="transparent" stroke-width="20" class="diplomacy-hitbox" data-title="Japan can declare war on the US anytime." style="cursor: pointer;" />
+                            <path d="M 55 158 Q 150 140 245 152" fill="none" stroke="#ffcc00" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#arrow-yellow)" pointer-events="none" />
+
+                            <path d="M 245 158 Q 150 175 55 162" fill="none" stroke="transparent" stroke-width="20" class="diplomacy-hitbox" data-title="US cannot declare war until Turn 4, unless London or a specific North American territory is captured." style="cursor: pointer;" />
+                            <path d="M 245 158 Q 150 175 55 162" fill="none" stroke="#33CFFF" stroke-width="1.5" stroke-dasharray="2,2" marker-end="url(#arrow-blue)" pointer-events="none" />
+
+                            <path d="M 55 55 Q 150 70 245 105" fill="none" stroke="transparent" stroke-width="20" class="diplomacy-hitbox" data-title="Germany/Italy can declare war on USSR anytime." style="cursor: pointer;" />
+                            <path d="M 55 55 Q 150 70 245 105" fill="none" stroke="#ffcc00" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#arrow-yellow)" pointer-events="none" />
+                            
+                            <path d="M 245 115 Q 150 90 55 65" fill="none" stroke="transparent" stroke-width="20" class="diplomacy-hitbox" data-title="USSR cannot declare war on European Axis until Turn 4, unless attacked, London falls, Axis takes Madrid, or 10+ Axis units on East Front." style="cursor: pointer;" />
+                            <path d="M 245 115 Q 150 90 55 65" fill="none" stroke="#33CFFF" stroke-width="1.5" stroke-dasharray="2,2" marker-end="url(#arrow-blue)" pointer-events="none" />
+
+                            <path d="M 55 60 Q 130 110 245 145" fill="none" stroke="transparent" stroke-width="20" class="diplomacy-hitbox" data-title="Germany/Italy can declare war on US anytime." style="cursor: pointer;" />
+                            <path d="M 55 60 Q 130 110 245 145" fill="none" stroke="#ffcc00" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#arrow-yellow)" pointer-events="none" />
+                            
+                            <path d="M 245 165 Q 150 130 55 70" fill="none" stroke="transparent" stroke-width="20" class="diplomacy-hitbox" data-title="US cannot declare war until Turn 4, unless London or a specific North American territory is captured." style="cursor: pointer;" />
+                            <path d="M 245 165 Q 150 130 55 70" fill="none" stroke="#33CFFF" stroke-width="1.5" stroke-dasharray="2,2" marker-end="url(#arrow-blue)" pointer-events="none" />
+                        </g>
+                    </svg>
+                    
+                    <div style="font-size: 11px; text-align: left; padding: 8px; background: rgba(0,0,0,0.3); margin-top: 5px; border-radius: 4px; border: 1px dashed #555;">
+                        <div style="margin-bottom: 3px;"><span style="color:#ff4444; font-weight:bold; font-size: 14px; vertical-align: middle;">━━━</span> At War</div>
+                        <div style="margin-bottom: 3px;"><span style="color:#ffcc00; font-weight:bold; font-size: 14px; vertical-align: middle;">- - -</span> Can Declare War Anytime</div>
+                        <div><span style="color:#33CFFF; font-weight:bold; font-size: 14px; vertical-align: middle;">· · ·</span> Conditional War (Turn 4+)</div>
+                        <div style="margin-top: 5px; text-align: center; color: #aaa; font-style: italic;">Hover over any line for specific rules.</div>
+                        <div id="diplomacy-note-display" style="margin-top: 8px; min-height: 40px; text-align: center; color: #E0D8B0; font-weight: bold; background: rgba(0,0,0,0.5); padding: 5px; border-radius: 4px; border: 1px solid #8C7B6A; font-size: 12px; display: flex; align-items: center; justify-content: center;">
+                            Select a relationship line above to view details.
                         </div>
                     </div>
                 </div>
+
                 <h4 style="margin-top: 15px; border-bottom: 1px solid #555; padding-bottom: 5px;">Neutral Powers Status</h4>
                 <div class="neutral-columns">
                     <div class="neutral-col" id="neutrals-axis"><h5>Axis Taken</h5></div>
-                    <div class="neutral-col" id="neutrals-strict"><h5>Strict Neutral</h5></div>
+                    <div class="neutral-col" id="neutrals-strict"><h5>Neutral</h5></div>
                     <div class="neutral-col" id="neutrals-allied"><h5>Allied Taken</h5></div>
                 </div>
             `;
 
             relationsAccordion.appendChild(relHeader);
             relationsAccordion.appendChild(relContent);
-            diagram.appendChild(relationsAccordion);
+            // Append as a top-level accordion next to the others, rather than inside Political Situation
+            const accordionsContainer = document.getElementById('dynamic-game-info-accordions');
+            const victoryAccordion = document.getElementById('victory-accordion');
+            accordionsContainer.insertBefore(relationsAccordion, victoryAccordion);
 
             // Populate neutral countries dynamically
             const axisCol = relContent.querySelector('#neutrals-axis');
@@ -2234,6 +2533,39 @@
                 else if (isAllied) alliedCol.appendChild(flagDiv);
                 else strictCol.appendChild(flagDiv);
             }
+
+            // HOVER LISTENERS FOR DIPLOMACY ARROWS
+            let lockedTooltip = false;
+            const diplomacyHitboxes = relContent.querySelectorAll('.diplomacy-hitbox');
+            const noteDisplay = relContent.querySelector('#diplomacy-note-display');
+            diplomacyHitboxes.forEach(hitbox => {
+                hitbox.addEventListener('mouseenter', () => {
+                    if (!lockedTooltip) {
+                        noteDisplay.textContent = hitbox.getAttribute('data-title');
+                        hitbox.nextElementSibling.style.filter = 'drop-shadow(0px 0px 5px rgba(255,255,255,0.8))';
+                    }
+                });
+                hitbox.addEventListener('mouseleave', () => {
+                    if (!lockedTooltip) {
+                        noteDisplay.textContent = 'Select a relationship line above to view details.';
+                        hitbox.nextElementSibling.style.filter = '';
+                    }
+                });
+                hitbox.addEventListener('click', () => {
+                    lockedTooltip = !lockedTooltip;
+                    if (lockedTooltip) {
+                        noteDisplay.textContent = hitbox.getAttribute('data-title') + " (Locked)";
+                        noteDisplay.style.border = '1px solid #FFD700'; // Highlight locking
+                        diplomacyHitboxes.forEach(h => h.nextElementSibling.style.filter = ''); // Reset others
+                        hitbox.nextElementSibling.style.filter = 'drop-shadow(0px 0px 5px rgba(255,255,255,1))';
+                    } else {
+                        noteDisplay.textContent = hitbox.getAttribute('data-title');
+                        noteDisplay.style.border = '1px solid #8C7B6A';
+                    }
+                });
+            });
+
+            updateVictoryConditions();
         }
 
 
@@ -2248,6 +2580,256 @@
 
         // Initial Call to set up power list
         updatePowerOptions();
+
+        /**
+         * Calculates current BBR Axis Victory Points based on the board state.
+         */
+        function calculateBBRVictory() {
+            // Helper to check territory control directly from the SVG elements
+            const getTerritoryPower = (terrName) => {
+                const path = document.querySelector(`.svg-content [data-name="${terrName}"]`);
+                return path ? path.getAttribute('data-power') : null;
+            };
+            const isAxis = (t) => { const p = getTerritoryPower(t); return p && AXIS_POWERS.has(p); };
+            const isAllied = (t) => { const p = getTerritoryPower(t); return p && ALLIED_POWERS.has(p); };
+
+            let points = 0;
+            let metObjectives = {};
+
+            // 1. Victory Cities (20 Possible)
+            const vcs = ["Japan", "Poland", "Brazil", "Kiangsu", "Southern Italy", "Western United States", "France", "Kwangtung", "Egypt", "Eastern Canada", "Alaska", "United Kingdom", "Germany", "New South Wales", "Philippines", "Russia City of Stalingrad", "India", "Russia City of Leningrad", "Hawaiian Islands", "Russia City of Moscow"];
+            let axisCities = vcs.filter(isAxis);
+            let alliedCities = vcs.filter(isAllied);
+            points += axisCities.length;
+            metObjectives['Cities'] = { count: axisCities.length, list: axisCities };
+
+            // 2. World Oil 1 & 2
+            const oils = ["Romania", "Caucasus", "Iraq", "Iran", "Saudi Arabia", "Sumatra", "Java", "Celebes", "Dutch New Guinea", "Borneo"];
+            let axisOils = oils.filter(isAxis).length;
+            if (axisOils >= 4) { points++; metObjectives['World Oil 1'] = true; }
+            if (axisOils >= 8) { points++; metObjectives['World Oil 2'] = true; }
+
+            // 3. Atlantic Wall (5 ground units in Norway, Denmark, Normandy Bordeaux, Holland Belgium)
+            const wallTerrs = ["Norway", "Denmark", "Normandy Bordeaux", "Holland Belgium"];
+            let wallMet = true;
+            for (const t of wallTerrs) {
+                // Count INF, ART, MECH, TANK, AAA (excluding sea, air, and facilities)
+                const groundUnits = placedUnitsData.filter(u => u.placedIn === t && AXIS_POWERS.has(u.power) && !SEA_UNIT_TYPES.includes(u.unitType) && !airUnitTypes.includes(u.unitType) && !FACILITY_UNIT_TYPES.includes(u.unitType))
+                    .reduce((sum, u) => sum + parseInt(u.count), 0);
+                if (groundUnits < 5) { wallMet = false; break; }
+            }
+            if (wallMet) { points++; metObjectives['Atlantic Wall'] = true; }
+
+            // 4. South Africa
+            if (isAxis("Union of South Africa") && isAxis("South West Africa")) { points++; metObjectives['South Africa'] = true; }
+
+            // 5. Resources
+            const resources = ["Siberia", "Urals", "Ukraine", "Manchuria", "Caucasus"];
+            if (resources.filter(isAxis).length >= 3) { points++; metObjectives['Resources'] = true; }
+
+            // 6. South Asia
+            const sAsia = ["Burma", "Shan State", "Thailand", "Malaya", "French Indo China"];
+            if (sAsia.every(isAxis)) { points++; metObjectives['South Asia'] = true; }
+
+            // 7. Imperial (Using the tracked IPCs)
+            if ((totalIpcsByPower['Japan'] || 0) >= 55) { points++; metObjectives['Imperial'] = true; }
+
+            // 8. China
+            const chinaTerrs = ["Suiyuan", "Chahar", "Jehol", "Manchuria", "Shantung", "Kiangsu", "Kiangsi", "Hopeh", "Kweichow", "Shensi", "Szechwan", "Hupeh", "Anhwei", "Yunnan", "Hunan", "Kwangsi", "Kwangtung", "Kansu", "Tsinghai", "Sikang"];
+            if (chinaTerrs.every(isAxis)) { points++; metObjectives['China'] = true; }
+
+            // 9. Africa Horn
+            const horn = ["Anglo-Egyptian Sudan", "Kenya", "Ethiopia", "British Somaliland", "Italian Somaliland"];
+            if (horn.every(isAxis)) { points++; metObjectives['Africa Horn'] = true; }
+
+            // 10. Mediterranean
+            const medAlliedExclusion = ["Malta", "Cyprus", "Crete", "Sardinia", "Sicily"];
+            const medAxisInclusion = ["Egypt", "Greece", "France City of Vichy", "Gibraltar"];
+            const noAlliedInMed = medAlliedExclusion.every(t => !isAllied(t));
+            const axisMedCount = medAxisInclusion.filter(isAxis).length;
+            if (noAlliedInMed && axisMedCount >= 3) { points++; metObjectives['Mediterranean'] = true; }
+
+            // 11. Pacific Islands
+            const pacIslands = ["Guam", "Wake Island", "Midway", "Gilbert Islands", "Line Islands", "Johnston Island", "Aleutian Islands", "Hawaiian Islands", "Borneo", "Philippines", "Samoa", "New Britain", "Solomon Islands", "Fiji"];
+            if (pacIslands.filter(isAxis).length >= 5) { points++; metObjectives['Pacific Islands'] = true; }
+
+            // 12. Reich
+            if ((totalIpcsByPower['Germany'] || 0) + (totalIpcsByPower['Italy'] || 0) >= 70) { points++; metObjectives['Reich'] = true; }
+
+            return { points, metObjectives, axisCities, alliedCities };
+        }
+
+        /**
+         * Renders the visual HTML block for Victory Conditions in the sidebar.
+         */
+        function updateVictoryConditions() {
+            const container = document.getElementById('victory-diagram');
+            if (!container) return;
+            container.innerHTML = '';
+
+            const { points, metObjectives, axisCities, alliedCities } = calculateBBRVictory();
+            
+            // Assume an 8 round game for baseline, can be made dynamic later
+            const pointsNeeded = { 8: 12, 9: 13, 10: 14 }[targetGameRounds] || 12;
+            const maxPoints = 32;
+
+            const progressPct = Math.min((points / pointsNeeded) * 100, 100);
+
+            // Create Rules Intro and Progress Bar
+            let html = `
+                <div style="font-size: 11px; line-height: 1.4; color: #f0ead2; margin-bottom: 10px;">
+                    <b>WINNING THE WAR (BBR):</b> The game is played to a specific round. The Axis must acquire a set amount of points (12 points for an 8 round game). These must be Axis controlled at the end of the final game round. Alternatively, taking Washington (Axis) or Berlin/Tokyo (Allies) immediately wins the game.
+                </div>
+                
+                <div class="victory-progress-container">
+                    <div class="victory-progress-bar" style="width: ${progressPct}%;"></div>
+                    <div class="victory-progress-text">${points} / ${pointsNeeded} Points Needed</div>
+                </div>
+                <div style="font-size: 10px; text-align: center; color: #aaa; margin-bottom: 15px;">Max Possible Points: ${maxPoints}</div>
+            `;
+            container.innerHTML = html;
+
+            // Definition of all visual objectives
+            const objectivesList = [
+                { title: `Victory Cities (Axis: ${axisCities.length}/20 | Allies: ${alliedCities.length}/20)`, text: "Each Axis-held city counts as 1 point.", territories: [], key: 'Cities' },
+                { title: "World Oil 1", text: "Axis control 4 of 10 oil territories.", territories: ["Romania", "Caucasus", "Iraq", "Iran", "Saudi Arabia", "Sumatra", "Java", "Celebes", "Dutch New Guinea", "Borneo"], key: 'World Oil 1' },
+                { title: "World Oil 2", text: "Axis control 8 of 10 oil territories.", territories: ["Romania", "Caucasus", "Iraq", "Iran", "Saudi Arabia", "Sumatra", "Java", "Celebes", "Dutch New Guinea", "Borneo"], key: 'World Oil 2' },
+                { title: "Atlantic Wall", text: "5 ground units in each territory: Norway, Denmark, Normandy, and Holland.", territories: ["Norway", "Denmark", "Normandy Bordeaux", "Holland Belgium"], key: 'Atlantic Wall' },
+                { title: "South Africa", text: "Axis control Union of S. Africa + SW Africa.", territories: ["Union of South Africa", "South West Africa"], key: 'South Africa' },
+                { title: "Resources", text: "Axis control 3 of 5 resource territories.", territories: ["Siberia", "Urals", "Ukraine", "Manchuria", "Caucasus"], key: 'Resources' },
+                { title: "South Asia", text: "Burma + Shan State + Thailand + Malaya + FIC.", territories: ["Burma", "Shan State", "Thailand", "Malaya", "French Indo China"], key: 'South Asia' },
+                { title: "Imperial", text: "Japan has 55 on income tracker.", territories: [], key: 'Imperial' },
+                { title: "China", text: "Control all Chinese marked territories.", territories: "ALL_CHINA", key: 'China' },
+                { title: "Africa Horn", text: "Sudan + Kenya + Ethiopia + British Somaliland + Italian Somaliland.", territories: ["Anglo-Egyptian Sudan", "Kenya", "Ethiopia", "British Somaliland", "Italian Somaliland"], key: 'Africa Horn' },
+                { title: "Mediterranean", text: "No Allied Territories in SZ 95-99 (Malta, Cyprus, Crete, Sardinia, Sicily). Also control at least 3 of: Egypt, Greece, Gibraltar, and Vichy France.", territories: ["Malta", "Cyprus", "Crete", "Sardinia", "Sicily", "Egypt", "Greece", "France City of Vichy", "Gibraltar"], key: 'Mediterranean' },
+                { title: "Pacific Islands", text: "Control 5 U.S., CW, or U.K. Pac. Isl.", territories: ["Guam", "Wake Island", "Midway", "Gilbert Islands", "Line Islands", "Johnston Island", "Aleutian Islands", "Hawaiian Islands", "Borneo", "Philippines", "Samoa", "New Britain", "Solomon Islands", "Fiji"], key: 'Pacific Islands' },
+                { title: "Reich", text: "Germany + Italy have 70 on income tracker.", territories: [], key: 'Reich' }
+            ];
+
+            // Render each objective item mimicking the National Objectives styling
+            objectivesList.forEach(obj => {
+                const isMet = obj.key === 'Cities' ? axisCities.length >= pointsNeeded : metObjectives[obj.key];
+                const statusIcon = isMet ? '<span class="objective-status-icon" style="color: #4CAF50;">✅</span>' : '<span class="objective-status-icon" style="color: #F44336;">❌</span>';
+                
+                const item = document.createElement('div');
+                item.className = 'no-item';
+                item.style.flexDirection = 'row';
+                item.style.alignItems = 'center';
+
+                const textDiv = document.createElement('div');
+                textDiv.className = 'no-text-content';
+
+                let progressBarHtml = '';
+                if (obj.key === 'Imperial') {
+                    const currentIPC = totalIpcsByPower['Japan'] || 0;
+                    const pct = Math.min((currentIPC / 55) * 100, 100);
+                    progressBarHtml = `
+                        <div style="width:100%; height:8px; background:rgba(0,0,0,0.5); border: 1px solid #555; border-radius: 4px; margin-top:8px; overflow:hidden;">
+                            <div style="width:${pct}%; height:100%; background:#FFC107; transition: width 0.4s;"></div>
+                        </div>
+                        <div style="font-size:10px; text-align:right; color:#E0D8B0; margin-top:2px;">${currentIPC} / 55 IPCs</div>`;
+                } else if (obj.key === 'Reich') {
+                    const currentIPC = (totalIpcsByPower['Germany'] || 0) + (totalIpcsByPower['Italy'] || 0);
+                    const pct = Math.min((currentIPC / 70) * 100, 100);
+                    progressBarHtml = `
+                        <div style="width:100%; height:8px; background:rgba(0,0,0,0.5); border: 1px solid #555; border-radius: 4px; margin-top:8px; overflow:hidden;">
+                            <div style="width:${pct}%; height:100%; background:#607D8B; transition: width 0.4s;"></div>
+                        </div>
+                        <div style="font-size:10px; text-align:right; color:#E0D8B0; margin-top:2px;">${currentIPC} / 70 IPCs</div>`;
+                }
+
+                textDiv.innerHTML = `${statusIcon} <span class="no-title" style="display:inline;">${obj.title}</span><br><span style="margin-left: 21px; display: block; margin-top: 3px;">${obj.text}</span>${progressBarHtml}`;
+
+                // Render minimap if territories exist
+                // Render minimap if territories exist
+                if (obj.key === 'Cities') {
+                    const grid = document.createElement('div');
+                    grid.className = 'no-grid';
+                    
+                    const addCityToGrid = (city, isAxisCity) => {
+                        const iconWrapper = document.createElement('div');
+                        iconWrapper.className = 'no-icon-wrapper';
+                        iconWrapper.style.borderColor = isAxisCity ? 'rgba(255, 68, 68, 0.5)' : 'rgba(51, 207, 255, 0.5)';
+                        
+                        const miniMap = generateMiniMap([city], isAxisCity ? 'Germany' : 'US');
+                        if (miniMap) {
+                            const svgContainer = document.createElement('div');
+                            svgContainer.className = 'no-svg-container';
+                            svgContainer.appendChild(miniMap);
+                            iconWrapper.appendChild(svgContainer);
+                        }
+                        iconWrapper.innerHTML += `<div class="no-icon-label" style="color: ${isAxisCity ? '#ff4444' : '#33CFFF'};">${city}</div>`;
+                        grid.appendChild(iconWrapper);
+                    };
+
+                    axisCities.forEach(city => addCityToGrid(city, true));
+                    alliedCities.forEach(city => addCityToGrid(city, false));
+                    
+                    item.style.flexDirection = 'column';
+                    item.style.alignItems = 'flex-start';
+                    item.appendChild(textDiv); // Text FIRST
+                    item.appendChild(grid);    // Visual BELOW
+                } 
+                else if (['World Oil 2', 'Resources', 'Mediterranean'].includes(obj.key)) {
+                    item.style.flexDirection = 'column';
+                    item.style.alignItems = 'flex-start';
+                    
+                    const miniMap = generateContextMiniMap(obj.territories);
+                    if (miniMap) {
+                        const svgContainer = document.createElement('div');
+                        svgContainer.className = 'no-svg-fullwidth'; 
+                        svgContainer.style.marginTop = '15px'; // Add space between text and visual
+                        svgContainer.appendChild(miniMap);
+                        item.appendChild(textDiv); // Text FIRST
+                        item.appendChild(svgContainer); // Visual BELOW
+                    } else {
+                        item.appendChild(textDiv);
+                    }
+                }
+                else if (['World Oil 1', 'Pacific Islands'].includes(obj.key)) {
+                    item.style.flexDirection = 'column';
+                    item.style.alignItems = 'flex-start';
+                    item.appendChild(textDiv); // Text FIRST
+                    
+                    const grid = document.createElement('div');
+                    grid.className = 'no-grid';
+                    
+                    obj.territories.forEach(terr => {
+                        const iconWrapper = document.createElement('div');
+                        iconWrapper.className = 'no-icon-wrapper';
+                        
+                        const miniMap = generateMiniMap([terr], isMet ? 'Germany' : 'Neutral');
+                        if (miniMap) {
+                            const svgContainer = document.createElement('div');
+                            svgContainer.className = 'no-svg-container';
+                            svgContainer.appendChild(miniMap);
+                            iconWrapper.appendChild(svgContainer);
+                        }
+                        iconWrapper.innerHTML += `<div class="no-icon-label">${terr}</div>`;
+                        grid.appendChild(iconWrapper);
+                    });
+                    
+                    item.appendChild(grid);    // Visual BELOW
+                }
+                else if (obj.territories && obj.territories.length > 0) {
+                    const miniMap = generateMiniMap(obj.territories, isMet ? 'Germany' : 'Neutral'); 
+                    if (miniMap) {
+                        const svgContainer = document.createElement('div');
+                        svgContainer.className = 'no-svg-container';
+                        svgContainer.style.marginRight = '20px'; // Increased margin
+                        svgContainer.style.width = '120px'; // Larger map
+                        svgContainer.style.height = '120px'; // Larger map
+                        svgContainer.appendChild(miniMap);
+                        item.appendChild(svgContainer); // Left visual
+                    }
+                    item.appendChild(textDiv); // Right text
+                } else {
+                    item.appendChild(textDiv);
+                }
+                
+                container.appendChild(item);
+            });
+        }
 
 
         
@@ -2484,7 +3066,26 @@
                 if (!neutralPowersResponse.ok) {
                     throw new Error(`HTTP error! status: ${neutralPowersResponse.status} for neutral-powers.json`);
                 }
-                const neutralPowersData = await neutralPowersResponse.json();
+                const neutralPowersData = {
+                  "Neutral": [
+                    "Venezuela", "Colombia", "Ecuador", "Peru", "Bolivia", "Paraguay", "Uruguay", "Chile",
+                    { "Netherlands": ["Suriname", "Sumatra", "Java", "Celebes", "Dutch New Guinea"] },
+                    { "Portugal": ["Portugal", "Azores", "Portuguese Guinea", "Angola", "Mozambique"] },
+                    "Liberia", "Switzerland", "Sweden",
+                    { "Turkey": ["Marmara", "Central Anatolia", "Eastern Anatolia"] },
+                    "Saudi Arabia",
+                    { "Mongolia": ["Olgiy", "Dzavhan", "Dornod", "Dornogobi"] },
+                    "Afghanistan"
+                  ],
+                  "Pro-Axis Neutral": [
+                    "Brazil",
+                    { "Spain": ["Galicia Navarra", "Castilla", "Aragon", "Spanish Morocco", "Rio de Oro"] },
+                    "Bulgaria", "Finland", "Siam"
+                  ],
+                  "Pro-Allies Neutral": [
+                    "Mexico", "Central America", "West Indies"
+                  ]
+                };
 
                 // Flatten the neutral powers data into a simple map for easy lookup
                 const neutralTerritoriesMap = {};
@@ -2565,6 +3166,8 @@
                     return AIR_BASE_SIZE;
                 case "Naval Base":
                     return NAVAL_BASE_SIZE;
+                case "SBR":
+                    return STRATEGIC_BOMBER_SIZE
                 default:
                     if (SEA_UNIT_TYPES.includes(unitType)) {
                         return SEA_UNIT_TYPE_SIZES[unitType] || LAND_UNIT_SIZE;
@@ -2672,41 +3275,35 @@
         function drawInfrastructure(svgElement, infrastructureData) {
             const infrastructureItems = infrastructureData.filter(item => item.type === 'railway' || item.type === 'road');
 
-            // Find the first element that likely represents a territory label or IPC number.
-            // This assumes labels/IPCs are rendered as <text> elements or are within a group
-            // that contains a <text> element early in the SVG's rendering order.
-            const firstLabelOrIpcElement = currentSvgElement.querySelector('text');
+            const firstLabelOrIpcElement = svgElement.querySelector('text');
 
-            // Iterate through infrastructure data and draw each railway and road
             infrastructureData.forEach(item => {
                 if (item.type === 'railway') {
                     const railwayGroup = createRailroadTrack(item.coordinates);
-                    // Insert the railway group before the first label/IPC element, or append if none found.
                     if (firstLabelOrIpcElement) {
-                        currentSvgElement.insertBefore(railwayGroup, firstLabelOrIpcElement);
+                        svgElement.insertBefore(railwayGroup, firstLabelOrIpcElement);
                     } else {
-                        currentSvgElement.appendChild(railwayGroup); // Fallback: put on top if no text found
+                        svgElement.appendChild(railwayGroup); 
                     }
                 } else if (item.type === 'road') {
                     const roadOutline = document.createElementNS("http://www.w3.org/2000/svg", "path");
                     roadOutline.setAttribute('d', `M${item.coordinates.map(p => `${p.x},${p.y}`).join('L')}`);
                     roadOutline.setAttribute('stroke', 'black');
-                    roadOutline.setAttribute('stroke-width', '6'); // Increased from 5 for prominence
+                    roadOutline.setAttribute('stroke-width', '6'); 
                     roadOutline.setAttribute('fill', 'none');
 
                     const roadLine = document.createElementNS("http://www.w3.org/2000/svg", "path");
                     roadLine.setAttribute('d', `M${item.coordinates.map(p => `${p.x},${p.y}`).join('L')}`);
-                    roadLine.setAttribute('stroke', '#5C3D2E'); // Darker brown, adjust as desired
-                    roadLine.setAttribute('stroke-width', '4'); // Increased from 3 for prominence
+                    roadLine.setAttribute('stroke', '#5C3D2E'); 
+                    roadLine.setAttribute('stroke-width', '4'); 
                     roadLine.setAttribute('fill', 'none');
 
-                    // Insert the road elements before the first label/IPC element, or append if none found.
                     if (firstLabelOrIpcElement) {
-                        currentSvgElement.insertBefore(roadOutline, firstLabelOrIpcElement);
-                        currentSvgElement.insertBefore(roadLine, firstLabelOrIpcElement);
+                        svgElement.insertBefore(roadOutline, firstLabelOrIpcElement);
+                        svgElement.insertBefore(roadLine, firstLabelOrIpcElement);
                     } else {
-                        currentSvgElement.appendChild(roadOutline);
-                        currentSvgElement.appendChild(roadLine);
+                        svgElement.appendChild(roadOutline);
+                        svgElement.appendChild(roadLine);
                     }
                 }
             });
@@ -3551,9 +4148,10 @@
                     
                     console.log(`Processing infrastructure unit: ${unitStack.unitType} in ${territory}.`);
 
-                    if (infrastructureCoordinates && infrastructureCoordinates[territory] && Array.isArray(infrastructureCoordinates[territory])) {
-                        const infraUnitCoords = infrastructureCoordinates[territory].find(
-                            entry => entry.unitType === unitStack.unitType
+                    if (infrastructureCoordinates && Array.isArray(infrastructureCoordinates)) {
+                        // Search the flat array for a matching territory AND unit type
+                        const infraUnitCoords = infrastructureCoordinates.find(
+                            entry => entry.territory === territory && entry.unitType === unitStack.unitType
                         );
 
                         if (infraUnitCoords) {
@@ -3564,12 +4162,10 @@
 
                             return; // ✅ Do not allow override by general coordinates
                         } else {
-                            
                             console.warn(`WARN: No specific coordinate entry for unit type "${unitStack.unitType}" found in territory "${territory}" inside infrastructure-coordinates.json. It will be auto-placed.`);
                         }
                     } else {
-                        
-                        console.warn(`WARN: No coordinates found for territory "${territory}" in the infrastructureCoordinates object. ${unitStack.unitType} will be auto-placed.`);
+                        console.warn(`WARN: infrastructureCoordinates is not loaded or not an array. ${unitStack.unitType} will be auto-placed.`);
                     }
                 
                 
@@ -3903,6 +4499,8 @@
                 throw new Error(`HTTP error! status: ${unitProfileResponse.status} for unit-profile.json`);
             }
             const unitProfileData = await unitProfileResponse.json();
+            window.unitProfileData = unitProfileData; // Expose globally
+            renderBattleSimulator(); // Generate the UI dynamically
 
             try {
                 // Fetch the territories-by-power.json file
@@ -3930,6 +4528,8 @@
                     // Log to the console to verify the result
                     console.log("Processed Territories by Country (1940 setup):", territoriesByCountry);
 
+                    originalTerritoriesByCountry = JSON.parse(JSON.stringify(territoriesByCountry));
+
                 } else {
                     console.error("'setup 1940' not found in territories-by-power.json");
                 }
@@ -3949,7 +4549,7 @@
                 // Fetch setup.json
                 const setupResponse = await fetch('setup.json');
                 if (!setupResponse.ok) {
-                    throw new Error(`HTTP error! status: ${setup.status} for setup.json`);
+                    throw new Error(`HTTP error! status: ${setupResponse.status} for setup.json`);
                 }
                 const setupData = await setupResponse.json();
                 window.setupData = setupData; // Make setup data globally accessible to helper functions
@@ -4035,15 +4635,19 @@
 
                 // Create a container for the original map and its bars
                 const originalMapGroup = document.createElement('div');
+                originalMapGroup.style.display = 'flex';
+                originalMapGroup.style.flexDirection = 'column';
                 originalMapGroup.appendChild(newSvgElement);
 
-                // Move the R&D and IPC bars from the document into this group
+                // Move the R&D bar into this group
                 const rdBar = document.getElementById('rdDisplayBar');
-                const ipcBar = document.getElementById('ipcDisplayBar');
                 if (rdBar) originalMapGroup.appendChild(rdBar);
+
+                // Move the IPC bar into this group so it scrolls and gets cloned
+                const ipcBar = document.getElementById('ipcDisplayBar');
                 if (ipcBar) originalMapGroup.appendChild(ipcBar);
 
-                // Clone the entire group (map + bars) twice
+                // Clone the entire group (map + both bars) twice
                 const leftCloneGroup = originalMapGroup.cloneNode(true);
                 const rightCloneGroup = originalMapGroup.cloneNode(true);
 
@@ -4069,6 +4673,17 @@
 
                 allSvgElements.forEach(svgEl => {
                     svgEl.addEventListener('click', (event) => {
+                        // --- Battle Simulator Territory Selection ---
+                        if (window.simSelectionMode) {
+                            event.stopPropagation();
+                            event.preventDefault();
+                            const path = event.target.closest('polygon, path');
+                            if (path && path.hasAttribute('data-name')) {
+                                loadTerritoryUnitsToSim(path.getAttribute('data-name'));
+                            }
+                            return;
+                        }
+
                         if (!event.ctrlKey) return;
 
                         // Pass the specific SVG where the click occurred
@@ -5299,12 +5914,15 @@
             const clientX = event.type.startsWith('touch') ? event.touches[0].clientX : event.clientX;
             const clientY = event.type.startsWith('touch') ? event.touches[0].clientY : event.clientY;
 
-            const svgPoint = getSvgCoordinates(clientX, clientY, event.target.ownerSVGElement);
+            const svgPoint = getSvgCoordinates(clientX, clientY, currentDraggedUnit.ownerSVGElement);
             let newX = svgPoint.x - dragOffsetX;
             let newY = svgPoint.y - dragOffsetY;
 
             // Move the unit visually
-            currentDraggedUnit.setAttribute('transform', `translate(${newX}, ${newY})`);
+            const unitId = currentDraggedUnit.getAttribute('id');
+            svgWrapper.querySelectorAll(`[id='${unitId}']`).forEach(unit => {
+                unit.setAttribute('transform', `translate(${newX}, ${newY})`);
+            });
             
             // Update the unit's data in our global array
             const unitIndex = placedUnitsData.findIndex(u => u.element === currentDraggedUnit);
@@ -5402,9 +6020,12 @@
                     }
                 }
 
-                currentDraggedUnit.setAttribute('transform', `translate(${finalX}, ${finalY})`);
+                const unitId = currentDraggedUnit.getAttribute('id');
+                svgWrapper.querySelectorAll(`[id='${unitId}']`).forEach(unit => {
+                    unit.setAttribute('transform', `translate(${finalX}, ${finalY})`);
+                    unit.setAttribute('data-placed-in', finalPlacedInTerritory);
+                });
                 redrawUnitArrows(currentDraggedUnit, finalX, finalY);
-                currentDraggedUnit.setAttribute('data-placed-in', finalPlacedInTerritory);
 
 
 
@@ -5550,9 +6171,10 @@
                     powersByIpcValue[ipcValue].push(powerName);
                 }
 
-                // 5. Display the results in 1-70 squares for all three IPC bars
-                const allIpcBars = document.querySelectorAll('.ipc-display-bar');
-                allIpcBars.forEach(ipcDisplayBar => {
+                // 5. Display the results in 1-70 squares in the fixed footer bar
+                const ipcBars = document.querySelectorAll('.ipc-display-bar');
+                
+                ipcBars.forEach(ipcDisplayBar => {
                     ipcDisplayBar.innerHTML = ''; // Clear previous content
 
                     for (let i = 1; i <= 70; i++) {
@@ -5568,50 +6190,27 @@
 
                             if (powersForThisIpc.length === 2) {
                                 flagsContainer.classList.add('vertical-split');
-                                powersForThisIpc.forEach(powerName => {
-                                    const flagItem = document.createElement('div');
-                                    flagItem.classList.add('flag-item');
-                                    const flagImg = document.createElement('img');
-                                    flagImg.src = `${powerName}.png`; // Adjust path as needed
-                                    flagImg.alt = `${powerName} Flag`;
-                                    flagImg.classList.add('flag-icon');
-                                    flagItem.appendChild(flagImg);
-                                    flagsContainer.appendChild(flagItem);
-                                });
                             } else if (powersForThisIpc.length === 3) {
                                 flagsContainer.classList.add('horizontal-split');
-                                 // To show "the center of the three flags", we'll just display them side-by-side
-                                 // and rely on object-fit:cover and flexbox to handle the scaling/cropping.
-                                powersForThisIpc.forEach(powerName => {
-                                    const flagItem = document.createElement('div');
-                                    flagItem.classList.add('flag-item');
-                                    const flagImg = document.createElement('img');
-                                    flagImg.src = `${powerName}.png`; // Adjust path as needed
-                                    flagImg.alt = `${powerName} Flag`;
-                                    flagImg.classList.add('flag-icon');
-                                    flagItem.appendChild(flagImg);
-                                    flagsContainer.appendChild(flagItem);
-                                });
-                            } else { // For 1 power or more than 3
-                                powersForThisIpc.forEach(powerName => {
-                                    const flagItem = document.createElement('div');
-                                    flagItem.classList.add('flag-item');
-                                    const flagImg = document.createElement('img');
-                                    flagImg.src = `flags/${powerName}.png`;
-                                    flagImg.alt = `${powerName} Flag`;
-                                    flagImg.classList.add('flag-icon');
-                                    flagItem.appendChild(flagImg);
-                                    flagsContainer.appendChild(flagItem);
-                                });
-                            }
+                            } 
+                            
+                            powersForThisIpc.forEach(powerName => {
+                                const flagItem = document.createElement('div');
+                                flagItem.classList.add('flag-item');
+                                const flagImg = document.createElement('img');
+                                flagImg.src = `flags/${powerName}.png`;
+                                flagImg.alt = `${powerName} Flag`;
+                                flagImg.classList.add('flag-icon');
+                                flagItem.appendChild(flagImg);
+                                flagsContainer.appendChild(flagItem);
+                            });
                         }
                         
-                        square.appendChild(flagsContainer); // Add the container to the square
-
+                        square.appendChild(flagsContainer); 
                         const ipcNumberSpan = document.createElement('span');
                         ipcNumberSpan.classList.add('ipc-number');
                         ipcNumberSpan.textContent = i;
-                        square.appendChild(ipcNumberSpan); // Add the number on top
+                        square.appendChild(ipcNumberSpan); 
 
                         ipcDisplayBar.appendChild(square);
                     }
@@ -5635,130 +6234,425 @@
             const mapWidth = currentSvgElement.getBoundingClientRect().width;
             if (mapWidth <= 0) return;
 
-            // Update the bars in all three cloned groups
+            // Ensure both bars match the exact map width for seamless clone scrolling
             for (const group of allMapGroups) {
-                const ipcBar = group.querySelector('.ipc-display-bar');
                 const rdBar = group.querySelector('.rd-display-bar');
-
-                if (ipcBar) ipcBar.style.width = `${mapWidth}px`;
                 if (rdBar) rdBar.style.width = `${mapWidth}px`;
+                
+                const ipcBar = group.querySelector('.ipc-display-bar');
+                if (ipcBar) ipcBar.style.width = `${mapWidth}px`;
+            }
+        }
 
-                if (ipcBar) {
-                    const squares = ipcBar.querySelectorAll('.ipc-square');
-                    if (squares.length > 0) {
-                        const squareWidth = mapWidth / squares.length;
-                        squares.forEach(square => {
-                            square.style.width = `${squareWidth}px`;
-                            square.style.height = `${squareWidth}px`;
-                        });
+    /* ============================================= */
+    /* == BATTLE SIMULATOR DYNAMIC LOGIC          == */
+    /* ============================================= */
+
+    window.simSelectionMode = null; // 'attacker' or 'defender'
+    let simulationHistory = [];
+
+    function getUnitAbbreviation(fullName) {
+        for (const [abbr, name] of Object.entries(UNIT_ABBREVIATION_TO_PROFILE_NAME)) {
+            if (name.toLowerCase() === fullName.toLowerCase()) return abbr;
+        }
+        return null;
+    }
+
+    function toggleSimSelectionMode(side) {
+        const svgElements = document.querySelectorAll('.svg-content');
+        if (window.simSelectionMode === side) {
+            window.simSelectionMode = null; // Turn off
+            svgElements.forEach(svg => svg.classList.remove('sim-select-mode'));
+            document.getElementById(`btn-select-${side}`).style.boxShadow = '';
+        } else {
+            window.simSelectionMode = side; // Turn on
+            svgElements.forEach(svg => svg.classList.add('sim-select-mode'));
+            document.getElementById('btn-select-attacker').style.boxShadow = '';
+            document.getElementById('btn-select-defender').style.boxShadow = '';
+            document.getElementById(`btn-select-${side}`).style.boxShadow = '0 0 8px #FFD700';
+        }
+    }
+
+    function loadTerritoryUnitsToSim(territoryName) {
+        const side = window.simSelectionMode;
+        if (!side) return;
+
+        // Reset inputs for this side first
+        document.querySelectorAll(`.sim-${side.substring(0,3)}-input`).forEach(inp => {
+            inp.value = 0;
+            updateSimInputDisplay(inp);
+        });
+
+        // Find units in this territory
+        const unitsInTerritory = placedUnitsData.filter(u => u.placedIn === territoryName && !FACILITY_UNIT_TYPES.includes(u.unitType));
+        
+        // Let user choose which alliance to pull if there are multiple? For now, pull ALL units in the territory
+        // (Assuming user is pulling their own stack for attack, or enemy stack for defense).
+        unitsInTerritory.forEach(u => {
+            const profileName = UNIT_ABBREVIATION_TO_PROFILE_NAME[u.unitType] || u.unitType;
+            const input = document.querySelector(`.sim-${side.substring(0,3)}-input[data-type="${profileName}"]`);
+            if (input) {
+                input.value = parseInt(input.value) + parseInt(u.count);
+                updateSimInputDisplay(input);
+            }
+        });
+
+        // Turn off mode automatically
+        toggleSimSelectionMode(side);
+    }
+
+    function updateSimInputDisplay(inputEl) {
+        const display = inputEl.parentElement.querySelector('.sim-qty-display');
+        if (display) display.value = inputEl.value;
+    }
+
+    function changeSimQty(btn, delta) {
+        const input = btn.parentElement.querySelector('input[type="hidden"]');
+        let val = parseInt(input.value) + delta;
+        if (val < 0) val = 0;
+        input.value = val;
+        updateSimInputDisplay(input);
+    }
+
+    function clearSimInputs() {
+        document.querySelectorAll('.sim-atk-input, .sim-def-input').forEach(inp => {
+            inp.value = 0;
+            updateSimInputDisplay(inp);
+        });
+        document.getElementById('battle-results-output').innerHTML = '<div style="text-align: center;">Results will be displayed here.</div>';
+    }
+
+    function renderBattleSimulator() {
+        const container = document.getElementById('battle-sim-content');
+        if (!container || !window.unitProfileData) return;
+
+        const validUnits = window.unitProfileData.filter(u => !u.is_facility);
+
+        // Remove AAA from attackers
+        const attackers = validUnits.filter(u => u.unit_type !== 'Anti-Aircraft Gun (AAA)').map(u => ({
+            ...u, baseVal: parseInt(u.attack_value) || 0
+        })).sort((a, b) => b.baseVal - a.baseVal); // Highest to lowest
+
+        const defenders = validUnits.map(u => ({
+            ...u, baseVal: parseInt(u.defense_value) || 0
+        })).sort((a, b) => b.baseVal - a.baseVal);
+
+        const buildInputRow = (unit, isAttacker) => {
+            const abbr = getUnitAbbreviation(unit.unit_type);
+            let imgSrc = '';
+            
+            // Handle standard abbreviations, AAAs, and special plane names
+            if (abbr && UNIT_IMAGE_MAP[abbr]) {
+                imgSrc = UNIT_IMAGE_MAP[abbr];
+            } else if (unit.unit_type.includes('AAA')) {
+                imgSrc = 'units/anti-aircraft.png';
+            } else if (unit.unit_type.toLowerCase() === 'transport plane (strategic bomber reclassified)') {
+                imgSrc = 'units/transport-plane.png';
+            } else if (unit.unit_type.toLowerCase() === 'cargo plane (heavy bomber reclassified)') {
+                imgSrc = 'units/cargo-plane.png';
+            }
+
+            const inputClass = isAttacker ? 'sim-atk-input' : 'sim-def-input';
+            
+            return `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; padding-bottom: 4px; border-bottom: 1px dashed rgba(255,255,255,0.1); font-family: 'Georgia', serif;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        ${imgSrc ? `<img src="${imgSrc}" style="width: 28px; height: 28px; filter: drop-shadow(2px 2px 3px rgba(0,0,0,0.8));" />` : ''}
+                        <span style="font-size: 13px; color: #f0ead2;">${unit.unit_type}</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <button class="sim-qty-btn" style="width: 24px; height: 24px; font-size: 16px;" onclick="changeSimQty(this, -1)">-</button>
+                        <input type="text" class="sim-qty-display" style="width: 30px; font-size: 14px;" value="0" readonly>
+                        <input type="hidden" class="${inputClass}" data-type="${unit.unit_type}" value="0">
+                        <button class="sim-qty-btn" style="width: 24px; height: 24px; font-size: 16px;" onclick="changeSimQty(this, 1)">+</button>
+                    </div>
+                </div>
+            `;
+        };
+
+        const groupByValue = (units, isAttacker) => {
+            let html = '';
+            let currentVal = -1;
+            units.forEach(u => {
+                if (u.baseVal !== currentVal) {
+                    currentVal = u.baseVal;
+                    html += `<div class="sim-group-header">Rolls @ ${currentVal}</div>`;
+                }
+                html += buildInputRow(u, isAttacker);
+            });
+            return html;
+        };
+
+        container.innerHTML = `
+            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                <button id="btn-select-attacker" onclick="toggleSimSelectionMode('attacker')" style="flex:1; background: #4a1a1a; color: #ffcccc; border: 1px solid #ff4444; padding: 8px; cursor: pointer; border-radius: 4px; font-family:'Georgia'; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.5);">📍 Select Territory (Atk)</button>
+                <button id="btn-select-defender" onclick="toggleSimSelectionMode('defender')" style="flex:1; background: #1a2a4a; color: #ccdfff; border: 1px solid #33CFFF; padding: 8px; cursor: pointer; border-radius: 4px; font-family:'Georgia'; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.5);">📍 Select Territory (Def)</button>
+            </div>
+            
+            <div style="display: flex; gap: 15px; margin-bottom: 20px; align-items: stretch;">
+                <div style="flex: 1; background: rgba(45, 35, 25, 0.6); border: 2px solid #ff4444; border-radius: 8px; padding: 15px; box-shadow: inset 0 0 10px rgba(255,68,68,0.15);">
+                    <h3 style="color: #ffcccc; background: rgba(138, 26, 26, 0.8); margin: -15px -15px 15px -15px; padding: 10px; text-align: center; border-bottom: 2px solid #ff4444; border-radius: 6px 6px 0 0; font-family:'Georgia'; font-size: 16px; letter-spacing: 1px; text-shadow: 1px 1px 2px black;">ATTACKER</h3>
+                    ${groupByValue(attackers, true)}
+                </div>
+                
+                <div style="flex: 1; background: rgba(45, 35, 25, 0.6); border: 2px solid #33CFFF; border-radius: 8px; padding: 15px; box-shadow: inset 0 0 10px rgba(51,207,255,0.15);">
+                    <h3 style="color: #ccdfff; background: rgba(26, 58, 90, 0.8); margin: -15px -15px 15px -15px; padding: 10px; text-align: center; border-bottom: 2px solid #33CFFF; border-radius: 6px 6px 0 0; font-family:'Georgia'; font-size: 16px; letter-spacing: 1px; text-shadow: 1px 1px 2px black;">DEFENDER</h3>
+                    ${groupByValue(defenders, false)}
+                </div>
+            </div>
+            
+            <div style="display: flex; gap: 10px;">
+                <button onclick="clearSimInputs()" style="flex: 1; padding: 12px; background-color: #4a3f35; color: #aaa; border: 1px solid #555; font-family:'Georgia'; border-radius: 4px; cursor: pointer; transition: background 0.2s;">Clear All</button>
+                <button onclick="calculateBattleOdds()" style="flex: 2; padding: 12px; background-color: #6D5C4C; color: #E0D8B0; border: 1px solid #E0D8B0; font-family:'Georgia'; font-weight: bold; font-size: 16px; border-radius: 4px; cursor: pointer; transition: background 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.5);">Calculate Odds</button>
+            </div>
+
+            <select id="sim-history" class="sim-history-dropdown" style="padding: 8px; font-size: 14px; margin-top: 15px;" onchange="loadHistory(this.value)">
+                <option value="">-- Simulation History --</option>
+            </select>
+            
+            <div id="battle-results-output" style="margin-top: 15px; border: 2px dashed #8C7B6A; background: rgba(0,0,0,0.4); padding: 15px; color: #E0D8B0; border-radius: 6px; font-size: 14px; font-family:'Georgia';">
+                <div style="text-align: center;">Results will be displayed here.</div>
+            </div>
+        `;
+    };
+
+    function calculateBattleOdds() {
+        const output = document.getElementById('battle-results-output');
+        output.innerHTML = `<div style="text-align: center;">Simulating...</div>`;
+
+        const getBaseUnits = (selector, isAttacker) => {
+            const units = [];
+            document.querySelectorAll(selector).forEach(input => {
+                const count = parseInt(input.value) || 0;
+                if (count <= 0) return;
+                
+                const type = input.getAttribute('data-type');
+                const profile = window.unitProfileData.find(u => u.unit_type === type);
+                const baseVal = parseInt(isAttacker ? profile.attack_value : profile.defense_value) || 0;
+                const cost = parseInt(profile.cost) || 0;
+                
+                for(let i=0; i<count; i++) {
+                    units.push({
+                        type, cost, baseVal, currentVal: baseVal, 
+                        hp: type === 'Battleship' ? 2 : 1,
+                        isTransport: type.includes('Transport') || type.includes('Cargo')
+                    });
+                }
+            });
+            return units;
+        };
+
+        const baseAttackers = getBaseUnits('.sim-atk-input', true);
+        const baseDefenders = getBaseUnits('.sim-def-input', false);
+
+        if (baseAttackers.length === 0 && baseDefenders.length === 0) {
+            output.innerHTML = `<div style="text-align: center; color: #ffcc00;">Please add units to simulate.</div>`;
+            return;
+        }
+
+        let atkWins = 0, defWins = 0, draws = 0;
+        let atkLostCostTotal = 0, defLostCostTotal = 0;
+        const ITERATIONS = 1000;
+
+        for (let i = 0; i < ITERATIONS; i++) {
+            let atk = JSON.parse(JSON.stringify(baseAttackers));
+            let def = JSON.parse(JSON.stringify(baseDefenders));
+            let atkCostLost = 0;
+            let defCostLost = 0;
+
+            while (atk.length > 0 && def.length > 0) {
+                // --- Combined Arms Adjustments ---
+                atk.forEach(u => u.currentVal = u.baseVal);
+                def.forEach(u => u.currentVal = u.baseVal);
+
+                // Attacker Combined Arms
+                let unassignedArt = atk.filter(u => u.type === 'Artillery').length;
+                atk.filter(u => u.type === 'Infantry' || u.type === 'Mechanized Infantry').forEach(u => {
+                    if (unassignedArt > 0) { u.currentVal = 2; unassignedArt--; }
+                });
+
+                let unassignedTank = atk.filter(u => u.type === 'Tank').length;
+                let unassignedFighter = atk.filter(u => u.type === 'Fighter').length;
+                atk.filter(u => u.type === 'Tactical Bomber').forEach(u => {
+                    if (unassignedTank > 0) { u.currentVal = 4; unassignedTank--; }
+                    else if (unassignedFighter > 0) { u.currentVal = 4; unassignedFighter--; }
+                });
+
+                // Defender Combined Arms
+                let tptDef = def.filter(u => u.type === 'Transport');
+                for(let j=0; j<Math.floor(tptDef.length / 2); j++) { tptDef[j].currentVal = 1; }
+
+                let unassignedBts = def.filter(u => u.type === 'Battleship').length;
+                def.filter(u => u.type === 'Cruiser').forEach(u => {
+                    if (unassignedBts > 0) { u.currentVal = 4; unassignedBts--; }
+                });
+
+                // --- Roll Dice ---
+                let atkHits = 0, defHits = 0;
+                atk.forEach(u => { if (Math.floor(Math.random() * 6) + 1 <= u.currentVal) atkHits++; });
+                def.forEach(u => { if (Math.floor(Math.random() * 6) + 1 <= u.currentVal) defHits++; });
+
+                // --- Sort for Casualties ---
+                // Priority logic:
+                // Undamaged Battleship takes hit FIRST (priority -10)
+                // Normal units take hit based on value (lowest value first)
+                // Transports take hit LAST (priority +1000)
+                const sortForCasualties = (arr) => {
+                    arr.forEach(u => {
+                        if (u.isTransport) u.casPriority = 1000 + u.cost;
+                        else if (u.type === 'Battleship' && u.hp === 2) u.casPriority = -10;
+                        else u.casPriority = u.currentVal + (u.cost / 100); // Cheap/weak die first
+                    });
+                    arr.sort((a, b) => a.casPriority - b.casPriority);
+                };
+
+                sortForCasualties(atk);
+                sortForCasualties(def);
+
+                // Apply Defender Hits to Attackers
+                for (let h = 0; h < defHits && atk.length > 0; h++) {
+                    if (atk[0].type === 'Battleship' && atk[0].hp === 2) {
+                        atk[0].hp = 1; atk[0].baseVal = 2; // Damaged BTS
+                        sortForCasualties(atk); // Re-sort because priority changed
+                    } else {
+                        atkCostLost += atk.shift().cost;
+                    }
+                }
+
+                // Apply Attacker Hits to Defenders
+                for (let h = 0; h < atkHits && def.length > 0; h++) {
+                    if (def[0].type === 'Battleship' && def[0].hp === 2) {
+                        def[0].hp = 1; def[0].baseVal = 2; // Damaged BTS
+                        sortForCasualties(def);
+                    } else {
+                        defCostLost += def.shift().cost;
                     }
                 }
             }
+
+            if (atk.length > 0) atkWins++;
+            else if (def.length > 0) defWins++;
+            else draws++;
+
+            atkLostCostTotal += atkCostLost;
+            defLostCostTotal += defCostLost;
         }
+
+        const atkPct = ((atkWins/ITERATIONS)*100).toFixed(1);
+        const defPct = ((defWins/ITERATIONS)*100).toFixed(1);
+        const drawPct = ((draws/ITERATIONS)*100).toFixed(1);
+        const avgAtkLoss = (atkLostCostTotal/ITERATIONS).toFixed(1);
+        const avgDefLoss = (defLostCostTotal/ITERATIONS).toFixed(1);
+
+        // Save to history
+        const historyEntry = {
+            title: `Atk ${baseAttackers.length} vs Def ${baseDefenders.length}`,
+            atkPct, defPct, drawPct, avgAtkLoss, avgDefLoss
+        };
+        simulationHistory.push(historyEntry);
+        updateHistoryDropdown();
+
+        renderResults(atkPct, defPct, drawPct, avgAtkLoss, avgDefLoss);
+    }
+
+    function renderResults(atkPct, defPct, drawPct, avgAtkLoss, avgDefLoss) {
+        const output = document.getElementById('battle-results-output');
+        
+        output.innerHTML = `
+            <h4 style="margin: 0 0 10px 0; border-bottom: 1px solid #555; padding-bottom: 5px;">Outcome Probabilities</h4>
+            <div style="display: flex; align-items: center; justify-content: space-around; margin-bottom: 15px;">
+                <div class="pie-chart-container" style="background: conic-gradient(#ff4444 0% ${atkPct}%, #aaa ${atkPct}% ${parseFloat(atkPct)+parseFloat(drawPct)}%, #33CFFF ${parseFloat(atkPct)+parseFloat(drawPct)}% 100%);"></div>
+                <div style="line-height: 1.6;">
+                    <div style="color: #ff4444; font-weight: bold;">Attacker Win: ${atkPct}%</div>
+                    <div style="color: #33CFFF; font-weight: bold;">Defender Win: ${defPct}%</div>
+                    <div style="color: #aaa;">Draw: ${drawPct}%</div>
+                </div>
+            </div>
+            <div style="display: flex; gap: 10px; border-top: 1px dashed #555; padding-top: 10px;">
+                <div style="flex: 1;">
+                    <span style="color: #ff4444; font-size: 11px; text-transform: uppercase;">Avg Atk IPC Loss</span><br>
+                    <span style="font-size: 18px; font-weight: bold;">${avgAtkLoss}</span>
+                </div>
+                <div style="flex: 1;">
+                    <span style="color: #33CFFF; font-size: 11px; text-transform: uppercase;">Avg Def IPC Loss</span><br>
+                    <span style="font-size: 18px; font-weight: bold;">${avgDefLoss}</span>
+                </div>
+            </div>
+        `;
+    }
+
+    function updateHistoryDropdown() {
+        const select = document.getElementById('sim-history');
+        if (!select) return;
+        select.innerHTML = '<option value="">-- Simulation History --</option>';
+        simulationHistory.forEach((hist, index) => {
+            select.innerHTML += `<option value="${index}">Run ${index+1}: ${hist.title} (A:${hist.atkPct}% / D:${hist.defPct}%)</option>`;
+        });
+        select.value = simulationHistory.length - 1; // Auto-select latest
+    }
+
+    function loadHistory(index) {
+        if (index === "") return;
+        const hist = simulationHistory[index];
+        renderResults(hist.atkPct, hist.defPct, hist.drawPct, hist.avgAtkLoss, hist.avgDefLoss);
+    }
+
     /* ============================================= */
-    /* == SCRIPT FOR SIDE TABS AND DRAGGABLE PANELS == */
+    /* == SCRIPT FOR FIXED SIDE PANELS AND MENU   == */
     /* ============================================= */
 
-    document.addEventListener('DOMContentLoaded', () => {
-        const tabs = document.querySelectorAll('.side-tab');
-        const panels = document.querySelectorAll('.draggable-panel');
-        const closeButtons = document.querySelectorAll('.close-panel');
+    function openSidePanel(id) {
+        // Close all panels first
+        document.querySelectorAll('.side-panel').forEach(p => p.classList.remove('open'));
+        // Open the target panel
+        const panel = document.getElementById(id);
+        if (panel) panel.classList.add('open');
+        // Hide dropdown menu
+        document.getElementById('dropdown-menu').classList.remove('visible');
+    }
 
-        // Function to show a specific panel
-        tabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                const targetId = tab.getAttribute('data-target');
-                const targetPanel = document.getElementById(targetId);
+    function closeSidePanel(id) {
+        const panel = document.getElementById(id);
+        if (panel) panel.classList.remove('open');
+    }
 
-                if (targetPanel) {
-                    const isVisible = targetPanel.classList.contains('visible');
-
-                    // If the panel was not already visible, show it.
-                    // This prevents a panel from hiding itself if its tab is clicked again.
-                    if (!isVisible) {
-                        targetPanel.classList.add('visible');
-
-                        // Dynamically adjust position after making it visible
-                        const panelRect = targetPanel.getBoundingClientRect();
-                        const viewportHeight = window.innerHeight;
-                        // Get height of sticky top bar, default to 40px if not found or no offsetHeight
-                        const topBarElement = document.getElementById('stickyTopBar');
-                        const topBarHeight = topBarElement ? topBarElement.offsetHeight : 40;
-                        const minTopPadding = 20; // Minimum padding from the top of the viewport
-                        const bottomPadding = 20; // Padding from the bottom of the viewport
-
-                        let calculatedTop = topBarHeight + minTopPadding; // Default top position below the sticky bar
-
-                        // Check if the panel's calculated bottom edge goes beyond the viewport
-                        if ((panelRect.height + calculatedTop + bottomPadding) > viewportHeight) {
-                            // If it does, adjust the top position to bring the bottom edge within bounds
-                            calculatedTop = viewportHeight - panelRect.height - bottomPadding;
-                        }
-                        
-                        // Ensure the panel is not placed higher than the minimum allowed top position
-                        // (i.e., below the sticky top bar and its padding)
-                        calculatedTop = Math.max(topBarHeight + minTopPadding, calculatedTop);
-
-                        targetPanel.style.top = `${calculatedTop}px`;
-                        targetPanel.style.right = `${minTopPadding}px`; // Ensure it stays aligned to the right
-                        targetPanel.style.left = 'unset'; // Remove left positioning if it was there
-                    }
+    document.querySelectorAll('.side-panel').forEach(panel => {
+        const resizer = document.createElement('div');
+        resizer.className = 'side-panel-resizer';
+        panel.appendChild(resizer);
+        
+        let startX, startWidth;
+        resizer.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            startX = e.clientX;
+            startWidth = parseInt(document.defaultView.getComputedStyle(panel).width, 10);
+            
+            // Temporarily disable transition during drag
+            panel.style.transition = 'none'; 
+            
+            function doDrag(e) {
+                const newWidth = startWidth - (e.clientX - startX);
+                if(newWidth > 300 && newWidth < window.innerWidth - 100) {
+                    panel.style.width = newWidth + 'px';
                 }
-            });
+            }
+            function stopDrag() {
+                panel.style.transition = ''; // Restore transition
+                document.documentElement.removeEventListener('mousemove', doDrag);
+                document.documentElement.removeEventListener('mouseup', stopDrag);
+            }
+            document.documentElement.addEventListener('mousemove', doDrag);
+            document.documentElement.addEventListener('mouseup', stopDrag);
         });
+    });
 
-        // Function to close panels
-        closeButtons.forEach(button => {
-            button.addEventListener('click', (e) => {
-                e.stopPropagation(); // Prevent the header's drag from starting
-                const panel = button.closest('.draggable-panel');
-                if (panel) {
-                    panel.classList.remove('visible');
-                }
-            });
-        });
-
-        // Function to make panels draggable
-        panels.forEach(panel => {
-            const header = panel.querySelector('.panel-header');
-            if (!header) return;
-
-            let isDragging = false;
-            let offsetX, offsetY;
-
-            header.addEventListener('mousedown', (e) => {
-                isDragging = true;
-                // Calculate offset from the top-left of the panel
-                offsetX = e.clientX - panel.offsetLeft;
-                offsetY = e.clientY - panel.offsetTop;
-                
-                panel.style.cursor = 'grabbing';
-                // Setting position to absolute is necessary for top/left to work correctly
-                panel.style.position = 'absolute';
-            });
-
-            document.addEventListener('mousemove', (e) => {
-                if (!isDragging) return;
-
-                // Calculate new position
-                let newX = e.clientX - offsetX;
-                let newY = e.clientY - offsetY;
-                
-                // Boundary checks to keep panel within viewport
-                newX = Math.max(0, Math.min(newX, window.innerWidth - panel.offsetWidth));
-                newY = Math.max(0, Math.min(newY, window.innerHeight - panel.offsetHeight));
-
-                panel.style.left = `${newX}px`;
-                panel.style.top = `${newY}px`;
-            });
-
-            document.addEventListener('mouseup', () => {
-                isDragging = false;
-                panel.style.cursor = 'default';
-            });
-        });
-
-        makePanelsResizable();
+    // Close dropdown menu if clicking anywhere else on the screen
+    document.addEventListener('click', (e) => {
+        const dropdown = document.getElementById('dropdown-menu');
+        const hamburger = document.getElementById('main-menu-btn');
+        if (dropdown && dropdown.classList.contains('visible') && !dropdown.contains(e.target) && e.target !== hamburger) {
+            dropdown.classList.remove('visible');
+        }
     });
 
     // --- Texture Toggle Logic ---
@@ -5772,95 +6666,95 @@
     });
 
     // --- Color Scheme Switching Logic ---
-        function applyColorScheme(schemeName) {
-            const newScheme = colorSchemes[schemeName];
-            if (!newScheme) {
-                console.error("Unknown color scheme:", schemeName);
-                return;
-            }
-
-            powerColors = newScheme; // Update the global colors object
-
-            // 1. Recolor territory paths
-            applyTerritoryColors(); // This existing function will now use the new `powerColors`
-
-            const allSvgElements = document.querySelectorAll('.svg-content');
-            allSvgElements.forEach(svg => {
-                // 2. Regenerate SVG filters for units with new colors
-                generateColorFilters(svg);
-
-                // 3. Update the filter on all existing unit images efficiently
-                const allUnitImages = svg.querySelectorAll('.unit-token');
-                allUnitImages.forEach(unitImage => {
-                    const unitGroup = unitImage.closest('.unit-stack-group');
-                    if (!unitGroup) return;
-
-                    const power = unitGroup.getAttribute('data-power');
-                    const unitType = unitGroup.getAttribute('data-unit-type');
-                    
-                    if (powerColors[power] && power !== 'Neutral' && !SPECIAL_INFRASTRUCTURE_UNITS.includes(unitType)) {
-                        const filterType = SEA_UNIT_TYPES.includes(unitType) ? 'sea' : 'land';
-                        unitImage.setAttribute('filter', `url(#colorize-${power}-${filterType})`);
-                    } else {
-                        unitImage.removeAttribute('filter');
-                    }
-                });
-            });
+    function applyColorScheme(schemeName) {
+        const newScheme = colorSchemes[schemeName];
+        if (!newScheme) {
+            console.error("Unknown color scheme:", schemeName);
+            return;
         }
 
-        document.getElementById('colorSchemeSelect').addEventListener('change', function() {
-            applyColorScheme(this.value);
+        powerColors = newScheme; // Update the global colors object
+
+        // 1. Recolor territory paths
+        applyTerritoryColors(); // This existing function will now use the new `powerColors`
+
+        const allSvgElements = document.querySelectorAll('.svg-content');
+        allSvgElements.forEach(svg => {
+            // 2. Regenerate SVG filters for units with new colors
+            generateColorFilters(svg);
+
+            // 3. Update the filter on all existing unit images efficiently
+            const allUnitImages = svg.querySelectorAll('.unit-token');
+            allUnitImages.forEach(unitImage => {
+                const unitGroup = unitImage.closest('.unit-stack-group');
+                if (!unitGroup) return;
+
+                const power = unitGroup.getAttribute('data-power');
+                const unitType = unitGroup.getAttribute('data-unit-type');
+                
+                if (powerColors[power] && power !== 'Neutral' && !SPECIAL_INFRASTRUCTURE_UNITS.includes(unitType)) {
+                    const filterType = SEA_UNIT_TYPES.includes(unitType) ? 'sea' : 'land';
+                    unitImage.setAttribute('filter', `url(#colorize-${power}-${filterType})`);
+                } else {
+                    unitImage.removeAttribute('filter');
+                }
+            });
         });
+    }
 
-        // --- Custom 8-Way Panel Resizer Logic ---
-        function makePanelsResizable() {
-            const panels = document.querySelectorAll('.draggable-panel');
-            const handles = ['n', 's', 'e', 'w', 'ne', 'nw', 'se', 'sw'];
-            
-            panels.forEach(panel => {
-                handles.forEach(dir => {
-                    const handle = document.createElement('div');
-                    handle.className = `resize-handle ${dir}`;
-                    panel.appendChild(handle);
+    document.getElementById('colorSchemeSelect').addEventListener('change', function() {
+        applyColorScheme(this.value);
+    });
+
+    // --- Custom 8-Way Panel Resizer Logic ---
+    function makePanelsResizable() {
+        const panels = document.querySelectorAll('.draggable-panel');
+        const handles = ['n', 's', 'e', 'w', 'ne', 'nw', 'se', 'sw'];
+        
+        panels.forEach(panel => {
+            handles.forEach(dir => {
+                const handle = document.createElement('div');
+                handle.className = `resize-handle ${dir}`;
+                panel.appendChild(handle);
+                
+                let startX, startY, startWidth, startHeight, startTop, startLeft;
+                
+                handle.addEventListener('mousedown', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
                     
-                    let startX, startY, startWidth, startHeight, startTop, startLeft;
+                    startX = e.clientX;
+                    startY = e.clientY;
+                    // Get accurate dimensions without 'px'
+                    startWidth = parseInt(document.defaultView.getComputedStyle(panel).width, 10);
+                    startHeight = parseInt(document.defaultView.getComputedStyle(panel).height, 10);
+                    startTop = panel.offsetTop;
+                    startLeft = panel.offsetLeft;
                     
-                    handle.addEventListener('mousedown', function(e) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        
-                        startX = e.clientX;
-                        startY = e.clientY;
-                        // Get accurate dimensions without 'px'
-                        startWidth = parseInt(document.defaultView.getComputedStyle(panel).width, 10);
-                        startHeight = parseInt(document.defaultView.getComputedStyle(panel).height, 10);
-                        startTop = panel.offsetTop;
-                        startLeft = panel.offsetLeft;
-                        
-                        function doDrag(e) {
-                            if (dir.includes('e')) panel.style.width = (startWidth + e.clientX - startX) + 'px';
-                            if (dir.includes('s')) panel.style.height = (startHeight + e.clientY - startY) + 'px';
-                            if (dir.includes('w')) {
-                                panel.style.width = (startWidth - (e.clientX - startX)) + 'px';
-                                panel.style.left = (startLeft + (e.clientX - startX)) + 'px';
-                            }
-                            if (dir.includes('n')) {
-                                panel.style.height = (startHeight - (e.clientY - startY)) + 'px';
-                                panel.style.top = (startTop + (e.clientY - startY)) + 'px';
-                            }
+                    function doDrag(e) {
+                        if (dir.includes('e')) panel.style.width = (startWidth + e.clientX - startX) + 'px';
+                        if (dir.includes('s')) panel.style.height = (startHeight + e.clientY - startY) + 'px';
+                        if (dir.includes('w')) {
+                            panel.style.width = (startWidth - (e.clientX - startX)) + 'px';
+                            panel.style.left = (startLeft + (e.clientX - startX)) + 'px';
                         }
-                        
-                        function stopDrag() {
-                            document.documentElement.removeEventListener('mousemove', doDrag);
-                            document.documentElement.removeEventListener('mouseup', stopDrag);
+                        if (dir.includes('n')) {
+                            panel.style.height = (startHeight - (e.clientY - startY)) + 'px';
+                            panel.style.top = (startTop + (e.clientY - startY)) + 'px';
                         }
-                        
-                        document.documentElement.addEventListener('mousemove', doDrag);
-                        document.documentElement.addEventListener('mouseup', stopDrag);
-                    });
+                    }
+                    
+                    function stopDrag() {
+                        document.documentElement.removeEventListener('mousemove', doDrag);
+                        document.documentElement.removeEventListener('mouseup', stopDrag);
+                    }
+                    
+                    document.documentElement.addEventListener('mousemove', doDrag);
+                    document.documentElement.addEventListener('mouseup', stopDrag);
                 });
             });
-        }
+        });
+    }
     </script>
 </body>
 </html>

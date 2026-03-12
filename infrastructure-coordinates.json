@@ -44,8 +44,8 @@
   {
     "territory": "Japan",
     "unitType": "Major Industrial Complex",
-    "x": 2095.24609375,
-    "y": 510.2743225097
+    "x": 2182.00,
+    "y": 411.00
   },
   {
     "territory": "New South Wales",
@@ -302,8 +302,8 @@
   {
     "territory": "Okinawa",
     "unitType": "Air Base",
-    "x": 1947.978515625,
-    "y": 479.64857482910156
+    "x": 2066,
+    "y": 584
   },
   {
     "territory": "Caroline Islands",
