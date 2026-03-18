@@ -448,7 +448,7 @@
             align-items: center;
             padding: 0 10px;
             box-sizing: border-box;
-            z-index: 1002; /* Higher than other fixed/sticky elements */
+            z-index: 3001; /* Higher than other fixed/sticky elements */
             color: #f0f0f0;
             font-family: Arial, sans-serif;
             font-size: 14px;
@@ -468,6 +468,8 @@
 
         .game-info-section {
             display: flex;
+            flex: 0 1 auto;
+            white-space: nowrap;
             align-items: center;
             gap: 8px;
             padding: 0 5px;
@@ -514,21 +516,26 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            flex: 1.5;
+            min-width: 140px;
         }
+
 
         .phase-name {
             position: absolute;
             top: 2px;
             font-size: 12px;
             font-weight: bold;
-            color: #f0f0f0;
+            color: #ffd700;
             white-space: nowrap;
+            text-align: center;
         }
+
 
         .phase-dots {
             display: flex;
             gap: 4px;
-            margin-top: 5px;
+            margin-top: 0 !important;
         }
 
         .phase-dot {
@@ -656,11 +663,15 @@
         .menu-item:hover { background-color: #007bff; }
         .menu-item:last-child { border-bottom: none; }
 
+        #dropdown-menu, .menu-container, #hamburger-menu-content {
+            z-index: 3000 !important; /* Ensure it stays above side panels and tech window */
+        }
+
         .side-panel {
             position: fixed;
             top: 35px; /* Changed to go all the way to the top */
             bottom: 43.429px;
-            right: -460px; 
+            right: -4000px; 
             width: 450px;
             background-color: rgba(45, 35, 25, 0.97);
             background-image: url('https://www.transparenttextures.com/patterns/paper.png');
@@ -885,7 +896,7 @@
             width: 100%;
             height: 100%;
             background-color: rgba(20, 20, 20, 0.95);
-            z-index: 2000;
+            z-index: 3002;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -1427,6 +1438,158 @@
         #main-menu-btn {
             z-index: 3000;
         }
+
+
+        /* --- Unified Action Window Styles (Tech & Purchase) --- */
+        .action-window {
+            position: fixed;
+            width: 500px; 
+            max-width: 100%;
+            max-height: 80vh; 
+            bottom: 10px;   /* Fixed to bottom */
+            right: 10px;    /* Fixed to right */
+            top: auto;
+            left: auto;
+            background-color: #1e222b;
+            border: 2px solid #3a475e;
+            border-radius: 8px;
+            box-shadow: -5px 5px 20px rgba(0,0,0,0.8);
+            z-index: 2000;
+            display: none;
+            flex-direction: column;
+            color: #d0d8e8;
+            font-family: 'Georgia', serif;
+            overflow: hidden;
+            transition: opacity 0.2s ease-in-out;
+        }
+
+        /* Minimized State */
+        .action-window.minimized {
+            width: auto !important;
+            height: 40px !important;
+            min-height: 40px !important;
+            background: #1e222b;
+            border: 2px solid #3a475e;
+            cursor: pointer;
+            border-radius: 4px;
+            display: flex !important;
+            flex-direction: row;
+            align-items: center;
+            padding: 0 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.8);
+        }
+
+        .action-window.minimized > *:not(.minimized-content) {
+            display: none !important;
+        }
+
+        .minimized-content {
+            display: none;
+            align-items: center;
+            gap: 10px;
+            color: #ccc;
+            font-size: 14px;
+            font-weight: bold;
+            pointer-events: none;
+        }
+
+        .action-window.minimized .minimized-content {
+            display: flex;
+        }
+
+        .minimize-triangle {
+            width: 0; 
+            height: 0; 
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-bottom: 8px solid #ccc;
+        }
+
+        .window-bg {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background-size: cover; background-position: center;
+            opacity: 0.15; z-index: 0; pointer-events: none;
+        }
+
+        .window-header {
+            background: #283345; padding: 15px; border-bottom: 2px solid #3a475e;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 1; position: relative;
+            cursor: move;
+        }
+
+        .window-minimize-btn {
+            cursor: pointer;
+            font-size: 12px;
+            color: #ccc;
+            margin-left: 10px;
+            padding: 5px;
+            transition: color 0.2s;
+        }
+        .window-minimize-btn:hover { color: #fff; }
+
+        .window-content {
+            flex-grow: 1; overflow-y: auto; padding: 15px;
+            z-index: 1; position: relative;
+            scrollbar-color: #3a475e #1e222b; scrollbar-width: thin;
+        }
+
+        .window-footer {
+            background: #283345; padding: 15px; border-top: 2px solid #3a475e;
+            display: flex; justify-content: space-between; z-index: 1; position: relative;
+        }
+
+        /* --- Tech Specific --- */
+        .tech-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        .tech-rules-container { background: rgba(0,0,0,0.3); padding: 10px; margin-bottom: 15px; border-radius: 6px; border: 1px dashed #4a5a75; font-size: 13px; line-height: 1.4; color: #b0c4de; }
+        .tech-card-new { background: rgba(40, 51, 69, 0.8); border: 1px solid #4a5a75; border-radius: 6px; padding: 12px 10px; cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; }
+        .tech-card-new:hover { background: rgba(58, 71, 94, 0.9); transform: translateY(-2px); }
+        .tech-card-new.selected { border-color: #66ccff; box-shadow: 0 0 10px rgba(102,204,255,0.5); background: rgba(58, 71, 94, 0.9); transform: scale(1.02); }
+        .tech-icon-uniform img { width: 100%; height: 50px; object-fit: contain; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.6)); margin-bottom: 5px; }
+        .tech-lore { font-size: 10px; font-style: italic; color: #8899a6; margin-top: 5px; line-height: 1.2; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 5px; }
+        
+        /* --- Purchase Specific --- */
+        .phase-section-title { color: #b0c4de; border-bottom: 2px solid #4a5a75; padding-bottom: 5px; margin-top: 20px; margin-bottom: 15px; font-size: 20px; text-transform: uppercase; text-align: center; }
+        .action-table { 
+            width: 100%; border-collapse: collapse; 
+            background: #283345; /* Solid background, no transparency */
+            border: 1px solid #4a5a75; margin-bottom: 15px; 
+            box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+        }
+        .action-table th, .action-table td { border: 1px solid #4a5a75; padding: 10px; text-align: center; vertical-align: middle; }
+        .action-table th { background: #1e222b; color: #b0c4de; font-size: 14px; }
+        .action-table img { height: 35px; object-fit: contain; filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.5)); }
+        
+        /* High contrast cell for black unit silhouettes */
+        .unit-img-cell { background-color: #cbd5e1; border-radius: 4px; padding: 5px !important; }
+        
+        /* Buttons */
+        .btn-action { background: #3a475e; color: #fff; border: 1px solid #66ccff; padding: 8px 15px; border-radius: 4px; cursor: pointer; transition: background 0.2s; font-weight: bold; font-family: 'Georgia', serif; }
+        .btn-action:hover { background: #4a5a75; }
+        .btn-skip { border-color: #ff6666; color: #ffcccc; background: transparent; }
+        .btn-skip:hover { background: rgba(255, 102, 102, 0.2); }
+        .repair-btn { background: #3a475e; color: #fff; border: 1px solid #66ccff; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .repair-btn:hover:not(:disabled) { background: #4a5a75; }
+        .repair-btn:disabled { opacity: 0.5; cursor: not-allowed; border-color: #555; }
+        .demo-btn { background: transparent; color: #ff6666; border: 1px solid #ff6666; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; transition: all 0.2s; }
+        .demo-btn:hover { background: rgba(255,102,102,0.2); }
+        .undo-demo-btn { background: #4CAF50; color: white; border: 1px solid #4CAF50; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .free-repair-check { color: #4CAF50; font-size: 16px; font-weight: bold; text-shadow: 1px 1px 2px black; }
+
+        /* --- Custom Modal --- */
+        #custom-modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); z-index: 4000; display: none;
+            justify-content: center; align-items: center;
+        }
+        .custom-modal-box {
+            background: #1e222b; border: 2px solid #6D5C4C; border-radius: 8px;
+            padding: 20px; width: 400px; max-width: 90%; text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8); color: #E0D8B0; font-family: 'Georgia', serif;
+        }
+        .custom-modal-title { font-size: 20px; margin-bottom: 15px; color: #ffd700; border-bottom: 1px solid #4a5a75; padding-bottom: 10px; }
+        .custom-modal-buttons { display: flex; justify-content: center; gap: 15px; margin-top: 20px; }
+
     </style>
 </head>
 <body>
@@ -1628,10 +1791,63 @@
             </div>
         </div>
     </div>
+    <div id="tech-window" class="action-window">
+        <div class="window-bg" id="tech-window-bg"></div>
+        <div class="minimized-content">
+            <div class="minimize-triangle"></div>
+            <span id="tech-minimized-title">Technology Research Phase</span>
+        </div>
+        <div class="window-header">
+            <div>
+                <h3 id="tech-power-title" style="margin: 0; color: #66ccff; font-size: 16px; text-transform: uppercase; text-shadow: 1px 1px 2px black;">Power</h3>
+                <div style="font-size: 12px; color: #aaa; margin-top: 4px;">Technology Research Phase</div>
+            </div>
+            <div style="display: flex; align-items: center;">
+                <div id="tech-ipc-display" style="font-size: 18px; font-weight: bold; color: #ffd700; background: rgba(0,0,0,0.5); padding: 5px 10px; border-radius: 4px; border: 1px solid #ffd700; box-shadow: inset 0 0 5px rgba(0,0,0,0.8);">IPCs: 0</div>
+                <div class="window-minimize-btn" onclick="event.stopPropagation(); toggleWindowMinimize('tech-window')" title="Minimize">▼ MINIMIZE</div>
+            </div>
+        </div>
+        <div class="window-content">
+            <div class="tech-grid" id="tech-list-container"></div>
+        </div>
+        <div class="window-footer">
+            <button class="btn-action btn-skip" onclick="closeTechModal(true)">Skip Research</button>
+            <button class="btn-action" id="tech-proceed-btn" onclick="closeTechModal(false)">Proceed (-4 IPCs)</button>
+        </div>
+    </div>
 
-    
+    <div id="purchase-window" class="action-window">
+        <div class="window-bg" id="purchase-window-bg"></div>
+        <div class="minimized-content">
+            <div class="minimize-triangle"></div>
+            <span id="purchase-minimized-title">Purchase / Repair / Demo Phase</span>
+        </div>
+        <div class="window-header">
+            <div>
+                <h3 id="purchase-power-title" style="margin: 0; color: #66ccff; font-size: 16px; text-transform: uppercase; text-shadow: 1px 1px 2px black;">Power</h3>
+                <div style="font-size: 12px; color: #aaa; margin-top: 4px;">Purchase / Repair / Demo Phase</div>
+            </div>
+            <div style="display: flex; align-items: center;">
+                <div id="purchase-ipc-display" style="font-size: 18px; font-weight: bold; color: #ffd700; background: rgba(0,0,0,0.5); padding: 5px 10px; border-radius: 4px; border: 1px solid #ffd700; box-shadow: inset 0 0 5px rgba(0,0,0,0.8);">IPCs: 0</div>
+                <div class="window-minimize-btn" onclick="event.stopPropagation(); toggleWindowMinimize('purchase-window')" title="Minimize">▼ MINIMIZE</div>
+            </div>
+        </div>
+        <div class="window-content" id="purchase-content-container"></div>
+        <div class="window-footer" style="justify-content: flex-end;">
+            <button class="btn-action" id="purchase-proceed-btn" onclick="applyPurchasePhaseChanges()">Proceed (+0 IPCs)</button>
+        </div>
+    </div>
 
-    
+    <div id="custom-modal-overlay">
+        <div class="custom-modal-box">
+            <div class="custom-modal-title" id="custom-modal-title">Alert</div>
+            <div id="custom-modal-body">Message goes here.</div>
+            <div class="custom-modal-buttons">
+                <button class="btn-action btn-skip" id="custom-modal-cancel" style="display:none;">Cancel</button>
+                <button class="btn-action" id="custom-modal-ok">OK</button>
+            </div>
+        </div>
+    </div>
     <script>
         const mapContainer = document.getElementById('map-container');
 
@@ -1861,7 +2077,10 @@
             'Collect Income'
         ];
 
-        const technologyResearchStatus = {
+        let activePowerForTech = "";
+        let selectedTechId = null;
+
+        let technologyResearchStatus = {
             // Major powers start the game with a free technology in Phase 1 (P1).[1]
             Germany: { researchPhase: 'P1' },
             Japan: { researchPhase: 'P1' },
@@ -1945,16 +2164,30 @@
 
         function startGame() {
             const power = document.getElementById('powerSelect').value;
+            const side = document.getElementById('sideSelect').value;
             const year = document.getElementById('yearSelect').value;
             targetGameRounds = parseInt(document.getElementById('roundsSelect').value, 10);
 
-
-            // 1. Hide Overlay
             document.getElementById('start-screen-overlay').style.display = 'none';
-            
-            // 2. Initialize Sidebar with chosen data
-            updateSidebarInfo(power, year);
-            
+
+            // Calculate IPCs first so they are available for the modal
+            calculateAndDisplayIPCs(year === '1940' ? "setup 1940" : "setup 1942").then(() => {
+                // Initialize side looping
+                const sidePowers = POWER_DATA[side];
+                const powersList = powersOrder.filter(p => sidePowers.includes(p));
+                window.currentTechPowers = powersList; // Save globally
+
+                activePowerForTech = powersList[0];
+                currentTurnPowerIndex = powersOrder.indexOf(activePowerForTech);
+
+                updateSidebarInfo(power, year);
+                updatePowerOrder(currentTurnPowerIndex);
+                
+                // Start Tech Phase
+                currentPhaseIndex = 0;
+                updatePhaseDisplay();
+                openTechModal();
+            });
             console.log(`Game Started: ${power} in ${year}`);
         }
 
@@ -2017,7 +2250,7 @@
         };
 
         // Define original ownership for dynamic objectives
-        const ORIGINAL_ITALIAN_TERRITORIES = ["Italy", "Northern Italy", "Southern Italy", "Sicily", "Sardinia", "Libya", "Italian Libya", "Italian Lybia City of Tobruk", "Italian Somaliland", "Eritrea", "Ethiopia", "Albania"];
+        const ORIGINAL_ITALIAN_TERRITORIES = ["Northern Italy", "Southern Italy", "Sicily", "Sardinia", "Italian Libya", "Italian Lybia City of Tobruk", "Italian Somaliland", "Ethiopia", "Albania"];
 
         // Creates a mini SVG showing the requested territories
         function generateMiniMap(territories, power, specialRule) {
@@ -2156,7 +2389,7 @@
             const categories = [
                 { key: 'Pro-Axis Neutral', label: 'Pro-Axis Neutral', theme: 'pro-axis-theme' },
                 { key: 'Neutral', label: 'Strict Neutral', theme: 'strict-neutral-theme' },
-                { key: 'Pro-Allies Neutral', label: 'Pro-Allies Neutral', theme: 'pro-allies-theme' }
+                { key: 'Pro-Allied Neutral', label: 'Pro-Allied Neutral', theme: 'pro-allies-theme' }
             ];
 
             categories.forEach(cat => {
@@ -2885,26 +3118,70 @@
          * Placeholder function to update phase display.
          * @param {number} activeIndex - The index of the current phase.
          */
-        function updatePhaseDisplay(activeIndex) {
-            phaseDisplayEl.innerHTML = ''; // Clear existing content
+        function updatePhaseDisplay() {
+            const phaseDisplayEl = document.getElementById('phaseDisplay');
+            if (!phaseDisplayEl) return;
+            phaseDisplayEl.innerHTML = '';
 
-            const phaseNameDiv = document.createElement('div');
-            phaseNameDiv.classList.add('phase-name');
-            phaseNameDiv.textContent = phaseNames[activeIndex];
-            phaseDisplayEl.appendChild(phaseNameDiv);
+            let prevIndex = (currentPhaseIndex - 1 + phaseNames.length) % phaseNames.length;
+            let nextIndex = (currentPhaseIndex + 1) % phaseNames.length;
+            const displayIndices = [prevIndex, currentPhaseIndex, nextIndex];
 
-            const phaseDotsDiv = document.createElement('div');
-            phaseDotsDiv.classList.add('phase-dots');
+            // Container for names to prevent displacing dots
+            const namesContainer = document.createElement('div');
+            namesContainer.style.position = 'relative';
+            namesContainer.style.height = '16px';
+            namesContainer.style.width = '100%';
+            namesContainer.style.display = 'flex';
+            namesContainer.style.justifyContent = 'center';
 
-            phaseNames.forEach((_, index) => {
+            displayIndices.forEach((idx, i) => {
+                const phaseNameDiv = document.createElement('div');
+                phaseNameDiv.classList.add('phase-name');
+                phaseNameDiv.textContent = phaseNames[idx];
+
+                if (i === 1) {
+                    phaseNameDiv.classList.add('active');
+                    phaseNameDiv.style.opacity = '1';
+                    phaseNameDiv.style.pointerEvents = 'auto';
+                } else {
+                    phaseNameDiv.style.opacity = '0';
+                    phaseNameDiv.style.pointerEvents = 'none';
+                }
+
+                if (idx === 0) {
+                    phaseNameDiv.style.cursor = 'pointer';
+                    phaseNameDiv.style.textDecoration = 'underline dashed #33CFFF';
+                    phaseNameDiv.title = "Click to open R&D panel";
+                    phaseNameDiv.onclick = () => { if (typeof openTechModal === 'function') openTechModal(); };
+                }
+                namesContainer.appendChild(phaseNameDiv);
+            });
+
+            // Regenerate the dots completely
+            const dotsContainer = document.createElement('div');
+            dotsContainer.classList.add('phase-dots');
+            phaseNames.forEach((_, idx) => {
                 const dot = document.createElement('div');
                 dot.classList.add('phase-dot');
-                if (index === activeIndex) {
-                    dot.classList.add('active');
-                }
-                phaseDotsDiv.appendChild(dot);
+                if (idx === currentPhaseIndex) dot.classList.add('active');
+                dotsContainer.appendChild(dot);
             });
-            phaseDisplayEl.appendChild(phaseDotsDiv);
+
+            phaseDisplayEl.appendChild(namesContainer);
+            phaseDisplayEl.appendChild(dotsContainer);
+
+            // Automatic Trigger
+            if (currentPhaseIndex === 0) {
+                console.log("R&D DEBUG: Auto-trigger condition met (Phase 0). Waiting 200ms...");
+                setTimeout(() => {
+                    const overlay = document.getElementById('tech-modal-overlay');
+                    if (overlay && overlay.style.display !== 'flex') {
+                        console.log("R&D DEBUG: Triggering auto-open...");
+                        if (typeof openTechModal === 'function') openTechModal();
+                    }
+                }, 200);
+            }
         }
 
         /**
@@ -3068,22 +3345,78 @@
                 }
                 const neutralPowersData = {
                   "Neutral": [
-                    "Venezuela", "Colombia", "Ecuador", "Peru", "Bolivia", "Paraguay", "Uruguay", "Chile",
-                    { "Netherlands": ["Suriname", "Sumatra", "Java", "Celebes", "Dutch New Guinea"] },
-                    { "Portugal": ["Portugal", "Azores", "Portuguese Guinea", "Angola", "Mozambique"] },
-                    "Liberia", "Switzerland", "Sweden",
-                    { "Turkey": ["Marmara", "Central Anatolia", "Eastern Anatolia"] },
+                    "Venezuela",
+                    "Colombia",
+                    "Ecuador",
+                    "Peru",
+                    "Bolivia",
+                    "Paraguay",
+                    "Uruguay",
+                    "Chile",
+                    {
+                      "Netherlands": [
+                        "Suriname",
+                        "Sumatra",
+                        "Java",
+                        "Celebes",
+                        "Dutch New Guinea"
+                      ]
+                    },
+                    {
+                      "Portugal": [
+                        "Portugal",
+                        "Azores",
+                        "Portuguese Guinea",
+                        "Angola",
+                        "Mozambique"
+                      ]
+                    },
+                    "Liberia",
+                    "Switzerland",
+                    "Sweden",
+                    {
+                      "Turkey": [
+                        "Marmara",
+                        "Central Anatolia",
+                        "Eastern Anatolia"
+                      ]
+                    },
                     "Saudi Arabia",
-                    { "Mongolia": ["Olgiy", "Dzavhan", "Dornod", "Dornogobi"] },
+                    {
+                      "Mongolia": [
+                        "Olgiy",
+                        "Dzavhan",
+                        "Dornod",
+                        "Dornogobi"
+                      ]
+                    },
                     "Afghanistan"
                   ],
                   "Pro-Axis Neutral": [
-                    "Brazil",
-                    { "Spain": ["Galicia Navarra", "Castilla", "Aragon", "Spanish Morocco", "Rio de Oro"] },
-                    "Bulgaria", "Finland", "Siam"
+                    "Argentina",
+                    {
+                      "Spain": [
+                        "Galicia Navarra",
+                        "Castilla",
+                        "Aragon",
+                        "Spanish Morocco",
+                        "Rio de Oro"
+                      ]
+                    },
+                    "Bulgaria",
+                    "Iraq",
+                    {
+                        "Iran": [
+                        "Iran",
+                        "Northwest Iran",
+                        "Eastern Iran"
+                        ]
+                    },
+                    "Thailand",
+                    "Finland"
                   ],
-                  "Pro-Allies Neutral": [
-                    "Mexico", "Central America", "West Indies"
+                  "Pro-Allied Neutral": [
+                    "Brazil", "Eire", "Yugoslavia", "Greece", "Crete"
                   ]
                 };
 
@@ -4333,6 +4666,11 @@
                     unitGroupElement.setAttribute('id', uniqueId);
                     unitGroupElement.setAttribute('data-has-moved', 'false');
                     unitGroupElement.setAttribute('data-movement-remaining', movementCapacity);
+
+                    // Add damage tracking for facilities & capital ships
+                    if (SPECIAL_INFRASTRUCTURE_UNITS.includes(unitType) || ['BTS', 'ACC'].includes(unitType)) {
+                        unitGroupElement.setAttribute('data-damage', '1');
+                    }
 
                     // Store this unit's data in the global array
                     placedUnitsData.push({
@@ -5716,6 +6054,13 @@
                 "Has Moved": clickedUnit.getAttribute('data-has-moved'),
                 "Movement Remaining": clickedUnit.getAttribute('data-movement-remaining')
             };
+
+            // Add Damage variable to log if it exists
+            const damageAttr = clickedUnit.getAttribute('data-damage');
+            if (damageAttr !== null) {
+                unitData["Damage"] = damageAttr;
+            }
+
             console.table(unitData);
 
             if (event.button === 2) return; // Ignore right-click
@@ -6079,6 +6424,8 @@
             console.log("SVG loaded and styled. Calculating and displaying IPCs...");
             calculateAndDisplayIPCs("setup 1940");
             drawOtherLabels();
+
+            updatePhaseDisplay();
         }).catch(error => {
             console.error("Error during map loading or IPC calculation:", error);
         });
@@ -6277,8 +6624,10 @@
         const side = window.simSelectionMode;
         if (!side) return;
 
+        const sidePrefix = side === 'attacker' ? 'atk' : 'def';
+
         // Reset inputs for this side first
-        document.querySelectorAll(`.sim-${side.substring(0,3)}-input`).forEach(inp => {
+        document.querySelectorAll(`.sim-${sidePrefix}-input`).forEach(inp => {
             inp.value = 0;
             updateSimInputDisplay(inp);
         });
@@ -6286,11 +6635,10 @@
         // Find units in this territory
         const unitsInTerritory = placedUnitsData.filter(u => u.placedIn === territoryName && !FACILITY_UNIT_TYPES.includes(u.unitType));
         
-        // Let user choose which alliance to pull if there are multiple? For now, pull ALL units in the territory
-        // (Assuming user is pulling their own stack for attack, or enemy stack for defense).
+        // Pull ALL units in the territory
         unitsInTerritory.forEach(u => {
             const profileName = UNIT_ABBREVIATION_TO_PROFILE_NAME[u.unitType] || u.unitType;
-            const input = document.querySelector(`.sim-${side.substring(0,3)}-input[data-type="${profileName}"]`);
+            const input = document.querySelector(`.sim-${sidePrefix}-input[data-type="${profileName}"]`);
             if (input) {
                 input.value = parseInt(input.value) + parseInt(u.count);
                 updateSimInputDisplay(input);
@@ -6326,14 +6674,29 @@
         const container = document.getElementById('battle-sim-content');
         if (!container || !window.unitProfileData) return;
 
+        window.simBattleType = window.simBattleType || 'land';
+        window.simCasOrder = window.simCasOrder || 'cost';
+        const isLand = window.simBattleType === 'land';
+
         const validUnits = window.unitProfileData.filter(u => !u.is_facility);
+        const seaTypes = ['Battleship', 'Aircraft Carrier', 'Cruiser', 'Destroyer', 'Transport', 'Submarine'];
+        const airTypes = ['Fighter', 'Tactical Bomber', 'Strategic Bomber', 'Transport Plane (Strategic Bomber Reclassified)', 'Cargo Plane (Heavy Bomber Reclassified)'];
 
-        // Remove AAA from attackers
-        const attackers = validUnits.filter(u => u.unit_type !== 'Anti-Aircraft Gun (AAA)').map(u => ({
+        const attackers = validUnits.filter(u => {
+            if (isLand) {
+                if (seaTypes.includes(u.unit_type)) return ['Battleship', 'Cruiser'].includes(u.unit_type);
+                return true;
+            } else {
+                return seaTypes.includes(u.unit_type) || airTypes.includes(u.unit_type);
+            }
+        }).map(u => ({
             ...u, baseVal: parseInt(u.attack_value) || 0
-        })).sort((a, b) => b.baseVal - a.baseVal); // Highest to lowest
+        })).sort((a, b) => b.baseVal - a.baseVal);
 
-        const defenders = validUnits.map(u => ({
+        const defenders = validUnits.filter(u => {
+            if (isLand) return !seaTypes.includes(u.unit_type);
+            else return seaTypes.includes(u.unit_type) || airTypes.includes(u.unit_type);
+        }).map(u => ({
             ...u, baseVal: parseInt(u.defense_value) || 0
         })).sort((a, b) => b.baseVal - a.baseVal);
 
@@ -6341,26 +6704,20 @@
             const abbr = getUnitAbbreviation(unit.unit_type);
             let imgSrc = '';
             
-            // Handle standard abbreviations, AAAs, and special plane names
-            if (abbr && UNIT_IMAGE_MAP[abbr]) {
-                imgSrc = UNIT_IMAGE_MAP[abbr];
-            } else if (unit.unit_type.includes('AAA')) {
-                imgSrc = 'units/anti-aircraft.png';
-            } else if (unit.unit_type.toLowerCase() === 'transport plane (strategic bomber reclassified)') {
-                imgSrc = 'units/transport-plane.png';
-            } else if (unit.unit_type.toLowerCase() === 'cargo plane (heavy bomber reclassified)') {
-                imgSrc = 'units/cargo-plane.png';
-            }
+            if (abbr && UNIT_IMAGE_MAP[abbr]) imgSrc = UNIT_IMAGE_MAP[abbr];
+            else if (unit.unit_type.includes('AAA')) imgSrc = 'units/anti-aircraft.png';
+            else if (unit.unit_type.toLowerCase() === 'transport plane (strategic bomber reclassified)') imgSrc = 'units/transport-plane.png';
+            else if (unit.unit_type.toLowerCase() === 'cargo plane (heavy bomber reclassified)') imgSrc = 'units/cargo-plane.png';
 
             const inputClass = isAttacker ? 'sim-atk-input' : 'sim-def-input';
             
             return `
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; padding-bottom: 4px; border-bottom: 1px dashed rgba(255,255,255,0.1); font-family: 'Georgia', serif;">
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        ${imgSrc ? `<img src="${imgSrc}" style="width: 28px; height: 28px; filter: drop-shadow(2px 2px 3px rgba(0,0,0,0.8));" />` : ''}
-                        <span style="font-size: 13px; color: #f0ead2;">${unit.unit_type}</span>
+                <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 8px; padding-bottom: 4px; border-bottom: 1px dashed rgba(255,255,255,0.1); font-family: 'Georgia', serif;">
+                    <div style="display: flex; align-items: center; gap: 10px; flex: 1 1 140px; min-width: 0;">
+                        ${imgSrc ? `<img src="${imgSrc}" style="width: 28px; height: 28px; filter: drop-shadow(2px 2px 3px rgba(0,0,0,0.8)); flex-shrink: 0;" />` : ''}
+                        <span style="font-size: 13px; color: #f0ead2; word-wrap: break-word;">${unit.unit_type}</span>
                     </div>
-                    <div style="display: flex; align-items: center; gap: 8px;">
+                    <div style="display: flex; align-items: center; gap: 8px; flex: 0 0 auto; justify-content: flex-end;">
                         <button class="sim-qty-btn" style="width: 24px; height: 24px; font-size: 16px;" onclick="changeSimQty(this, -1)">-</button>
                         <input type="text" class="sim-qty-display" style="width: 30px; font-size: 14px;" value="0" readonly>
                         <input type="hidden" class="${inputClass}" data-type="${unit.unit_type}" value="0">
@@ -6384,20 +6741,39 @@
         };
 
         container.innerHTML = `
-            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-                <button id="btn-select-attacker" onclick="toggleSimSelectionMode('attacker')" style="flex:1; background: #4a1a1a; color: #ffcccc; border: 1px solid #ff4444; padding: 8px; cursor: pointer; border-radius: 4px; font-family:'Georgia'; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.5);">📍 Select Territory (Atk)</button>
-                <button id="btn-select-defender" onclick="toggleSimSelectionMode('defender')" style="flex:1; background: #1a2a4a; color: #ccdfff; border: 1px solid #33CFFF; padding: 8px; cursor: pointer; border-radius: 4px; font-family:'Georgia'; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.5);">📍 Select Territory (Def)</button>
+            <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 6px; border: 1px solid #555; margin-bottom: 15px; display: flex; flex-direction: column; gap: 10px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <label style="color: #E0D8B0; font-weight: bold;">Area:</label>
+                    <div>
+                        <label style="margin-right: 10px; cursor: pointer;"><input type="radio" name="sim-battle-type" value="land" ${isLand?'checked':''} onchange="window.simBattleType=this.value; renderBattleSimulator();"> Land</label>
+                        <label style="cursor: pointer;"><input type="radio" name="sim-battle-type" value="sea" ${!isLand?'checked':''} onchange="window.simBattleType=this.value; renderBattleSimulator();"> Sea</label>
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <label style="color: #E0D8B0; font-weight: bold;">Cas Priority:</label>
+                    <select id="sim-cas-order" onchange="window.simCasOrder=this.value;" style="background: #2d2319; color: #E0D8B0; border: 1px solid #6D5C4C; padding: 3px; border-radius: 3px;">
+                        <option value="cost" ${window.simCasOrder==='cost'?'selected':''}>Cheapest IPC First</option>
+                        <option value="value" ${window.simCasOrder==='value'?'selected':''}>Lowest Combat Value</option>
+                        <option value="preserve_planes" ${window.simCasOrder==='preserve_planes'?'selected':''}>Preserve Air Units</option>
+                    </select>
+                </div>
             </div>
-            
-            <div style="display: flex; gap: 15px; margin-bottom: 20px; align-items: stretch;">
-                <div style="flex: 1; background: rgba(45, 35, 25, 0.6); border: 2px solid #ff4444; border-radius: 8px; padding: 15px; box-shadow: inset 0 0 10px rgba(255,68,68,0.15);">
-                    <h3 style="color: #ffcccc; background: rgba(138, 26, 26, 0.8); margin: -15px -15px 15px -15px; padding: 10px; text-align: center; border-bottom: 2px solid #ff4444; border-radius: 6px 6px 0 0; font-family:'Georgia'; font-size: 16px; letter-spacing: 1px; text-shadow: 1px 1px 2px black;">ATTACKER</h3>
-                    ${groupByValue(attackers, true)}
+
+            <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; justify-content: center;">
+                <div style="flex: 1 1 180px; display: flex; flex-direction: column; gap: 10px; min-width: 0;">
+                    <button id="btn-select-attacker" onclick="toggleSimSelectionMode('attacker')" style="width: 100%; background: #4a1a1a; color: #ffcccc; border: 1px solid #ff4444; padding: 8px; cursor: pointer; border-radius: 4px; font-family:'Georgia'; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.5);">📍 Select Territory (Atk)</button>
+                    <div style="background: rgba(45, 35, 25, 0.6); border: 2px solid #ff4444; border-radius: 8px; padding: 15px; box-shadow: inset 0 0 10px rgba(255,68,68,0.15);">
+                        <h3 style="color: #ffcccc; background: rgba(138, 26, 26, 0.8); margin: -15px -15px 15px -15px; padding: 10px; text-align: center; border-bottom: 2px solid #ff4444; border-radius: 6px 6px 0 0; font-family:'Georgia'; font-size: 16px; letter-spacing: 1px; text-shadow: 1px 1px 2px black;">ATTACKER</h3>
+                        ${groupByValue(attackers, true)}
+                    </div>
                 </div>
                 
-                <div style="flex: 1; background: rgba(45, 35, 25, 0.6); border: 2px solid #33CFFF; border-radius: 8px; padding: 15px; box-shadow: inset 0 0 10px rgba(51,207,255,0.15);">
-                    <h3 style="color: #ccdfff; background: rgba(26, 58, 90, 0.8); margin: -15px -15px 15px -15px; padding: 10px; text-align: center; border-bottom: 2px solid #33CFFF; border-radius: 6px 6px 0 0; font-family:'Georgia'; font-size: 16px; letter-spacing: 1px; text-shadow: 1px 1px 2px black;">DEFENDER</h3>
-                    ${groupByValue(defenders, false)}
+                <div style="flex: 1 1 180px; display: flex; flex-direction: column; gap: 10px; min-width: 0;">
+                    <button id="btn-select-defender" onclick="toggleSimSelectionMode('defender')" style="width: 100%; background: #1a2a4a; color: #ccdfff; border: 1px solid #33CFFF; padding: 8px; cursor: pointer; border-radius: 4px; font-family:'Georgia'; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.5);">📍 Select Territory (Def)</button>
+                    <div style="background: rgba(45, 35, 25, 0.6); border: 2px solid #33CFFF; border-radius: 8px; padding: 15px; box-shadow: inset 0 0 10px rgba(51,207,255,0.15);">
+                        <h3 style="color: #ccdfff; background: rgba(26, 58, 90, 0.8); margin: -15px -15px 15px -15px; padding: 10px; text-align: center; border-bottom: 2px solid #33CFFF; border-radius: 6px 6px 0 0; font-family:'Georgia'; font-size: 16px; letter-spacing: 1px; text-shadow: 1px 1px 2px black;">DEFENDER</h3>
+                        ${groupByValue(defenders, false)}
+                    </div>
                 </div>
             </div>
             
@@ -6414,7 +6790,7 @@
                 <div style="text-align: center;">Results will be displayed here.</div>
             </div>
         `;
-    };
+    }
 
     function calculateBattleOdds() {
         const output = document.getElementById('battle-results-output');
@@ -6452,7 +6828,43 @@
 
         let atkWins = 0, defWins = 0, draws = 0;
         let atkLostCostTotal = 0, defLostCostTotal = 0;
+        const survivorCounts = {};
         const ITERATIONS = 1000;
+        const airTypes = ['Fighter', 'Tactical Bomber', 'Strategic Bomber', 'Transport Plane (Strategic Bomber Reclassified)', 'Cargo Plane (Heavy Bomber Reclassified)'];
+
+        const sortForCasualties = (arr) => {
+            arr.forEach(u => {
+                if (u.isTransport) u.casPriority = 1000 + u.cost;
+                else if (u.type === 'Battleship' && u.hp === 2) u.casPriority = -10;
+                else {
+                    let base = 0;
+                    if (window.simCasOrder === 'cost') base = u.cost;
+                    else if (window.simCasOrder === 'value') base = u.currentVal;
+                    else if (window.simCasOrder === 'preserve_planes') base = airTypes.includes(u.type) ? 500 + u.cost : u.cost;
+                    u.casPriority = base + (u.currentVal / 100);
+                }
+            });
+            arr.sort((a, b) => a.casPriority - b.casPriority);
+        };
+
+        const applyAirHits = (arr, hits, costLostVar) => {
+            for(let h=0; h<hits; h++) {
+                const airIdx = arr.findIndex(u => airTypes.includes(u.type));
+                if (airIdx !== -1) costLostVar += arr.splice(airIdx, 1)[0].cost;
+                else break;
+            }
+            return costLostVar;
+        };
+
+        const getSignature = (arr) => {
+            if (arr.length === 0) return "Wiped Out";
+            const counts = {};
+            arr.forEach(u => counts[u.type] = (counts[u.type] || 0) + 1);
+            return Object.entries(counts)
+                .sort((a, b) => b[1] - a[1])
+                .map(([type, qty]) => `${qty} ${getUnitAbbreviation(type)||type}`)
+                .join(', ');
+        };
 
         for (let i = 0; i < ITERATIONS; i++) {
             let atk = JSON.parse(JSON.stringify(baseAttackers));
@@ -6460,12 +6872,42 @@
             let atkCostLost = 0;
             let defCostLost = 0;
 
-            while (atk.length > 0 && def.length > 0) {
-                // --- Combined Arms Adjustments ---
-                atk.forEach(u => u.currentVal = u.baseVal);
-                def.forEach(u => u.currentVal = u.baseVal);
+            let preDefHits = 0;
+            let preAtkAirHits = 0;
+            let preDefAirHits = 0;
 
-                // Attacker Combined Arms
+            if (window.simBattleType === 'land') {
+                const bombardmentUnits = atk.filter(u => ['Battleship', 'Cruiser'].includes(u.type));
+                bombardmentUnits.forEach(u => { if (Math.floor(Math.random() * 6) + 1 <= u.baseVal) preDefHits++; });
+                atk = atk.filter(u => !['Battleship', 'Cruiser'].includes(u.type));
+            }
+
+            const atkAAA = atk.filter(u => u.type.includes('AAA'));
+            atkAAA.forEach(u => {
+                if (Math.floor(Math.random() * 6) + 1 <= 1) preDefAirHits++;
+                u.currentVal = 0;
+            });
+
+            const defAAA = def.filter(u => u.type.includes('AAA'));
+            defAAA.forEach(u => {
+                if (Math.floor(Math.random() * 6) + 1 <= 1) preAtkAirHits++;
+                u.currentVal = 0;
+            });
+
+            sortForCasualties(def);
+            for(let h=0; h<preDefHits && def.length>0; h++) {
+                if (def[0].type === 'Battleship' && def[0].hp === 2) {
+                    def[0].hp = 1; sortForCasualties(def);
+                } else defCostLost += def.shift().cost;
+            }
+
+            atkCostLost = applyAirHits(atk, preAtkAirHits, atkCostLost);
+            defCostLost = applyAirHits(def, preDefAirHits, defCostLost);
+
+            while (atk.length > 0 && def.length > 0) {
+                atk.forEach(u => u.currentVal = u.type.includes('AAA') ? 0 : u.baseVal);
+                def.forEach(u => u.currentVal = u.type.includes('AAA') ? 0 : u.baseVal);
+
                 let unassignedArt = atk.filter(u => u.type === 'Artillery').length;
                 atk.filter(u => u.type === 'Infantry' || u.type === 'Mechanized Infantry').forEach(u => {
                     if (unassignedArt > 0) { u.currentVal = 2; unassignedArt--; }
@@ -6478,7 +6920,6 @@
                     else if (unassignedFighter > 0) { u.currentVal = 4; unassignedFighter--; }
                 });
 
-                // Defender Combined Arms
                 let tptDef = def.filter(u => u.type === 'Transport');
                 for(let j=0; j<Math.floor(tptDef.length / 2); j++) { tptDef[j].currentVal = 1; }
 
@@ -6487,52 +6928,31 @@
                     if (unassignedBts > 0) { u.currentVal = 4; unassignedBts--; }
                 });
 
-                // --- Roll Dice ---
                 let atkHits = 0, defHits = 0;
-                atk.forEach(u => { if (Math.floor(Math.random() * 6) + 1 <= u.currentVal) atkHits++; });
-                def.forEach(u => { if (Math.floor(Math.random() * 6) + 1 <= u.currentVal) defHits++; });
-
-                // --- Sort for Casualties ---
-                // Priority logic:
-                // Undamaged Battleship takes hit FIRST (priority -10)
-                // Normal units take hit based on value (lowest value first)
-                // Transports take hit LAST (priority +1000)
-                const sortForCasualties = (arr) => {
-                    arr.forEach(u => {
-                        if (u.isTransport) u.casPriority = 1000 + u.cost;
-                        else if (u.type === 'Battleship' && u.hp === 2) u.casPriority = -10;
-                        else u.casPriority = u.currentVal + (u.cost / 100); // Cheap/weak die first
-                    });
-                    arr.sort((a, b) => a.casPriority - b.casPriority);
-                };
+                atk.forEach(u => { if (u.currentVal > 0 && Math.floor(Math.random() * 6) + 1 <= u.currentVal) atkHits++; });
+                def.forEach(u => { if (u.currentVal > 0 && Math.floor(Math.random() * 6) + 1 <= u.currentVal) defHits++; });
 
                 sortForCasualties(atk);
                 sortForCasualties(def);
 
-                // Apply Defender Hits to Attackers
                 for (let h = 0; h < defHits && atk.length > 0; h++) {
                     if (atk[0].type === 'Battleship' && atk[0].hp === 2) {
-                        atk[0].hp = 1; atk[0].baseVal = 2; // Damaged BTS
-                        sortForCasualties(atk); // Re-sort because priority changed
-                    } else {
-                        atkCostLost += atk.shift().cost;
-                    }
+                        atk[0].hp = 1; atk[0].baseVal = 2; sortForCasualties(atk);
+                    } else atkCostLost += atk.shift().cost;
                 }
 
-                // Apply Attacker Hits to Defenders
                 for (let h = 0; h < atkHits && def.length > 0; h++) {
                     if (def[0].type === 'Battleship' && def[0].hp === 2) {
-                        def[0].hp = 1; def[0].baseVal = 2; // Damaged BTS
-                        sortForCasualties(def);
-                    } else {
-                        defCostLost += def.shift().cost;
-                    }
+                        def[0].hp = 1; def[0].baseVal = 2; sortForCasualties(def);
+                    } else defCostLost += def.shift().cost;
                 }
             }
 
-            if (atk.length > 0) atkWins++;
-            else if (def.length > 0) defWins++;
-            else draws++;
+            let resultKey = "";
+            if (atk.length > 0) { atkWins++; resultKey = "ATK: " + getSignature(atk); }
+            else if (def.length > 0) { defWins++; resultKey = "DEF: " + getSignature(def); }
+            else { draws++; resultKey = "Mutual Destruction"; }
+            survivorCounts[resultKey] = (survivorCounts[resultKey] || 0) + 1;
 
             atkLostCostTotal += atkCostLost;
             defLostCostTotal += defCostLost;
@@ -6543,21 +6963,31 @@
         const drawPct = ((draws/ITERATIONS)*100).toFixed(1);
         const avgAtkLoss = (atkLostCostTotal/ITERATIONS).toFixed(1);
         const avgDefLoss = (defLostCostTotal/ITERATIONS).toFixed(1);
+        
+        const topSurvivors = Object.entries(survivorCounts)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 3)
+            .map(([desc, count]) => ({ desc, pct: ((count/ITERATIONS)*100).toFixed(1) }));
 
-        // Save to history
         const historyEntry = {
             title: `Atk ${baseAttackers.length} vs Def ${baseDefenders.length}`,
-            atkPct, defPct, drawPct, avgAtkLoss, avgDefLoss
+            atkPct, defPct, drawPct, avgAtkLoss, avgDefLoss, topSurvivors
         };
         simulationHistory.push(historyEntry);
         updateHistoryDropdown();
 
-        renderResults(atkPct, defPct, drawPct, avgAtkLoss, avgDefLoss);
+        renderResults(atkPct, defPct, drawPct, avgAtkLoss, avgDefLoss, topSurvivors);
     }
 
-    function renderResults(atkPct, defPct, drawPct, avgAtkLoss, avgDefLoss) {
+    function renderResults(atkPct, defPct, drawPct, avgAtkLoss, avgDefLoss, topSurvivors = []) {
         const output = document.getElementById('battle-results-output');
         
+        let survivorsHtml = topSurvivors.length > 0 ? `<h4 style="margin: 15px 0 10px 0; border-bottom: 1px solid #555; padding-bottom: 5px;">Top Surviving Scenarios</h4><ul style="padding-left: 20px; margin: 0; font-size: 13px; color: #ccc;">` : '';
+        topSurvivors.forEach(s => {
+            survivorsHtml += `<li style="margin-bottom: 5px;"><strong>${s.pct}%</strong> - ${s.desc}</li>`;
+        });
+        if (topSurvivors.length > 0) survivorsHtml += `</ul>`;
+
         output.innerHTML = `
             <h4 style="margin: 0 0 10px 0; border-bottom: 1px solid #555; padding-bottom: 5px;">Outcome Probabilities</h4>
             <div style="display: flex; align-items: center; justify-content: space-around; margin-bottom: 15px;">
@@ -6578,6 +7008,7 @@
                     <span style="font-size: 18px; font-weight: bold;">${avgDefLoss}</span>
                 </div>
             </div>
+            ${survivorsHtml}
         `;
     }
 
@@ -6594,7 +7025,7 @@
     function loadHistory(index) {
         if (index === "") return;
         const hist = simulationHistory[index];
-        renderResults(hist.atkPct, hist.defPct, hist.drawPct, hist.avgAtkLoss, hist.avgDefLoss);
+        renderResults(hist.atkPct, hist.defPct, hist.drawPct, hist.avgAtkLoss, hist.avgDefLoss, hist.topSurvivors);
     }
 
     /* ============================================= */
@@ -6755,6 +7186,634 @@
             });
         });
     }
+
+    const TECH_OPTIONS = [
+        { name: "Self-Propelled Artillery", img: "units/self-propelled-artillery.png", effect: "Artillery can move at 2, attack and defend at 3, and increases defense of infantry/mechanized units by 1.", lore: "Mounting artillery on tracked chassis provided infantry with highly mobile fire support that could keep pace with fast-moving armored divisions." },
+        { name: "Improved Transports", img: "units/super-transport.png", effect: "Transports have double carrying capacity, and can defend at 1 (allowing them to take hits in combat).", lore: "Standardized and mass-produced transport ships with better onboard armament ensured vital supplies and troops survived contested waters." },
+        { name: "Super Battleships", img: "units/super-battleship.png", effect: "Attacks and defends with two dice (one @ 4, one @ 3). Takes 3 hits total. (Hit 1 reduces to one @ 4. Hit 2 reduces to one @ 2).", lore: "The pinnacle of naval artillery, these behemoths featured unprecedented armor thickness and massive main batteries." },
+        { name: "Super Submarines", img: "units/super-submarine.png", effect: "Attack at 3. Destroyers can detect only up to 3 subs. Can be hit by air, and can attack air (one @ 1).", lore: "Advanced hull designs and improved snorkels allowed submarines to remain submerged longer and mount anti-aircraft defenses." },
+        { name: "Heavy Bombers", img: "units/heavy-strategic-bomber.png", effect: "Strategic bombers now roll 2 dice at 4, and may be reclassified as a cargo plane.", lore: "Four-engine strategic bombers possessed massive payloads and range, capable of leveling industrial centers or dropping massive supply payloads." },
+        { name: "Fighter Jets", img: "units/fighter-jet.png", effect: "Fighters can now move 6, attack at 4, and defend at 5.", lore: "The introduction of jet propulsion completely revolutionized aerial combat, offering speeds and climb rates piston-engine aircraft could not match." },
+        { name: "Super Aircraft Carriers", img: "units/super-aircraft-carrier.png", effect: "Double carrying capacity, attack at 2, and can take 3 hits. Fully operational until taking 2 hits.", lore: "Armored flight decks and massive hangar spaces turned carriers into nearly unsinkable floating airbases that projected power globally." },
+        { name: "Improved Shipyards", img: "units/super-shipyard.png", effect: "At major shipyards, all naval units cost half to produce.", lore: "Assembly-line techniques and prefabricated sections dramatically reduced the time and cost required to launch massive fleets." },
+        { name: "Heavy Tanks", img: "units/heavy-tank.png", effect: "Tanks attack and defend at 4.", lore: "Trading speed for impenetrable sloped armor and devastating high-velocity guns, these tanks dominated battlefield engagements." },
+        { name: "Super Anti-Aircraft", img: "units/super-anti-aircraft.png", effect: "All Anti-Aircraft defense increases to 2, and is also triggered when units fly over adjacent spaces. AAA units can now take two hits.", lore: "Radar-guided targeting systems and proximity fuzes transformed ground-to-air defenses into a lethal wall of flak." }
+    ];
+
+    // --- Custom Modal Logic ---
+    function showCustomModal(title, message, isConfirm = false) {
+        return new Promise((resolve) => {
+            const overlay = document.getElementById('custom-modal-overlay');
+            document.getElementById('custom-modal-title').textContent = title;
+            document.getElementById('custom-modal-body').textContent = message;
+            
+            const btnOk = document.getElementById('custom-modal-ok');
+            const btnCancel = document.getElementById('custom-modal-cancel');
+            
+            btnCancel.style.display = isConfirm ? 'block' : 'none';
+            overlay.style.display = 'flex';
+
+            btnOk.onclick = () => { overlay.style.display = 'none'; resolve(true); };
+            btnCancel.onclick = () => { overlay.style.display = 'none'; resolve(false); };
+        });
+    }
+
+    // --- Staging Variables for Purchase Phase ---
+    let stagedIpcChange = 0;
+    let pendingRepairs = {}; // { unitId: amountHealed }
+    let pendingDemos = {};   // { unitId: 'demolish' | 'downgrade' }
+
+    function openTechModal() {
+        if (['France', 'China'].includes(activePowerForTech)) {
+            advancePhase();
+            return;
+        }
+
+        const windowEl = document.getElementById('tech-window');
+        if (!windowEl) return;
+
+        const content = document.getElementById('tech-list-container');
+        const bg = document.getElementById('tech-window-bg');
+        const title = document.getElementById('tech-power-title');
+        const ipcDisplay = document.getElementById('tech-ipc-display');
+
+        bg.style.backgroundImage = `url('flags/${activePowerForTech}.png')`;
+        title.textContent = activePowerForTech;
+        
+        const currentIpcs = totalIpcsByPower[activePowerForTech] || 0;
+        ipcDisplay.textContent = `IPCs: ${currentIpcs}`;
+        ipcDisplay.style.color = currentIpcs >= 4 ? '#ffd700' : '#ff6666';
+
+        selectedTechId = null;
+        
+        const currentPhase = technologyResearchStatus[activePowerForTech]?.researchPhase || 'Inactive';
+        
+        // Inject Rules and clear grid
+        content.innerHTML = `
+            <div class="tech-rules-container" style="grid-column: 1 / -1;">
+                <div style="font-weight: bold; margin-bottom: 8px; color: #66ccff; text-transform: uppercase;">🧪 R&D Phases & Rules (Current Phase: ${currentPhase})</div>
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 6px; margin-bottom: 6px;">
+                    <div><span style="color:#ffd700; font-weight:bold;">💰 Cost:</span> 4 IPCs (Advance) / 6 IPCs (Roll)</div>
+                    <div><span style="color:#ff6666; font-weight:bold;">🎲 Breakthrough (Phase 3):</span> Roll a 6</div>
+                </div>
+                <div><span style="color:#a8d8b0; font-weight:bold;">📈 Progress:</span> Inactive ➔ P1 ➔ P2 ➔ P3 ➔ Activated (or H)</div>
+                <div style="margin-top: 6px; font-size: 11px; color: #aaa;">Fail Phase 3? Move to Phase H (Hold). From H, buy dice for 1 IPC each, roll 5 or 6 to activate!</div>
+            </div>
+        `;
+
+        TECH_OPTIONS.forEach((tech, idx) => {
+            content.innerHTML += `
+                <div class="tech-card-new" id="tech-card-${idx}" onclick="selectTech(${idx})">
+                    <div class="tech-icon-uniform">
+                        <img src="${tech.img}" onerror="this.src='units/infantry.png'">
+                    </div>
+                    <h4 style="margin:0; color:#66ccff; font-size:13px;">${tech.name}</h4>
+                    <p style="font-size:11px; margin:0; line-height:1.3; color:#ccc;">${tech.effect}</p>
+                    <div class="tech-lore">${tech.lore}</div>
+                </div>
+            `;
+        });
+
+        // Anchor bottom right
+        windowEl.style.top = 'auto';
+        windowEl.style.left = 'auto';
+        windowEl.style.bottom = '10px';
+        windowEl.style.right = '10px';
+        windowEl.style.transform = 'none';
+        windowEl.style.display = 'flex';
+    }
+
+    function openPurchaseModal() {
+        stagedIpcChange = 0;
+        pendingRepairs = {};
+        pendingDemos = {};
+
+        const windowEl = document.getElementById('purchase-window');
+        const bg = document.getElementById('purchase-window-bg');
+        bg.style.backgroundImage = `url('flags/${activePowerForTech}.png')`;
+        document.getElementById('purchase-power-title').textContent = activePowerForTech;
+        
+        renderPurchaseModalContent();
+        
+        // Anchor bottom right
+        windowEl.style.top = 'auto';
+        windowEl.style.left = 'auto';
+        windowEl.style.bottom = '10px';
+        windowEl.style.right = '10px';
+        windowEl.style.transform = 'none';
+        windowEl.style.display = 'flex';
+    }
+
+    function renderPurchaseModalContent() {
+        const contentContainer = document.getElementById('purchase-content-container');
+        const ipcDisplay = document.getElementById('purchase-ipc-display');
+        const proceedBtn = document.getElementById('purchase-proceed-btn');
+
+        const currentBank = totalIpcsByPower[activePowerForTech] || 0;
+        
+        // Window header stays completely static (what they had BEFORE buying/repairing)
+        ipcDisplay.textContent = `IPCs: ${currentBank}`;
+        ipcDisplay.style.color = '#ffd700'; 
+        
+        const sign = stagedIpcChange >= 0 ? '+' : '';
+        proceedBtn.textContent = `Proceed (${sign}${stagedIpcChange} IPCs)`;
+
+        const allMyUnits = placedUnitsData.filter(u => u.power === activePowerForTech);
+        const netIpcs = currentBank + stagedIpcChange; // Used internally to restrict further buying, but not displayed at the top
+        
+        // 1. Repair Logic
+        const damagedUnits = allMyUnits.filter(u => parseInt(u.element.getAttribute('data-damage') || '0') > 0);
+        damagedUnits.sort((a, b) => SPECIAL_INFRASTRUCTURE_UNITS.includes(a.unitType) ? -1 : 1);
+
+        let repairTableRows = '';
+        damagedUnits.forEach(u => {
+            const baseDamage = parseInt(u.element.getAttribute('data-damage'));
+            const healed = pendingRepairs[u.element.id] || 0;
+            const displayDamage = baseDamage - healed;
+            
+            const isFacility = SPECIAL_INFRASTRUCTURE_UNITS.includes(u.unitType);
+            const isShip = ['BTS', 'ACC'].includes(u.unitType);
+            
+            let repairControls = '';
+
+            if (isFacility) {
+                repairControls = `
+                    <div style="display:flex; justify-content:center; align-items:center; gap: 10px;">
+                        <button class="repair-btn" onclick="stageRepair('${u.element.id}', -1)" ${healed <= 0 ? 'disabled' : ''}>Undo</button>
+                        <span style="font-size: 18px; font-weight: bold; width: 20px;">${healed}</span>
+                        <button class="repair-btn" onclick="stageRepair('${u.element.id}', 1)" ${displayDamage <= 0 || netIpcs < 1 ? 'disabled' : ''}>Heal</button>
+                    </div>
+                `;
+            } else if (isShip) {
+                if (isAdjacentToFriendlyNavalBase(u.placedIn, activePowerForTech)) {
+                    repairControls = `<span class="free-repair-check">✔ (Free on Proceed)</span>`;
+                    pendingRepairs[u.element.id] = baseDamage; // Free heal staged
+                } else {
+                    repairControls = `<span style="color:#ff6666;">No adjacent Naval Base</span>`;
+                }
+            }
+
+            const profileName = UNIT_ABBREVIATION_TO_PROFILE_NAME[u.unitType] || u.unitType;
+            repairTableRows += `
+                <tr>
+                    <td class="unit-img-cell"><img src="${UNIT_IMAGE_MAP[u.unitType]}"></td>
+                    <td style="font-weight:bold;">${profileName}</td>
+                    <td>${u.placedIn}</td>
+                    <td style="color: #ff6666; font-weight: bold; font-size: 20px;">${displayDamage}</td>
+                    <td>${repairControls}</td>
+                </tr>
+            `;
+        });
+
+        // 2. Demo Logic
+        const myFacilities = allMyUnits.filter(u => SPECIAL_INFRASTRUCTURE_UNITS.includes(u.unitType));
+        let demoTableRows = '';
+        
+        myFacilities.forEach(u => {
+            const profileName = UNIT_ABBREVIATION_TO_PROFILE_NAME[u.unitType] || u.unitType;
+            const isMajor = u.unitType === 'Major Industrial Complex';
+            const actionText = isMajor ? "Downgrade to Minor (+12 IPCs)" : "Demolish (+12 IPCs)";
+            const pendingStatus = pendingDemos[u.element.id];
+
+            let controlHtml = '';
+            if (pendingStatus) {
+                controlHtml = `<button class="undo-demo-btn" onclick="stageDemo('${u.element.id}', null)">Undo ${pendingStatus}</button>`;
+            } else {
+                controlHtml = `<button class="demo-btn" onclick="stageDemo('${u.element.id}', '${isMajor ? 'downgrade' : 'demolish'}')">${actionText}</button>`;
+            }
+
+            demoTableRows += `
+                <tr style="${pendingStatus ? 'opacity: 0.5; background: rgba(255,0,0,0.1);' : ''}">
+                    <td class="unit-img-cell"><img src="${UNIT_IMAGE_MAP[u.unitType]}"></td>
+                    <td style="font-weight:bold;">${profileName}</td>
+                    <td>${u.placedIn}</td>
+                    <td>${controlHtml}</td>
+                </tr>
+            `;
+        });
+
+        contentContainer.innerHTML = `
+            <h2 class="phase-section-title">🔧 Repair Damaged Units</h2>
+            ${damagedUnits.length > 0 ? `
+                <table class="action-table">
+                    <thead><tr><th>Unit</th><th>Type</th><th>Space</th><th>Remaining Dmg</th><th>Action</th></tr></thead>
+                    <tbody>${repairTableRows}</tbody>
+                </table>
+            ` : '<div style="text-align:center; color:#aaa; margin-bottom: 30px; font-style:italic;">No damaged units to repair.</div>'}
+
+            <h2 class="phase-section-title">🏗️ Demolish Facilities</h2>
+            ${myFacilities.length > 0 ? `
+                <table class="action-table">
+                    <thead><tr><th>Unit</th><th>Type</th><th>Space</th><th>Action</th></tr></thead>
+                    <tbody>${demoTableRows}</tbody>
+                </table>
+            ` : '<div style="text-align:center; color:#aaa; font-style:italic;">No facilities available to demolish.</div>'}
+        `;
+    }
+    
+
+    function selectTech(idx) {
+        document.querySelectorAll('.tech-card-new').forEach(c => c.classList.remove('selected'));
+        document.getElementById(`tech-card-${idx}`).classList.add('selected');
+        selectedTechId = idx;
+    }
+
+    function closeTechModal(skipped) {
+        if (skipped) {
+            advancePhase();
+        } else {
+            if (selectedTechId === null) {
+                alert("Please select a technology first, or click Skip.");
+                return;
+            }
+            
+            technologyResearchStatus[activePowerForTech] = technologyResearchStatus[activePowerForTech] || {};
+            let currentPhase = technologyResearchStatus[activePowerForTech].researchPhase || 'Inactive';
+            let nextPhase = 'P1';
+            let cost = 4;
+            
+            // Determine phase progression
+            if (currentPhase === 'Inactive') { nextPhase = 'P1'; }
+            else if (currentPhase === 'P1') { nextPhase = 'P2'; }
+            else if (currentPhase === 'P2') { nextPhase = 'P3'; }
+            else if (currentPhase === 'P3') { 
+                nextPhase = 'P3 Roll'; // Wait for dice mechanic implementation
+                cost = 6; 
+            }
+
+            const currentIpcs = totalIpcsByPower[activePowerForTech] || 0;
+            if (currentIpcs < cost) {
+                alert(`Not enough IPCs! You need ${cost} IPCs to advance.`);
+                return;
+            }
+            
+            // Deduct IPCs and apply logic
+            totalIpcsByPower[activePowerForTech] -= cost;
+            technologyResearchStatus[activePowerForTech].researchPhase = nextPhase;
+            technologyResearchStatus[activePowerForTech].activeTech = TECH_OPTIONS[selectedTechId].name;
+
+            // Sync UI
+            document.getElementById('sidebar-ipc').textContent = totalIpcsByPower[activePowerForTech];
+            
+            // Update R&D map bar visually
+            updateRDBarVisual(activePowerForTech, nextPhase);
+
+            // Refresh the bottom IPC bar purely from our updated dictionary
+            refreshIpcDisplayBarVisuals();
+
+            advancePhase();
+        }
+    }
+
+    // Helper: Updates the R&D bar on the map dynamically
+    function updateRDBarVisual(power, phase) {
+        const cards = document.querySelectorAll('.rd-power-card');
+        cards.forEach(card => {
+            const flagCircle = card.querySelector('.rd-flag-circle');
+            if (flagCircle && flagCircle.style.backgroundImage.includes(`/${power}.png`)) {
+                const stageText = card.querySelector('.rd-stage-text');
+                if (stageText) {
+                    stageText.textContent = phase;
+                }
+            }
+        });
+    }
+
+    // Helper: Rebuilds the IPC bar visually based on current spent values
+    function refreshIpcDisplayBarVisuals() {
+        const powersByIpcValue = {};
+        for (const powerName in totalIpcsByPower) {
+            const ipcValue = totalIpcsByPower[powerName];
+            if (!powersByIpcValue[ipcValue]) powersByIpcValue[ipcValue] = [];
+            powersByIpcValue[ipcValue].push(powerName);
+        }
+
+        const ipcBars = document.querySelectorAll('.ipc-display-bar');
+        ipcBars.forEach(ipcDisplayBar => {
+            ipcDisplayBar.innerHTML = ''; 
+
+            for (let i = 1; i <= 70; i++) {
+                const square = document.createElement('div');
+                square.classList.add('ipc-square');
+
+                const flagsContainer = document.createElement('div');
+                flagsContainer.classList.add('ipc-flags-container');
+
+                if (powersByIpcValue[i]) {
+                    const powersForThisIpc = powersByIpcValue[i];
+                    if (powersForThisIpc.length === 2) flagsContainer.classList.add('vertical-split');
+                    else if (powersForThisIpc.length === 3) flagsContainer.classList.add('horizontal-split');
+                    
+                    powersForThisIpc.forEach(powerName => {
+                        const flagItem = document.createElement('div');
+                        flagItem.classList.add('flag-item');
+                        const flagImg = document.createElement('img');
+                        flagImg.src = `flags/${powerName}.png`;
+                        flagImg.classList.add('flag-icon');
+                        flagItem.appendChild(flagImg);
+                        flagsContainer.appendChild(flagItem);
+                    });
+                }
+                
+                square.appendChild(flagsContainer); 
+                const ipcNumberSpan = document.createElement('span');
+                ipcNumberSpan.classList.add('ipc-number');
+                ipcNumberSpan.textContent = i;
+                square.appendChild(ipcNumberSpan); 
+                ipcDisplayBar.appendChild(square);
+            }
+        });
+        updateIpcBarLayout();
+    }
+
+    function toggleWindowMinimize(windowId) {
+        const winEl = document.getElementById(windowId);
+        
+        if (winEl.classList.contains('minimized')) {
+            // Restore
+            winEl.classList.remove('minimized');
+            winEl.style.top = winEl.dataset.prevTop || '10%';
+            winEl.style.left = winEl.dataset.prevLeft || '50%';
+            winEl.onclick = null; 
+        } else {
+            // Minimize to bottom right of its current coordinates
+            const rect = winEl.getBoundingClientRect();
+            winEl.dataset.prevTop = winEl.style.top || (rect.top + 'px');
+            winEl.dataset.prevLeft = winEl.style.left || (rect.left + 'px');
+            
+            winEl.classList.add('minimized');
+            
+            // Push to bottom right of where it used to be
+            winEl.style.top = (rect.bottom - 40) + 'px'; 
+            winEl.style.left = (rect.right - 250) + 'px'; 
+
+            winEl.onclick = function() {
+                toggleWindowMinimize(windowId);
+            };
+        }
+    }
+
+    function makeWindowsDraggable() {
+        document.querySelectorAll('.action-window').forEach(win => {
+            const header = win.querySelector('.window-header');
+            if(!header) return;
+            let isDraggingWin = false;
+            let offsetX, offsetY;
+
+            header.addEventListener('mousedown', (e) => {
+                isDraggingWin = true;
+                offsetX = e.clientX - win.getBoundingClientRect().left;
+                offsetY = e.clientY - win.getBoundingClientRect().top;
+                win.style.transition = 'none'; 
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (!isDraggingWin) return;
+                let newX = e.clientX - offsetX;
+                let newY = e.clientY - offsetY;
+                
+                newX = Math.max(0, Math.min(newX, window.innerWidth - win.offsetWidth));
+                newY = Math.max(0, Math.min(newY, window.innerHeight - win.offsetHeight));
+                
+                win.style.left = newX + 'px';
+                win.style.top = newY + 'px';
+                win.style.right = 'auto'; 
+                win.style.bottom = 'auto';
+                if(win.style.transform) win.style.transform = 'none'; // Clear center transforms
+            });
+
+            document.addEventListener('mouseup', () => {
+                if(isDraggingWin) win.style.transition = 'opacity 0.2s ease-in-out';
+                isDraggingWin = false;
+            });
+        });
+    }
+    document.addEventListener('DOMContentLoaded', makeWindowsDraggable);
+
+    // --- UI Dynamic Sidebar Updater ---
+    function updateActivePowerSidebar() {
+        if (!activePowerForTech) return;
+        
+        // 1. Update IPCs
+        const currentIpcs = totalIpcsByPower[activePowerForTech] || 0;
+        const sidebarIpcEl = document.getElementById('sidebar-ipc');
+        if (sidebarIpcEl) sidebarIpcEl.textContent = currentIpcs;
+
+        // 2. Update R&D Status inside updateActivePowerSidebar()
+        const sidebarRdEl = document.getElementById('sidebar-rd');
+        if (sidebarRdEl) {
+            const rdStatus = technologyResearchStatus[activePowerForTech];
+            if (!rdStatus || rdStatus.researchPhase === 'Not Participating') {
+                sidebarRdEl.textContent = 'Not Participating';
+            } else {
+                // ALWAYS display the phase as requested.
+                sidebarRdEl.innerHTML = `<span style="color:#66ccff;">Phase: ${rdStatus.researchPhase}</span>`;
+            }
+        }
+
+        // 3. Update Purchase Queue (Placeholder for now)
+        const sidebarQueueEl = document.getElementById('sidebar-queue');
+        if (sidebarQueueEl) sidebarQueueEl.textContent = 'Queue empty.';
+    }
+
+    // --- Overhauled Phase Progression Logic ---
+    function advancePhase() {
+        // Hide open windows
+        document.getElementById('tech-window').style.display = 'none';
+        document.getElementById('purchase-window').style.display = 'none';
+
+        const powersList = window.currentTechPowers;
+        const currentPowerIndex = powersList.indexOf(activePowerForTech);
+
+        // Logic for Phase 0 (Technology Research) - Everyone goes once before moving to Phase 1
+        if (currentPhaseIndex === 0) {
+            if (currentPowerIndex < powersList.length - 1) {
+                // Next power for Tech
+                activePowerForTech = powersList[currentPowerIndex + 1];
+                currentTurnPowerIndex = powersOrder.indexOf(activePowerForTech);
+                updatePowerOrder(currentTurnPowerIndex);
+                updateActivePowerSidebar();
+                openTechModal();
+            } else {
+                // All powers did Tech. Move to Phase 1, reset back to FIRST power.
+                currentPhaseIndex = 1;
+                activePowerForTech = powersList[0];
+                currentTurnPowerIndex = powersOrder.indexOf(activePowerForTech);
+                updatePowerOrder(currentTurnPowerIndex);
+                updatePhaseDisplay();
+                updateActivePowerSidebar();
+                openPurchaseModal();
+            }
+        } 
+        // Logic for Phases 1-6 (One Power does all phases, then the next Power does all phases)
+        else {
+            if (currentPhaseIndex < 6) {
+                // Same Power, Next Phase
+                currentPhaseIndex++;
+                updatePhaseDisplay();
+                updateActivePowerSidebar();
+                
+                // Route to appropriate window based on phase (Placeholders for future phases)
+                if (currentPhaseIndex === 1) openPurchaseModal();
+                else console.log(`Phase ${currentPhaseIndex} started for ${activePowerForTech}.`);
+                
+            } else {
+                // Power finished all 6 phases. Move to the next Power.
+                if (currentPowerIndex < powersList.length - 1) {
+                    currentPhaseIndex = 1; // Start at Purchase Phase for the next power
+                    activePowerForTech = powersList[currentPowerIndex + 1];
+                    currentTurnPowerIndex = powersOrder.indexOf(activePowerForTech);
+                    updatePowerOrder(currentTurnPowerIndex);
+                    updatePhaseDisplay();
+                    updateActivePowerSidebar();
+                    openPurchaseModal();
+                } else {
+                    // Everyone has gone! Next Round!
+                    currentRound++;
+                    updateRoundInfo();
+                    currentPhaseIndex = 0; // Back to Tech Phase
+                    activePowerForTech = powersList[0]; // Reset to first power
+                    currentTurnPowerIndex = powersOrder.indexOf(activePowerForTech);
+                    updatePowerOrder(currentTurnPowerIndex);
+                    updatePhaseDisplay();
+                    updateActivePowerSidebar();
+                    openTechModal();
+                }
+            }
+        }
+    }
+
+    // --- Fix the "Skip Research" / "Proceed" button calls ---
+    // Make sure closeTechModal uses the new logic
+    async function closeTechModal(skipped) {
+        if (skipped) {
+            advancePhase();
+        } else {
+            if (selectedTechId === null) { 
+                await showCustomModal("Selection Required", "Please select a technology first, or click Skip."); 
+                return; 
+            }
+            
+            technologyResearchStatus[activePowerForTech] = technologyResearchStatus[activePowerForTech] || {};
+            let currentPhase = technologyResearchStatus[activePowerForTech].researchPhase || 'Inactive';
+            let nextPhase = 'P1';
+            let cost = 4;
+            
+            if (currentPhase === 'Inactive') { nextPhase = 'P1'; }
+            else if (currentPhase === 'P1') { nextPhase = 'P2'; }
+            else if (currentPhase === 'P2') { nextPhase = 'P3'; }
+            else if (currentPhase === 'P3') { nextPhase = 'P3 Roll'; cost = 6; }
+
+            if ((totalIpcsByPower[activePowerForTech] || 0) < cost) {
+                await showCustomModal("Insufficient Funds", `Not enough IPCs! You need ${cost} IPCs.`);
+                return;
+            }
+            
+            totalIpcsByPower[activePowerForTech] -= cost;
+            technologyResearchStatus[activePowerForTech].researchPhase = nextPhase;
+            technologyResearchStatus[activePowerForTech].activeTech = TECH_OPTIONS[selectedTechId].name;
+
+            updateRDBarVisual(activePowerForTech, nextPhase);
+            refreshIpcDisplayBarVisuals();
+            updateActivePowerSidebar();
+            advancePhase();
+        }
+    }
+
+    // Helper: Check if a sea zone is adjacent to a friendly Naval Base
+    function isAdjacentToFriendlyNavalBase(seaZoneName, power) {
+        const adjacencies = territoryAdjacencies[seaZoneName]?.adjacent_to || [];
+        for (const adjTerr of adjacencies) {
+            if (isNaN(Number(adjTerr))) { // If it's a land territory
+                const hasNavalBase = placedUnitsData.some(u => 
+                    u.placedIn === adjTerr && 
+                    u.unitType === 'Naval Base' && 
+                    (u.power === power || ALLIED_POWERS.has(u.power) === ALLIED_POWERS.has(power))
+                );
+                if (hasNavalBase) return true;
+            }
+        }
+        return false;
+    }
+
+
+    
+
+    // Attach locally to script
+    window.stageRepair = function(unitId, direction) {
+        if (direction === 1) {
+            pendingRepairs[unitId] = (pendingRepairs[unitId] || 0) + 1;
+            stagedIpcChange -= 1;
+        } else {
+            pendingRepairs[unitId] = Math.max(0, (pendingRepairs[unitId] || 0) - 1);
+            stagedIpcChange += 1;
+        }
+        renderPurchaseModalContent();
+    };
+
+    window.stageDemo = async function(unitId, actionType) {
+        if (actionType) {
+            const confirmed = await showCustomModal("Confirm Demolition", `Are you sure you want to stage this facility for ${actionType}?`, true);
+            if (!confirmed) return;
+            pendingDemos[unitId] = actionType;
+            stagedIpcChange += 12;
+        } else {
+            // Undo
+            if (pendingDemos[unitId]) stagedIpcChange -= 12;
+            delete pendingDemos[unitId];
+        }
+        renderPurchaseModalContent();
+    };
+
+    function applyPurchasePhaseChanges() {
+        const currentBank = totalIpcsByPower[activePowerForTech] || 0;
+        if (currentBank + stagedIpcChange < 0) {
+            showCustomModal("Error", "You do not have enough IPCs to cover these repairs.");
+            return;
+        }
+
+        // Apply Repairs
+        for (const [unitId, healed] of Object.entries(pendingRepairs)) {
+            const unitObj = placedUnitsData.find(u => u.element.id === unitId);
+            if (unitObj) {
+                const currentDamage = parseInt(unitObj.element.getAttribute('data-damage'));
+                unitObj.element.setAttribute('data-damage', Math.max(0, currentDamage - healed));
+            }
+        }
+
+        // Apply Demos
+        for (const [unitId, actionType] of Object.entries(pendingDemos)) {
+            const unitObj = placedUnitsData.find(u => u.element.id === unitId);
+            if (unitObj) {
+                if (actionType === 'downgrade') {
+                    unitObj.unitType = 'Minor Industrial Complex';
+                    unitObj.element.setAttribute('data-unit-type', 'Minor Industrial Complex');
+                    const img = unitObj.element.querySelector('image.unit-token');
+                    if (img) img.setAttribute('href', UNIT_IMAGE_MAP['Minor Industrial Complex']);
+                    const txt = unitObj.element.querySelector('.unit-type-initial');
+                    if (txt) txt.textContent = 'MINOR';
+                } else if (actionType === 'demolish') {
+                    unitObj.element.remove();
+                    placedUnitsData = placedUnitsData.filter(u => u.element.id !== unitId);
+                }
+            }
+        }
+
+        // Commit IPCs
+        totalIpcsByPower[activePowerForTech] += stagedIpcChange;
+        
+        updateActivePowerSidebar();
+        refreshIpcDisplayBarVisuals();
+        advancePhase();
+    }
+
+    // Reset session trackers when advancing phases
+    const originalAdvancePhase = advancePhase;
+    advancePhase = function() {
+        window._sessionRepairCost = 0;
+        window._sessionDemoIncome = 0;
+        originalAdvancePhase();
+    };
     </script>
 </body>
 </html>
