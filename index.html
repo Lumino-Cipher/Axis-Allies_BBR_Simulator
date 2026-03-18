@@ -1559,6 +1559,49 @@
         .action-table th, .action-table td { border: 1px solid #4a5a75; padding: 10px; text-align: center; vertical-align: middle; }
         .action-table th { background: #1e222b; color: #b0c4de; font-size: 14px; }
         .action-table img { height: 35px; object-fit: contain; filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.5)); }
+
+
+        /* --- Purchase Window Table Adjustments --- */
+
+        /* 1. Add room to the Unit column in both tables for images + margins */
+        #purchase-window .action-table th:nth-child(1),
+        #purchase-window .action-table td:nth-child(1) {
+            width: 78px !important; 
+            text-align: center;
+        }
+
+        /* 2. Repair Table specific adjustments (the 4-column table) */
+        /* Targets the table where the 4th column is 'Action' */
+        #purchase-window .action-table:has(th:nth-child(4):last-child) th:nth-child(2) {
+            width: 90px !important; /* Decrease Space column width to just fit text */
+        }
+
+        #purchase-window .action-table:has(th:nth-child(4):last-child) th:nth-child(4) {
+            width: 140px !important; /* Increase Action column to prevent "Repair 1 (1 IPC)" overflow */
+        }
+
+        /* 3. Purchase Table specific adjustments (the 7-column table) */
+        /* Targets the table with 7 columns (Unit, Name, Atk, Def, Mov, IPC, Action) */
+        #purchase-window .action-table:has(th:nth-child(7)) th:nth-child(2) {
+            width: 100px !important; /* Make the unit name column less wide */
+        }
+
+        #purchase-window .action-table:has(th:nth-child(7)) th:nth-child(7) {
+            width: 105px !important; /* Increase Action column to fit the +/- buttons and count without overflow */
+        }
+
+        /* Ensure buttons within the action column don't wrap or overflow */
+        #purchase-window .action-table td:last-child {
+            white-space: nowrap;
+            padding-right: 10px;
+        }
+
+        /* Optional: tighten the padding on the unit images to match the new column width */
+        #purchase-window .unit-img-cell {
+            padding: 5px 0 !important;
+        }
+
+        
         
         /* High contrast cell for black unit silhouettes */
         .unit-img-cell { background-color: #cbd5e1; border-radius: 4px; padding: 5px !important; }
@@ -1575,6 +1618,52 @@
         .demo-btn:hover { background: rgba(255,102,102,0.2); }
         .undo-demo-btn { background: #4CAF50; color: white; border: 1px solid #4CAF50; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; }
         .free-repair-check { color: #4CAF50; font-size: 16px; font-weight: bold; text-shadow: 1px 1px 2px black; }
+
+        /* --- Purchase Table Enhancements --- */
+        .purchase-container {
+            width: 100%;
+            overflow-x: auto;
+        }
+        .action-table {
+            table-layout: fixed;
+            width: 100%;
+            font-size: 13px;
+        }
+        .action-table th, .action-table td {
+            padding: 6px 4px;
+        }
+        .action-table td {
+            white-space: normal;
+            word-wrap: break-word;
+        }
+        .unit-board-render {
+            position: relative;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .unit-board-bg {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 0.5px solid white;
+            z-index: 0;
+        }
+        .unit-board-img {
+            position: relative;
+            z-index: 1;
+            object-fit: contain;
+        }
+        .combined-arms-img {
+            width: 100%;
+            max-height: 120px;
+            object-fit: cover;
+            border: 1px solid #4a5a75;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
 
         /* --- Custom Modal --- */
         #custom-modal-overlay {
@@ -7218,10 +7307,17 @@
         });
     }
 
+    // // --- Staging Variables for Purchase Phase ---
+    // let stagedIpcChange = 0;
+    // let pendingRepairs = {}; // { unitId: amountHealed }
+    // let pendingDemos = {};   // { unitId: 'demolish' | 'downgrade' }
     // --- Staging Variables for Purchase Phase ---
-    let stagedIpcChange = 0;
     let pendingRepairs = {}; // { unitId: amountHealed }
     let pendingDemos = {};   // { unitId: 'demolish' | 'downgrade' }
+    let pendingPurchases = {}; // { unitType: count }
+    let powerPurchaseQueues = {}; // { PowerName: { unitType: count } }
+    let chinaTanksBoughtTotal = 0; // Game-long tracking
+    let chinaTanksBoughtThisRound = 0; // Round tracking
 
     function openTechModal() {
         if (['France', 'China'].includes(activePowerForTech)) {
@@ -7284,9 +7380,10 @@
     }
 
     function openPurchaseModal() {
-        stagedIpcChange = 0;
         pendingRepairs = {};
         pendingDemos = {};
+        pendingPurchases = {};
+        if (activePowerForTech === 'China') chinaTanksBoughtThisRound = 0;
 
         const windowEl = document.getElementById('purchase-window');
         const bg = document.getElementById('purchase-window-bg');
@@ -7295,7 +7392,6 @@
         
         renderPurchaseModalContent();
         
-        // Anchor bottom right
         windowEl.style.top = 'auto';
         windowEl.style.left = 'auto';
         windowEl.style.bottom = '10px';
@@ -7304,111 +7400,235 @@
         windowEl.style.display = 'flex';
     }
 
+    function getUnitBoardRender(unitType, power) {
+        let mapKey = getUnitAbbreviation(unitType) || unitType;
+        if (unitType === 'Industrial Complex (Minor)') mapKey = 'Minor Industrial Complex';
+        if (unitType === 'Industrial Complex (Major)') mapKey = 'Major Industrial Complex';
+        if (!UNIT_IMAGE_MAP[mapKey] && unitType.includes('AAA')) mapKey = 'AAA';
+        
+        const size = getUnitSize(mapKey);
+        const isSea = SEA_UNIT_TYPES.includes(mapKey) || ['Battleship', 'Aircraft Carrier', 'Cruiser', 'Destroyer', 'Transport', 'Submarine'].includes(unitType);
+        const isFacility = SPECIAL_INFRASTRUCTURE_UNITS.includes(mapKey) || ['Major Industrial Complex', 'Minor Industrial Complex', 'Air Base', 'Naval Base'].includes(unitType);
+        const imgSrc = UNIT_IMAGE_MAP[mapKey] || 'units/infantry.png';
+        
+        let bgHtml = '';
+        if (!isFacility && !isSea && powerColors[power]) {
+            const color = power === 'Neutral' ? powerColors['Neutral'] : darkenColor(powerColors[power], 0.4);
+            bgHtml = `<div class="unit-board-bg" style="background-color: ${color};"></div>`;
+        }
+        
+        const filterAttr = (powerColors[power] && power !== 'Neutral' && !isFacility) ? `filter: url(#colorize-${power}-${isSea ? 'sea' : 'land'});` : '';
+        const cellWidth = isSea ? Math.max(size, 55) : size;
+
+        return `
+            <div class="unit-board-render" style="width: ${cellWidth}px; height: ${size}px;">
+                ${bgHtml}
+                <img class="unit-board-img" src="${imgSrc}" style="width: ${size}px; height: ${size}px; ${filterAttr}">
+            </div>
+        `;
+    }
+
     function renderPurchaseModalContent() {
         const contentContainer = document.getElementById('purchase-content-container');
         const ipcDisplay = document.getElementById('purchase-ipc-display');
         const proceedBtn = document.getElementById('purchase-proceed-btn');
 
         const currentBank = totalIpcsByPower[activePowerForTech] || 0;
-        
-        // Window header stays completely static (what they had BEFORE buying/repairing)
         ipcDisplay.textContent = `IPCs: ${currentBank}`;
         ipcDisplay.style.color = '#ffd700'; 
+
+        const isChina = activePowerForTech === 'China';
         
-        const sign = stagedIpcChange >= 0 ? '+' : '';
-        proceedBtn.textContent = `Proceed (${sign}${stagedIpcChange} IPCs)`;
-
-        const allMyUnits = placedUnitsData.filter(u => u.power === activePowerForTech);
-        const netIpcs = currentBank + stagedIpcChange; // Used internally to restrict further buying, but not displayed at the top
+        // Calculate Totals (Only charge repair IPCs for Facilities)
+        const totalRepairCost = Object.entries(pendingRepairs).reduce((sum, [id, h]) => {
+            const u = placedUnitsData.find(unit => unit.element.id === id);
+            return sum + ((u && SPECIAL_INFRASTRUCTURE_UNITS.includes(u.unitType)) ? h : 0);
+        }, 0);
+        const totalDemoIncome = Object.keys(pendingDemos).length * 12; // +12 IPCs per demo
+        const totalPurchaseCost = Object.entries(pendingPurchases).reduce((sum, [t, count]) => {
+            const p = window.unitProfileData.find(u => u.unit_type === t);
+            return sum + (count * (parseInt(p.cost) || 0));
+        }, 0);
         
-        // 1. Repair Logic
-        const damagedUnits = allMyUnits.filter(u => parseInt(u.element.getAttribute('data-damage') || '0') > 0);
-        damagedUnits.sort((a, b) => SPECIAL_INFRASTRUCTURE_UNITS.includes(a.unitType) ? -1 : 1);
+        const netCost = totalRepairCost + totalPurchaseCost - totalDemoIncome;
+        const netIpcs = currentBank - netCost;
+        
+        const sign = netCost > 0 ? '-' : '+';
+        proceedBtn.textContent = `Proceed (${sign}${Math.abs(netCost)} IPCs)`;
 
-        let repairTableRows = '';
-        damagedUnits.forEach(u => {
-            const baseDamage = parseInt(u.element.getAttribute('data-damage'));
-            const healed = pendingRepairs[u.element.id] || 0;
-            const displayDamage = baseDamage - healed;
+        let html = '<div class="purchase-container">';
+        
+        // 1. Repair & Demo (Hidden for China)
+        if (!isChina) {
+            const allMyUnits = placedUnitsData.filter(u => u.power === activePowerForTech);
             
-            const isFacility = SPECIAL_INFRASTRUCTURE_UNITS.includes(u.unitType);
-            const isShip = ['BTS', 'ACC'].includes(u.unitType);
+            // Repairs
+            const damagedUnits = allMyUnits.filter(u => parseInt(u.element.getAttribute('data-damage') || '0') > 0);
+            damagedUnits.sort((a, b) => SPECIAL_INFRASTRUCTURE_UNITS.includes(a.unitType) ? -1 : 1);
             
-            let repairControls = '';
-
-            if (isFacility) {
-                repairControls = `
-                    <div style="display:flex; justify-content:center; align-items:center; gap: 10px;">
-                        <button class="repair-btn" onclick="stageRepair('${u.element.id}', -1)" ${healed <= 0 ? 'disabled' : ''}>Undo</button>
-                        <span style="font-size: 18px; font-weight: bold; width: 20px;">${healed}</span>
-                        <button class="repair-btn" onclick="stageRepair('${u.element.id}', 1)" ${displayDamage <= 0 || netIpcs < 1 ? 'disabled' : ''}>Heal</button>
-                    </div>
+            if (damagedUnits.length > 0) {
+                html += `
+                    <h2 class="phase-section-title">🔧 Repair Damaged Units</h2>
+                    <table class="action-table" style="table-layout: fixed; width: 100%;">
+                        <thead><tr><th style="width: 55px;">Unit</th><th>Space</th><th style="width: 35px;">Dmg</th><th style="width: 105px;">Action</th></tr></thead>
+                        <tbody>
                 `;
-            } else if (isShip) {
-                if (isAdjacentToFriendlyNavalBase(u.placedIn, activePowerForTech)) {
-                    repairControls = `<span class="free-repair-check">✔ (Free on Proceed)</span>`;
-                    pendingRepairs[u.element.id] = baseDamage; // Free heal staged
-                } else {
-                    repairControls = `<span style="color:#ff6666;">No adjacent Naval Base</span>`;
+                damagedUnits.forEach(u => {
+                    const baseDamage = parseInt(u.element.getAttribute('data-damage'));
+                    const healed = pendingRepairs[u.element.id] || 0;
+                    const displayDamage = baseDamage - healed;
+                    const isFacility = SPECIAL_INFRASTRUCTURE_UNITS.includes(u.unitType);
+                    const isShip = ['BTS', 'ACC'].includes(u.unitType);
+                    
+                    let repairControls = '';
+                    if (isFacility) {
+                        repairControls = `
+                            <div style="display:flex; justify-content:center; align-items:center; gap: 5px;">
+                                <button class="repair-btn" onclick="stageRepair('${u.element.id}', -1)" ${healed <= 0 ? 'disabled' : ''}>Undo</button>
+                                <span style="font-size: 16px; font-weight: bold; width: 15px;">${healed}</span>
+                                <button class="repair-btn" onclick="stageRepair('${u.element.id}', 1)" ${displayDamage <= 0 || netIpcs < 1 ? 'disabled' : ''}>Heal</button>
+                            </div>
+                        `;
+                    } else if (isShip) {
+                        if (isAdjacentToFriendlyNavalBase(u.placedIn, activePowerForTech)) {
+                            repairControls = `<span class="free-repair-check">✔ (Free on Proceed)</span>`;
+                            pendingRepairs[u.element.id] = baseDamage;
+                        } else {
+                            repairControls = `<span style="color:#ff6666;">No adj. Naval Base</span>`;
+                        }
+                    }
+
+                    const profileName = UNIT_ABBREVIATION_TO_PROFILE_NAME[u.unitType] || u.unitType;
+                    html += `
+                        <tr>
+                            <td class="unit-img-cell" style="text-align:center;">
+                                ${getUnitBoardRender(u.unitType, activePowerForTech)}<br>
+                                <span style="font-size:10px; font-weight:bold; color:#333;">${profileName}</span>
+                            </td>
+                            <td style="font-size: 11px; line-height: 1.1;">${u.placedIn}</td>
+                            <td style="color: #ff6666; font-weight: bold; font-size: 16px;">${baseDamage}</td>
+                            <td>${repairControls}</td>
+                        </tr>
+                    `;
+                });
+                html += `</tbody></table><div style="text-align:right; font-size:12px; margin-top:5px;">Repair Cost: <span style="color:#ff6666">-${totalRepairCost}</span></div>`;
+            }
+
+            // Demos
+            const myFacilities = allMyUnits.filter(u => SPECIAL_INFRASTRUCTURE_UNITS.includes(u.unitType));
+            if (myFacilities.length > 0) {
+                html += `
+                    <h2 class="phase-section-title">🏗️ Demolish Facilities</h2>
+                    <table class="action-table">
+                        <thead><tr><th>Unit</th><th>Space</th><th>Action</th></tr></thead>
+                        <tbody>
+                `;
+                myFacilities.forEach(u => {
+                    const profileName = UNIT_ABBREVIATION_TO_PROFILE_NAME[u.unitType] || u.unitType;
+                    const isMajor = u.unitType === 'Major Industrial Complex';
+                    const actionText = isMajor ? "Downgrade (+12)" : "Demolish (+12)";
+                    const pendingStatus = pendingDemos[u.element.id];
+
+                    let controlHtml = pendingStatus 
+                        ? `<button class="undo-demo-btn" onclick="stageDemo('${u.element.id}', null)">Undo ${pendingStatus}</button>`
+                        : `<button class="demo-btn" onclick="stageDemo('${u.element.id}', '${isMajor ? 'downgrade' : 'demolish'}')">${actionText}</button>`;
+
+                    html += `
+                        <tr style="${pendingStatus ? 'opacity: 0.5; background: rgba(255,0,0,0.1);' : ''}">
+                            <td class="unit-img-cell" style="text-align:center;">
+                                ${getUnitBoardRender(u.unitType, activePowerForTech)}<br>
+                                <span style="font-size:10px; font-weight:bold; color:#333;">${profileName}</span>
+                            </td>
+                            <td>${u.placedIn}</td>
+                            <td>${controlHtml}</td>
+                        </tr>
+                    `;
+                });
+                html += `</tbody></table><div style="text-align:right; font-size:12px; margin-top:5px;">Demo Income: <span style="color:#a8d8b0">+${totalDemoIncome}</span></div>`;
+            }
+        }
+
+        // 2. Purchase Units Section
+        html += `<h2 class="phase-section-title">🛒 Purchase Units</h2>`;
+        html += `<img src="units/combined-arms.png" alt="Combined Arms" class="combined-arms-img">`;
+        
+        html += `
+            <table class="action-table" style="table-layout: fixed; width: 100%;">
+                <thead><tr><th style="width: 50px;">Unit</th><th>Name</th><th style="width: 28px;">Atk</th><th style="width: 28px;">Def</th><th style="width: 28px;">Mov</th><th style="width: 28px;">IPC</th><th style="width: 85px;">Buy</th></tr></thead>
+                <tbody>
+        `;
+
+        const getCat = (u) => {
+            if (u.is_facility) return 4;
+            if (['Battleship', 'Aircraft Carrier', 'Cruiser', 'Destroyer', 'Transport', 'Submarine'].includes(u.unit_type)) return 3;
+            if (['Fighter', 'Tactical Bomber', 'Strategic Bomber'].includes(u.unit_type)) return 2;
+            return 1;
+        };
+
+        const sortedUnits = [...window.unitProfileData].filter(u => 
+            !['Transport Plane (Strategic Bomber Reclassified)', 'Cargo Plane (Heavy Bomber Reclassified)'].includes(u.unit_type)
+        ).sort((a, b) => {
+            if (getCat(a) !== getCat(b)) return getCat(a) - getCat(b);
+            return (parseInt(a.cost) || 0) - (parseInt(b.cost) || 0);
+        });
+
+        const isAllied = (terr) => {
+            const el = document.querySelector(`.svg-content [data-name="${terr}"]`);
+            return el && ALLIED_POWERS.has(el.getAttribute('data-power'));
+        };
+        const burmaRoadOpen = isAllied('India') && isAllied('Burma') && isAllied('Yunnan') && isAllied('Szechwan');
+
+        sortedUnits.forEach(u => {
+            const cost = parseInt(u.cost) || 0;
+            const twoHit = ['Battleship', 'Aircraft Carrier'].includes(u.unit_type);
+            const displayName = u.unit_type + (twoHit ? ' **' : '');
+            const boughtCount = pendingPurchases[u.unit_type] || 0;
+            
+            // China Restrictions
+            let canBuy = true;
+            if (isChina) {
+                if (u.unit_type === 'Tank') {
+                    if (chinaTanksBoughtTotal + chinaTanksBoughtThisRound >= 2 || boughtCount >= 1) canBuy = false;
+                } else if (u.unit_type === 'Artillery') {
+                    canBuy = burmaRoadOpen;
+                } else if (!['Infantry', 'Cavalry'].includes(u.unit_type)) {
+                    canBuy = false;
                 }
             }
 
-            const profileName = UNIT_ABBREVIATION_TO_PROFILE_NAME[u.unitType] || u.unitType;
-            repairTableRows += `
-                <tr>
-                    <td class="unit-img-cell"><img src="${UNIT_IMAGE_MAP[u.unitType]}"></td>
-                    <td style="font-weight:bold;">${profileName}</td>
-                    <td>${u.placedIn}</td>
-                    <td style="color: #ff6666; font-weight: bold; font-size: 20px;">${displayDamage}</td>
-                    <td>${repairControls}</td>
-                </tr>
-            `;
-        });
-
-        // 2. Demo Logic
-        const myFacilities = allMyUnits.filter(u => SPECIAL_INFRASTRUCTURE_UNITS.includes(u.unitType));
-        let demoTableRows = '';
-        
-        myFacilities.forEach(u => {
-            const profileName = UNIT_ABBREVIATION_TO_PROFILE_NAME[u.unitType] || u.unitType;
-            const isMajor = u.unitType === 'Major Industrial Complex';
-            const actionText = isMajor ? "Downgrade to Minor (+12 IPCs)" : "Demolish (+12 IPCs)";
-            const pendingStatus = pendingDemos[u.element.id];
-
-            let controlHtml = '';
-            if (pendingStatus) {
-                controlHtml = `<button class="undo-demo-btn" onclick="stageDemo('${u.element.id}', null)">Undo ${pendingStatus}</button>`;
-            } else {
-                controlHtml = `<button class="demo-btn" onclick="stageDemo('${u.element.id}', '${isMajor ? 'downgrade' : 'demolish'}')">${actionText}</button>`;
+            if (!isChina || canBuy || boughtCount > 0) {
+                html += `
+                    <tr>
+                        <td class="unit-img-cell" style="text-align:center; padding: 2px;">${getUnitBoardRender(u.unit_type, activePowerForTech)}</td>
+                        <td style="font-weight:bold; font-size: 11px; line-height: 1.1;">${displayName}</td>
+                        <td>${u.attack_value || '-'}</td>
+                        <td>${(u.defense_value && u.defense_value.toString().toLowerCase().includes('anti-aircraft')) ? 'A' : (u.defense_value || '-')}</td>
+                        <td>${u.movement_capacity || '-'}</td>
+                        <td style="color:#ffd700; font-weight:bold;">${cost}</td>
+                        <td style="min-width: 80px;">
+                            <div style="display:flex; justify-content:center; align-items:center; gap: 5px;">
+                                <button class="repair-btn" onclick="stagePurchase('${u.unit_type}', -1)" ${boughtCount <= 0 ? 'disabled' : ''}>-</button>
+                                <span style="font-size: 16px; font-weight: bold; width: 15px;">${boughtCount}</span>
+                                <button class="repair-btn" onclick="stagePurchase('${u.unit_type}', 1)" ${(!canBuy || netIpcs < cost) ? 'disabled' : ''}>+</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
             }
-
-            demoTableRows += `
-                <tr style="${pendingStatus ? 'opacity: 0.5; background: rgba(255,0,0,0.1);' : ''}">
-                    <td class="unit-img-cell"><img src="${UNIT_IMAGE_MAP[u.unitType]}"></td>
-                    <td style="font-weight:bold;">${profileName}</td>
-                    <td>${u.placedIn}</td>
-                    <td>${controlHtml}</td>
-                </tr>
-            `;
         });
 
-        contentContainer.innerHTML = `
-            <h2 class="phase-section-title">🔧 Repair Damaged Units</h2>
-            ${damagedUnits.length > 0 ? `
-                <table class="action-table">
-                    <thead><tr><th>Unit</th><th>Type</th><th>Space</th><th>Remaining Dmg</th><th>Action</th></tr></thead>
-                    <tbody>${repairTableRows}</tbody>
-                </table>
-            ` : '<div style="text-align:center; color:#aaa; margin-bottom: 30px; font-style:italic;">No damaged units to repair.</div>'}
-
-            <h2 class="phase-section-title">🏗️ Demolish Facilities</h2>
-            ${myFacilities.length > 0 ? `
-                <table class="action-table">
-                    <thead><tr><th>Unit</th><th>Type</th><th>Space</th><th>Action</th></tr></thead>
-                    <tbody>${demoTableRows}</tbody>
-                </table>
-            ` : '<div style="text-align:center; color:#aaa; font-style:italic;">No facilities available to demolish.</div>'}
-        `;
+        html += `
+                </tbody>
+            </table>
+            <div style="font-size: 10px; font-style: italic; margin-top: 5px;">** Unit can take two hits before being destroyed.</div>
+            <div style="font-size: 10px; font-style: italic; margin-top: 2px;">'A' denotes built-in Anti-aircraft capabilities.</div>
+            <div style="text-align:right; font-size:12px; margin-top:5px;">Purchase Cost: <span style="color:#ff6666">-${totalPurchaseCost}</span></div>
+            <div style="text-align:right; font-size:16px; font-weight:bold; margin-top:10px; color:${netCost > 0 ? '#ff6666' : '#a8d8b0'}; border-top: 1px solid #4a5a75; padding-top: 5px;">
+                Total Net Change: ${netCost > 0 ? '-' : '+'}${Math.abs(netCost)} IPCs
+            </div>
+        </div>`;
+        
+        contentContainer.innerHTML = html;
     }
     
 
@@ -7594,26 +7814,32 @@
     function updateActivePowerSidebar() {
         if (!activePowerForTech) return;
         
-        // 1. Update IPCs
         const currentIpcs = totalIpcsByPower[activePowerForTech] || 0;
         const sidebarIpcEl = document.getElementById('sidebar-ipc');
         if (sidebarIpcEl) sidebarIpcEl.textContent = currentIpcs;
 
-        // 2. Update R&D Status inside updateActivePowerSidebar()
         const sidebarRdEl = document.getElementById('sidebar-rd');
         if (sidebarRdEl) {
             const rdStatus = technologyResearchStatus[activePowerForTech];
             if (!rdStatus || rdStatus.researchPhase === 'Not Participating') {
                 sidebarRdEl.textContent = 'Not Participating';
             } else {
-                // ALWAYS display the phase as requested.
                 sidebarRdEl.innerHTML = `<span style="color:#66ccff;">Phase: ${rdStatus.researchPhase}</span>`;
             }
         }
 
-        // 3. Update Purchase Queue (Placeholder for now)
         const sidebarQueueEl = document.getElementById('sidebar-queue');
-        if (sidebarQueueEl) sidebarQueueEl.textContent = 'Queue empty.';
+        if (sidebarQueueEl) {
+            const queue = powerPurchaseQueues[activePowerForTech] || {};
+            const queueEntries = Object.entries(queue).filter(([_, count]) => count > 0);
+            
+            if (queueEntries.length > 0) {
+                const qTexts = queueEntries.map(([u, c]) => `<span style="color:#ffd700;">${c}x</span> ${u}`);
+                sidebarQueueEl.innerHTML = qTexts.join('<br>');
+            } else {
+                sidebarQueueEl.textContent = 'Queue empty.';
+            }
+        }
     }
 
     // --- Overhauled Phase Progression Logic ---
@@ -7740,13 +7966,19 @@
     
 
     // Attach locally to script
+    window.stagePurchase = function(unitType, delta) {
+        pendingPurchases[unitType] = Math.max(0, (pendingPurchases[unitType] || 0) + delta);
+        if (activePowerForTech === 'China' && unitType === 'Tank') {
+            chinaTanksBoughtThisRound = pendingPurchases[unitType];
+        }
+        renderPurchaseModalContent();
+    };
+
     window.stageRepair = function(unitId, direction) {
         if (direction === 1) {
             pendingRepairs[unitId] = (pendingRepairs[unitId] || 0) + 1;
-            stagedIpcChange -= 1;
         } else {
             pendingRepairs[unitId] = Math.max(0, (pendingRepairs[unitId] || 0) - 1);
-            stagedIpcChange += 1;
         }
         renderPurchaseModalContent();
     };
@@ -7756,21 +7988,36 @@
             const confirmed = await showCustomModal("Confirm Demolition", `Are you sure you want to stage this facility for ${actionType}?`, true);
             if (!confirmed) return;
             pendingDemos[unitId] = actionType;
-            stagedIpcChange += 12;
         } else {
-            // Undo
-            if (pendingDemos[unitId]) stagedIpcChange -= 12;
             delete pendingDemos[unitId];
         }
         renderPurchaseModalContent();
     };
 
-    function applyPurchasePhaseChanges() {
+    async function applyPurchasePhaseChanges() {
         const currentBank = totalIpcsByPower[activePowerForTech] || 0;
-        if (currentBank + stagedIpcChange < 0) {
-            showCustomModal("Error", "You do not have enough IPCs to cover these repairs.");
+        
+        // Calculate Totals (Only charge IPCs for Facilities)
+        const totalRepairCost = Object.entries(pendingRepairs).reduce((sum, [id, h]) => {
+            const u = placedUnitsData.find(unit => unit.element.id === id);
+            return sum + ((u && SPECIAL_INFRASTRUCTURE_UNITS.includes(u.unitType)) ? h : 0);
+        }, 0);
+        const totalDemoIncome = Object.keys(pendingDemos).length * 12;
+        const totalPurchaseCost = Object.entries(pendingPurchases).reduce((sum, [t, count]) => {
+            const p = window.unitProfileData.find(u => u.unit_type === t);
+            return sum + (count * (parseInt(p.cost) || 0));
+        }, 0);
+        
+        const netCost = totalRepairCost + totalPurchaseCost - totalDemoIncome;
+
+        if (currentBank - netCost < 0) {
+            showCustomModal("Error", "You do not have enough IPCs to cover these actions.");
             return;
         }
+
+        const sign = netCost > 0 ? '-' : '+';
+        const confirmed = await showCustomModal("Confirm Actions", `Are you sure you want to proceed? Net IPC Change: ${sign}${Math.abs(netCost)}`, true);
+        if (!confirmed) return;
 
         // Apply Repairs
         for (const [unitId, healed] of Object.entries(pendingRepairs)) {
@@ -7799,12 +8046,21 @@
             }
         }
 
+        // Apply Purchases (Queue)
+        if (!powerPurchaseQueues[activePowerForTech]) powerPurchaseQueues[activePowerForTech] = {};
+        for (const [unitType, count] of Object.entries(pendingPurchases)) {
+            if (count > 0) {
+                powerPurchaseQueues[activePowerForTech][unitType] = (powerPurchaseQueues[activePowerForTech][unitType] || 0) + count;
+                if (activePowerForTech === 'China' && unitType === 'Tank') chinaTanksBoughtTotal += count;
+            }
+        }
+
         // Commit IPCs
-        totalIpcsByPower[activePowerForTech] += stagedIpcChange;
+        totalIpcsByPower[activePowerForTech] -= netCost;
         
         updateActivePowerSidebar();
         refreshIpcDisplayBarVisuals();
-        advancePhase();
+        advancePhase(); // Already naturally advances to the next phase for the SAME power
     }
 
     // Reset session trackers when advancing phases
