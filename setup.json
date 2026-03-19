@@ -971,8 +971,8 @@
           "TANK 1942": 2,
           "FTR 1940": 1,
           "FTR 1942": 1,
-          "SBR 1940": 1,
-          "SBR 1942": 1,
+          "TBR 1940": 1,
+          "TBR 1942": 1,
           "Major Industrial Complex 1940": 1,
           "Major Industrial Complex 1942": 1,
           "Air Base": 1
@@ -1522,7 +1522,6 @@
         "name": "Guam",
         "units": {
           "INF 1942": 1,
-          "Air Base": 1,
           "Control Marker 1942": "TRUE"
         }
       },

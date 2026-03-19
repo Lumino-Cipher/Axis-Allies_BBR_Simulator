@@ -384,7 +384,7 @@
   {
     "unit_type": "Strategic Bomber",
     "cost": 12,
-    "attack_value": 2,
+    "attack_value": 4,
     "defense_value": 1,
     "movement_capacity": 6,
     "damage_capacity": 1,

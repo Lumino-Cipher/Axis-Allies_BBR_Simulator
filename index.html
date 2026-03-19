@@ -181,13 +181,9 @@
             fill-opacity: 1.0 !important; /* Ensure it's fully visible */
         }
 
-        /* Highlight style for adjacent territories on unit click */
-        .adjacent-highlight {
-            fill: #FFD700 !important; /* A nice gold color */
-            fill-opacity: 0.3 !important; /* Semi-transparent */
-            stroke: #000000 !important;
-            stroke-width: 1px !important;
-        }
+
+        
+
 
         /* Style for the selected unit marker */
         .selection-marker-outline {
@@ -1601,7 +1597,7 @@
             padding: 5px 0 !important;
         }
 
-        
+
         
         /* High contrast cell for black unit silhouettes */
         .unit-img-cell { background-color: #cbd5e1; border-radius: 4px; padding: 5px !important; }
@@ -5222,6 +5218,25 @@
                 seaTexturePattern.appendChild(seaTextureImage);
                 defs.appendChild(seaTexturePattern);
 
+                // --- Attack Hatching Pattern ---
+                const attackHatchPattern = newSvgElement.ownerDocument.createElementNS('http://www.w3.org/2000/svg', 'pattern');
+                attackHatchPattern.setAttribute('id', 'attackHatch');
+                attackHatchPattern.setAttribute('patternUnits', 'userSpaceOnUse');
+                attackHatchPattern.setAttribute('width', '5'); // Distance between lines
+                attackHatchPattern.setAttribute('height', '1');
+                attackHatchPattern.setAttribute('patternTransform', 'rotate(45)');
+                
+                const hatchLine = newSvgElement.ownerDocument.createElementNS('http://www.w3.org/2000/svg', 'line');
+                hatchLine.setAttribute('x1', '0');
+                hatchLine.setAttribute('y1', '0');
+                hatchLine.setAttribute('x2', '0');
+                hatchLine.setAttribute('y2', '16');
+                hatchLine.setAttribute('stroke', 'rgba(0, 0, 0, 0.35)'); // Translucent dark lines
+                hatchLine.setAttribute('stroke-width', '4'); // Thickness of the lines
+                attackHatchPattern.appendChild(hatchLine);
+                defs.appendChild(attackHatchPattern);
+                // -----------------------------------------
+
                 // Add event listeners for hover effects on all territory parts in all three SVGs
                 allSvgElements.forEach(svgEl => {
                     const allTerritoryPaths = svgEl.querySelectorAll('polygon[data-name], path[data-name]');
@@ -5987,8 +6002,10 @@
             }
 
             // --- APPLY HIGHLIGHTS & CLICK HANDLERS ---
-            const applyHighlight = (territoryName, color, isAttackable) => {
-                const pathsToHighlight = svgWrapper.querySelectorAll(`[data-name="${territoryName}"]`);
+            // --- APPLY HIGHLIGHTS & CLICK HANDLERS ---
+            const applyHighlight = (territoryName) => {
+                const pathsToHighlight = svgWrapper.querySelectorAll(`polygon[data-name="${territoryName}"], path[data-name="${territoryName}"]`);
+
                 pathsToHighlight.forEach(path => {
                     const territoryClickHandler = async (event) => {
                         event.stopPropagation();
@@ -5997,7 +6014,6 @@
                         const availableUnits = totalUnitsInStack - unitsAlreadyMoved;
 
                         if (availableUnits <= 0) {
-                            // Using a custom modal/toast in the future would be better than alert.
                             console.warn("All units from this stack have already been assigned a move.");
                             return;
                         }
@@ -6030,24 +6046,34 @@
                         });
                     };
 
-                    highlightedTerritories.push({
-                        element: path,
-                        originalFill: path.style.fill,
-                        originalOpacity: path.style.fillOpacity,
-                        originalStroke: path.style.stroke,
-                        originalStrokeWidth: path.style.strokeWidth,
-                        clickHandler: isAttackable ? territoryClickHandler : null
-                    });
+                    // Create the visual overlay for hatching and border
+                    const hatchOverlay = path.cloneNode(true);
+                    hatchOverlay.removeAttribute('id');
+                    hatchOverlay.removeAttribute('class');
+                    hatchOverlay.style.fill = 'url(#attackHatch)';
+                    hatchOverlay.style.stroke = 'rgba(0, 0, 0, 0.85)'; // Dark solid border
+                    hatchOverlay.style.strokeWidth = '3px';
+                    hatchOverlay.style.pointerEvents = 'none'; // Clicks pass through to the real path underneath
 
-                    if (isAttackable) {
-                        path.addEventListener('click', territoryClickHandler);
-                        path.style.cursor = 'crosshair';
+                    // Insert the overlay above the map paths, but below the text and units!
+                    // This perfectly solves the overlapping borders issue.
+                    const firstTopLayerEl = path.ownerSVGElement.querySelector('text, g#background-labels-layer, g#unit-layer');
+                    if (firstTopLayerEl) {
+                        path.ownerSVGElement.insertBefore(hatchOverlay, firstTopLayerEl);
+                    } else {
+                        path.ownerSVGElement.appendChild(hatchOverlay);
                     }
 
-                    path.style.fill = color;
-                    path.style.fillOpacity = '0.5';
-                    path.style.stroke = '#000000';
-                    path.style.strokeWidth = '1.5px';
+                    // Save data for cleanup
+                    highlightedTerritories.push({
+                        element: path,
+                        overlay: hatchOverlay, // Store the overlay so we can delete it later
+                        clickHandler: territoryClickHandler
+                    });
+
+                    // Make the original path clickable
+                    path.addEventListener('click', territoryClickHandler);
+                    path.style.cursor = 'crosshair';
                 });
             };
 
@@ -6058,9 +6084,9 @@
                 }
             }
 
-            // Apply highlights for attackable territories (clickable), which will draw over any passable highlights
+            // Apply highlights ONLY for attackable territories (clickable)
             for (const territoryName of attackableSpaces) {
-                applyHighlight(territoryName, ATTACK_HIGHLIGHT_COLOR, true);
+                applyHighlight(territoryName);
             }
         }
 
@@ -6078,12 +6104,20 @@
                 el.style.fillOpacity = highlight.originalOpacity;
                 el.style.stroke = highlight.originalStroke;
                 el.style.strokeWidth = highlight.originalStrokeWidth;
-                el.style.cursor = 'pointer'; // Reset cursor
+
+                el.classList.remove('highlight-attackable', 'highlight-passable', 'adjacent-highlight');
+
                 if (highlight.clickHandler) {
                     el.removeEventListener('click', highlight.clickHandler); // IMPORTANT: Remove the listener
                 }
+
+                // Remove the hatching overlay from the DOM
+                if (highlight.overlay && highlight.overlay.parentNode) {
+                    highlight.overlay.parentNode.removeChild(highlight.overlay);
+                }
             });
             highlightedTerritories = [];
+
 
             // Remove marker from the previously selected unit
             if (selectedUnit) {
