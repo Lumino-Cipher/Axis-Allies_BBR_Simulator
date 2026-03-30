@@ -176,9 +176,9 @@
 
         /* Highlight style for the territory when a unit is dragged */
         .highlighted-territory {
-            stroke: #FFFF00 !important; /* Bright yellow border */
-            stroke-width: 3 !important; /* Thicker border */
-            fill-opacity: 1.0 !important; /* Ensure it's fully visible */
+            stroke: #FFFF00 !important; 
+            stroke-width: 3 !important; 
+            fill: none !important; /* Prevents an opaque fill from hiding the map underneath */
         }
 
 
@@ -763,32 +763,78 @@
             filter: drop-shadow(0 0 3px #000);
         }
 
-        /* Style for the movement arrows */
+        /* Enhanced Arrow Hitbox and Hover */
         .movement-arrow-group {
-            pointer-events: all;
-            cursor: pointer;
-            /* Apply a single drop shadow to the entire group for a clean effect */
+            pointer-events: none; 
             filter: drop-shadow(0px 1px 3px rgba(0,0,0,0.7));
         }
 
-        /* This layer is now the dark blue outline */
         .movement-arrow-outline {
-           fill: none;
-           stroke: #005F99; /* Dark Blue */
-           stroke-width: 5px; /* Thinner outline */
-           stroke-linecap: round;
-           stroke-linejoin: round;
+           display: none; 
+        }
+
+        .movement-arrow-hitbox {
+            fill: none;
+            stroke: transparent;
+            stroke-width: 25px; /* Extremely wide invisible line for easy hovering */
+            pointer-events: stroke;
+            cursor: pointer;
         }
         
-        /* This is the main, bright blue line with a glow effect */
         .movement-arrow-path {
             fill: none;
-            stroke: #33CFFF; /* Bright Sky Blue */
-            stroke-width: 2.5px; /* Thinner main line */
+            stroke: #ff4444; 
+            stroke-width: 3px; 
             stroke-linecap: round;
             stroke-linejoin: round;
-            /* The glow effect using multiple drop shadows on the path itself */
-            filter: drop-shadow(0 0 3px #33CFFF) drop-shadow(0 0 6px #33CFFF);
+            pointer-events: none; /* Let the hitbox catch the mouse events */
+            transition: filter 0.2s, stroke 0.2s;
+        }
+
+        .movement-arrow-hitbox:hover ~ .movement-arrow-path,
+        .movement-arrow-path:hover {
+            stroke: #ffdd00; 
+            filter: drop-shadow(0px 0px 6px #ffdd00) !important;
+        }
+        
+        .movement-arrow-path {
+            fill: none;
+            stroke: #ff4444; 
+            stroke-width: 3px; 
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            /* Re-enable pointer events ONLY on the actual stroke line */
+            pointer-events: stroke; 
+            cursor: pointer;
+            transition: filter 0.2s, stroke 0.2s;
+        }
+
+        .movement-arrow-path:hover {
+            stroke: #ffdd00; /* Turn yellow on hover for clear deletion targeting */
+            filter: drop-shadow(0px 0px 6px #ffdd00) !important;
+        }
+
+        #next-phase-combat-btn {
+            position: fixed;
+            bottom: 60px; /* Above the IPC bar */
+            right: 20px;
+            background-color: #8a1a1a;
+            color: #E0D8B0;
+            border: 2px solid #ff4444;
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            font-family: 'Georgia', serif;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.8);
+            cursor: pointer;
+            z-index: 3000;
+            display: none; /* Hidden until Combat Phase */
+            transition: all 0.2s;
+        }
+        #next-phase-combat-btn:hover {
+            background-color: #a82020;
+            transform: scale(1.05);
         }
         
         /* The shadow path is no longer needed with this new style, but we'll leave the class here */
@@ -1528,6 +1574,8 @@
             flex-grow: 1; overflow-y: auto; padding: 15px;
             z-index: 1; position: relative;
             scrollbar-color: #3a475e #1e222b; scrollbar-width: thin;
+            display: flex;
+            overflow-x: hidden;
         }
 
         .window-footer {
@@ -1618,7 +1666,7 @@
         /* --- Purchase Table Enhancements --- */
         .purchase-container {
             width: 100%;
-            overflow-x: auto;
+            overflow-x: none;
         }
         .action-table {
             table-layout: fixed;
@@ -1933,6 +1981,19 @@
             </div>
         </div>
     </div>
+    <div id="pathing-ui-panel" style="display: none; position: fixed; bottom: 20px; right: 20px; width: 220px; background: rgba(30, 34, 43, 0.95); border: 2px solid #33CFFF; border-radius: 8px; padding: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.8); z-index: 3001; color: #E0D8B0; font-family: 'Georgia', serif;">
+        <h4 style="margin: 0 0 10px 0; color: #33CFFF; border-bottom: 1px dashed #555; padding-bottom: 5px; text-align: center;">Combat Pathing</h4>
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+            <div id="pathing-ui-icon-container" style="width: 40px; height: 40px; position: relative;">
+                </div>
+            <div style="flex: 1;">
+                <div id="pathing-ui-target" style="font-weight: bold; font-size: 14px; line-height: 1.2;">Target</div>
+                <div id="pathing-ui-movement" style="font-size: 12px; color: #aaa; margin-top: 3px;">Move: X/Y</div>
+            </div>
+        </div>
+        <div style="font-size: 10px; color: #8899a6; text-align: center; font-style: italic;">Select adjacent spaces to build path. Click target again to execute.</div>
+    </div>
+    <button id="next-phase-combat-btn" onclick="promptNextCombatPhase()">Next Phase: Combat ➔</button>
     <script>
         const mapContainer = document.getElementById('map-container');
 
@@ -2186,6 +2247,7 @@
         };
 
         let totalIpcsByPower = {};
+        let baseIpcsByPower = {};
 
         // --- Get elements for the sticky bar ---
         const roundInfoEl = document.getElementById('roundInfo');
@@ -3267,6 +3329,23 @@
                     }
                 }, 200);
             }
+
+            // Show/Hide the Combat Phase 'Next' button
+            const combatBtn = document.getElementById('next-phase-combat-btn');
+            if (combatBtn) {
+                combatBtn.style.display = (currentPhaseIndex === 2) ? 'block' : 'none';
+            }
+        }
+
+        function promptNextCombatPhase() {
+            showCustomModal("Confirm Next Phase", "Are you sure you are done with Combat Movement and want to proceed to Conduct Combat?", true).then(confirmed => {
+                if (confirmed) {
+                    // Deselect any currently selected unit/pathing state before moving on
+                    if (selectedUnit) handleUnitClick(selectedUnit);
+                    window.activePathingState = null;
+                    advancePhase();
+                }
+            });
         }
 
         /**
@@ -4754,7 +4833,7 @@
 
                     // Add damage tracking for facilities & capital ships
                     if (SPECIAL_INFRASTRUCTURE_UNITS.includes(unitType) || ['BTS', 'ACC'].includes(unitType)) {
-                        unitGroupElement.setAttribute('data-damage', '1');
+                        unitGroupElement.setAttribute('data-damage', '0');
                     }
 
                     // Store this unit's data in the global array
@@ -5175,8 +5254,9 @@
                     }
                 });
 
-                cssRules += `polygon, path { cursor: default; fill-opacity: 0.8; transition: fill 0.3s ease, fill-opacity 0.3s ease, stroke 0.3s ease, stroke-width 0.3s ease; }`;
-                cssRules += `.hover-highlight { fill-opacity: 1.0 !important; stroke: #fff !important; stroke-width: 1 !important; }`;
+                cssRules += `polygon, path { pointer-events: all; cursor: default; fill-opacity: 0.8; transition: fill 0.3s ease, fill-opacity 0.3s ease, stroke 0.3s ease, stroke-width 0.3s ease; }`;
+                cssRules += `.hover-highlight { fill: rgba(255, 255, 255, 0.1) !important; stroke: #fff !important; stroke-width: 1 !important; }`;
+                cssRules += `.territory-label, .ipcs-token { pointer-events: none !important; }`;
 
                 styleElement.textContent = cssRules;
 
@@ -5222,8 +5302,8 @@
                 const attackHatchPattern = newSvgElement.ownerDocument.createElementNS('http://www.w3.org/2000/svg', 'pattern');
                 attackHatchPattern.setAttribute('id', 'attackHatch');
                 attackHatchPattern.setAttribute('patternUnits', 'userSpaceOnUse');
-                attackHatchPattern.setAttribute('width', '5'); // Distance between lines
-                attackHatchPattern.setAttribute('height', '1');
+                attackHatchPattern.setAttribute('width', '8'); // Distance between lines
+                attackHatchPattern.setAttribute('height', '16');
                 attackHatchPattern.setAttribute('patternTransform', 'rotate(45)');
                 
                 const hatchLine = newSvgElement.ownerDocument.createElementNS('http://www.w3.org/2000/svg', 'line');
@@ -5232,7 +5312,7 @@
                 hatchLine.setAttribute('x2', '0');
                 hatchLine.setAttribute('y2', '16');
                 hatchLine.setAttribute('stroke', 'rgba(0, 0, 0, 0.35)'); // Translucent dark lines
-                hatchLine.setAttribute('stroke-width', '4'); // Thickness of the lines
+                hatchLine.setAttribute('stroke-width', '8'); // Thickness of the lines
                 attackHatchPattern.appendChild(hatchLine);
                 defs.appendChild(attackHatchPattern);
                 // -----------------------------------------
@@ -5244,16 +5324,31 @@
                         path.addEventListener('mouseover', () => {
                             const territoryName = path.getAttribute('data-name');
                             if (territoryName) {
-                                // Highlight the territory across all three maps
-                                svgWrapper.querySelectorAll(`[data-name="${territoryName}"]`).forEach(part => part.classList.add('hover-highlight'));
+                                svgWrapper.querySelectorAll(`path[data-name="${territoryName}"], polygon[data-name="${territoryName}"]`).forEach(part => {
+                                    if(part.classList.contains('hover-highlight') || part.classList.contains('drag-highlight-clone')) return;
+                                    
+                                    const clone = part.cloneNode(true);
+                                    clone.removeAttribute('id');
+                                    clone.classList.add('hover-highlight', 'hover-highlight-clone');
+                                    clone.style.pointerEvents = 'none';
+
+                                    let highlightLayer = part.ownerSVGElement.querySelector('.top-highlight-layer');
+                                    if (!highlightLayer) {
+                                        highlightLayer = part.ownerSVGElement.ownerDocument.createElementNS('http://www.w3.org/2000/svg', 'g');
+                                        highlightLayer.setAttribute('class', 'top-highlight-layer');
+                                        const bgLabels = part.ownerSVGElement.querySelector('[id^="background-labels-layer"]');
+                                        if (bgLabels) part.ownerSVGElement.insertBefore(highlightLayer, bgLabels);
+                                        else part.ownerSVGElement.appendChild(highlightLayer);
+                                    }
+                                    highlightLayer.appendChild(clone);
+                                });
                             }
                         });
 
                         path.addEventListener('mouseout', () => {
                             const territoryName = path.getAttribute('data-name');
                             if (territoryName) {
-                                // Remove highlight from the territory across all three maps
-                                svgWrapper.querySelectorAll(`[data-name="${territoryName}"]`).forEach(part => part.classList.remove('hover-highlight'));
+                                svgWrapper.querySelectorAll(`.hover-highlight-clone[data-name="${territoryName}"]`).forEach(el => el.remove());
                             }
                         });
                     });
@@ -5287,6 +5382,9 @@
                     const backgroundLabelsGroup = svgEl.ownerDocument.createElementNS('http://www.w3.org/2000/svg', 'g');
                     backgroundLabelsGroup.setAttribute('id', `background-labels-layer-${Math.random().toString(36).substr(2, 9)}`);
 
+                    const arrowLayerGroup = svgEl.ownerDocument.createElementNS('http://www.w3.org/2000/svg', 'g');
+                    arrowLayerGroup.setAttribute('class', 'arrow-layer');
+
                     const unitLayerGroup = svgEl.ownerDocument.createElementNS('http://www.w3.org/2000/svg', 'g');
                     unitLayerGroup.setAttribute('id', `unit-layer-${Math.random().toString(36).substr(2, 9)}`);
 
@@ -5302,6 +5400,9 @@
                     // 3. Add background labels (CONVOY, SHIPYARD)
                     svgEl.appendChild(backgroundLabelsGroup);
                     drawConvoyAndShipyardLabels(backgroundLabelsGroup, seazoneLabelsData);
+
+                    // Append arrows BEFORE units
+                    svgEl.appendChild(arrowLayerGroup);
 
                     // 4. Add the unit layer
                     svgEl.appendChild(unitLayerGroup);
@@ -5572,77 +5673,316 @@
             return point.matrixTransform(svgMatrix.inverse());
         }
 
-        /**
-         * Draws a randomly curved, high-contrast arrow between two points on the SVG.
-         * Places the arrow layer behind the starting unit.
-         * @param {object} startPos - {x, y} coordinates of the start point.
-         * @param {object} endPos - {x, y} coordinates of the end point.
-         * @param {SVGElement} startUnit - The unit group element where the arrow originates.
-         * @returns {SVGElement} The created <g> element containing the arrow.
-         */
-        function drawCurvedArrow(startPos, endPos, startUnit) {
+        function getUnitEdgePoint(unitX, unitY, unitWidth, unitHeight, targetX, targetY) {
+            const cx = unitX + unitWidth / 2;
+            const cy = unitY + unitHeight / 2;
+            const dx = targetX - cx;
+            const dy = targetY - cy;
+            if (dx === 0 && dy === 0) return { x: cx, y: cy };
+            
+            // Project line to the edges of the bounding box
+            const scaleX = (unitWidth / 2) / Math.abs(dx);
+            const scaleY = (unitHeight / 2) / Math.abs(dy);
+            const scale = Math.min(scaleX, Math.max(scaleY, 0.1)); 
+            
+            return {
+                x: cx + dx * scale,
+                y: cy + dy * scale
+            };
+        }
+
+        function isLineInTerritories(p1, p2, validNames, svgDoc) {
+            const steps = 15; // Resolution for line of sight check
+            const dx = p2.x - p1.x;
+            const dy = p2.y - p1.y;
+            const svgPoint = svgDoc.createSVGPoint();
+
+            for (let i = 1; i < steps; i++) {
+                svgPoint.x = p1.x + (dx * i) / steps;
+                svgPoint.y = p1.y + (dy * i) / steps;
+                
+                let isInside = false;
+                for (const name of validNames) {
+                    const paths = svgDoc.querySelectorAll(`[data-name="${name}"]`);
+                    for (const path of Array.from(paths)) {
+                        if (path.isPointInFill && path.isPointInFill(svgPoint)) {
+                            isInside = true;
+                            break;
+                        }
+                    }
+                    if (isInside) break;
+                }
+                if (!isInside) return false; // Line exited the valid path territories
+            }
+            return true;
+        }
+
+        
+
+        function generateTightPath(points) {
+            if (points.length === 0) return '';
+            let d = `M ${points[0].x} ${points[0].y}`;
+            // Use straight lines to strictly stay within the clicked territories
+            for (let i = 1; i < points.length; i++) {
+                d += ` L ${points[i].x} ${points[i].y}`;
+            }
+            return d;
+        }
+
+        
+
+        function generateSmoothPath(points) {
+            const validPoints = points.filter(p => p && !isNaN(p.x) && !isNaN(p.y));
+            if (validPoints.length === 0) return '';
+            if (validPoints.length === 1) return `M ${validPoints[0].x} ${validPoints[0].y}`;
+
+            // NO simplification! We never return a straight 'L' line if there are 3+ points.
+            if (validPoints.length === 2) {
+                return `M ${validPoints[0].x} ${validPoints[0].y} L ${validPoints[1].x} ${validPoints[1].y}`;
+            }
+
+            let d = `M ${validPoints[0].x},${validPoints[0].y} `;
+            
+            // Catmull-Rom formulation
+            for (let i = 0; i < validPoints.length - 1; i++) {
+                const p0 = i > 0 ? validPoints[i - 1] : validPoints[0];
+                const p1 = validPoints[i];
+                const p2 = validPoints[i + 1];
+                const p3 = i !== validPoints.length - 2 ? validPoints[i + 2] : p2;
+
+                // Higher tension keeps the arrow tighter to the anchor points to avoid straying into other territories
+                const tension = 7;
+
+                const cp1x = p1.x + (p2.x - p0.x) / tension;
+                const cp1y = p1.y + (p2.y - p0.y) / tension;
+
+                const cp2x = p2.x - (p3.x - p1.x) / tension;
+                const cp2y = p2.y - (p3.y - p1.y) / tension;
+
+                d += `C ${cp1x},${cp1y} ${cp2x},${cp2y} ${p2.x},${p2.y} `;
+            }
+            return d;
+        }
+
+        function getSharedBorderData(svgDoc, name1, name2) {
+            const path1s = Array.from(svgDoc.querySelectorAll(`[data-name="${name1}"]`));
+            const path2s = Array.from(svgDoc.querySelectorAll(`[data-name="${name2}"]`));
+            if (!path1s.length || !path2s.length) return null;
+
+            let sharedSegments = [];
+            const svgPoint = svgDoc.createSVGPoint();
+
+            for (let p1 of path1s) {
+                if (!p1.getTotalLength) continue;
+                for (let p2 of path2s) {
+                    if (!p2.isPointInStroke) continue;
+                    
+                    const len = p1.getTotalLength();
+                    const steps = Math.max(30, Math.floor(len / 4)); 
+
+                    const origStroke = p2.style.strokeWidth || p2.getAttribute('stroke-width');
+                    p2.style.strokeWidth = "12px"; // Thicken temporarily for intersection detection
+
+                    let currentSeg = [];
+                    for(let i=0; i<=steps; i++) {
+                        const pt = p1.getPointAtLength((i/steps) * len);
+                        svgPoint.x = pt.x; svgPoint.y = pt.y;
+                        if (p2.isPointInStroke(svgPoint) || p2.isPointInFill(svgPoint)) {
+                            currentSeg.push(pt);
+                        } else if (currentSeg.length > 0) {
+                            sharedSegments.push(currentSeg);
+                            currentSeg = [];
+                        }
+                    }
+                    if (currentSeg.length > 0) sharedSegments.push(currentSeg);
+                    p2.style.strokeWidth = origStroke; // Restore
+                }
+            }
+
+            if (sharedSegments.length === 0) return null;
+            // Return the longest continuous shared segment
+            sharedSegments.sort((a, b) => b.length - a.length);
+            return sharedSegments[0]; 
+        }
+
+        function findBorderCrossing(svgDoc, name1, name2, p1, p2) {
+            const borderSegment = getSharedBorderData(svgDoc, name1, name2);
+            if (borderSegment && borderSegment.length > 0) {
+                const midIndex = Math.floor(borderSegment.length / 2);
+                return borderSegment[midIndex]; // Return the exact geometric center of the shared boundary
+            }
+            
+            // Fallback to raycast if paths don't mathematically overlap
+            const steps = 40;
+            const dx = p2.x - p1.x;
+            const dy = p2.y - p1.y;
+            const svgPoint = svgDoc.createSVGPoint();
+
+            for (let i = 1; i <= steps; i++) {
+                svgPoint.x = p1.x + (dx * i) / steps;
+                svgPoint.y = p1.y + (dy * i) / steps;
+                const path2s = svgDoc.querySelectorAll(`[data-name="${name2}"]`);
+                const isInside2 = Array.from(path2s).some(path => path.isPointInFill && path.isPointInFill(svgPoint));
+                if (isInside2) return { x: svgPoint.x - dx/(steps*2), y: svgPoint.y - dy/(steps*2) };
+            }
+            return { x: p1.x + dx/2, y: p1.y + dy/2 };
+        }
+
+        function drawPathArrow(pathArray, startUnit, color = '#ff4444', isLanding = false) {
             const svgNS = 'http://www.w3.org/2000/svg';
+            const svgDoc = startUnit.ownerSVGElement;
             const arrowGroup = document.createElementNS(svgNS, 'g');
             arrowGroup.classList.add('movement-arrow-group');
 
-            // --- Path Calculation (no changes here) ---
-            const dx = endPos.x - startPos.x;
-            const dy = endPos.y - startPos.y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
-            const midpoint = { x: (startPos.x + endPos.x) / 2, y: (startPos.y + endPos.y) / 2 };
-            const perpendicular = { x: -dy / distance, y: dx / distance };
-            const curveFactor = distance * (Math.random() * 0.25 - 0.125);
-            const controlPoint = {
-                x: midpoint.x + perpendicular.x * curveFactor,
-                y: midpoint.y + perpendicular.y * curveFactor
-            };
-            const pathData = `M ${startPos.x} ${startPos.y} Q ${controlPoint.x} ${controlPoint.y} ${endPos.x} ${endPos.y}`;
+            // 1. Get Start Position
+            let unitX = 0, unitY = 0, unitWidth = 30, unitHeight = 30;
+            try {
+                const transformAttr = startUnit.getAttribute('transform');
+                if (transformAttr) {
+                    const match = transformAttr.match(/translate\(([^,]+),\s*([^)]+)\)/);
+                    if (match) {
+                        unitX = parseFloat(match[1]);
+                        unitY = parseFloat(match[2]);
+                    }
+                }
+                if (unitX === 0 && unitY === 0 && startUnit.transform.baseVal.numberOfItems > 0) {
+                    const matrix = startUnit.transform.baseVal.getItem(0).matrix;
+                    unitX = matrix.e;
+                    unitY = matrix.f;
+                }
+                const unitImage = startUnit.querySelector('.unit-token');
+                if (unitImage) {
+                    unitWidth = parseFloat(unitImage.getAttribute('width')) || 30;
+                    unitHeight = parseFloat(unitImage.getAttribute('height')) || 30;
+                }
+            } catch (e) {}
 
-            // --- Path Elements (no changes here) ---
-            const outlinePath = document.createElementNS(svgNS, 'path');
-            outlinePath.setAttribute('d', pathData);
-            outlinePath.classList.add('movement-arrow-outline');
+            const getTerritoryCenter = (name) => {
+                const elements = svgDoc.querySelectorAll(`[data-name="${name}"]`);
+                if (!elements || elements.length === 0) return null;
+                let largestElement = elements[0];
+                let maxArea = 0;
+                elements.forEach(el => {
+                    try {
+                        const bbox = el.getBBox();
+                        const area = bbox.width * bbox.height;
+                        if (area > maxArea) { maxArea = area; largestElement = el; }
+                    } catch (e) {} 
+                });
+                try {
+                    const bbox = largestElement.getBBox();
+                    return { x: bbox.x + bbox.width / 2, y: bbox.y + bbox.height / 2 };
+                } catch (e) { return null; }
+            };
+
+            // 2. Build the STRICT Border Sequence
+            const rawWaypoints = [];
+            for (let i = 0; i < pathArray.length - 1; i++) {
+                const currName = pathArray[i];
+                const nextName = pathArray[i + 1];
+                
+                // Centers are ONLY used to cast the ray to find the border.
+                // They are NOT added to the path.
+                const currCenter = getTerritoryCenter(currName) || { x: unitX + unitWidth/2, y: unitY + unitHeight/2 };
+                const nextCenter = getTerritoryCenter(nextName) || currCenter;
+                
+                const borderPoint = findBorderCrossing(svgDoc, currName, nextName, currCenter, nextCenter);
+                
+                rawWaypoints.push(borderPoint);
+                // Force the arrow to route through the center of intermediate spaces
+                if (i < pathArray.length - 2) { 
+                    rawWaypoints.push(nextCenter);
+                }
+            }
+            
+            let finalTargetPoint = getTerritoryCenter(pathArray[pathArray.length - 1]);
+            if (!finalTargetPoint) finalTargetPoint = { x: unitX + unitWidth/2, y: unitY + unitHeight/2 };
+
+            const startCenterPoint = { x: unitX + unitWidth / 2, y: unitY + unitHeight / 2 };
+            
+            // Waypoints are strictly: [Start Center, Border 1, Border 2, ..., Target Center]
+            // This eliminates the "center gravity" issue completely.
+            let points = [startCenterPoint, ...rawWaypoints, finalTargetPoint];
+
+            // 3. Generate Path Data 
+            const pathData = generateSmoothPath(points);
+
+            // 4. Build Visual Elements (NO CLIP PATHS)
             const arrowPath = document.createElementNS(svgNS, 'path');
             arrowPath.setAttribute('d', pathData);
             arrowPath.classList.add('movement-arrow-path');
-            
-            const startCircle = document.createElementNS(svgNS, 'circle');
-            startCircle.setAttribute('cx', startPos.x);
-            startCircle.setAttribute('cy', startPos.y);
-            startCircle.setAttribute('r', 4); // A small, visible circle
-            startCircle.setAttribute('fill', '#33CFFF');
-            startCircle.setAttribute('stroke', '#005F99');
-            startCircle.setAttribute('stroke-width', '1.5px');
-            startCircle.classList.add('arrow-start-circle'); // Add a class for easy selection
+            arrowPath.style.stroke = color; // Use style to override the CSS class
+            arrowPath.style.fill = "none";
 
-            // --- Arrowhead (made larger) ---
-            const angle = Math.atan2(endPos.y - controlPoint.y, endPos.x - controlPoint.x);
-            const arrowHeadLength = 18; // Larger for better visibility
-            const arrowHeadWidth = 10;  // Larger for better visibility
-            const arrowHeadPathData = `M 0,0 L -${arrowHeadLength},-${arrowHeadWidth} L -${arrowHeadLength},${arrowHeadWidth} z`;
-            const arrowHead = document.createElementNS('svg', 'path');
-            arrowHead.setAttribute('d', arrowHeadPathData);
-            arrowHead.setAttribute('fill', '#33CFFF');
-            arrowHead.setAttribute('stroke', '#005F99');
-            arrowHead.setAttribute('stroke-width', '1.5px');
-            arrowHead.setAttribute('transform', `translate(${endPos.x}, ${endPos.y}) rotate(${angle * 180 / Math.PI})`);
+            const hitboxPath = document.createElementNS(svgNS, 'path');
+            hitboxPath.setAttribute('d', pathData);
+            hitboxPath.classList.add('movement-arrow-hitbox');
 
-            // --- Assemble the Arrow Group ---
-            arrowGroup.appendChild(outlinePath);
+            const validPoints = points.filter(p => p && !isNaN(p.x) && !isNaN(p.y));
+            const last = validPoints[validPoints.length - 1];
+            const prev = validPoints[validPoints.length - 2] || validPoints[0];
+
+            let head;
+            if (last && prev) {
+                const angle = Math.atan2(last.y - prev.y, last.x - prev.x) * 180 / Math.PI;
+                head = document.createElementNS(svgNS, 'path');
+                head.setAttribute('d', `M 0,0 L -12,-6 L -12,6 z`);
+                head.setAttribute('fill', color);
+                head.setAttribute('transform', `translate(${last.x}, ${last.y}) rotate(${angle})`);
+            }
+
+            arrowGroup.appendChild(hitboxPath);
             arrowGroup.appendChild(arrowPath);
-            arrowGroup.appendChild(startCircle); // Add the new start circle
-            arrowGroup.appendChild(arrowHead);
+            if (head) arrowGroup.appendChild(head);
             
-            arrowGroup.addEventListener('click', () => {
-                if (confirm('Do you want to remove this movement arrow?')) {
-                    arrowGroup.remove();
-                    drawnArrows = drawnArrows.filter(a => a.arrowElement !== arrowGroup);
+            arrowGroup.pathPoints = validPoints;
+
+            const layer = svgDoc.querySelector('.arrow-layer') || svgDoc.appendChild(document.createElementNS(svgNS, 'g'));
+            layer.appendChild(arrowGroup);
+
+            return { arrowGroup, endPos: last };
+        }
+
+        function redrawUnitArrows(unitElement, newUnitX, newUnitY) {
+            // Stretch loading arrows dynamically if this unit is the transport OR the cargo
+            if (window.loadedUnitsLinks) {
+                window.loadedUnitsLinks.forEach(link => {
+                    if (link.startUnit === unitElement || link.transportEl === unitElement) {
+                        updateLoadArrowPosition(link);
+                    }
+                });
+            }
+
+            const arrowsToUpdate = drawnArrows.filter(arrow => arrow.startUnit === unitElement && !arrow.isLoad);
+            if (arrowsToUpdate.length === 0) return;
+
+            const unitImage = unitElement.querySelector('.unit-token');
+            const unitWidth = parseFloat(unitImage.getAttribute('width')) || 30;
+            const unitHeight = parseFloat(unitImage.getAttribute('height')) || 30;
+
+            arrowsToUpdate.forEach(arrow => {
+                const arrowGroup = arrow.arrowElement;
+                if (!arrowGroup.pathPoints || arrowGroup.pathPoints.length < 2) return;
+                
+                const newStartPos = { x: newUnitX + unitWidth / 2, y: newUnitY + unitHeight / 2 };
+                arrowGroup.pathPoints[0] = newStartPos;
+                const newPathData = generateSmoothPath(arrowGroup.pathPoints);
+
+                const mainPath = arrowGroup.querySelector('.movement-arrow-path');
+                const hitboxPath = arrowGroup.querySelector('.movement-arrow-hitbox');
+                if (mainPath) mainPath.setAttribute('d', newPathData);
+                if (hitboxPath) hitboxPath.setAttribute('d', newPathData);
+                
+                const countCircle = arrowGroup.ownerSVGElement.querySelector(`.arrow-label-group[data-arrow-id="${arrowGroup.id}"] .arrow-unit-count-circle`);
+                const countText = arrowGroup.ownerSVGElement.querySelector(`.arrow-label-group[data-arrow-id="${arrowGroup.id}"] .arrow-unit-count-text`);
+                if (countCircle && countText && mainPath) {
+                    const midPoint = mainPath.getPointAtLength(mainPath.getTotalLength() / 2);
+                    countCircle.setAttribute('cx', midPoint.x);
+                    countCircle.setAttribute('cy', midPoint.y);
+                    countText.setAttribute('x', midPoint.x);
+                    countText.setAttribute('y', midPoint.y);
                 }
             });
-            // This is the key to fixing the layering issue.
-            startUnit.parentNode.insertBefore(arrowGroup, startUnit);
-            
-            return arrowGroup;
         }
 
         /**
@@ -5712,91 +6052,33 @@
             const circle = document.createElementNS(svgNS, 'circle');
             circle.setAttribute('cx', midPoint.x);
             circle.setAttribute('cy', midPoint.y);
-            circle.setAttribute('r', 12); // Smaller radius for the circle
+            circle.setAttribute('r', 8); // Shrunk from 12
             circle.classList.add('arrow-unit-count-circle');
+            circle.style.pointerEvents = 'none'; // Prevent blocking clicks
 
             const text = document.createElementNS(svgNS, 'text');
             text.setAttribute('x', midPoint.x);
             text.setAttribute('y', midPoint.y);
             text.textContent = count;
             text.classList.add('arrow-unit-count-text');
+            text.style.fontSize = '10px'; // Shrunk text
+            text.style.pointerEvents = 'none'; 
 
-            arrowElement.appendChild(circle);
-            arrowElement.appendChild(text);
-        }
-
-        /**
-         * Redraws all arrows connected to a specific unit based on its new position.
-         * This updates the arrow path, arrowhead, start circle, and unit count display.
-         * @param {SVGElement} unitElement - The unit <g> element that is moving.
-         * @param {number} newUnitX - The new top-left X coordinate of the unit.
-         * @param {number} newUnitY - The new top-left Y coordinate of the unit.
-         */
-        function redrawUnitArrows(unitElement, newUnitX, newUnitY) {
-            const arrowsToUpdate = drawnArrows.filter(arrow => arrow.startUnit === unitElement);
-            if (arrowsToUpdate.length === 0) return;
-
-            const unitImage = unitElement.querySelector('.unit-token');
-            const unitWidth = parseFloat(unitImage.getAttribute('width'));
-            const unitHeight = parseFloat(unitImage.getAttribute('height'));
+            const labelGroup = document.createElementNS(svgNS, 'g');
+            labelGroup.classList.add('arrow-label-group');
+            // Give the arrow a unique ID if it doesn't have one to link the label
+            if (!arrowElement.id) {
+                arrowElement.id = 'arrow-' + Math.random().toString(36).substr(2, 9);
+            }
+            labelGroup.setAttribute('data-arrow-id', arrowElement.id);
             
-            // The new starting position for the arrows is the unit's current center
-            const newStartPos = {
-                x: newUnitX + unitWidth / 2,
-                y: newUnitY + unitHeight / 2
-            };
+            labelGroup.appendChild(circle);
+            labelGroup.appendChild(text);
 
-            arrowsToUpdate.forEach(arrow => {
-                const endPos = arrow.endPos; // Retrieve the stored end position
-                
-                // 1. Recalculate the curve and path data
-                const dx = endPos.x - newStartPos.x;
-                const dy = endPos.y - newStartPos.y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
-                const midpoint = { x: (newStartPos.x + endPos.x) / 2, y: (newStartPos.y + endPos.y) / 2 };
-                const perpendicular = { x: -dy / distance, y: dx / distance };
-                const curveFactor = distance * 0.1; // Use a consistent curve factor during drag for stability
-                const controlPoint = {
-                    x: midpoint.x + perpendicular.x * curveFactor,
-                    y: midpoint.y + perpendicular.y * curveFactor
-                };
-                const newPathData = `M ${newStartPos.x} ${newStartPos.y} Q ${controlPoint.x} ${controlPoint.y} ${endPos.x} ${endPos.y}`;
-
-                // 2. Update all visual components of the arrow
-                const arrowGroup = arrow.arrowElement;
-                const mainPath = arrowGroup.querySelector('.movement-arrow-path');
-                const outlinePath = arrowGroup.querySelector('.movement-arrow-outline');
-                const startCircle = arrowGroup.querySelector('.arrow-start-circle');
-                const arrowhead = arrowGroup.querySelector('path:not([class])');
-                const countCircle = arrowGroup.querySelector('.arrow-unit-count-circle');
-                const countText = arrowGroup.querySelector('.arrow-unit-count-text');
-
-                // Update paths
-                if (mainPath) mainPath.setAttribute('d', newPathData);
-                if (outlinePath) outlinePath.setAttribute('d', newPathData);
-                
-                // Update start circle position
-                if (startCircle) {
-                    startCircle.setAttribute('cx', newStartPos.x);
-                    startCircle.setAttribute('cy', newStartPos.y);
-                }
-
-                // Update arrowhead rotation
-                if (arrowhead) {
-                    const newAngle = Math.atan2(endPos.y - controlPoint.y, endPos.x - controlPoint.x);
-                    arrowhead.setAttribute('transform', `translate(${endPos.x}, ${endPos.y}) rotate(${newAngle * 180 / Math.PI})`);
-                }
-
-                // Update position of unit count circle and text
-                if (countCircle && countText && mainPath) {
-                    const midPoint = mainPath.getPointAtLength(mainPath.getTotalLength() / 2);
-                    countCircle.setAttribute('cx', midPoint.x);
-                    countCircle.setAttribute('cy', midPoint.y);
-                    countText.setAttribute('x', midPoint.x);
-                    text.setAttribute('y', midPoint.y);
-                }
-            });
+            // Append directly to the main SVG element so it renders on top of ALL layers (including units)
+            arrowElement.ownerSVGElement.appendChild(labelGroup);
         }
+
 
         /**
          * Highlights all territories a unit can reach based on its movement points and specific rules for unit type.
@@ -5807,135 +6089,192 @@
          * @param {string} unitType - The type of the unit.
          */
         function highlightReachableTerritories(startTerritory, movementPoints, unitPower, unitType) {
-            // --- SETUP & CONSTANTS ---
-            const ATTACK_HIGHLIGHT_COLOR = 'rgba(196, 77, 51, 0.6)'; // A burnt orange/red
-            const PASSABLE_HIGHLIGHT_COLOR = 'rgba(218, 165, 32, 0.5)'; // A translucent gold
+            const ATTACK_HIGHLIGHT_COLOR = 'rgba(196, 77, 51, 0.6)';
             const unitAlliance = AXIS_POWERS.has(unitPower) ? AXIS_POWERS : ALLIED_POWERS;
             const isAirUnit = airUnitTypes.includes(unitType);
             const isSeaUnit = SEA_UNIT_TYPES.includes(unitType);
             const isLandUnit = !isAirUnit && !isSeaUnit;
+            const isTankOrCav = ['Tank', 'Cavalry'].includes(unitType);
             const attackableSpaces = new Set();
-            const passableSpaces = new Set();
 
-            // --- HELPER FUNCTIONS ---
+            const isSeaZone = (name) => !isNaN(Number(name));
 
-            /**
-             * Gets the string name of the power controlling a territory.
-             * @param {string} territoryName - The name of the territory.
-             * @returns {string|null} The power name (e.g., "Germany", "Impassable") or null if not found.
-             */
             const getTerritoryPower = (territoryName) => {
                 const path = svgWrapper.querySelector(`[data-name="${territoryName}"]`);
                 return path ? path.getAttribute('data-power') : null;
             };
 
-            /**
-             * Determines if a territory is hostile to the moving unit based on complex alliance rules.
-             * @param {string} territoryName - The name of the target territory.
-             * @param {string} movingUnitPower - The power of the unit that is moving.
-             * @returns {boolean} True if the territory is considered an enemy.
-             */
             const isEnemyTerritory = (territoryName, movingUnitPower) => {
+                if (isSeaZone(territoryName)) return false;
                 const targetPower = getTerritoryPower(territoryName);
                 if (!targetPower || targetPower === 'Impassable') return false;
-
+                
+                // ALL Neutrals (Strict and Pro) can be passed through or attacked
+                if (targetPower.includes('Neutral') || targetPower === 'Neutral') return true; 
+                
                 const movingUnitAlliance = AXIS_POWERS.has(movingUnitPower) ? 'Axis' : 'Allies';
+                return movingUnitAlliance === 'Allies' ? AXIS_POWERS.has(targetPower) : ALLIED_POWERS.has(targetPower);
+            };
 
-                if (movingUnitAlliance === 'Allies') {
-                    return AXIS_POWERS.has(targetPower) || targetPower === 'Neutral' || targetPower === 'Pro-Axis Neutral';
-                } else { // Moving unit is Axis
-                    return ALLIED_POWERS.has(targetPower) || targetPower === 'Neutral' || targetPower === 'Pro-Allied Neutral';
+            const isFriendlyLand = (territoryName, movingUnitPower) => {
+                if (isSeaZone(territoryName) || territoryName === 'Impassable') return false;
+                const targetPower = getTerritoryPower(territoryName);
+                if (!targetPower) return false;
+                if (targetPower === movingUnitPower) return true;
+                
+                const movingUnitAlliance = AXIS_POWERS.has(movingUnitPower) ? 'Axis' : 'Allies';
+                if (movingUnitAlliance === 'Axis') {
+                    return AXIS_POWERS.has(targetPower) || targetPower === 'Pro-Axis Neutral';
+                } else {
+                    return ALLIED_POWERS.has(targetPower) || targetPower === 'Pro-Allied Neutral';
                 }
             };
 
-            /**
-             * Checks if a sea zone contains any enemy sea units.
-             * @param {string} zoneName - The name of the sea zone.
-             * @returns {boolean} True if enemy units are present.
-             */
             const seaZoneHasEnemyUnits = (zoneName) => {
                 return placedUnitsData.some(unit =>
-                    unit.placedIn === zoneName &&
-                    SEA_UNIT_TYPES.includes(unit.unitType) &&
-                    !unitAlliance.has(unit.power)
+                    unit.placedIn === zoneName && SEA_UNIT_TYPES.includes(unit.unitType) && !unitAlliance.has(unit.power)
                 );
             };
-            
-            /**
-             * A unified check for air units to determine if a land or sea space is a valid attack target.
-             * @param {string} zoneName - The name of the territory or sea zone.
-             * @param {string} movingUnitPower - The power of the attacking air unit.
-             * @returns {boolean} True if the space is a valid attack target.
-             */
-            const isAttackableByAir = (zoneName, movingUnitPower) => {
-                 const targetPower = getTerritoryPower(zoneName);
-                 if (!targetPower || targetPower === 'Impassable') return false;
-                 // Sea zones are attackable if they contain any enemy units (sea or land).
-                 if (!isNaN(Number(zoneName))) {
-                     return placedUnitsData.some(unit => unit.placedIn === zoneName && !unitAlliance.has(unit.power));
-                 }
-                 // Land territories are attackable if they are enemy-controlled.
-                 return isEnemyTerritory(zoneName, movingUnitPower);
+
+            const hasEnemyCombatUnits = (terrName) => {
+                return placedUnitsData.some(unit =>
+                    unit.placedIn === terrName && !unitAlliance.has(unit.power) && !unit.unitType.includes('AAA') && !FACILITY_UNIT_TYPES.includes(unit.unitType) && !SEA_UNIT_TYPES.includes(unit.unitType)
+                );
             };
 
-
-            // --- LOGIC FOR LAND UNITS ---
-            if (isLandUnit) {
-                const adjacencies1 = territoryAdjacencies[startTerritory]?.adjacent_to || [];
-                const friendlyBridgeTerritories = new Set();
-
-                for (const adjName of adjacencies1) {
-                    const power = getTerritoryPower(adjName);
-                    if (!power || power === 'Impassable') continue;
-                    
-                    if (isEnemyTerritory(adjName, unitPower)) {
-                        attackableSpaces.add(adjName);
-                    } else {
-                        friendlyBridgeTerritories.add(adjName);
+            const getAvailableCarrierSpots = (seaZone) => {
+                let accCapacity = 0;
+                let planesUsed = 0;
+                placedUnitsData.forEach(u => {
+                    if (u.placedIn === seaZone && unitAlliance.has(u.power)) {
+                        if (u.unitType === 'ACC') accCapacity += parseInt(u.count) * 2;
+                        if (u.unitType === 'FTR' || u.unitType === 'TBR') planesUsed += parseInt(u.count);
                     }
-                }
+                });
+                return Math.max(0, accCapacity - planesUsed);
+            };
 
-                if (movementPoints > 1) {
-                    for (const bridgeTerritory of friendlyBridgeTerritories) {
-                        const adjacencies2 = territoryAdjacencies[bridgeTerritory]?.adjacent_to || [];
-                        for (const adjName2 of adjacencies2) {
-                            if (adjName2 === startTerritory || adjName2 === bridgeTerritory) continue;
+            // Pre-calculate Amphibious Zones for Sea Units
+            const validAmphibiousSeaZones = new Set();
+            if (isSeaUnit) {
+                const friendlyTransports = placedUnitsData.filter(u => u.unitType === 'TPT' && u.power === unitPower);
+                friendlyTransports.forEach(tpt => {
+                    // Check if TPT is loaded or adjacent to friendly land units
+                    let canLoad = placedUnitsData.some(u => u.placedIn === tpt.placedIn && !SEA_UNIT_TYPES.includes(u.unitType) && u.power === unitPower);
+                    if (!canLoad) {
+                        const adjs = territoryAdjacencies[tpt.placedIn]?.adjacent_to || [];
+                        canLoad = adjs.some(adj => !isSeaZone(adj) && placedUnitsData.some(u => u.placedIn === adj && u.power === unitPower && !SEA_UNIT_TYPES.includes(u.unitType)));
+                    }
+
+                    if (canLoad) {
+                        const tptMove = parseInt(tpt.element.getAttribute('data-movement-remaining')) || 2;
+                        let q = [{name: tpt.placedIn, d: 0}];
+                        let vis = new Set([tpt.placedIn]);
+                        while(q.length > 0) {
+                            let curr = q.shift();
+                            const adjs = territoryAdjacencies[curr.name]?.adjacent_to || [];
                             
-                            const power = getTerritoryPower(adjName2);
-                            if (!power || power === 'Impassable') continue;
-                            
-                            if (isEnemyTerritory(adjName2, unitPower)) {
-                                attackableSpaces.add(adjName2);
-                                passableSpaces.add(bridgeTerritory); 
+                            // If this sea zone borders an enemy territory, it's a valid assault zone
+                            if (adjs.some(a => isEnemyTerritory(a, unitPower))) {
+                                validAmphibiousSeaZones.add(curr.name);
+                            }
+
+                            if (curr.d < tptMove) {
+                                adjs.forEach(a => {
+                                    if (isSeaZone(a) && !vis.has(a)) {
+                                        vis.add(a);
+                                        q.push({name: a, d: curr.d + 1});
+                                    }
+                                });
                             }
                         }
                     }
-                }
+                });
             }
 
+            // --- LOGIC FOR LAND UNITS (Including BLITZ and LOADING) ---
+            if (isLandUnit) {
+                const adjs = territoryAdjacencies[startTerritory]?.adjacent_to || [];
+                
+                // Directly query all map clones for valid transports to ensure they are all highlighted
+                document.querySelectorAll('.unit-stack-group').forEach(tptEl => {
+                    const uPower = tptEl.getAttribute('data-power');
+                    const uType = tptEl.getAttribute('data-unit-type');
+                    const uPlacedIn = tptEl.getAttribute('data-placed-in');
+                    
+                    let isValid = false;
+                    if (uPower === unitPower) {
+                        if (uType === 'SBR' && uPlacedIn === startTerritory) {
+                            isValid = true;
+                        } else if (uType === 'TPT' && isSeaZone(uPlacedIn) && (adjs.includes(Number(uPlacedIn)) || adjs.includes(String(uPlacedIn)))) {
+                            isValid = true;
+                        }
+                    }
+
+                    if (isValid) {
+                        tptEl.classList.add('highlight-transport');
+                        
+                        // 1. Add a glowing CSS filter to the whole unit group
+                        tptEl.style.filter = 'drop-shadow(0 0 6px #00FF00) drop-shadow(0 0 10px #33CFFF)';
+
+                        // 2. Add a highly visible animated/dashed ring extending past the image bounds
+                        if (!tptEl.querySelector('.transport-highlight-ring')) {
+                            const ring = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                            const img = tptEl.querySelector('image.unit-token');
+                            if (img) {
+                                const cx = parseFloat(img.getAttribute('x')) + parseFloat(img.getAttribute('width'))/2;
+                                const cy = parseFloat(img.getAttribute('y')) + parseFloat(img.getAttribute('height'))/2;
+                                
+                                const maxImgDim = Math.max(parseFloat(img.getAttribute('width')), parseFloat(img.getAttribute('height')));
+                                const radius = (maxImgDim / 2) + 8; 
+                                
+                                ring.setAttribute('cx', cx);
+                                ring.setAttribute('cy', cy);
+                                ring.setAttribute('r', radius);
+                                ring.setAttribute('fill', 'rgba(51, 207, 255, 0.4)'); // Translucent cyan interior
+                                ring.setAttribute('stroke', '#00FF00'); // Neon green border
+                                ring.setAttribute('stroke-width', '3');
+                                ring.setAttribute('stroke-dasharray', '6 4');
+                                ring.classList.add('transport-highlight-ring');
+                                
+                                ring.style.pointerEvents = 'all'; 
+                                ring.style.cursor = 'pointer';
+                                
+                                tptEl.insertBefore(ring, tptEl.firstChild);
+                            }
+                        }
+                    }
+                });
+            }
             // --- LOGIC FOR SEA UNITS ---
             else if (isSeaUnit) {
-                const adjacencies1 = territoryAdjacencies[startTerritory]?.adjacent_to || [];
+                const distanceMap = new Map();
+                let queue = [{ territoryName: startTerritory, distance: 0 }];
+                distanceMap.set(startTerritory, 0);
 
-                for (const adjName1 of adjacencies1) {
-                     const power = getTerritoryPower(adjName1);
-                     if (power === 'Impassable' || isNaN(Number(adjName1))) continue;
-
-                    if (seaZoneHasEnemyUnits(adjName1)) {
-                        attackableSpaces.add(adjName1);
-                    } else {
-                        const adjacencies2 = territoryAdjacencies[adjName1]?.adjacent_to || [];
-                        for (const adjName2 of adjacencies2) {
-                            if (isNaN(Number(adjName2)) || adjName2 === startTerritory) continue;
-                            if (seaZoneHasEnemyUnits(adjName2)) {
-                                attackableSpaces.add(adjName2);
-                                passableSpaces.add(adjName1);
-                            }
+                while (queue.length > 0) {
+                    const { territoryName, distance } = queue.shift();
+                    if (distance >= movementPoints) continue;
+                    const adjacencies = territoryAdjacencies[territoryName]?.adjacent_to || [];
+                    for (const adjName of adjacencies) {
+                        if (!isSeaZone(adjName)) continue;
+                        if (!distanceMap.has(adjName)) {
+                            distanceMap.set(adjName, distance + 1);
+                            queue.push({ territoryName: adjName, distance: distance + 1 });
                         }
                     }
                 }
-            }
 
+                for (const [candidate, dist] of distanceMap.entries()) {
+                    if (candidate === startTerritory) continue;
+                    
+                    if (seaZoneHasEnemyUnits(candidate)) {
+                        attackableSpaces.add(candidate);
+                    } else if (['TPT', 'BTS', 'CSR'].includes(unitType) && validAmphibiousSeaZones.has(candidate)) {
+                        attackableSpaces.add(candidate);
+                    }
+                }
+            }
             // --- LOGIC FOR AIR UNITS ---
             else if (isAirUnit) {
                 const distanceMap = new Map();
@@ -5945,12 +6284,9 @@
                 while (queue.length > 0) {
                     const { territoryName, distance } = queue.shift();
                     if (distance >= movementPoints) continue;
-
                     const adjacencies = territoryAdjacencies[territoryName]?.adjacent_to || [];
                     for (const adjName of adjacencies) {
-                        const power = getTerritoryPower(adjName);
-                        if (power === 'Impassable') continue;
-
+                        if (getTerritoryPower(adjName) === 'Impassable') continue;
                         if (!distanceMap.has(adjName)) {
                             distanceMap.set(adjName, distance + 1);
                             queue.push({ territoryName: adjName, distance: distance + 1 });
@@ -5958,11 +6294,19 @@
                     }
                 }
 
-                for (const [candidate, distanceFromStart] of distanceMap.entries()) {
+                for (const [candidate, distToTarget] of distanceMap.entries()) {
                     if (candidate === startTerritory) continue;
+                    
+                    // Fixed check for attacking Sea Zones and Land
+                    let isAttackable = false;
+                    if (isSeaZone(candidate)) {
+                        isAttackable = seaZoneHasEnemyUnits(candidate);
+                    } else {
+                        isAttackable = isEnemyTerritory(candidate, unitPower);
+                    }
 
-                    if (isAttackableByAir(candidate, unitPower)) {
-                        const remainingMove = movementPoints - distanceFromStart;
+                    if (isAttackable) {
+                        const remainingMove = movementPoints - distToTarget;
                         if (remainingMove < 0) continue;
                         
                         let canLand = false;
@@ -5971,17 +6315,12 @@
 
                         while (landingQueue.length > 0) {
                             const { territoryName, distance } = landingQueue.shift();
-                            const targetPower = getTerritoryPower(territoryName);
 
-                            if (targetPower && unitAlliance.has(targetPower)) {
-                                canLand = true;
-                                break;
+                            if (isFriendlyLand(territoryName, unitPower)) {
+                                canLand = true; break;
                             }
-                            if (!isNaN(Number(territoryName))) {
-                                 if (placedUnitsData.some(u => u.placedIn === territoryName && u.unitType === 'ACC' && u.power === unitPower)) {
-                                    canLand = true;
-                                    break;
-                                }
+                            if (isSeaZone(territoryName) && getAvailableCarrierSpots(territoryName) > 0) {
+                                canLand = true; break;
                             }
 
                             if (distance < remainingMove) {
@@ -5994,102 +6333,530 @@
                                 }
                             }
                         }
-                        if (canLand) {
-                            attackableSpaces.add(candidate);
-                        }
+                        if (canLand) attackableSpaces.add(candidate);
                     }
                 }
             }
 
-            // --- APPLY HIGHLIGHTS & CLICK HANDLERS ---
-            // --- APPLY HIGHLIGHTS & CLICK HANDLERS ---
-            const applyHighlight = (territoryName) => {
-                const pathsToHighlight = svgWrapper.querySelectorAll(`polygon[data-name="${territoryName}"], path[data-name="${territoryName}"]`);
+            // Helpers for Pathfinding to draw arrows and check AA
+            const getPathsTo = (target) => {
+                let validPaths = [];
+                let stack = [{ name: startTerritory, path: [startTerritory], dist: 0 }];
+                
+                while(stack.length > 0) {
+                    let curr = stack.pop();
+                    if (curr.name === target) {
+                        validPaths.push(curr.path);
+                        continue;
+                    }
+                    if (curr.dist < movementPoints) {
+                        const adjs = territoryAdjacencies[curr.name]?.adjacent_to || [];
+                        for (let adj of adjs) {
+                            if (curr.path.includes(adj)) continue;
+                            if (adj === target) {
+                                stack.push({ name: adj, path: [...curr.path, adj], dist: curr.dist + 1 });
+                            } else {
+                                // Enemy spaces can't be passed through
+                                let isEnemy = isSeaZone(adj) ? seaZoneHasEnemyUnits(adj) : isEnemyTerritory(adj, unitPower);
+                                let isValidIntermediate = false;
 
+                                if (getTerritoryPower(adj) === 'Impassable') isValidIntermediate = false;
+                                else if (isLandUnit && !isSeaZone(adj) && !isEnemy) isValidIntermediate = true;
+                                else if (isSeaUnit && isSeaZone(adj) && !isEnemy) isValidIntermediate = true;
+                                else if (isAirUnit) isValidIntermediate = true; // Air flies over anything but impassable
+                                
+                                if (isValidIntermediate) {
+                                    stack.push({ name: adj, path: [...curr.path, adj], dist: curr.dist + 1 });
+                                }
+                            }
+                        }
+                    }
+                }
+                return validPaths;
+            };
+
+            const getEnemyAACount = (pathArray) => {
+                let aaCount = 0;
+                for (let i = 1; i < pathArray.length; i++) {
+                    const terr = pathArray[i];
+                    const hasEnemyAA = placedUnitsData.some(u => 
+                        u.placedIn === terr && 
+                        !unitAlliance.has(u.power) && 
+                        (u.unitType.includes('AAA') || FACILITY_UNIT_TYPES.includes(u.unitType) || u.unitType === 'Battleship')
+                    );
+                    if (hasEnemyAA) aaCount++;
+                }
+                return aaCount;
+            };
+
+            const getLandingPaths = (startNode, remainingMove) => {
+                let validPaths = [];
+                let queue = [{ name: startNode, path: [startNode], dist: 0 }];
+                while(queue.length > 0) {
+                    let curr = queue.shift();
+                    
+                    let canLand = false;
+                    if (isFriendlyLand(curr.name, unitPower)) canLand = true;
+                    if (isSeaZone(curr.name) && getAvailableCarrierSpots(curr.name) > 0) canLand = true;
+                    if (canLand) validPaths.push(curr.path);
+                    
+                    if (curr.dist < remainingMove) {
+                        const adjs = territoryAdjacencies[curr.name]?.adjacent_to || [];
+                        for (let adj of adjs) {
+                            adj = String(adj);
+                            if (curr.path.includes(adj)) continue;
+                            
+                            // Air units CAN fly over enemies, but CANNOT fly over impassables
+                            if (getTerritoryPower(adj) !== 'Impassable') {
+                                queue.push({ name: adj, path: [...curr.path, adj], dist: curr.dist + 1 });
+                            }
+                        }
+                    }
+                }
+                return validPaths;
+            };
+
+            // --- APPLY HIGHLIGHTS & CLICK HANDLERS ---
+            // --- MANUAL PATH BUILDING ENGINE ---
+            const applyHighlight = (territoryName, isManualStep = false) => {
+                const pathsToHighlight = svgWrapper.querySelectorAll(`polygon[data-name="${territoryName}"], path[data-name="${territoryName}"]`);
                 pathsToHighlight.forEach(path => {
+                    const originalFill = path.style.fill;
+                    const originalOpacity = path.style.fillOpacity;
+                    const originalStroke = path.style.stroke;
+                    const originalStrokeWidth = path.style.strokeWidth;
+
                     const territoryClickHandler = async (event) => {
                         event.stopPropagation();
-                        const totalUnitsInStack = parseInt(selectedUnit.getAttribute('data-count'), 10);
-                        let unitsAlreadyMoved = drawnArrows.reduce((sum, arrow) => (arrow.startUnit === selectedUnit) ? sum + arrow.units : sum, 0);
-                        const availableUnits = totalUnitsInStack - unitsAlreadyMoved;
 
-                        if (availableUnits <= 0) {
-                            console.warn("All units from this stack have already been assigned a move.");
-                            return;
+                        if (!window.activePathingState) {
+                            window.activePathingState = {
+                                unit: selectedUnit,
+                                target: territoryName,
+                                currentPath: [startTerritory],
+                                remainingMoves: movementPoints
+                            };
+
+                            highlightedTerritories.forEach(highlight => {
+                                if (highlight.element.getAttribute('data-name') !== territoryName && highlight.overlay) {
+                                    highlight.overlay.remove();
+                                }
+                            });
+                            
+                            path.style.fill = 'rgba(255, 0, 0, 0.5)';
+                            updatePathingUI(territoryName, movementPoints);
+                            
+                            window.activePathingListener = (e) => {
+                                const clickedUnitGroup = e.target.closest('.unit-stack-group');
+                                if (clickedUnitGroup && clickedUnitGroup === window.activePathingState.unit) {
+                                    handleUnitClick(clickedUnitGroup);
+                                    e.stopPropagation(); e.preventDefault(); return;
+                                }
+
+                                let clickedPath = e.target.closest('[data-name]');
+                                if (!clickedPath) return;
+                                if (clickedPath.classList && (clickedPath.classList.contains('movement-arrow-path') || clickedPath.classList.contains('movement-arrow-hitbox'))) return;
+
+                                // Force string conversion for robust Sea Zone checks
+                                const clickedName = String(clickedPath.getAttribute('data-name'));
+
+                                // FORCE the script to use the actual shape, not a text label (like a Sea Zone number)
+                                if (clickedPath.tagName.toLowerCase() !== 'path' && clickedPath.tagName.toLowerCase() !== 'polygon') {
+                                    clickedPath = clickedPath.ownerSVGElement.querySelector(`path[data-name="${clickedName}"], polygon[data-name="${clickedName}"]`);
+                                    if (!clickedPath) return;
+                                }
+                                const pathLength = window.activePathingState.currentPath.length;
+                                const lastSpace = String(window.activePathingState.currentPath[pathLength - 1]);
+
+                                // UNDO LOGIC: If clicking the last added space (and it's not the start space)
+                                if (clickedName === lastSpace && pathLength > 1) {
+                                    window.activePathingState.currentPath.pop();
+                                    window.activePathingState.remainingMoves++;
+                                    updatePathingUI(window.activePathingState.target, window.activePathingState.remainingMoves);
+                                    
+                                    // Remove the DOM elements for this step
+                                    const stepElements = document.querySelectorAll(`.manual-path-step[data-step="${pathLength - 1}"]`);
+                                    stepElements.forEach(el => el.remove());
+                                    
+                                    e.stopPropagation(); e.preventDefault(); return;
+                                }
+
+                                const forwardAdjs = (territoryAdjacencies[lastSpace]?.adjacent_to || []).map(String);
+                                const backwardAdjs = (territoryAdjacencies[clickedName]?.adjacent_to || []).map(String);
+                                const isAdjacent = forwardAdjs.includes(clickedName) || backwardAdjs.includes(lastSpace);
+
+                                if (!isAdjacent && clickedName !== lastSpace) {
+                                    showCustomModal("Invalid Move", "You must select a space adjacent to the previous one in your path.");
+                                    e.stopPropagation(); e.preventDefault(); return;
+                                }
+
+                                // Enforce Land Unit sea zone restriction
+                                if (isSeaZone(clickedName) && !isAirUnit && !isSeaUnit) {
+                                    showCustomModal("Invalid Move", "Land units cannot route through or attack Sea Zones directly.");
+                                    e.stopPropagation(); e.preventDefault(); return;
+                                }
+
+                                if (clickedName !== lastSpace) {
+                                    window.activePathingState.currentPath.push(clickedName);
+                                    window.activePathingState.remainingMoves--;
+                                    updatePathingUI(window.activePathingState.target, window.activePathingState.remainingMoves);
+                                    
+                                    // HIGHLIGHT THE SHARED BORDER
+                                    const borderSegment = getSharedBorderData(clickedPath.ownerSVGElement, lastSpace, clickedName);
+                                    if (borderSegment && borderSegment.length > 1) {
+                                        const polyline = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+                                        polyline.setAttribute('points', borderSegment.map(p => `${p.x},${p.y}`).join(' '));
+                                        polyline.setAttribute('fill', 'none');
+                                        polyline.setAttribute('stroke', '#66ccff'); // Softer cyan
+                                        polyline.setAttribute('stroke-width', '4px'); // Thinner
+                                        polyline.setAttribute('stroke-linecap', 'round');
+                                        polyline.setAttribute('stroke-linejoin', 'round');
+                                        polyline.style.pointerEvents = 'none';
+                                        polyline.classList.add('manual-path-step', 'shared-border-highlight');
+                                        polyline.setAttribute('data-step', window.activePathingState.currentPath.length - 1);
+                                        
+                                        clickedPath.parentNode.insertBefore(polyline, clickedPath.nextSibling);
+                                    }
+
+                                    // Add visual feedback for intermediate path spaces
+                                    const clone = clickedPath.cloneNode(true);
+                                    clone.removeAttribute('id');
+                                    clone.style.fill = 'rgba(255, 255, 255, 0.2)'; // Soft white wash
+                                    clone.style.stroke = '#66ccff'; // Cyan border
+                                    clone.style.strokeWidth = '2px';
+                                    clone.style.pointerEvents = 'none';
+                                    clone.classList.add('manual-path-step');
+                                    clone.setAttribute('data-step', window.activePathingState.currentPath.length - 1);
+                                    
+                                    clickedPath.parentNode.insertBefore(clone, clickedPath.nextSibling);
+                                }
+
+                                if (clickedName === window.activePathingState.target) {
+                                    document.removeEventListener('click', window.activePathingListener, true);
+                                    window.activePathingListener = null;
+                                    finalizeManualPath(e);
+                                }
+                                e.stopPropagation(); e.preventDefault();
+                            };
+                            document.addEventListener('click', window.activePathingListener, true);
+                            return; 
                         }
-
-                        const unitTransform = selectedUnit.transform.baseVal.getItem(0).matrix;
-                        const unitImage = selectedUnit.querySelector('.unit-token');
-                        const unitWidth = parseFloat(unitImage.getAttribute('width'));
-                        const unitHeight = parseFloat(unitImage.getAttribute('height'));
-                        const startPos = { x: unitTransform.e + unitWidth / 2, y: unitTransform.f + unitHeight / 2 };
-                        const endPos = getSvgCoordinates(event.clientX, event.clientY, path.ownerSVGElement);
-
-                        let unitsToMove = 1;
-                        if (availableUnits > 1) {
-                            unitsToMove = await showUnitSplitSlider(availableUnits, event);
-                        }
-
-                        if (unitsToMove === null || unitsToMove === 0) return;
-
-                        const arrowElement = drawCurvedArrow(startPos, endPos, selectedUnit);
-                        if (totalUnitsInStack > 1) {
-                            addUnitCountToArrow(arrowElement, unitsToMove);
-                        }
-
-                        drawnArrows.push({
-                            arrowElement,
-                            startUnit: selectedUnit,
-                            targetTerritory: territoryName,
-                            units: unitsToMove,
-                            endPos
-                        });
                     };
 
-                    // Create the visual overlay for hatching and border
                     const hatchOverlay = path.cloneNode(true);
                     hatchOverlay.removeAttribute('id');
                     hatchOverlay.removeAttribute('class');
-                    hatchOverlay.style.fill = 'url(#attackHatch)';
-                    hatchOverlay.style.stroke = 'rgba(0, 0, 0, 0.85)'; // Dark solid border
-                    hatchOverlay.style.strokeWidth = '3px';
-                    hatchOverlay.style.pointerEvents = 'none'; // Clicks pass through to the real path underneath
+                    hatchOverlay.style.fill = isManualStep ? 'rgba(255, 255, 255, 0.15)' : 'url(#attackHatch)';
+                    hatchOverlay.style.stroke = isManualStep ? '#66ccff' : 'rgba(0, 0, 0, 0.85)';
+                    hatchOverlay.style.strokeWidth = isManualStep ? '2px' : '3px';
+                    hatchOverlay.style.pointerEvents = 'auto'; 
+                    hatchOverlay.style.cursor = 'crosshair';
 
-                    // Insert the overlay above the map paths, but below the text and units!
-                    // This perfectly solves the overlapping borders issue.
-                    const firstTopLayerEl = path.ownerSVGElement.querySelector('text, g#background-labels-layer, g#unit-layer');
-                    if (firstTopLayerEl) {
-                        path.ownerSVGElement.insertBefore(hatchOverlay, firstTopLayerEl);
-                    } else {
-                        path.ownerSVGElement.appendChild(hatchOverlay);
+                    let highlightLayer = path.ownerSVGElement.querySelector('.top-highlight-layer');
+                    if (!highlightLayer) {
+                        highlightLayer = path.ownerSVGElement.ownerDocument.createElementNS('http://www.w3.org/2000/svg', 'g');
+                        highlightLayer.setAttribute('class', 'top-highlight-layer');
+                        const bgLabels = path.ownerSVGElement.querySelector('[id^="background-labels-layer"]');
+                        if (bgLabels) path.ownerSVGElement.insertBefore(highlightLayer, bgLabels);
+                        else path.ownerSVGElement.appendChild(highlightLayer);
                     }
+                    highlightLayer.appendChild(hatchOverlay);
 
-                    // Save data for cleanup
-                    highlightedTerritories.push({
-                        element: path,
-                        overlay: hatchOverlay, // Store the overlay so we can delete it later
-                        clickHandler: territoryClickHandler
+                    highlightedTerritories.push({ 
+                        element: path, 
+                        overlay: hatchOverlay, 
+                        clickHandler: territoryClickHandler,
+                        originalFill: originalFill,
+                        originalOpacity: originalOpacity,
+                        originalStroke: originalStroke,
+                        originalStrokeWidth: originalStrokeWidth
                     });
-
-                    // Make the original path clickable
-                    path.addEventListener('click', territoryClickHandler);
-                    path.style.cursor = 'crosshair';
+                    hatchOverlay.addEventListener('click', territoryClickHandler);
                 });
             };
+            
 
-            // Apply highlights for passable territories first (not clickable)
-            for (const territoryName of passableSpaces) {
-                if (!attackableSpaces.has(territoryName)) {
-                    applyHighlight(territoryName, PASSABLE_HIGHLIGHT_COLOR, false);
+            const finalizeManualPath = async (e) => {
+                const pathArray = window.activePathingState.currentPath;
+                const targetTerr = window.activePathingState.target;
+                const remainingMoves = window.activePathingState.remainingMoves;
+                window.activePathingState = null; 
+                hidePathingUI();
+
+                document.querySelectorAll('.manual-path-step').forEach(el => el.remove());
+                
+                // AIR UNIT VALIDATION
+                if (isAirUnit) {
+                    const possibleLandings = getLandingPaths(targetTerr, remainingMoves);
+                    if (possibleLandings.length === 0) {
+                        await showCustomModal("Kamikaze Not Allowed", "This path does not leave enough movement points for the aircraft to land in a friendly space.");
+                        // Cleanup without drawing arrow
+                        highlightedTerritories.forEach(highlight => {
+                            const el = highlight.element;
+                            el.style.fill = highlight.originalFill;
+                            if (highlight.overlay && highlight.overlay.parentNode) highlight.overlay.parentNode.removeChild(highlight.overlay);
+                        });
+                        highlightedTerritories = [];
+                        handleUnitClick(selectedUnit);
+                        return;
+                    }
                 }
-            }
 
-            // Apply highlights ONLY for attackable territories (clickable)
+                // RESTORE AND REMOVE HIGHLIGHTS
+                highlightedTerritories.forEach(highlight => {
+                    const el = highlight.element;
+                    el.style.fill = highlight.originalFill;
+                    el.style.fillOpacity = highlight.originalOpacity;
+                    el.style.stroke = highlight.originalStroke;
+                    el.style.strokeWidth = highlight.originalStrokeWidth;
+                    if (highlight.overlay && highlight.overlay.parentNode) highlight.overlay.parentNode.removeChild(highlight.overlay);
+                });
+                highlightedTerritories = [];
+
+                // Generate a randomized color including lighter reds, and oranges
+                const r = Math.floor(Math.random() * 56) + 200; // 200–255
+                const g = Math.floor(Math.random() * 151);      // 0–150 (allows orange)
+                const b = Math.floor(Math.random() * 21);       // 0–20 (almost no blue)
+                const randomArrowColor = `rgb(${r}, ${g}, ${b})`;
+
+                const { arrowGroup, endPos } = drawPathArrow(pathArray, selectedUnit, randomArrowColor, false);
+                
+                // Color the unit's background circle border
+                const bgCircle = selectedUnit.querySelector('.unit-background-circle');
+                if (bgCircle) {
+                    bgCircle.setAttribute('stroke', randomArrowColor);
+                    bgCircle.setAttribute('stroke-width', '2');
+                }
+
+                // Clone replacement technique
+                const newArrowGroup = arrowGroup.cloneNode(true);
+                arrowGroup.replaceWith(newArrowGroup);
+                
+                newArrowGroup.addEventListener('click', (ev) => {
+                    ev.stopPropagation();
+                    if (confirm('Do you want to remove this movement arrow?')) {
+                        const startU = drawnArrows.find(a => a.arrowElement === newArrowGroup)?.startUnit;
+                        if (startU) {
+                            startU.removeAttribute('data-locked'); 
+                            
+                            // Revert border to standard white
+                            const unitBg = startU.querySelector('.unit-background-circle');
+                            if (unitBg) {
+                                unitBg.setAttribute('stroke', 'white');
+                                unitBg.setAttribute('stroke-width', '0.5');
+                            }
+                        }
+                        
+                        // Cleanup clipPath from DOM
+                        const clipId = newArrowGroup.getAttribute('data-clip-id');
+                        if (clipId) {
+                            const clipEl = newArrowGroup.ownerSVGElement.querySelector(`#${clipId}`);
+                            if (clipEl) clipEl.remove();
+                        }
+                        
+                        // Remove the detached label group if it exists
+                        if (newArrowGroup.id) {
+                            const labelGroup = newArrowGroup.ownerSVGElement.querySelector(`.arrow-label-group[data-arrow-id="${newArrowGroup.id}"]`);
+                            if (labelGroup) labelGroup.remove();
+                        }
+                        
+                        newArrowGroup.remove();
+                        drawnArrows = drawnArrows.filter(a => a.arrowElement !== newArrowGroup);
+                    }
+                });
+                newArrowGroup.style.cursor = 'pointer';
+
+                const totalUnitsInStack = parseInt(selectedUnit.getAttribute('data-count'), 10);
+                let unitsAlreadyMoved = drawnArrows.reduce((sum, arrow) => (arrow.startUnit === selectedUnit) ? sum + arrow.units : sum, 0);
+                let availableUnits = totalUnitsInStack - unitsAlreadyMoved;
+
+                if (availableUnits <= 0) {
+                    newArrowGroup.remove();
+                    return;
+                }
+
+                let unitsToMove = 1;
+                if (availableUnits > 1) {
+                    unitsToMove = await showUnitSplitSlider(availableUnits, e);
+                }
+                
+                if (unitsToMove === null || unitsToMove === 0) {
+                    newArrowGroup.remove();
+                    return;
+                }
+
+                // LOCK THE UNIT FROM DRAGGING
+                selectedUnit.setAttribute('data-locked', 'true');
+
+                if (totalUnitsInStack > 1) addUnitCountToArrow(newArrowGroup, unitsToMove);
+                
+                // STORE FULL PATH ARRAY FOR NEXT PHASE
+                drawnArrows.push({ 
+                    arrowElement: newArrowGroup, 
+                    startUnit: selectedUnit, 
+                    targetTerritory: targetTerr, 
+                    units: unitsToMove, 
+                    endPos,
+                    fullPath: pathArray // Storing full route
+                });
+                
+                handleUnitClick(selectedUnit); 
+            };
+
             for (const territoryName of attackableSpaces) {
                 applyHighlight(territoryName);
             }
         }
 
+        window.loadedUnitsLinks = window.loadedUnitsLinks || [];
+
+        function updateLoadArrowPosition(linkObj) {
+            const { arrowElement, startUnit, transportEl } = linkObj;
+            const getCenter = (el) => {
+                const img = el.querySelector('image.unit-token');
+                let x = 0, y = 0;
+                const transform = el.transform.baseVal.getItem(0);
+                if (transform) { x = transform.matrix.e; y = transform.matrix.f; }
+                if (img) {
+                    x += parseFloat(img.getAttribute('x')) + parseFloat(img.getAttribute('width'))/2;
+                    y += parseFloat(img.getAttribute('y')) + parseFloat(img.getAttribute('height'))/2;
+                }
+                return {x, y};
+            };
+            
+            const p1 = getCenter(startUnit);
+            const p2 = getCenter(transportEl);
+            
+            const line = arrowElement.querySelector('line');
+            if (line) {
+                line.setAttribute('x1', p1.x); line.setAttribute('y1', p1.y);
+                line.setAttribute('x2', p2.x); line.setAttribute('y2', p2.y);
+            }
+            
+            const circle = arrowElement.querySelector('circle');
+            const text = arrowElement.querySelector('text');
+            if (circle && text) {
+                const midX = (p1.x + p2.x)/2;
+                const midY = (p1.y + p2.y)/2;
+                circle.setAttribute('cx', midX); circle.setAttribute('cy', midY);
+                text.setAttribute('x', midX); text.setAttribute('y', midY);
+            }
+        }
+
+        async function attemptLoadUnit(landUnitEl, transportEl) {
+            const landType = landUnitEl.getAttribute('data-unit-type');
+            const tptType = transportEl.getAttribute('data-unit-type');
+            
+            let loadedOntoThis = window.loadedUnitsLinks.filter(l => l.transportEl === transportEl);
+            let currentLoadedCount = loadedOntoThis.reduce((sum, l) => sum + l.units, 0);
+
+            // CAPACITY RULES
+            if (tptType === 'SBR') {
+                if (landType !== 'INF') { showCustomModal("Cannot Load", "Transport Planes can only carry Infantry."); return; }
+                if (currentLoadedCount >= 2) { showCustomModal("Capacity Reached", "This plane is already carrying 2 Infantry."); return; }
+            } else if (tptType === 'TPT') {
+                if (currentLoadedCount >= 2) { showCustomModal("Capacity Reached", "This transport is full."); return; }
+                if (currentLoadedCount === 1) {
+                    const existingType = loadedOntoThis[0].landType;
+                    if (landType !== 'INF' && existingType !== 'INF') {
+                        showCustomModal("Capacity Reached", "A transport carrying 2 units must include at least 1 Infantry."); return;
+                    }
+                }
+            }
+
+            const totalUnitsInStack = parseInt(landUnitEl.getAttribute('data-count'), 10) || 1;
+            const unitsAlreadyMoved = drawnArrows.reduce((sum, arrow) => (arrow.startUnit === landUnitEl) ? sum + arrow.units : sum, 0);
+            let availableUnits = totalUnitsInStack - unitsAlreadyMoved;
+
+            if (availableUnits <= 0) { showCustomModal("Unit Locked", "No available units in this stack to load."); return; }
+
+            // Clamp slider max based on remaining capacity
+            let maxCanLoad = 2 - currentLoadedCount;
+            if (tptType === 'TPT' && landType !== 'INF') {
+                maxCanLoad = 1; // Can never load more than 1 non-INF
+            }
+            
+            let unitsToLoad = Math.min(availableUnits, maxCanLoad);
+            
+            // Show split slider if the original stack has multiple units, capping it at the transport's max capacity
+            if (availableUnits > 1 && unitsToLoad > 1) {
+                // Assuming mouse is somewhere in center to trigger unit split UI near center screen
+                unitsToLoad = await showUnitSplitSlider(unitsToLoad, {clientX: window.innerWidth/2, clientY: window.innerHeight/2});
+                if (!unitsToLoad) return;
+            }
+
+            // Lock land unit from dragging naturally
+            landUnitEl.setAttribute('data-locked', 'true');
+
+            // MORPH Strategic Bomber to Transport Plane
+            if (tptType === 'SBR') {
+                const img = transportEl.querySelector('image.unit-token');
+                if (img) img.setAttribute('href', 'units/transport-plane.png');
+            }
+
+            // Draw Loading Arrow
+            const svgNS = 'http://www.w3.org/2000/svg';
+            const loadArrowGroup = document.createElementNS(svgNS, 'g');
+            loadArrowGroup.classList.add('loading-arrow-group');
+            
+            const line = document.createElementNS(svgNS, 'line');
+            line.setAttribute('stroke', '#33CFFF');
+            line.setAttribute('stroke-width', '4');
+            line.setAttribute('stroke-dasharray', '6 4');
+            line.style.cursor = 'pointer';
+            loadArrowGroup.appendChild(line);
+            
+            if (totalUnitsInStack > 1) {
+                const circle = document.createElementNS(svgNS, 'circle');
+                circle.setAttribute('r', 8); circle.setAttribute('fill', '#33CFFF'); circle.setAttribute('stroke', 'white');
+                const text = document.createElementNS(svgNS, 'text');
+                text.textContent = unitsToLoad; text.setAttribute('text-anchor', 'middle'); text.setAttribute('dominant-baseline', 'middle'); text.setAttribute('font-size', '10px');
+                loadArrowGroup.appendChild(circle); loadArrowGroup.appendChild(text);
+            }
+
+            landUnitEl.ownerSVGElement.querySelector('.arrow-layer').appendChild(loadArrowGroup);
+
+            const linkObj = { arrowElement: loadArrowGroup, startUnit: landUnitEl, transportEl: transportEl, units: unitsToLoad, landType: landType, isLoad: true };
+            drawnArrows.push(linkObj); 
+            window.loadedUnitsLinks.push(linkObj);
+
+            // Click dashed arrow to Undo
+            loadArrowGroup.addEventListener('click', (ev) => {
+                ev.stopPropagation();
+                if (confirm('Undo loading this unit?')) {
+                    loadArrowGroup.remove();
+                    drawnArrows = drawnArrows.filter(a => a !== linkObj);
+                    window.loadedUnitsLinks = window.loadedUnitsLinks.filter(l => l !== linkObj);
+                    
+                    // Revert Bomber image if empty
+                    if (tptType === 'SBR' && window.loadedUnitsLinks.filter(l => l.transportEl === transportEl).length === 0) {
+                        const img = transportEl.querySelector('image.unit-token');
+                        if (img) img.setAttribute('href', UNIT_IMAGE_MAP['SBR']);
+                    }
+
+                    if (!drawnArrows.some(a => a.startUnit === landUnitEl)) landUnitEl.removeAttribute('data-locked');
+                    
+                    // Clear Selection UI
+                    const prevId = selectedUnit.getAttribute('id');
+                    svgWrapper.querySelectorAll(`[id='${prevId}']`).forEach(u => toggleUnitSelectionMarker(u, false));
+                    selectedUnit = null;
+                }
+            });
+
+            updateLoadArrowPosition(linkObj);
+
+            // Clear Selection UI
+            const prevId = selectedUnit.getAttribute('id');
+            svgWrapper.querySelectorAll(`[id='${prevId}']`).forEach(u => toggleUnitSelectionMarker(u, false));
+            selectedUnit = null;
+            
+            // Revert Transport Highlights 
+            document.querySelectorAll('.highlight-transport').forEach(el => {
+                el.classList.remove('highlight-transport');
+                el.style.filter = ''; // Remove glowing drop shadow
+            });
+            document.querySelectorAll('.transport-highlight-ring').forEach(el => el.remove());
+        }
 
 
         /**
@@ -6097,6 +6864,53 @@
          * @param {SVGElement} clickedUnit - The unit <g> element that was clicked.
          */
         function handleUnitClick(clickedUnit) {
+            if (currentPhaseIndex !== 2) {
+                return; // ONLY permit interaction during Combat Movement Phase
+            }
+
+            // Intercept clicks on valid Transports for Loading
+            if (selectedUnit && clickedUnit !== selectedUnit && clickedUnit.classList.contains('highlight-transport')) {
+                attemptLoadUnit(selectedUnit, clickedUnit);
+                return;
+            }
+            
+            // ... the rest of your original handleUnitClick code ...
+
+            // ONLY allow the active power to move units
+            if (clickedUnit.getAttribute('data-power') !== activePowerForTech) {
+                return; 
+            }
+
+            // If the user is currently building a manual path
+            if (window.activePathingState) {
+                if (clickedUnit === window.activePathingState.unit) {
+                    // Cancel pathing completely
+                    if (window.activePathingListener) {
+                        document.removeEventListener('click', window.activePathingListener, true);
+                        window.activePathingListener = null;
+                    }
+                    window.activePathingState = null;
+                    hidePathingUI();
+
+                    document.querySelectorAll('.manual-path-step').forEach(el => el.remove());
+                    
+                    highlightedTerritories.forEach(highlight => {
+                        const el = highlight.element;
+                        el.style.fill = highlight.originalFill;
+                        if (highlight.overlay && highlight.overlay.parentNode) highlight.overlay.parentNode.removeChild(highlight.overlay);
+                    });
+                    highlightedTerritories = [];
+                    
+                    const prevId = selectedUnit.getAttribute('id');
+                    svgWrapper.querySelectorAll(`[id='${prevId}']`).forEach(unit => toggleUnitSelectionMarker(unit, false));
+                    selectedUnit = null;
+                    return;
+                } else {
+                    showCustomModal("Path Incomplete", "Please finish selecting spaces to pass through, or re-click the currently selected unit to cancel the path.");
+                    return;
+                }
+            }
+
             // Restore original styles on previously highlighted territories
             highlightedTerritories.forEach(highlight => {
                 const el = highlight.element;
@@ -6117,7 +6931,13 @@
                 }
             });
             highlightedTerritories = [];
-
+            
+            // Revert any transport highlights to ensure they don't get stuck on screen
+            document.querySelectorAll('.highlight-transport').forEach(el => {
+                el.classList.remove('highlight-transport');
+                el.style.filter = ''; // Remove glowing drop shadow
+            });
+            document.querySelectorAll('.transport-highlight-ring').forEach(el => el.remove());
 
             // Remove marker from the previously selected unit
             if (selectedUnit) {
@@ -6154,6 +6974,15 @@
                 return;
             }
 
+            // Check available units so we don't highlight if the stack is fully utilized
+            const totalUnitsInStack = parseInt(selectedUnit.getAttribute('data-count'), 10) || 1;
+            const unitsAlreadyMoved = drawnArrows.reduce((sum, arrow) => (arrow.startUnit === selectedUnit) ? sum + arrow.units : sum, 0);
+            if (totalUnitsInStack - unitsAlreadyMoved <= 0) {
+                showCustomModal("Unit Locked", "This unit has assigned all its movement.");
+                selectedUnit = null;
+                return;
+            }
+
             // Call the powerful highlighting function with all the unit's details.
             highlightReachableTerritories(territoryName, movementRemaining, unitPower, unitType);
         }
@@ -6167,6 +6996,18 @@
             mouseMovedDuringDrag = false;
             console.log("%c--- Unit Clicked ---", "color: yellow; font-weight: bold; background-color: black; padding: 2px 5px;");
             const clickedUnit = event.currentTarget;
+            const isLocked = clickedUnit.getAttribute('data-locked') === 'true';
+            const totalUnitsInStack = parseInt(clickedUnit.getAttribute('data-count'), 10) || 1;
+            const unitsAlreadyMoved = drawnArrows.reduce((sum, arrow) => (arrow.startUnit === clickedUnit) ? sum + arrow.units : sum, 0);
+            const availableUnits = totalUnitsInStack - unitsAlreadyMoved;
+
+            if (isLocked && availableUnits <= 0) {
+                clickedUnit.dataset.dragBlocked = 'true';
+            } else if (isLocked && availableUnits > 0) {
+                clickedUnit.dataset.dragBlocked = 'true'; // Block drag, but allow click!
+            } else {
+                clickedUnit.dataset.dragBlocked = 'false';
+            }
             const unitData = {
                 "ID": clickedUnit.getAttribute('id'),
                 "Unit Type": clickedUnit.getAttribute('data-unit-type'),
@@ -6191,43 +7032,6 @@
             isDragging = true;
             currentDraggedUnit = event.currentTarget; // The 'g' element
 
-
-            // --- MOVEMENT BONUS LOGIC ---
-            // This bonus is applied only once at the start of a unit's first move.
-            const hasMoved = currentDraggedUnit.getAttribute('data-has-moved') === 'true';
-            if (!hasMoved) {
-                let movementBonus = 0;
-                const unitType = currentDraggedUnit.getAttribute('data-unit-type');
-                const originalTerritoryName = currentDraggedUnit.getAttribute('data-original-territory');
-
-                // Check for air unit bonus
-                if (airUnitTypes.includes(unitType)) {
-                    if (has1940AirBase(originalTerritoryName)) {
-                        movementBonus = 1;
-                    }
-                // Check for sea unit bonus
-                } else if (SEA_UNIT_TYPES.includes(unitType)) {
-                    const adjacencies = territoryAdjacencies[originalTerritoryName]?.adjacent_to || [];
-                    for (const adjacentTerritory of adjacencies) {
-                        // Check if the adjacent area is a land territory (not a sea zone number)
-                        if (isNaN(Number(adjacentTerritory))) {
-                            if (has1940NavalBase(adjacentTerritory)) {
-                                movementBonus = 1;
-                                break; // Found a naval base, no need to check other adjacent territories
-                            }
-                        }
-                    }
-                }
-
-                if (movementBonus > 0) {
-                    const currentMovement = parseInt(currentDraggedUnit.getAttribute('data-movement-remaining'));
-                    const newMovement = currentMovement + movementBonus;
-                    currentDraggedUnit.setAttribute('data-movement-remaining', newMovement);
-                    console.log(`%c+1 Movement Bonus Applied to ${unitType} in ${originalTerritoryName}. New Movement: ${newMovement}`, 'color: lightblue; font-weight: bold;');
-                }
-            }
-            // --- END MOVEMENT BONUS LOGIC ---
-
             currentDraggedUnit.style.cursor = 'grabbing';
             currentDraggedUnit.parentNode.appendChild(currentDraggedUnit); // Bring to front
 
@@ -6247,16 +7051,24 @@
             const unitType = currentDraggedUnit.getAttribute('data-unit-type');
             isSpecialUnitDragging = SPECIAL_INFRASTRUCTURE_UNITS.includes(unitType);
 
-            if (isSpecialUnitDragging) {
-                const territory = currentDraggedUnit.getAttribute('data-original-territory');
-                const paths = svgWrapper.querySelectorAll(`polygon[data-name="${territory}"], path[data-name="${territory}"]`);
-                paths.forEach(path => path.classList.add('highlighted-territory'));
-            }
-
-            if (!isSpecialUnitDragging) {
-                const paths = svgWrapper.querySelectorAll(`polygon[data-name="${initialPlacedInTerritory}"], path[data-name="${initialPlacedInTerritory}"]`);
-                paths.forEach(path => path.classList.add('highlighted-territory'));
-            }
+            const highlightTarget = isSpecialUnitDragging ? currentDraggedUnit.getAttribute('data-original-territory') : initialPlacedInTerritory;
+            const paths = svgWrapper.querySelectorAll(`polygon[data-name="${highlightTarget}"], path[data-name="${highlightTarget}"]`);
+            
+            paths.forEach(path => {
+                let highlightLayer = path.ownerSVGElement.querySelector('.top-highlight-layer');
+                if (!highlightLayer) {
+                    highlightLayer = path.ownerSVGElement.ownerDocument.createElementNS('http://www.w3.org/2000/svg', 'g');
+                    highlightLayer.setAttribute('class', 'top-highlight-layer');
+                    const bgLabels = path.ownerSVGElement.querySelector('[id^="background-labels-layer"]');
+                    if (bgLabels) path.ownerSVGElement.insertBefore(highlightLayer, bgLabels);
+                    else path.ownerSVGElement.appendChild(highlightLayer);
+                }
+                const clone = path.cloneNode(true);
+                clone.removeAttribute('id');
+                clone.classList.add('highlighted-territory', 'drag-highlight-clone');
+                clone.style.pointerEvents = 'none';
+                highlightLayer.appendChild(clone);
+            });
 
             validDropZones = [];
             const originalTerritoryName = currentDraggedUnit.getAttribute('data-original-territory');
@@ -6374,6 +7186,20 @@
          * @param {Event} event - The mouse or touch event.
          */
         function drag(event) {
+            if (currentDraggedUnit.dataset.dragBlocked === 'true') {
+                if (!mouseMovedDuringDrag) {
+                    mouseMovedDuringDrag = true;
+                    const total = parseInt(currentDraggedUnit.getAttribute('data-count'), 10) || 1;
+                    const moved = drawnArrows.reduce((sum, arrow) => (arrow.startUnit === currentDraggedUnit) ? sum + arrow.units : sum, 0);
+                    if (total - moved <= 0) {
+                        showCustomModal("Unit Locked", "This unit has assigned all its movement. Delete its arrow to free it.");
+                    } else {
+                        showCustomModal("Unit Locked", "This unit has an arrow. Click it (without dragging) to route the remaining units, or delete its arrow to move it manually.");
+                    }
+                }
+                return; // Prevent actual moving
+            }
+
             if (!isDragging || !currentDraggedUnit) return;
 
             mouseMovedDuringDrag = true;
@@ -6409,11 +7235,8 @@
          */
         function endDrag(event) {
             isDragging = false;
-            if (isSpecialUnitDragging && currentDraggedUnit) {
-                const territory = currentDraggedUnit.getAttribute('data-original-territory');
-                const paths = svgWrapper.querySelectorAll(`polygon[data-name="${territory}"], path[data-name="${territory}"]`);
-                paths.forEach(path => path.classList.remove('highlighted-territory'));
-            }
+            // Clear drag highlights
+            svgWrapper.querySelectorAll('.drag-highlight-clone').forEach(el => el.remove());
 
             if (currentDraggedUnit) {
                 currentDraggedUnit.style.cursor = 'grab';
@@ -6627,14 +7450,15 @@
                         }
                     });
                     totalIpcsByPower[powerName] = totalIpcs;
+                    baseIpcsByPower[powerName] = totalIpcs;
                 }
 
                 console.log("Calculated Total IPCs (excluding Neutral/Impassable):", totalIpcsByPower);
 
                 // 4. Prepare data for display: map IPC value to list of powers
                 const powersByIpcValue = {};
-                for (const powerName in totalIpcsByPower) {
-                    const ipcValue = totalIpcsByPower[powerName];
+                for (const powerName in baseIpcsByPower) {
+                    const ipcValue = baseIpcsByPower[powerName];
                     if (!powersByIpcValue[ipcValue]) {
                         powersByIpcValue[ipcValue] = [];
                     }
@@ -6873,7 +7697,7 @@
                     </div>
                 </div>
                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <label style="color: #E0D8B0; font-weight: bold;">Cas Priority:</label>
+                    <label style="color: #E0D8B0; font-weight: bold;">Casualty Priority:</label>
                     <select id="sim-cas-order" onchange="window.simCasOrder=this.value;" style="background: #2d2319; color: #E0D8B0; border: 1px solid #6D5C4C; padding: 3px; border-radius: 3px;">
                         <option value="cost" ${window.simCasOrder==='cost'?'selected':''}>Cheapest IPC First</option>
                         <option value="value" ${window.simCasOrder==='value'?'selected':''}>Lowest Combat Value</option>
@@ -7404,13 +8228,18 @@
             `;
         });
 
-        // Anchor bottom right
-        windowEl.style.top = 'auto';
-        windowEl.style.left = 'auto';
-        windowEl.style.bottom = '10px';
-        windowEl.style.right = '10px';
-        windowEl.style.transform = 'none';
-        windowEl.style.display = 'flex';
+        // Anchor to dragged location, or default to bottom right
+        if (window.lastActionWindowLeft && window.lastActionWindowTop) {
+            windowEl.style.left = window.lastActionWindowLeft;
+            windowEl.style.top = window.lastActionWindowTop;
+            windowEl.style.right = 'auto';
+            windowEl.style.bottom = 'auto';
+            if(windowEl.style.transform) windowEl.style.transform = 'none';
+        } else if (!windowEl.style.top && !windowEl.style.left && !windowEl.style.bottom && !windowEl.style.right) {
+            windowEl.style.bottom = '10px';
+            windowEl.style.right = '10px';
+        }
+        windowEl.style.display = 'flex'; // Crucial: Make it visible
     }
 
     function openPurchaseModal() {
@@ -7426,12 +8255,18 @@
         
         renderPurchaseModalContent();
         
-        windowEl.style.top = 'auto';
-        windowEl.style.left = 'auto';
-        windowEl.style.bottom = '10px';
-        windowEl.style.right = '10px';
-        windowEl.style.transform = 'none';
-        windowEl.style.display = 'flex';
+        // Inherit global dragged position across phases
+        if (window.lastActionWindowLeft && window.lastActionWindowTop) {
+            windowEl.style.left = window.lastActionWindowLeft;
+            windowEl.style.top = window.lastActionWindowTop;
+            windowEl.style.right = 'auto';
+            windowEl.style.bottom = 'auto';
+            if(windowEl.style.transform) windowEl.style.transform = 'none';
+        } else if (!windowEl.style.top && !windowEl.style.left && !windowEl.style.bottom && !windowEl.style.right) {
+            windowEl.style.bottom = '10px';
+            windowEl.style.right = '10px';
+        }
+        windowEl.style.display = 'flex'; // Crucial: Make it visible
     }
 
     function getUnitBoardRender(unitType, power) {
@@ -7736,8 +8571,8 @@
     // Helper: Rebuilds the IPC bar visually based on current spent values
     function refreshIpcDisplayBarVisuals() {
         const powersByIpcValue = {};
-        for (const powerName in totalIpcsByPower) {
-            const ipcValue = totalIpcsByPower[powerName];
+        for (const powerName in baseIpcsByPower) {
+            const ipcValue = baseIpcsByPower[powerName];
             if (!powersByIpcValue[ipcValue]) powersByIpcValue[ipcValue] = [];
             powersByIpcValue[ipcValue].push(powerName);
         }
@@ -7809,16 +8644,17 @@
 
     function makeWindowsDraggable() {
         document.querySelectorAll('.action-window').forEach(win => {
-            const header = win.querySelector('.window-header');
-            if(!header) return;
             let isDraggingWin = false;
             let offsetX, offsetY;
 
-            header.addEventListener('mousedown', (e) => {
-                isDraggingWin = true;
-                offsetX = e.clientX - win.getBoundingClientRect().left;
-                offsetY = e.clientY - win.getBoundingClientRect().top;
-                win.style.transition = 'none'; 
+            // Allow dragging from the header OR the entire minimized window
+            win.addEventListener('mousedown', (e) => {
+                if (e.target.closest('.window-header') || win.classList.contains('minimized')) {
+                    isDraggingWin = true;
+                    offsetX = e.clientX - win.getBoundingClientRect().left;
+                    offsetY = e.clientY - win.getBoundingClientRect().top;
+                    win.style.transition = 'none'; 
+                }
             });
 
             document.addEventListener('mousemove', (e) => {
@@ -7833,7 +8669,11 @@
                 win.style.top = newY + 'px';
                 win.style.right = 'auto'; 
                 win.style.bottom = 'auto';
-                if(win.style.transform) win.style.transform = 'none'; // Clear center transforms
+                if(win.style.transform) win.style.transform = 'none';
+                
+                // SAVE POSITION GLOBALLY FOR OTHER WINDOWS TO INHERIT
+                window.lastActionWindowLeft = newX + 'px';
+                window.lastActionWindowTop = newY + 'px';
             });
 
             document.addEventListener('mouseup', () => {
@@ -7876,6 +8716,97 @@
         }
     }
 
+    function applyBaseMovementBonuses() {
+        // Find ALL units of the active power across all 3 map clones
+        const allUnitGroups = document.querySelectorAll('.unit-stack-group');
+        
+        allUnitGroups.forEach(unitGroup => {
+            if (unitGroup.getAttribute('data-power') !== activePowerForTech) return;
+            
+            const hasMoved = unitGroup.getAttribute('data-has-moved') === 'true';
+            const bonusApplied = unitGroup.getAttribute('data-bonus-applied') === 'true';
+            
+            if (!hasMoved && !bonusApplied) {
+                const unitType = unitGroup.getAttribute('data-unit-type');
+                const placedIn = unitGroup.getAttribute('data-placed-in');
+                const uPower = unitGroup.getAttribute('data-power');
+                let bonus = 0;
+                
+                // Robust Alliance Check: Explicitly checks exact power match or shared alliance, safely ignoring Neutrals.
+                const isFriendlyBase = (bPower) => {
+                    return bPower === uPower || 
+                           (ALLIED_POWERS.has(bPower) && ALLIED_POWERS.has(uPower)) || 
+                           (AXIS_POWERS.has(bPower) && AXIS_POWERS.has(uPower));
+                };
+                
+                if (airUnitTypes.includes(unitType)) {
+                    // Use placedUnitsData (which acts as our single source of logical truth) to check for base
+                    const hasBase = placedUnitsData.some(b => b.placedIn === placedIn && b.unitType === 'Air Base' && isFriendlyBase(b.power));
+                    if (hasBase) bonus = 1;
+                } else if (SEA_UNIT_TYPES.includes(unitType)) {
+                    const adjacencies = territoryAdjacencies[placedIn]?.adjacent_to || [];
+                    for (const adjTerr of adjacencies) {
+                        if (isNaN(Number(adjTerr))) {
+                            const hasBase = placedUnitsData.some(b => b.placedIn === adjTerr && b.unitType === 'Naval Base' && isFriendlyBase(b.power));
+                            if (hasBase) { bonus = 1; break; }
+                        }
+                    }
+                }
+
+                if (bonus > 0) {
+                    const currentMovement = parseInt(unitGroup.getAttribute('data-movement-remaining'), 10) || 0;
+                    const newMovement = currentMovement + bonus;
+                    
+                    // Explicitly cast to string to force the DOM to recognize the mutation across all map clones
+                    unitGroup.setAttribute('data-movement-remaining', newMovement.toString());
+                    unitGroup.setAttribute('data-bonus-applied', 'true'); // Prevent infinite stacking
+                    console.log(`+1 Base Bonus Applied to ${unitType} in ${placedIn}. New Move: ${newMovement}`);
+                    console.log(unitGroup.getAttribute('data-movement-remaining'));
+                }
+            }
+        });
+    }
+
+    function updatePathingUI(targetName, remainingMoves) {
+        const panel = document.getElementById('pathing-ui-panel');
+        const targetDiv = document.getElementById('pathing-ui-target');
+        const moveDiv = document.getElementById('pathing-ui-movement');
+        const iconContainer = document.getElementById('pathing-ui-icon-container');
+
+        if (!window.activePathingState) return;
+        const unitType = window.activePathingState.unit.getAttribute('data-unit-type');
+        const power = window.activePathingState.unit.getAttribute('data-power');
+        const maxMove = window.activePathingState.unit.getAttribute('data-movement-remaining');
+        const count = window.activePathingState.unit.getAttribute('data-count');
+
+        // Set Target Name with Starting Space
+        const startName = window.activePathingState.currentPath[0];
+        const startText = !isNaN(Number(startName)) ? `SZ ${startName}` : startName;
+        const targetText = !isNaN(Number(targetName)) ? `SZ ${targetName}` : targetName;
+        targetDiv.textContent = `${startText} ➔ ${targetText}`;
+        
+        // Set Movement
+        moveDiv.innerHTML = `Movement: <span style="color:${remainingMoves > 0 ? '#4CAF50' : '#ff4444'}">${remainingMoves}</span> / ${maxMove}`;
+
+        // Inject Icon
+        iconContainer.innerHTML = getUnitBoardRender(unitType, power);
+        
+        // Add Count Circle if > 1
+        if (count > 1) {
+            iconContainer.innerHTML += `
+                <div style="position:absolute; bottom:-5px; right:-5px; width:16px; height:16px; background:#FFEB3B; border-radius:50%; border:1px solid #000; color:#000; font-size:10px; display:flex; justify-content:center; align-items:center; font-weight:bold; font-family:Arial;">
+                    ${count}
+                </div>
+            `;
+        }
+
+        panel.style.display = 'block';
+    }
+
+    function hidePathingUI() {
+        document.getElementById('pathing-ui-panel').style.display = 'none';
+    }
+
     // --- Overhauled Phase Progression Logic ---
     function advancePhase() {
         // Hide open windows
@@ -7913,9 +8844,14 @@
                 updatePhaseDisplay();
                 updateActivePowerSidebar();
                 
-                // Route to appropriate window based on phase (Placeholders for future phases)
-                if (currentPhaseIndex === 1) openPurchaseModal();
-                else console.log(`Phase ${currentPhaseIndex} started for ${activePowerForTech}.`);
+                if (currentPhaseIndex === 1) {
+                    openPurchaseModal();
+                } else if (currentPhaseIndex === 2) {
+                    applyBaseMovementBonuses(); // AUTOMATICALLY APPLY BONUSES HERE
+                    console.log(`Combat Movement phase started for ${activePowerForTech}.`);
+                } else {
+                    console.log(`Phase ${currentPhaseIndex} started for ${activePowerForTech}.`);
+                }
                 
             } else {
                 // Power finished all 6 phases. Move to the next Power.
