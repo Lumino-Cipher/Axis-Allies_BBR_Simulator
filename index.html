@@ -1723,7 +1723,355 @@
         .custom-modal-title { font-size: 20px; margin-bottom: 15px; color: #ffd700; border-bottom: 1px solid #4a5a75; padding-bottom: 10px; }
         .custom-modal-buttons { display: flex; justify-content: center; gap: 15px; margin-top: 20px; }
 
+
+        /* --- Combat Phase Screen Overlay --- */
+        .combat-flag-container {
+            position: absolute;
+            top: 40px;
+            width: 320px;
+            height: 200px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.9);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            background: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 1s ease-in-out 0.5s, transform 1s ease-out 0.5s;
+        }
+
+        .combat-flag-container.attacker { left: 0px; }
+        .combat-flag-container.defender { right: 0px; }
+
+        .combat-screen-active .combat-flag-container {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .combat-text-overlay {
+            position: absolute;
+            bottom: 12px;
+            width: 100%;
+            text-align: center;
+            color: white;
+            font-size: 26px;
+            font-weight: bold;
+            text-shadow: 2px 2px 5px black, 0 0 15px black;
+            z-index: 10;
+            letter-spacing: 3px;
+        }
+
+        .combat-canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        
+        @keyframes combat-pulse {
+            0% { filter: drop-shadow(0 0 5px #ff4444) brightness(1); stroke-width: 2px; }
+            50% { filter: drop-shadow(0 0 25px #ff4444) brightness(1.5); stroke-width: 5px; }
+            100% { filter: drop-shadow(0 0 5px #ff4444) brightness(1); stroke-width: 2px; }
+        }
+
+        .combat-target-highlight {
+            animation: combat-pulse 1.5s infinite;
+            stroke: #ff4444 !important;
+            fill-opacity: 0.9 !important;
+            z-index: 1000;
+        }
+
+        /* --- Combat Phase Screen Overlay (Full Screen & Vintage) --- */
+        #combat-screen-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 5000; display: none; opacity: 0;
+            transform: scale(1.05); /* Start slightly zoomed in for the transition */
+            backdrop-filter: blur(0px); /* Start unblurred */
+            transition: opacity 0.8s ease-in-out, transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), backdrop-filter 0.8s ease-in-out;
+            pointer-events: auto; /* Catch all clicks while open */
+            font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+            color: #d8c3a5; /* Vintage sand text */
+        }
+        
+        #combat-screen-overlay.theme-land {
+            background: radial-gradient(circle at center, #3d1616 0%, #150404 100%); /* Darker Land */
+        }
+
+        #combat-screen-overlay.theme-sea {
+            background: radial-gradient(circle at center, #153250 0%, #030b14 100%); /* Darker Sea */
+        }
+
+        .combat-flag-bg {
+            position: absolute; 
+            top: -18vh; /* Pull up to bleed off the top edge */
+            width: 60vw; /* Make larger to stretch past the center */
+            height: 70vh; /* Stretch past the bottom */
+            opacity: 0.75; /* Darker and more transparent */
+            z-index: 1; 
+            pointer-events: none;
+            background-size: contain;
+            background-repeat: no-repeat;
+            mix-blend-mode: screen; /* Blends the flag highlights nicely into your dark background */
+        }
+
+        .combat-flag-bg.attacker { 
+            left: -13vw; /* Pull left to bleed off the left edge */
+            background-position: top left;
+            /* Expanded irregular mask to create a soft, wavy fade out */
+            mask-image: radial-gradient(ellipse 120% 120% at 0% 0%, black 20%, rgba(0,0,0,0.6) 45%, transparent 75%);
+            -webkit-mask-image: radial-gradient(ellipse 120% 120% at 0% 0%, black 20%, rgba(0,0,0,0.6) 45%, transparent 75%);
+        }
+
+        .combat-flag-bg.defender { 
+            right: -13vw; /* Pull right to bleed off the right edge */
+            background-position: top right;
+            mask-image: radial-gradient(ellipse 120% 120% at 100% 0%, black 20%, rgba(0,0,0,0.6) 45%, transparent 75%);
+            -webkit-mask-image: radial-gradient(ellipse 120% 120% at 100% 0%, black 20%, rgba(0,0,0,0.6) 45%, transparent 75%);
+        }
+
+        .combat-header {
+            position: absolute; top: 0; left: 0; width: 100%; height: 180px;
+            display: flex; justify-content: space-between; align-items: flex-start;
+        }
+
+        .combat-corner-text {
+            position: relative; z-index: 2; font-size: 28px; font-weight: bold; 
+            letter-spacing: 4px; padding: 40px; text-shadow: 2px 2px 10px #000;
+        }
+        
+        .combat-center-titles {
+            position: absolute; width: 100%; top: 40px; text-align: center; z-index: 2;
+        }
+        
+        .combat-title-main { font-size: 22px; letter-spacing: 6px; color: #b59b72; margin-bottom: 5px; opacity: 0.8;}
+        .combat-title-space { font-size: 46px; font-weight: bold; text-transform: uppercase; text-shadow: 0 0 20px rgba(0,0,0,0.9); }
+
+        .combat-board {
+            position: absolute; top: 120px; left: 0; width: 100%; height: calc(100% - 200px); /* Moved up to create more vertical space */
+            display: flex; justify-content: space-between; padding: 0 30px; box-sizing: border-box;
+        }
+        
+        .combat-side { width: 35%; display: flex; flex-direction: column; gap: 5px; height: 100%; } /* Made responsive to parent height */
+        
+        .combat-row {
+            flex: 1; /* Automatically resize dynamically without scrollbars */
+            min-height: 60px;
+            max-height: 100px;
+            background: rgba(0,0,0,0.25); border: 1px solid rgba(216, 195, 165, 0.08);
+            border-radius: 8px; display: flex; align-items: center; padding: 5px 15px;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.4);
+            justify-content: space-between;
+            overflow: visible;
+        }
+
+        .combat-units-area {
+            flex: 1; display: flex; gap: 15px; flex-wrap: wrap; 
+            align-content: center; /* Centers units vertically */
+            overflow: visible; /* Removes scrollbar */
+        }
+
+        .combat-unit-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px; /* Spacing between unit and buttons */
+            height: auto; 
+        }
+
+        .combat-unit-wrapper {
+            width: 80px;  /* Increased 80x80 size */
+            height: 80px; 
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.2s;
+        }
+
+        .combat-unit-wrapper svg {
+            width: 100%;
+            height: 100%;
+            transform: scale(1.1); /* Slight bump to fill space perfectly */
+            transform-origin: center center;
+        }
+
+        .combat-unit-wrapper text {
+            font-family: Arial, sans-serif !important; 
+        }
+
+        .combat-damage-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #1a1a1a;
+            border: 2px solid #8C7B6A;
+            border-radius: 4px;
+            padding: 0;
+            z-index: 10;
+            width: 50px;  /* Much smaller overall width */
+            height: 24px; /* Much smaller height */
+            box-sizing: border-box;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.8);
+            font-family: Arial, sans-serif;
+        }
+
+        .combat-damage-btn {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: #d8c3a5;
+            width: 35%;
+            height: 100%;
+            font-size: 14px; /* Shrunk font size */
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s, color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .combat-damage-btn:hover {
+            background: rgba(255,255,255,0.2);
+            color: #ffdd00;
+        }
+
+        .combat-damage-val {
+            color: #fff;
+            font-size: 14px; /* Shrunk font size */
+            font-weight: bold;
+            flex: 1;
+            text-align: center;
+        }
+
+        /* Fire-themed hit markers */
+        .fire-hit-marker {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: linear-gradient(135deg, #8a0000, #ff4400);
+            color: white;
+            border: 2px solid #3d0000;
+            border-radius: 50% 50% 0 50%;
+            transform: rotate(45deg);
+            width: 28px;
+            height: 28px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            font-size: 16px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.8);
+            pointer-events: none;
+            z-index: 20;
+        }
+
+        /* 3D Dice Simulation Layer */
+        #dice-simulation-layer {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 1px;
+            height: 1px;
+            perspective: 1000px;
+            pointer-events: none;
+            z-index: 9999; /* Ensure it stays on top of the combat screen */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .die-3d {
+            position: absolute;
+            width: 45px;
+            height: 45px;
+            transform-style: preserve-3d;
+            transition: transform 2s cubic-bezier(.25,.8,.25,1); /* Smooth 2s transition */
+        }
+
+        .die-face {
+            position: absolute;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 6px;
+            border: 2px solid rgba(0,0,0,0.6);
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5), inset 0 0 15px rgba(255,255,255,0.05), 0 4px 10px rgba(0,0,0,0.6);
+            font-family: 'Georgia', serif;
+        }
+
+        /* Victorian Theme ported from your snippet */
+        .die-3d.victorian .die-face {
+            background: repeating-radial-gradient(circle at 20% 20%, rgba(255,255,255,0.07) 0 2px, transparent 3px 5px), linear-gradient(145deg, #3e2a1c, #1f140d);
+            color: #f3e2c7;
+            border-color: #b89c6d;
+        }
+
+        /* Ornamental overlay */
+        .die-face::after {
+            content: "";
+            position: absolute;
+            inset: 3px;
+            border-radius: 4px;
+            border: 1px solid rgba(255,255,255,0.15);
+            pointer-events: none;
+        }
+        
+        /* Animations for highlighting target */
+        @keyframes combat-pulse {
+            0% { filter: drop-shadow(0 0 5px #ff4444) brightness(1); stroke-width: 2px; }
+            50% { filter: drop-shadow(0 0 25px #ff4444) brightness(1.5); stroke-width: 5px; }
+            100% { filter: drop-shadow(0 0 5px #ff4444) brightness(1); stroke-width: 2px; }
+        }
+        .combat-target-highlight {
+            animation: combat-pulse 1.5s infinite;
+            stroke: #ff4444 !important; fill-opacity: 0.9 !important; z-index: 1000;
+        }
+
+
+        /* --- Combat UI Enhancements --- */
+        /* Hide scrollbars for the boxes */
+        .combat-units-area::-webkit-scrollbar { display: none; }
+        .combat-units-area { scrollbar-width: none; }
+
+        /* Align Attacker units starting from the left (die on the right) */
+        #combat-attacker-board .combat-row { flex-direction: row; }
+        #combat-attacker-board .combat-units-area { 
+            justify-content: flex-start; 
+            align-items: center;
+        }
+
+        /* Align Defender units starting from the left (die on the left) */
+        #combat-defender-board .combat-row { flex-direction: row; }
+        #combat-defender-board .combat-units-area { 
+            justify-content: flex-start; 
+            align-items: center;
+        }
+
+        
+
+        /* Visual removal for Amphibious Bombardment ships */
+        .visually-removed {
+            opacity: 0.2;
+            filter: grayscale(100%);
+            pointer-events: none;
+        }
+
+
+        
     </style>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
+            }
+        }
+    </script>
 </head>
 <body>
     <div id="loading-screen" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #1a1a1a; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #E0D8B0; font-family: 'Georgia', serif;">
@@ -1989,6 +2337,26 @@
             </div>
         </div>
     </div>
+    <div id="combat-screen-overlay" class="theme-land">
+        <div class="combat-header">
+            <div class="combat-flag-bg attacker" id="combat-attacker-canvas"></div>
+            <div class="combat-corner-text">ATTACKER</div>
+            
+            <div class="combat-center-titles">
+                <div class="combat-title-space" id="combat-space-name">TERRITORY</div>
+            </div>
+
+            <div class="combat-corner-text">DEFENDER</div>
+            <div class="combat-flag-bg defender" id="combat-defender-canvas"></div>
+        </div>
+
+        <div class="combat-board">
+            <div class="combat-side attacker-side" id="combat-attacker-board">
+                </div>
+            <div style="width: 8%;"></div> <div class="combat-side defender-side" id="combat-defender-board">
+                </div>
+        </div>
+    </div>
     <div id="pathing-ui-panel" style="display: none; position: fixed; bottom: 20px; right: 20px; width: 220px; background: rgba(30, 34, 43, 0.95); border: 2px solid #33CFFF; border-radius: 8px; padding: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.8); z-index: 3001; color: #E0D8B0; font-family: 'Georgia', serif;">
         <h4 style="margin: 0 0 10px 0; color: #33CFFF; border-bottom: 1px dashed #555; padding-bottom: 5px; text-align: center;">Combat Pathing</h4>
         <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
@@ -2241,43 +2609,117 @@
 
         function updateUniversalBoardState() {
             universalBoardState = {};
+            
             placedUnitsData.forEach(unit => {
-                const space = unit.placedIn;
-                if (!universalBoardState[space]) universalBoardState[space] = [];
+                const startSpace = unit.placedIn;
+                const unitId = unit.element.getAttribute('id');
+                const totalCount = parseInt(unit.element.getAttribute('data-count'), 10);
                 
-                // Extract all metadata
-                const metadata = {
-                    id: unit.element.getAttribute('id'),
-                    unitType: unit.unitType,
-                    power: unit.power,
-                    count: unit.element.getAttribute('data-count'),
-                    originalTerritory: unit.originalTerritory,
-                    placedIn: space,
-                    hasMoved: unit.element.getAttribute('data-has-moved'),
-                    movementRemaining: unit.element.getAttribute('data-movement-remaining'),
-                    x: unit.x,
-                    y: unit.y,
-                    loadedCargo: [] 
+                const unitArrows = drawnArrows.filter(a => a.startUnit.getAttribute('id') === unitId && !a.isLoad);
+                let movedCount = 0;
+                
+                const getCargoForIndices = (indices) => {
+                    let cargo = [];
+                    if (unit.unitType === 'TPT' || unit.unitType === 'SBR') {
+                        const links = (window.loadedUnitsLinks || []).filter(l => l.transportEl === unit.element);
+                        links.forEach(link => {
+                            let countInIndices = 0;
+                            link.capacitiesAdded.forEach(cap => {
+                                if (indices.includes(Number(cap.idx))) countInIndices += cap.count;
+                            });
+                            if (countInIndices > 0) {
+                                cargo.push({
+                                    id: link.startUnit.getAttribute('id'),
+                                    unitType: link.landType,
+                                    count: countInIndices,
+                                    power: link.startUnit.getAttribute('data-power'),
+                                    originalTerritory: link.startUnit.getAttribute('data-original-territory')
+                                });
+                            }
+                        });
+                    }
+                    return cargo;
                 };
                 
-                // Check for cargo if it's a transport
-                if (unit.unitType === 'TPT' || unit.unitType === 'SBR') {
-                   const cargo = (window.loadedUnitsLinks || []).filter(l => l.transportEl === unit.element);
-                   cargo.forEach(c => {
-                       metadata.loadedCargo.push({
-                           id: c.startUnit.getAttribute('id'),
-                           unitType: c.landType,
-                           count: c.units
-                       });
-                   });
+                let movedIndicesGlobal = [];
+
+                unitArrows.forEach(arrow => {
+                    const targetSpace = arrow.targetTerritory;
+                    movedCount += arrow.units;
+                    
+                    let indicesToMove = arrow.specificTransportIndices;
+                    if (!indicesToMove && (unit.unitType === 'TPT' || unit.unitType === 'SBR')) {
+                        // Fallback: take next available indices if advanced menu wasn't used
+                        const allPossible = Array.from({length: totalCount}, (_, i) => i);
+                        indicesToMove = allPossible.filter(i => !movedIndicesGlobal.includes(i)).slice(0, arrow.units);
+                    }
+                    if (indicesToMove) movedIndicesGlobal.push(...indicesToMove);
+                    
+                    let actualPlacedIn = targetSpace;
+                    
+                    // For Amphibious Assaults, grab the last Sea Zone from the arrow's drawn path
+                    if (['TPT', 'BTS', 'CSR'].includes(unit.unitType) && isNaN(Number(targetSpace))) {
+                        const lastSeaZone = arrow.fullPath ? arrow.fullPath.slice().reverse().find(step => !isNaN(Number(step))) : null;
+                        actualPlacedIn = lastSeaZone || targetSpace;
+                    }
+
+                    if (!universalBoardState[actualPlacedIn]) universalBoardState[actualPlacedIn] = [];
+                    
+                    universalBoardState[actualPlacedIn].push({
+                        id: unitId + '-' + actualPlacedIn, 
+                        unitType: unit.unitType,
+                        power: unit.power,
+                        count: arrow.units,
+                        originalTerritory: unit.originalTerritory,
+                        placedIn: actualPlacedIn,
+                        attackTarget: targetSpace, // Explicitly tag where this unit is attacking
+                        hasMoved: true, 
+                        movementRemaining: arrow.remainingMoves !== undefined ? arrow.remainingMoves : parseInt(unit.element.getAttribute('data-movement-remaining'), 10),
+                        x: arrow.endPos ? arrow.endPos.x : unit.x,
+                        y: arrow.endPos ? arrow.endPos.y : unit.y,
+                        loadedCargo: getCargoForIndices(indicesToMove || [])
+                    });
+                });
+                
+                const remainingCount = totalCount - movedCount;
+                if (remainingCount > 0) {
+                    // For remaining un-moved units, revert placedIn to their startSpace (prevents stack-split bugs)
+                    // Cargo, however, relies on DOM metadata to snap to the land space
+                    const isCargo = window.loadedUnitsLinks && window.loadedUnitsLinks.some(l => l.startUnit === unit.element);
+                    const currentPlacedIn = isCargo ? (unit.element.getAttribute('data-placed-in') || startSpace) : startSpace;
+
+                    if (!universalBoardState[currentPlacedIn]) universalBoardState[currentPlacedIn] = [];
+                    
+                    let remainingIndices = [];
+                    if (unit.unitType === 'TPT' || unit.unitType === 'SBR') {
+                        const allIndices = Array.from({length: totalCount}, (_, i) => i);
+                        remainingIndices = allIndices.filter(i => !movedIndicesGlobal.includes(i));
+                    }
+                    
+                    const currentMove = unit.element.getAttribute('data-movement-remaining');
+                    const currentHasMoved = unit.element.getAttribute('data-has-moved') === 'true';
+
+                    universalBoardState[currentPlacedIn].push({
+                        id: unitId + '-remaining', 
+                        unitType: unit.unitType,
+                        power: unit.power,
+                        count: remainingCount,
+                        originalTerritory: unit.originalTerritory,
+                        placedIn: currentPlacedIn,
+                        attackTarget: currentPlacedIn,
+                        hasMoved: currentHasMoved,
+                        movementRemaining: parseInt(currentMove, 10),
+                        x: unit.x,
+                        y: unit.y,
+                        loadedCargo: getCargoForIndices(remainingIndices)
+                    });
                 }
-                universalBoardState[space].push(metadata);
             });
-            console.log("Variable Update [Universal Board State]:", universalBoardState);
-        }
+            console.log("Variable Update [Universal Board State]:", JSON.parse(JSON.stringify(universalBoardState)));
+        };
 
         let territoriesByCountry = {};
-        let originalTerritoriesByCountry = {}
+        let originalTerritoriesByCountry = {};
 
         // --- New Global Variables for Sticky Bar ---
         const gameStartDate = new Date('1940-05-10T00:00:00'); // May 10, 1940
@@ -3418,55 +3860,116 @@
                     if (selectedUnit) handleUnitClick(selectedUnit);
                     window.activePathingState = null;
 
-                    // 1. Update the universal map state
-                    updateUniversalBoardState();
+                    // 1. Create a Temporary Variable organizing combat data by movedFrom
+                    const tempMovedFrom = {};
+                    Object.values(combatPhaseData).forEach(engagement => {
+                        engagement.Attackers.forEach(attacker => {
+                            if (!tempMovedFrom[attacker.movedFrom]) tempMovedFrom[attacker.movedFrom] = [];
+                            tempMovedFrom[attacker.movedFrom].push(attacker);
 
-                    // 2. Build the Combat Phase Organizer
-                    combatPhaseData = {};
-
-                    drawnArrows.forEach(arrow => {
-                        const target = arrow.targetTerritory;
-                        const attackingUnit = arrow.startUnit;
-
-                        if (!combatPhaseData[target]) {
-                            combatPhaseData[target] = { Attackers: [], Defenders: [] };
-                            
-                            // Fetch existing defenders in this space from the universal state
-                            if (universalBoardState[target]) {
-                                universalBoardState[target].forEach(unitData => {
-                                    const isEnemy = AXIS_POWERS.has(unitData.power) !== AXIS_POWERS.has(activePowerForTech);
-                                    if (isEnemy || unitData.power === 'Neutral' || unitData.power.includes('Neutral')) {
-                                        combatPhaseData[target].Defenders.push(unitData);
-                                    }
+                            if (attacker.loadedCargo) {
+                                attacker.loadedCargo.forEach(cargo => {
+                                   if (!tempMovedFrom[cargo.movedFrom]) tempMovedFrom[cargo.movedFrom] = [];
+                                   tempMovedFrom[cargo.movedFrom].push(cargo);
                                 });
                             }
+                        });
+                    });
+
+                    // 2. Initialize an empty Universal Board State
+                    universalBoardState = {};
+
+                    // 3. Subtract from Map Data and build Universal Board State
+                    placedUnitsData.forEach(baseUnit => {
+                        const unitId = baseUnit.element.getAttribute('id');
+                        const totalMapCount = parseInt(baseUnit.element.getAttribute('data-count'), 10) || 1;
+                        const originalMapSpace = baseUnit.placedIn;
+
+                        // Calculate how many units of this ID moved away from this specific space
+                        let movedCount = 0;
+                        if (tempMovedFrom[originalMapSpace]) {
+                            const matchingMoves = tempMovedFrom[originalMapSpace].filter(u => u.id === unitId);
+                            movedCount = matchingMoves.reduce((sum, u) => sum + u.count, 0);
                         }
 
-                        // Add attackers based on the arrow
-                        const attackerMetadata = universalBoardState[attackingUnit.getAttribute('data-placed-in')].find(u => u.id === attackingUnit.getAttribute('id'));
-                        
-                        if (attackerMetadata) {
-                            // Create a copy of the metadata representing just the units moving
-                            const movingAttacker = { ...attackerMetadata, count: arrow.units };
-                            combatPhaseData[target].Attackers.push(movingAttacker);
+                        // Formula: [map units] - [combatPhaseData units]
+                        const remainingCount = totalMapCount - movedCount;
 
-                            // Amphibious Assault Cargo resolution
-                            if (movingAttacker.unitType === 'TPT' && !isNaN(Number(target)) === false) {
-                                // If targeting land, move the loaded cargo into the land combat
-                                movingAttacker.loadedCargo.forEach(cargo => {
-                                     combatPhaseData[target].Attackers.push({
-                                         unitType: cargo.unitType,
-                                         count: cargo.count,
-                                         power: movingAttacker.power,
-                                         isAmphibious: true
-                                     });
-                                });
+                        if (remainingCount > 0) {
+                            const unitObj = {
+                                id: unitId,
+                                unitType: baseUnit.unitType,
+                                power: baseUnit.power,
+                                count: remainingCount,
+                                originalTerritory: baseUnit.originalTerritory,
+                                placedIn: originalMapSpace,
+                                currentlyPlacedIn: originalMapSpace, // matching metadata
+                                attackTarget: originalMapSpace,
+                                hasMoved: false,
+                                movementRemaining: parseInt(baseUnit.element.getAttribute('data-movement-remaining'), 10),
+                                loadedCargo: []
+                            };
+
+                            // Add Defenders/Static Attackers to the engagement if this space is being attacked
+                            const isEnemy = AXIS_POWERS.has(baseUnit.power) !== AXIS_POWERS.has(activePowerForTech);
+                            const isNeutral = baseUnit.power.includes('Neutral') || baseUnit.power === 'Neutral';
+
+                            if (combatPhaseData[originalMapSpace]) {
+                                if (isEnemy || isNeutral) {
+                                    combatPhaseData[originalMapSpace].Defenders.push(unitObj);
+                                } else {
+                                    combatPhaseData[originalMapSpace].Attackers.push(unitObj);
+                                }
                             }
+
+                            // Write to Universal Board State
+                            if (!universalBoardState[originalMapSpace]) universalBoardState[originalMapSpace] = [];
+                            universalBoardState[originalMapSpace].push(unitObj);
+
+                            // Update the Map DOM to reflect subtraction
+                            baseUnit.element.setAttribute('data-count', remainingCount);
+                            const countText = baseUnit.element.querySelector('.unit-count-text');
+                            const countCircle = baseUnit.element.querySelector('.unit-count-circle');
+                            if (remainingCount > 1) {
+                                if (countText) countText.textContent = remainingCount;
+                            } else if (remainingCount === 1) {
+                                if (countText) countText.remove();
+                                if (countCircle) countCircle.remove();
+                            }
+                        } else {
+                            // If remaining is 0, completely hide it on the map visually
+                            baseUnit.element.setAttribute('data-count', 0);
+                            baseUnit.element.style.display = 'none';
                         }
                     });
 
-                    console.log("Variable Update [Combat Engagements]:", combatPhaseData);
+                    // 4. Finally, write the incoming attacking units into the Universal Board State
+                    Object.values(combatPhaseData).forEach(engagement => {
+                        engagement.Attackers.forEach(attacker => {
+                            let boardStateAttacker = { ...attacker };
+                            
+                            // Cargo unloading logic (same as original)
+                            if (boardStateAttacker.loadedCargo && boardStateAttacker.loadedCargo.length > 0) {
+                                let retainedCargo = [];
+                                boardStateAttacker.loadedCargo.forEach(cargoItem => {
+                                    if (isNaN(Number(cargoItem.currentlyPlacedIn))) {
+                                        if (!universalBoardState[cargoItem.currentlyPlacedIn]) universalBoardState[cargoItem.currentlyPlacedIn] = [];
+                                        universalBoardState[cargoItem.currentlyPlacedIn].push({ ...cargoItem });
+                                    } else {
+                                        retainedCargo.push(cargoItem);
+                                    }
+                                });
+                                boardStateAttacker.loadedCargo = retainedCargo;
+                            }
+                            
+                            if (!universalBoardState[boardStateAttacker.currentlyPlacedIn]) universalBoardState[boardStateAttacker.currentlyPlacedIn] = [];
+                            universalBoardState[boardStateAttacker.currentlyPlacedIn].push(boardStateAttacker);
+                        });
+                    });
 
+                    console.log("Variable Update [Combat Engagements]:", JSON.parse(JSON.stringify(combatPhaseData)));
+                    console.log("Variable Update [Universal Board State]:", JSON.parse(JSON.stringify(universalBoardState)));
+                    
                     advancePhase();
                 }
             });
@@ -6690,7 +7193,8 @@
                                     e.stopPropagation(); e.preventDefault(); return;
                                 }
 
-                                const isUnloadingStep = isSeaUnit && isLoadedTpt && !isSeaZone(clickedName) && clickedName === window.activePathingState.target;
+                                const isAssaultingShip = ['BTS', 'CSR', 'TPT'].includes(unitType);
+                                const isLandAssaultStep = isSeaUnit && isAssaultingShip && !isSeaZone(clickedName) && clickedName === window.activePathingState.target;
 
                                 // Enforce Land Unit neutral/hostile space restriction (must stop)
                                 if (clickedName !== lastSpace && clickedName !== window.activePathingState.target) {
@@ -6700,15 +7204,15 @@
                                     }
                                 }
 
-                                // Enforce Sea Unit land restriction (but allow the final unloading step)
-                                if (!isSeaZone(clickedName) && isSeaUnit && !isUnloadingStep) {
-                                    showCustomModal("Invalid Move", "Sea units cannot pass through or enter land spaces.");
+                                // Enforce Sea Unit land restriction (but allow the final land assault step)
+                                if (!isSeaZone(clickedName) && isSeaUnit && !isLandAssaultStep) {
+                                    showCustomModal("Invalid Move", "Sea units cannot pass through or enter land spaces, except as the final target of an amphibious assault or bombardment.");
                                     e.stopPropagation(); e.preventDefault(); return;
                                 }
 
                                 if (clickedName !== lastSpace) {
-                                    // Don't exhaust movement points if this is just the free unloading step
-                                    if (!isUnloadingStep && window.activePathingState.remainingMoves <= 0) {
+                                    // Don't exhaust movement points if this is just the free assault step
+                                    if (!isLandAssaultStep && window.activePathingState.remainingMoves <= 0) {
                                         showCustomModal("Movement Exhausted", "This unit does not have enough movement points to continue this path.");
                                         e.stopPropagation(); e.preventDefault(); return;
                                     }
@@ -6716,7 +7220,7 @@
                                     window.activePathingState.currentPath.push(clickedName);
                                     
                                     // Decrease moves ONLY if it's a normal movement step
-                                    if (!isUnloadingStep) {
+                                    if (!isLandAssaultStep) {
                                         window.activePathingState.remainingMoves--;
                                     }
                                     updatePathingUI(window.activePathingState.target, window.activePathingState.remainingMoves);
@@ -6786,13 +7290,13 @@
                 const pathArray = window.activePathingState.currentPath;
                 const targetTerr = window.activePathingState.target;
                 const remainingMoves = window.activePathingState.remainingMoves;
-                // UPDATE UNIT METADATA
+                
                 const finalUnit = window.activePathingState.unit;
                 const originalMoveRemaining = finalUnit.getAttribute('data-movement-remaining');
-                finalUnit.setAttribute('data-original-movement', originalMoveRemaining); 
-                finalUnit.setAttribute('data-movement-remaining', remainingMoves);
-                finalUnit.setAttribute('data-has-moved', 'true');
-                console.log(`Variable Update [Unit Metadata]: Unit ${finalUnit.getAttribute('id')} -> Move Remaining: ${remainingMoves}, Has Moved: true`);
+                // Store original movement ONLY once, so we have it if we need to undo
+                if (!finalUnit.hasAttribute('data-original-movement')) {
+                    finalUnit.setAttribute('data-original-movement', originalMoveRemaining); 
+                }
 
                 window.activePathingState = null; 
                 hidePathingUI();
@@ -6848,27 +7352,73 @@
                 
                 newArrowGroup.addEventListener('click', (ev) => {
                     ev.stopPropagation();
+                    if (currentPhaseIndex === 3) {
+                        showCustomModal("Action Denied", "Cannot remove arrows during Conduct Combat phase.");
+                        return;
+                    }
                     if (confirm('Do you want to remove this movement arrow?')) {
-                        const startU = drawnArrows.find(a => a.arrowElement === newArrowGroup)?.startUnit;
+                        // Revert placedIn to original territory when arrow is removed
+                        const startU = drawnArrows.find(a => a.arrowElement === newArrowGroup)?.startUnit || selectedUnit;
                         if (startU) {
-                            startU.removeAttribute('data-locked'); 
+                            const origTerr = startU.getAttribute('data-original-territory');
+                            const uId = startU.getAttribute('id');
+                            svgWrapper.querySelectorAll(`[id='${uId}']`).forEach(u => {
+                                u.setAttribute('data-placed-in', origTerr);
+                            });
 
-                            // REVERT UNIT METADATA
-                            const revertedMove = startU.getAttribute('data-original-movement');
-                            if (revertedMove) {
-                                startU.setAttribute('data-movement-remaining', revertedMove);
-                            }
-                            startU.setAttribute('data-has-moved', 'false');
-                            console.log(`Variable Update [Unit Metadata]: Unit ${startU.getAttribute('id')} REVERTED -> Move Remaining: ${revertedMove}, Has Moved: false`);
-                            
-                            // Revert border to standard white
-                            const unitBg = startU.querySelector('.unit-background-circle');
-                            if (unitBg) {
-                                unitBg.setAttribute('stroke', 'white');
-                                unitBg.setAttribute('stroke-width', '0.5');
+                            // Revert cargo if it's a Transport
+                            if (startU.getAttribute('data-unit-type') === 'TPT') {
+                                const loadedCargoLinks = window.loadedUnitsLinks.filter(l => l.transportEl === startU);
+                                loadedCargoLinks.forEach(link => {
+                                    const cargoId = link.startUnit.getAttribute('id');
+                                    const cOrig = link.startUnit.getAttribute('data-original-territory');
+                                    svgWrapper.querySelectorAll(`[id='${cargoId}']`).forEach(cargo => {
+                                        cargo.setAttribute('data-placed-in', cOrig);
+                                        cargo.setAttribute('data-movement-remaining', cargo.getAttribute('data-original-movement') || '1');
+                                        cargo.setAttribute('data-has-moved', 'false');
+                                    });
+                                });
                             }
                         }
+                        const arrowToRemove = drawnArrows.find(a => a.arrowElement === newArrowGroup);
                         
+                        /* === REVERSE combatPhaseData === */
+                        if (combatPhaseData[targetTerr] && startU) {
+                            const uIdToRemove = startU.getAttribute('id');
+                            
+                            // Find and remove the exact attacker matching this unit and count
+                            const attackerIndex = combatPhaseData[targetTerr].Attackers.findIndex(u => u.id === uIdToRemove && u.count === unitsToMove);
+                            if (attackerIndex !== -1) {
+                                const removedAttacker = combatPhaseData[targetTerr].Attackers.splice(attackerIndex, 1)[0];
+                                
+                                // Also remove associated cargo from the parent array for this engagement
+                                if (removedAttacker.loadedCargo) {
+                                    removedAttacker.loadedCargo.forEach(cargoItem => {
+                                        const cargoIdx = combatPhaseData[targetTerr].loadedCargo.findIndex(c => c.id === cargoItem.id && c.count === cargoItem.count);
+                                        if (cargoIdx !== -1) combatPhaseData[targetTerr].loadedCargo.splice(cargoIdx, 1);
+                                    });
+                                }
+                            }
+                            
+                            // Cleanup empty engagements
+                            if (combatPhaseData[targetTerr].Attackers.length === 0 && combatPhaseData[targetTerr].Defenders.length === 0) {
+                                delete combatPhaseData[targetTerr];
+                            }
+                        }
+                        /* ==================================== */
+
+                        // Reset border color if no movement arrows remain
+                        if (startU) {
+                            const remainingArrows = drawnArrows.filter(a => a.startUnit === startU && a.arrowElement !== newArrowGroup && !a.isLoad);
+                            if (remainingArrows.length === 0) {
+                                const bgCircle = startU.querySelector('.unit-background-circle');
+                                if (bgCircle) {
+                                    bgCircle.setAttribute('stroke', 'white');
+                                    bgCircle.setAttribute('stroke-width', '0.5');
+                                }
+                            }
+                        }
+
                         // Cleanup clipPath from DOM
                         const clipId = newArrowGroup.getAttribute('data-clip-id');
                         if (clipId) {
@@ -6898,9 +7448,18 @@
                 }
 
                 let unitsToMove = 1;
+                let specificTransportIndices = null;
 
-                if (selectedUnit.getAttribute('data-unit-type') === 'TPT' && totalUnitsInStack > 1) {
-                    // Custom logic for routing grouped transports
+                const isTransportType = ['TPT', 'SBR'].includes(selectedUnit.getAttribute('data-unit-type'));
+                const loadedCargoForThisIcon = (window.loadedUnitsLinks || []).filter(l => l.transportEl === selectedUnit);
+
+                if (isTransportType && totalUnitsInStack > 1 && loadedCargoForThisIcon.length > 0) {
+                    // Custom logic for routing grouped transports/planes with specific cargo
+                    const movedIndicesGlobal = [];
+                    drawnArrows.filter(a => a.startUnit === selectedUnit && !a.isLoad && a.specificTransportIndices).forEach(a => {
+                        movedIndicesGlobal.push(...a.specificTransportIndices);
+                    });
+
                     unitsToMove = await new Promise((resolve) => {
                         const overlay = document.createElement('div');
                         overlay.style.cssText = 'position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:4000; display:flex; justify-content:center; align-items:center;';
@@ -6908,17 +7467,16 @@
                         const box = document.createElement('div');
                         box.style.cssText = 'background:#1e222b; border:2px solid #66ccff; border-radius:8px; padding:20px; width:450px; color:#E0D8B0; font-family:"Georgia", serif; max-height: 80vh; overflow-y: auto;';
                         
-                        let html = `<h3 style="margin-top:0; color:#66ccff; text-align:center;">Select Transports to Move to ${targetTerr}</h3>`;
+                        const typeName = selectedUnit.getAttribute('data-unit-type') === 'SBR' ? 'Transport Planes' : 'Transports';
+                        let html = `<h3 style="margin-top:0; color:#66ccff; text-align:center;">Select ${typeName} to Move to ${targetTerr}</h3>`;
                         html += `<div style="font-size:12px; margin-bottom:15px; text-align:center;">Check which transports (and their cargo) will execute this path.</div>`;
-                        
-                        const capacities = selectedUnit.unitCapacities || [];
-                        const loadedCargoForThisIcon = (window.loadedUnitsLinks || []).filter(l => l.transportEl === selectedUnit);
 
                         for(let i = 0; i < totalUnitsInStack; i++) {
-                            // Find what is loaded on this specific transport index
+                            if (movedIndicesGlobal.includes(i)) continue; // Skip already routed transports
+                            
                             let cargoStrings = [];
                             loadedCargoForThisIcon.forEach(link => {
-                                const capAdded = link.capacitiesAdded.find(c => c.idx === i);
+                                const capAdded = link.capacitiesAdded.find(c => Number(c.idx) === i);
                                 if (capAdded && capAdded.count > 0) {
                                     cargoStrings.push(`${capAdded.count} ${capAdded.landType}`);
                                 }
@@ -6928,7 +7486,7 @@
                             html += `
                                 <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.05); padding:10px; margin-bottom:5px; border-radius:4px; border:1px solid #555;">
                                     <div style="flex:1;">
-                                        <strong>Transport ${i + 1}</strong><br>
+                                        <strong>Unit ${i + 1}</strong><br>
                                         <span style="font-size:11px; color:#aaa;">Cargo: ${cargoDisplay}</span>
                                     </div>
                                     <input type="checkbox" class="tpt-route-check" data-idx="${i}" style="width: 20px; height: 20px; cursor: pointer;">
@@ -6953,14 +7511,8 @@
                             }
                             if (ev.target.id === 'tpt-route-ok') {
                                 const checked = box.querySelectorAll('.tpt-route-check:checked');
-                                let countToMove = checked.length;
-                                
-                                // You could store the specific indices in a global variable here to know exactly 
-                                // which cargo went where during Combat Phase resolution.
-                                const selectedIndices = Array.from(checked).map(cb => cb.getAttribute('data-idx'));
-                                window.lastRoutedTransportIndices = selectedIndices; 
-                                
-                                overlay.remove(); resolve(countToMove);
+                                specificTransportIndices = Array.from(checked).map(cb => parseInt(cb.getAttribute('data-idx'), 10));
+                                overlay.remove(); resolve(checked.length);
                             }
                         });
                     });
@@ -6973,20 +7525,99 @@
                     return;
                 }
 
-                // LOCK THE UNIT FROM DRAGGING
-                selectedUnit.setAttribute('data-locked', 'true');
+                const remainingAfterMove = availableUnits - unitsToMove;
+                if (remainingAfterMove <= 0) {
+                    // LOCK THE UNIT FROM DRAGGING ONLY IF FULLY EXHAUSTED
+                    selectedUnit.setAttribute('data-locked', 'true');
+                }
+                // (DOM metadata updates for data-placed-in, data-has-moved, etc. have been removed to defer to Next Phase processing)
 
                 if (totalUnitsInStack > 1) addUnitCountToArrow(newArrowGroup, unitsToMove);
                 
                 // STORE FULL PATH ARRAY FOR NEXT PHASE
-                drawnArrows.push({ 
+                drawnArrows.push({
                     arrowElement: newArrowGroup, 
                     startUnit: selectedUnit, 
                     targetTerritory: targetTerr, 
                     units: unitsToMove, 
                     endPos,
-                    fullPath: pathArray // Storing full route
+                    fullPath: pathArray, 
+                    remainingMoves: remainingMoves,
+                    specificTransportIndices: specificTransportIndices 
                 });
+
+                /* === NEW: ADD TO combatPhaseData IMMEDIATELY === */
+                const unitTypeStr = selectedUnit.getAttribute('data-unit-type');
+                const powerStr = selectedUnit.getAttribute('data-power');
+                const origTerr = selectedUnit.getAttribute('data-original-territory');
+                const movedFromSpace = selectedUnit.getAttribute('data-placed-in') || origTerr;
+                const unitId = selectedUnit.getAttribute('id');
+
+                let newPlacedIn = targetTerr;
+                if (['TPT', 'BTS', 'CSR'].includes(unitTypeStr) && isNaN(Number(targetTerr))) {
+                    const lastSeaZone = pathArray.slice().reverse().find(step => !isNaN(Number(step)));
+                    newPlacedIn = lastSeaZone || targetTerr;
+                }
+
+                let cargo = [];
+                if (unitTypeStr === 'TPT' || unitTypeStr === 'SBR') {
+                    const links = (window.loadedUnitsLinks || []).filter(l => l.transportEl === selectedUnit);
+                    let indicesToMove = specificTransportIndices;
+                    
+                    if (!window.movedIndicesGlobal) window.movedIndicesGlobal = {};
+                    if (!window.movedIndicesGlobal[unitId]) window.movedIndicesGlobal[unitId] = [];
+                    
+                    if (!indicesToMove) {
+                        const allPossible = Array.from({length: totalUnitsInStack}, (_, i) => i);
+                        indicesToMove = allPossible.filter(i => !window.movedIndicesGlobal[unitId].includes(i)).slice(0, unitsToMove);
+                    }
+                    window.movedIndicesGlobal[unitId].push(...indicesToMove);
+                    
+                    links.forEach(link => {
+                        let countInIndices = 0;
+                        link.capacitiesAdded.forEach(cap => {
+                            if (indicesToMove.includes(Number(cap.idx))) countInIndices += cap.count;
+                        });
+                        if (countInIndices > 0) {
+                            const cargoId = link.startUnit.getAttribute('id');
+                            cargo.push({
+                                id: cargoId,
+                                unitType: link.landType,
+                                count: countInIndices,
+                                power: link.startUnit.getAttribute('data-power'),
+                                originalTerritory: link.startUnit.getAttribute('data-original-territory'),
+                                movedFrom: link.startUnit.getAttribute('data-placed-in') || link.startUnit.getAttribute('data-original-territory'),
+                                currentlyPlacedIn: targetTerr,
+                                attackTarget: targetTerr,
+                                hasMoved: true,
+                                movementRemaining: 0,
+                                isAmphibious: true
+                            });
+                        }
+                    });
+                }
+
+                if (!combatPhaseData[targetTerr]) {
+                    combatPhaseData[targetTerr] = { Attackers: [], Defenders: [], loadedCargo: [] };
+                }
+
+                const attackerObj = {
+                    id: unitId,
+                    unitType: unitTypeStr,
+                    power: powerStr,
+                    count: unitsToMove,
+                    originalTerritory: origTerr,
+                    movedFrom: movedFromSpace,           // <--- New Metadata
+                    currentlyPlacedIn: newPlacedIn,      // <--- Updated Location
+                    attackTarget: targetTerr,
+                    hasMoved: true,                      // <--- Updated Status
+                    movementRemaining: remainingMoves,   // <--- Subtracted Logic
+                    loadedCargo: cargo
+                };
+
+                combatPhaseData[targetTerr].Attackers.push(attackerObj);
+                cargo.forEach(c => combatPhaseData[targetTerr].loadedCargo.push(c));
+                /* =============================================== */
                 
                 handleUnitClick(selectedUnit); 
             };
@@ -7051,6 +7682,7 @@
             }
 
             let unitsToLoad = 0;
+            let loadedCapacitiesFromModal = []; // Store capacities before modal destroys itself
 
             if (tptCount === 1) {
                 // Original Logic for single transport
@@ -7150,6 +7782,7 @@
                                 const added = parseInt(v.textContent);
                                 transportEl.unitCapacities[i].count += added;
                                 if (added > 0 && landType !== 'INF') transportEl.unitCapacities[i].hasNonInf = true;
+                                if (added > 0) loadedCapacitiesFromModal.push({ idx: i, count: added, landType: landType });
                             });
                             overlay.remove(); resolve(totalAssigned);
                         }
@@ -7196,13 +7829,7 @@
             if (tptCount === 1) {
                 capacitiesAdded.push({ idx: 0, count: unitsToLoad, landType: landType });
             } else {
-                const box = document.querySelector('.tpt-val')?.closest('div').parentElement.parentElement;
-                if (box) {
-                    Array.from(box.querySelectorAll('.tpt-val')).forEach((v, i) => {
-                        const added = parseInt(v.textContent);
-                        if (added > 0) capacitiesAdded.push({ idx: i, count: added, landType: landType });
-                    });
-                }
+                capacitiesAdded = loadedCapacitiesFromModal; // Use the properly captured data
             }
 
             const linkObj = { arrowElement: loadArrowGroup, startUnit: landUnitEl, transportEl: transportEl, units: unitsToLoad, landType: landType, isLoad: true, capacitiesAdded: capacitiesAdded };
@@ -7212,6 +7839,10 @@
             // Click dashed arrow to Undo
             loadArrowGroup.addEventListener('click', (ev) => {
                 ev.stopPropagation();
+                if (currentPhaseIndex === 3) {
+                    showCustomModal("Action Denied", "Cannot remove arrows during Conduct Combat phase.");
+                    return;
+                }
                 if (confirm('Undo loading this unit?')) {
                     
                     // REVERT CAPACITIES ON TRANSPORT
@@ -7278,7 +7909,7 @@
                 return;
             }
             
-            // ... the rest of your original handleUnitClick code ...
+            // ... the rest of original handleUnitClick code ...
 
             // ONLY allow the active power to move units
             if (clickedUnit.getAttribute('data-power') !== activePowerForTech) {
@@ -7343,7 +7974,8 @@
             });
             document.querySelectorAll('.transport-highlight-ring').forEach(el => el.remove());
 
-            // Remove marker from the previously selected unit
+            // Ensure all previous selection markers are wiped globally
+            svgWrapper.querySelectorAll('.selection-marker').forEach(marker => marker.remove());
             if (selectedUnit) {
                 const prevId = selectedUnit.getAttribute('id');
                 svgWrapper.querySelectorAll(`[id='${prevId}']`).forEach(unit => toggleUnitSelectionMarker(unit, false));
@@ -7451,7 +8083,7 @@
             dragOffsetX = svgPoint.x - startDragX;
             dragOffsetY = svgPoint.y - startDragY;
 
-            // (The rest of the function remains the same...)
+            
             const unitType = currentDraggedUnit.getAttribute('data-unit-type');
             isSpecialUnitDragging = SPECIAL_INFRASTRUCTURE_UNITS.includes(unitType);
 
@@ -9196,9 +9828,16 @@
         
         // Set Movement
         const isLandTarget = isNaN(Number(targetName));
+        
+        // Find if the most recently selected step in the path is adjacent to the target
+        const currentPath = window.activePathingState.currentPath;
+        const lastStep = currentPath[currentPath.length - 1];
+        const adjs = territoryAdjacencies[lastStep]?.adjacent_to || [];
+        const isAdjacentToTarget = adjs.map(String).includes(String(targetName)) || lastStep === targetName;
+
         const isAssaultingSeaUnit = ['TPT', 'BTS', 'CSR'].includes(unitType) && isLandTarget;
 
-        if (isAssaultingSeaUnit) {
+        if (isAssaultingSeaUnit && isAdjacentToTarget) {
             moveDiv.innerHTML = `Movement: <span style="color:#ffcc00; font-weight:bold;">ATTACK LAND</span>`;
         } else {
             moveDiv.innerHTML = `Movement: <span style="color:${remainingMoves > 0 ? '#4CAF50' : '#ff4444'}">${remainingMoves}</span> / ${maxMove}`;
@@ -9221,6 +9860,883 @@
 
     function hidePathingUI() {
         document.getElementById('pathing-ui-panel').style.display = 'none';
+    }
+
+    let combatRenderers = {};
+
+    function renderCombatFlag(containerId, flagUrl) {
+        console.log(flagUrl);
+        import('three').then(THREE => {
+            const container = document.getElementById(containerId);
+            container.innerHTML = ''; 
+            
+            if (combatRenderers[containerId]) cancelAnimationFrame(combatRenderers[containerId]);
+
+            const params = {
+                baseWind: 2.4, 
+                baseSpeed: 2.0,
+                segments: 140,
+                currentWind: 2.4,
+                currentSpeed: 2.0
+            };
+
+            const _VS = `
+                varying vec2 vUv;
+                varying vec3 vNormal;
+                varying vec3 vViewPosition;
+                varying float vDisplacement;
+                
+                uniform float uTime;
+                uniform float uWindStrength;
+                uniform float uWaveSpeed;
+
+                float hash(float n) { return fract(sin(n) * 43758.5453123); }
+                float noise(vec2 x) {
+                    vec2 p = floor(x);
+                    vec2 f = fract(x);
+                    f = f*f*(3.0-2.0*f);
+                    float n = p.x + p.y*57.0;
+                    return mix(mix(hash(n+0.0), hash(n+1.0), f.x),
+                               mix(hash(n+57.0), hash(n+58.0), f.x), f.y);
+                }
+
+                float fbm(vec2 p) {
+                    float f = 0.0;
+                    f += 0.5000 * noise(p); p = p * 2.02;
+                    f += 0.2500 * noise(p); p = p * 2.03;
+                    f += 0.1250 * noise(p); p = p * 2.01;
+                    f += 0.0625 * noise(p);
+                    return f;
+                }
+
+                void main() {
+                    vUv = uv;
+                    vec3 pos = position;
+                    
+                    float anchor = smoothstep(-4.5, -0.5, pos.x);
+                    float t = uTime;
+                    
+                    float wave1 = sin(pos.x * 0.7 - t) * cos(pos.y * 0.3 + t * 0.4);
+                    vec2 fbmPos = vec2(pos.x * 0.45 - t * 0.65, pos.y * 0.4);
+                    float wave2 = fbm(fbmPos) * 2.0 - 1.0;
+                    
+                    float displacement = (wave1 * 0.6 + wave2 * 1.2) * uWindStrength * anchor;
+                    
+                    if(displacement > 0.0) displacement *= 0.5;
+                    
+                    pos.z += displacement;
+                    pos.x -= abs(displacement) * 0.08; 
+                    pos.y += sin(pos.x * 0.25 + t) * 0.15 * uWindStrength * anchor;
+                    
+                    vDisplacement = displacement;
+
+                    vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
+                    vViewPosition = -mvPosition.xyz;
+                    
+                    float delta = 0.05;
+                    float d1 = (sin((pos.x + delta) * 0.7 - t) * cos(pos.y * 0.3 + t * 0.4) * 0.6 + (fbm(vec2(pos.x + delta * 0.45 - t * 0.65, pos.y * 0.4)) * 2.0 - 1.0) * 1.2) * uWindStrength * anchor;
+                    float d2 = (sin(pos.x * 0.7 - t) * cos((pos.y + delta) * 0.3 + t * 0.4) * 0.6 + (fbm(vec2(pos.x * 0.45 - t * 0.65, (pos.y + delta) * 0.4)) * 2.0 - 1.0) * 1.2) * uWindStrength * anchor;
+                    
+                    vec3 tangent = normalize(vec3(delta, 0.0, d1 - displacement));
+                    vec3 bitangent = normalize(vec3(0.0, delta, d2 - displacement));
+                    vNormal = normalize(normalMatrix * cross(tangent, bitangent));
+                    
+                    gl_Position = projectionMatrix * mvPosition;
+                }
+            `;
+
+            const _FS = `
+                varying vec2 vUv;
+                varying vec3 vNormal;
+                varying vec3 vViewPosition;
+                varying float vDisplacement;
+                
+                uniform sampler2D uTexture;
+                uniform vec3 uLightDirection;
+
+                void main() {
+                    vec4 texColor = texture2D(uTexture, vUv);
+                    
+                    vec3 normal = normalize(vNormal);
+                    if (!gl_FrontFacing) normal = -normal;
+                    
+                    vec3 viewDir = normalize(vViewPosition);
+                    vec3 lightDir = normalize(uLightDirection);
+                    
+                    float dotNL = dot(normal, lightDir);
+                    
+                    float diffuse = smoothstep(-0.4, 0.5, dotNL);
+                    diffuse = mix(diffuse, 1.0, 0.15); 
+                    
+                    float creviceShadow = smoothstep(-2.8, -1.0, vDisplacement);
+                    creviceShadow = mix(0.45, 1.0, creviceShadow);
+                    
+                    vec3 halfDir = normalize(lightDir + viewDir);
+                    float spec = pow(max(dot(normal, halfDir), 0.0), 24.0) * 0.3;
+                    
+                    vec3 ambient = vec3(0.5); 
+                    
+                    vec3 lightImpact = ambient + (diffuse * 0.6);
+                    vec3 color = texColor.rgb * lightImpact * creviceShadow;
+                    
+                    color += spec * texColor.rgb;
+                    
+                    gl_FragColor = vec4(color, 1.0);
+                }
+            `;
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(35, container.clientWidth / container.clientHeight, 0.1, 1000);
+            camera.position.set(0, 0, 14); // Adjusted for the cinematic flag
+
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.setClearColor(0x000000, 0); // Transparent to float over map
+            container.appendChild(renderer.domElement);
+
+            const loader = new THREE.TextureLoader();
+            loader.load(flagUrl, function(texture) {
+                const geometry = new THREE.PlaneGeometry(10, 6, params.segments, params.segments);
+                const material = new THREE.ShaderMaterial({
+                    uniforms: {
+                        uTime: { value: 0 },
+                        uWindStrength: { value: params.baseWind },
+                        uWaveSpeed: { value: params.baseSpeed },
+                        uTexture: { value: texture },
+                        uLightDirection: { value: new THREE.Vector3(0.3, 0.3, 1.0).normalize() }
+                    },
+                    vertexShader: _VS,
+                    fragmentShader: _FS,
+                    side: THREE.DoubleSide
+                });
+
+                const flag = new THREE.Mesh(geometry, material);
+                flag.rotation.y = -0.1;
+                scene.add(flag);
+
+                const clock = new THREE.Clock();
+                let persistentTime = 0;
+
+                function animate() {
+                    const deltaTime = clock.getDelta();
+                    
+                    if (material) {
+                        const targetWind = params.baseWind + (Math.sin(clock.elapsedTime * 0.15) * 0.4 + 0.3);
+                        const targetSpeed = params.baseSpeed + (Math.cos(clock.elapsedTime * 0.1) * 0.3);
+
+                        params.currentWind += (targetWind - params.currentWind) * 0.02;
+                        params.currentSpeed += (targetSpeed - params.currentSpeed) * 0.02;
+
+                        persistentTime += deltaTime * params.currentSpeed;
+
+                        material.uniforms.uTime.value = persistentTime;
+                        material.uniforms.uWindStrength.value = params.currentWind;
+                        material.uniforms.uWaveSpeed.value = params.currentSpeed;
+                    }
+                    
+                    renderer.render(scene, camera);
+                    combatRenderers[containerId] = requestAnimationFrame(animate);
+                }
+                animate();
+            }, undefined, function() {
+                // Fallback to neutral if missing (Preserved from original code)
+                if (flagUrl !== 'flags/Neutral.png') renderCombatFlag(containerId, 'flags/Neutral.png');
+            });
+        });
+    }
+
+    function getDieSVG(value) {
+        let dots = '';
+        const r = 3.5;
+        const fill = "#d8c3a5";
+        if (value === 1) dots = `<circle cx="20" cy="20" r="${r}" fill="${fill}"/>`;
+        if (value === 2) dots = `<circle cx="12" cy="12" r="${r}" fill="${fill}"/><circle cx="28" cy="28" r="${r}" fill="${fill}"/>`;
+        if (value === 3) dots = `<circle cx="12" cy="12" r="${r}" fill="${fill}"/><circle cx="20" cy="20" r="${r}" fill="${fill}"/><circle cx="28" cy="28" r="${r}" fill="${fill}"/>`;
+        if (value === 4) dots = `<circle cx="12" cy="12" r="${r}" fill="${fill}"/><circle cx="28" cy="12" r="${r}" fill="${fill}"/><circle cx="12" cy="28" r="${r}" fill="${fill}"/><circle cx="28" cy="28" r="${r}" fill="${fill}"/>`;
+        if (value === 0) dots = `<text x="20" y="25" fill="${fill}" font-size="16" font-family="serif" text-anchor="middle" font-weight="bold">0</text>`;
+        
+        return `
+        <svg viewBox="0 0 40 40" width="45" height="45">
+            <rect width="40" height="40" rx="8" fill="rgba(255,255,255,0.03)" stroke="rgba(216, 195, 165, 0.25)" stroke-width="2"/>
+            ${dots}
+        </svg>`;
+    }
+
+    function getSpecificNeutralFlag(territoryName, fallbackPower) {
+        if (!fallbackPower.includes('Neutral')) return fallbackPower;
+        
+        // Look for the specific flag injected by drawNeutralFlags
+        const flagGroup = currentSvgElement.querySelector(`.neutral-flag-group[data-territory-name="${territoryName}"]`);
+        if (flagGroup) {
+            return flagGroup.getAttribute('data-power-name');
+        }
+        return fallbackPower; // Fallback to 'Neutral' or 'Pro-Axis Neutral' if not found
+    }
+
+    // Global State for the active combat
+    let activeCombatState = null;
+
+    function createCombatUnitVisual(unitObj, side) {
+        const container = document.createElement('div');
+        container.className = 'combat-unit-container';
+
+        const wrapper = document.createElement('div');
+        wrapper.className = 'combat-unit-wrapper';
+        wrapper.dataset.unitId = unitObj.id;
+        wrapper.dataset.side = side;
+        wrapper.dataset.assignedHits = 0; 
+        
+        const realElement = unitObj.element || document.getElementById(unitObj.id);
+        if (realElement) {
+            const cloneNode = realElement.cloneNode(true);
+            const selectionMarker = cloneNode.querySelector('.selection-marker');
+            if (selectionMarker) selectionMarker.remove();
+            cloneNode.setAttribute('transform', 'translate(40, 40)'); 
+            
+            const newSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+            newSvg.setAttribute("viewBox", "0 0 80 80");
+            newSvg.appendChild(cloneNode);
+            wrapper.appendChild(newSvg);
+        }
+
+        // Fire-themed Hit Marker
+        const hitMarker = document.createElement('div');
+        hitMarker.className = 'fire-hit-marker';
+        hitMarker.style.display = 'none';
+        const hitSpan = document.createElement('span');
+        hitMarker.appendChild(hitSpan);
+        wrapper.appendChild(hitMarker);
+
+        // Restored Interactive Damage Controls
+        const controls = document.createElement('div');
+        controls.className = 'combat-damage-controls';
+
+        const minusBtn = document.createElement('button');
+        minusBtn.className = 'combat-damage-btn';
+        minusBtn.textContent = '−';
+
+        const valSpan = document.createElement('div');
+        valSpan.className = 'combat-damage-val';
+        valSpan.textContent = '0';
+
+        const plusBtn = document.createElement('button');
+        plusBtn.className = 'combat-damage-btn';
+        plusBtn.textContent = '+';
+
+        controls.appendChild(minusBtn);
+        controls.appendChild(valSpan);
+        controls.appendChild(plusBtn);
+
+        container.appendChild(wrapper);
+        container.appendChild(controls);
+
+        const assignHit = (delta) => {
+            if (!activeCombatState || !activeCombatState.assigningHits || activeCombatState.targetSide !== side) return;
+            if (activeCombatState.phase === 'AAA' && !airUnitTypes.includes(unitObj.unitType)) return;
+            if (activeCombatState.phase === 'AMPHIBIOUS' && side !== 'defender') return;
+            
+            let currentHits = parseInt(wrapper.dataset.assignedHits || 0);
+            
+            if (delta > 0 && activeCombatState.unassignedHits > 0 && currentHits < unitObj.count) {
+                currentHits++;
+                activeCombatState.unassignedHits--;
+            } else if (delta < 0 && currentHits > 0) {
+                currentHits--;
+                activeCombatState.unassignedHits++;
+            }
+            
+            wrapper.dataset.assignedHits = currentHits;
+            valSpan.textContent = currentHits; // Sync the button display
+            
+            if (currentHits > 0) {
+                hitMarker.style.display = 'flex';
+                hitSpan.textContent = currentHits; // Sync the visual fire marker
+            } else {
+                hitMarker.style.display = 'none';
+            }
+            
+            if (typeof updateUnassignedHitsDisplay === 'function') updateUnassignedHitsDisplay();
+        };
+
+        minusBtn.addEventListener('click', (e) => { e.preventDefault(); assignHit(-1); });
+        plusBtn.addEventListener('click', (e) => { e.preventDefault(); assignHit(1); });
+
+        return container;
+    }
+
+    // --- Balanced Dice Bag System ---
+        let diceBag = [];
+        function getBalancedDieRoll() {
+            if (diceBag.length === 0) {
+                // Fill the bag with 10 of each number from 1 to 6 (60 total)
+                for (let i = 1; i <= 6; i++) {
+                    for (let j = 0; j < 10; j++) {
+                        diceBag.push(i);
+                    }
+                }
+                // Fisher-Yates Shuffle
+                for (let i = diceBag.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [diceBag[i], diceBag[j]] = [diceBag[j], diceBag[i]];
+                }
+                console.log("Dice bag depleted. Refilled and reshuffled 60 dice.");
+            }
+            return diceBag.pop();
+        }
+
+    // 3D DOM Dice Roller using Poisson drop distribution
+    function rollCombatDice(diceData) {
+        return new Promise(resolve => {
+            let layer = document.getElementById('dice-simulation-layer');
+            if (!layer) {
+                layer = document.createElement('div');
+                layer.id = 'dice-simulation-layer';
+                document.getElementById('combat-screen-overlay').appendChild(layer);
+            }
+            
+            // Constrain layer to the middle 20% of the screen height-wise and width-wise
+            layer.style.cssText = "position:absolute; top:20%; left:42%; width:16%; height:60%; perspective:1200px; pointer-events:none; z-index:9999; display:flex; flex-wrap:wrap; justify-content:center; align-content:center; gap:10px;";
+            layer.innerHTML = '';
+            
+            let hits = 0;
+            const faceNumbers = [1, 6, 3, 4, 2, 5];
+
+            diceData.forEach((die, index) => {
+                const val = getBalancedDieRoll();
+                const isHit = val <= die.targetVal;
+                if (isHit) hits++;
+                
+                const dieEl = document.createElement('div');
+                dieEl.className = 'die-3d victorian';
+                dieEl.style.position = "relative"; // Let flexbox handle positioning
+                dieEl.style.width = "40px";
+                dieEl.style.height = "40px";
+                dieEl.style.transition = "none";
+                
+                // Random start rotation
+                dieEl.style.transform = `translateZ(400px) rotateX(${Math.random()*1000}deg) rotateY(${Math.random()*1000}deg)`;
+                
+                faceNumbers.forEach((num, idx) => {
+                    const f = document.createElement('div');
+                    f.className = 'die-face';
+                    f.style.width = "40px"; f.style.height = "40px";
+                    f.style.background = '#3e2a1c'; 
+                    f.style.borderColor = '#b89c6d';
+                    const rotations = [
+                        'translateZ(20px)', 'rotateY(180deg) translateZ(20px)',
+                        'rotateY(90deg) translateZ(20px)', 'rotateY(-90deg) translateZ(20px)',
+                        'rotateX(90deg) translateZ(20px)', 'rotateX(-90deg) translateZ(20px)'
+                    ];
+                    f.style.transform = rotations[idx];
+                    f.textContent = num;
+                    dieEl.appendChild(f);
+                });
+                
+                layer.appendChild(dieEl);
+                
+                requestAnimationFrame(() => {
+                    setTimeout(() => {
+                        dieEl.style.transition = "transform 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
+                        let rotY = val === 1 ? 0 : val === 6 ? 180 : val === 3 ? -90 : val === 4 ? 90 : 0;
+                        let rotX = val === 2 ? -90 : val === 5 ? 90 : 0;
+                        dieEl.style.transform = `translateZ(0px) rotateX(${rotX}deg) rotateY(${rotY}deg) rotateZ(${(Math.random()*20)-10}deg)`;
+                        
+                        setTimeout(() => {
+                            if (isHit) {
+                                dieEl.querySelectorAll('.die-face').forEach(face => {
+                                    face.style.background = '#8a0000';
+                                    face.style.borderColor = '#ff4444';
+                                });
+                            }
+                        }, 1100);
+                    }, index * 50);
+                });
+            });
+            
+            setTimeout(() => resolve(hits), 2000);
+        });
+    }
+
+    function triggerConductCombatPhase() {
+        const combatKeys = Object.keys(combatPhaseData);
+        if (combatKeys.length === 0) {
+            advancePhase(); // No combats, move on
+            return;
+        }
+
+        const targetTerr = combatKeys[0];
+        const combatInfo = combatPhaseData[targetTerr];
+        const targetPath = currentSvgElement.querySelector(`[data-name="${targetTerr}"]`);
+        const isSeaSpace = !isNaN(Number(targetTerr));
+
+        // Pan map
+        if (targetPath) {
+            const bbox = targetPath.getBBox();
+            const zoomRatio = currentSvgElement.getBoundingClientRect().width / (originalViewBox.width || 1);
+            mapContainer.scrollTo({
+                left: (bbox.x + bbox.width / 2) * zoomRatio - (mapContainer.clientWidth / 2),
+                top: (bbox.y + bbox.height / 2) * zoomRatio - (mapContainer.clientHeight / 2),
+                behavior: 'smooth'
+            });
+            targetPath.classList.add('combat-target-highlight');
+        }
+
+        let defenderPower = targetPath ? targetPath.getAttribute('data-power') : null;
+                
+        // Sea Zones lack ownership, so we must check the actual defending units to get the flag!
+        if (!defenderPower || defenderPower.trim() === '' || defenderPower === 'Neutral') {
+            if (combatInfo.Defenders && combatInfo.Defenders.length > 0) {
+                defenderPower = combatInfo.Defenders[0].power;
+            } else {
+                defenderPower = 'Neutral'; 
+            }
+        }
+
+
+        // Fix for empty string or whitespace bug
+        if (!defenderPower || defenderPower.trim() === '') {
+            defenderPower = 'Neutral'; 
+        }
+        
+        defenderPower = getSpecificNeutralFlag(targetTerr, defenderPower);
+        
+        // Debugging logs to help trace if it ever slips through again
+        console.log(`[COMBAT DEBUG] Territory: ${targetTerr} | Raw Defender Power: '${defenderPower}'`);
+        if (!defenderPower || defenderPower.trim() === '') {
+            console.warn(`[COMBAT DEBUG] defenderPower was completely empty! Hard fallback to Neutral.`);
+            defenderPower = 'Neutral'; 
+        }
+
+        const attackerPower = activePowerForTech;
+
+        const overlay = document.getElementById('combat-screen-overlay');
+        overlay.className = isSeaSpace ? 'theme-sea' : 'theme-land';
+        document.getElementById('combat-space-name').textContent = targetTerr;
+        
+        renderCombatFlag('combat-attacker-canvas', `flags/${attackerPower}.png`);
+        renderCombatFlag('combat-defender-canvas', `flags/${defenderPower}.png`);
+
+        // Initialize State Machine
+        activeCombatState = {
+            territory: targetTerr,
+            isSeaSpace: isSeaSpace,
+            attackerPower: attackerPower,
+            defenderPower: defenderPower,
+            Attackers: combatInfo.Attackers,
+            Defenders: combatInfo.Defenders,
+            phase: 'AAA',
+            assigningHits: false,
+            unassignedHits: 0,
+            targetSide: null
+        };
+
+        renderCombatBoard();
+        overlay.style.display = 'block';
+        
+        // Force reflow so the transition applies smoothly
+        void overlay.offsetWidth; 
+        
+        setTimeout(() => { 
+            overlay.style.opacity = '1'; 
+            overlay.style.transform = 'scale(1)'; 
+            overlay.style.backdropFilter = 'blur(6px)'; // Cinematic background blur
+        }, 50);
+
+        // Start Combat Loop
+        executeCombatPhase();
+    }
+
+    function renderCombatBoard() {
+        const parseCombatVal = (val, isDefender, unitType) => {
+            if (isDefender && (val.toString().toLowerCase().includes('anti-aircraft') || unitType.includes('AAA') || FACILITY_UNIT_TYPES.includes(unitType))) return 0;
+            const num = parseInt(val);
+            return isNaN(num) ? 0 : Math.min(Math.max(num, 0), 4);
+        };
+
+        const attackerRows = {0:[], 1:[], 2:[], 3:[], 4:[]};
+        const defenderRows = {0:[], 1:[], 2:[], 3:[], 4:[]};
+
+        activeCombatState.Attackers.forEach(u => {
+            if (FACILITY_UNIT_TYPES.includes(u.unitType)) return;
+            const profile = window.unitProfileData.find(p => p.unit_type.toLowerCase() === (UNIT_ABBREVIATION_TO_PROFILE_NAME[u.unitType] || u.unitType).toLowerCase());
+            
+            let cVal = profile ? parseCombatVal(profile.attack_value, false, u.unitType) : 0;
+            if (u.unitType === 'BTS' && parseInt(u.element?.getAttribute('data-damage') || 0) > 0) cVal = 2; 
+            
+            attackerRows[cVal].push(u);
+        });
+
+        activeCombatState.Defenders.forEach(u => {
+            const profile = window.unitProfileData.find(p => p.unit_type.toLowerCase() === (UNIT_ABBREVIATION_TO_PROFILE_NAME[u.unitType] || u.unitType).toLowerCase());
+            
+            let cVal = profile ? parseCombatVal(profile.defense_value, true, u.unitType) : 0;
+            if (u.unitType === 'BTS' && parseInt(u.element?.getAttribute('data-damage') || 0) > 0) cVal = 2; 
+            if (u.unitType === 'ACC' && parseInt(u.element?.getAttribute('data-damage') || 0) > 0) cVal = 1; 
+
+            defenderRows[cVal].push(u);
+        });
+
+        const aBoard = document.getElementById('combat-attacker-board');
+        const dBoard = document.getElementById('combat-defender-board');
+        aBoard.innerHTML = ''; dBoard.innerHTML = '';
+
+        for (let i = 0; i <= 4; i++) {
+            const aRow = document.createElement('div'); aRow.className = 'combat-row';
+            const aUnits = document.createElement('div'); aUnits.className = 'combat-units-area';
+            attackerRows[i].forEach(u => aUnits.appendChild(createCombatUnitVisual(u, 'attacker')));
+            aRow.appendChild(aUnits);
+            aRow.appendChild(Object.assign(document.createElement('div'), {innerHTML: getDieSVG(i)}));
+            aBoard.appendChild(aRow);
+
+            const dRow = document.createElement('div'); dRow.className = 'combat-row';
+            const dUnits = document.createElement('div'); dUnits.className = 'combat-units-area';
+            defenderRows[i].forEach(u => dUnits.appendChild(createCombatUnitVisual(u, 'defender')));
+            dRow.appendChild(Object.assign(document.createElement('div'), {innerHTML: getDieSVG(i)}));
+            dRow.appendChild(dUnits);
+            dBoard.appendChild(dRow);
+        }
+    }
+
+    // --- The Async Combat Loop Engine ---
+    async function executeCombatPhase() {
+        switch(activeCombatState.phase) {
+            case 'AAA':
+                await runAAALogic();
+                break;
+            case 'AMPHIBIOUS':
+                await runAmphibiousLogic();
+                break;
+            case 'ATTACKER_ROLL':
+                await runStandardRolls('attacker');
+                break;
+            case 'DEFENDER_ROLL':
+                await runStandardRolls('defender');
+                break;
+            case 'RESOLUTION':
+                promptRetreatOrContinue();
+                break;
+        }
+    }
+
+    // --- CORRECTED COMBAT ENGINE ---
+
+    async function runAAALogic() {
+        let defAAAUnits = activeCombatState.Defenders.filter(u => u.unitType.includes('AAA') || FACILITY_UNIT_TYPES.includes(u.unitType) || u.unitType === 'BTS');
+        let totalAAADice = defAAAUnits.reduce((sum, u) => sum + (u.count * 3), 0);
+        let atkAirUnits = activeCombatState.Attackers.filter(u => airUnitTypes.includes(u.unitType));
+        let totalAirCount = atkAirUnits.reduce((sum, u) => sum + u.count, 0);
+        
+        let diceCount = Math.min(totalAAADice, totalAirCount);
+        
+        if (diceCount > 0) {
+            const diceData = Array.from({length: diceCount}, () => ({ targetVal: 1 }));
+            let hits = await rollCombatDice(diceData); // Calls visual 3D dice
+            
+            if (hits > 0) {
+                activeCombatState.unassignedHits = hits;
+                activeCombatState.assigningHits = true;
+                activeCombatState.targetSide = 'attacker';
+                
+                addConfirmButton(() => {
+                    applyAssignedDamage('attacker'); // This now handles removal and auto-victory
+                    removeDefenderFacilities();
+                    if (activeCombatState) { // Only continue if auto-victory didn't close the window
+                        activeCombatState.phase = 'AMPHIBIOUS';
+                        executeCombatPhase();
+                    }
+                });
+                return;
+            }
+        }
+        
+        removeDefenderFacilities();
+        activeCombatState.phase = 'AMPHIBIOUS';
+        executeCombatPhase();
+    }
+
+    function removeDefenderFacilities() {
+        activeCombatState.Defenders = activeCombatState.Defenders.filter(u => !FACILITY_UNIT_TYPES.includes(u.unitType));
+        renderCombatBoard();
+    }
+
+    async function runAmphibiousLogic() {
+        if (!activeCombatState.isSeaSpace) {
+            let bombardmentShips = activeCombatState.Attackers.filter(u => ['BTS', 'CSR'].includes(u.unitType));
+            if (bombardmentShips.length > 0) {
+                let diceData = [];
+                bombardmentShips.forEach(u => {
+                    const profile = window.unitProfileData.find(p => p.unit_type.toLowerCase() === (UNIT_ABBREVIATION_TO_PROFILE_NAME[u.unitType] || u.unitType).toLowerCase());
+                    const cVal = profile ? parseInt(profile.attack_value) : 0;
+                    for(let i=0; i < u.count; i++) diceData.push({ targetVal: cVal });
+                    
+                    const wrapper = document.querySelector(`.combat-unit-wrapper[data-unit-id="${u.id}"]`);
+                    if(wrapper) wrapper.classList.add('visually-removed');
+                });
+                
+                activeCombatState.Attackers = activeCombatState.Attackers.filter(u => !['BTS', 'CSR'].includes(u.unitType));
+
+                let hits = await rollCombatDice(diceData); // Calls visual 3D dice
+                if (hits > 0) {
+                    activeCombatState.unassignedHits = hits;
+                    activeCombatState.assigningHits = true;
+                    activeCombatState.targetSide = 'defender';
+                    
+                    addConfirmButton(() => {
+                        applyAssignedDamage('defender'); 
+                        activeCombatState.phase = 'ATTACKER_ROLL';
+                        executeCombatPhase();
+                    });
+                    return;
+                }
+            }
+        }
+        activeCombatState.phase = 'ATTACKER_ROLL';
+        executeCombatPhase();
+    }
+
+    async function runStandardRolls(side) {
+        const isAttacker = side === 'attacker';
+        const pool = isAttacker ? activeCombatState.Attackers : activeCombatState.Defenders;
+        let diceData = [];
+
+        pool.forEach(u => {
+            const profile = window.unitProfileData.find(p => p.unit_type.toLowerCase() === (UNIT_ABBREVIATION_TO_PROFILE_NAME[u.unitType] || u.unitType).toLowerCase());
+            let cVal = profile ? parseInt(isAttacker ? profile.attack_value : profile.defense_value) : 0;
+            
+            if (u.unitType === 'BTS' && parseInt(u.element?.getAttribute('data-damage') || 0) > 0) cVal = 2;
+            if (!isAttacker && u.unitType === 'ACC' && parseInt(u.element?.getAttribute('data-damage') || 0) > 0) cVal = 1;
+
+            if (cVal > 0) {
+                for(let i=0; i<u.count; i++) diceData.push({ targetVal: cVal });
+            }
+        });
+
+        if (diceData.length > 0) {
+            let hits = await rollCombatDice(diceData); // Calls visual 3D dice
+            if (hits > 0) {
+                const poolToHit = isAttacker ? activeCombatState.Defenders : activeCombatState.Attackers;
+                const totalHP = poolToHit.reduce((sum, u) => {
+                    let hp = u.count;
+                    if (['BTS', 'ACC'].includes(u.unitType)) hp += u.count; // Count 2 for capital ships
+                    return sum + hp;
+                }, 0);
+
+                if (hits >= totalHP) {
+                    // AUTO-WIPE: Don't prompt, just kill everyone and resolve
+                    activeCombatState.targetSide = isAttacker ? 'defender' : 'attacker';
+                    // Mark all units with max hits in the DOM for applyAssignedDamage to see
+                    document.querySelectorAll(`.combat-unit-wrapper[data-side="${activeCombatState.targetSide}"]`).forEach(w => {
+                        w.dataset.assignedHits = 99; 
+                    });
+                    applyAssignedDamage(activeCombatState.targetSide);
+                    
+                    if (isAttacker) {
+                        activeCombatState.phase = 'DEFENDER_ROLL';
+                        executeCombatPhase();
+                    } else {
+                        activeCombatState.phase = 'RESOLUTION';
+                        executeCombatPhase();
+                    }
+                    return;
+                }
+
+                // Otherwise, proceed to manual assignment
+                activeCombatState.unassignedHits = hits;
+                activeCombatState.assigningHits = true;
+                activeCombatState.targetSide = isAttacker ? 'defender' : 'attacker';
+                
+                addConfirmButton(() => {
+                    applyAssignedDamage(activeCombatState.targetSide); 
+                    if (isAttacker) {
+                        activeCombatState.phase = 'DEFENDER_ROLL';
+                        executeCombatPhase();
+                    } else {
+                        activeCombatState.phase = 'RESOLUTION';
+                        executeCombatPhase();
+                    }
+                });
+                return;
+            }
+        } 
+        
+        activeCombatState.phase = isAttacker ? 'DEFENDER_ROLL' : 'RESOLUTION';
+        executeCombatPhase();
+    }
+
+    function applyAssignedDamage(side) {
+        const poolKey = side === 'attacker' ? 'Attackers' : 'Defenders';
+        const pool = activeCombatState[poolKey];
+        
+        // Use the side-specific wrappers
+        const wrappers = document.querySelectorAll(`.combat-unit-wrapper[data-side="${side}"]`);
+        
+        wrappers.forEach(w => {
+            let hitsToApply = parseInt(w.dataset.assignedHits || 0);
+            if (hitsToApply <= 0) return;
+
+            const unitId = w.dataset.unitId;
+            // Find the unit in the correct active pool
+            const unitIndex = pool.findIndex(u => u.id === unitId);
+            
+            if (unitIndex !== -1) {
+                let u = pool[unitIndex];
+                
+                // Multi-hit logic for Battleships/Carriers
+                if (['BTS', 'ACC'].includes(u.unitType)) {
+                    let dmg = parseInt(u.element?.getAttribute('data-damage') || 0);
+                    while (hitsToApply > 0 && u.count > 0) {
+                        if (dmg === 0) {
+                            dmg = 1; hitsToApply--;
+                            if (u.element) u.element.setAttribute('data-damage', 1);
+                        } else {
+                            u.count--; dmg = 0; hitsToApply--;
+                            if (u.element) u.element.setAttribute('data-damage', 0);
+                        }
+                    }
+                } else {
+                    u.count -= hitsToApply;
+                }
+
+                // Functional Removal from Game State
+                if (u.count <= 0) {
+                    pool.splice(unitIndex, 1);
+                    // Remove from all 3 map clones
+                    svgWrapper.querySelectorAll(`[id="${unitId}"]`).forEach(el => el.remove());
+                    // Remove from the functional tracking array
+                    placedUnitsData = placedUnitsData.filter(item => item.element.id !== unitId);
+                } else {
+                    // Update remaining count visually on map
+                    svgWrapper.querySelectorAll(`[id="${unitId}"]`).forEach(el => {
+                        el.setAttribute('data-count', u.count);
+                        const txt = el.querySelector('.unit-count-text');
+                        if (txt) txt.textContent = u.count;
+                    });
+                }
+            }
+        });
+        
+        activeCombatState.assigningHits = false;
+        renderCombatBoard();
+
+        // Check for wipeout after hits are applied
+        if (activeCombatState.Attackers.length === 0 || activeCombatState.Defenders.length === 0) {
+            setTimeout(() => resolveCombatWinner(), 500);
+        }
+    }
+
+    function resolveCombatWinner(isRetreat = false) {
+        if (!activeCombatState) return;
+        
+        const overlay = document.getElementById('combat-screen-overlay');
+        const targetTerr = activeCombatState.territory;
+        const targetPath = currentSvgElement.querySelector(`[data-name="${targetTerr}"]`);
+
+        // Fix: Clearer win/loss logic
+        const attackersGone = activeCombatState.Attackers.length === 0;
+        const defendersGone = activeCombatState.Defenders.length === 0;
+
+        if (!isRetreat && defendersGone && !attackersGone) {
+            showCustomModal("Victory", `${activeCombatState.attackerPower} has captured ${targetTerr}!`);
+            if (targetPath && isNaN(Number(targetTerr))) {
+                targetPath.setAttribute('data-power', activeCombatState.attackerPower);
+                applyTerritoryColors(); 
+            }
+        } else if (attackersGone) {
+            showCustomModal("Defeat", `The attack on ${targetTerr} has failed.`);
+        } else if (isRetreat) {
+            showCustomModal("Retreat", `Forces have withdrawn from ${targetTerr}.`);
+        }
+
+        // 2. NEW: Clean up movement arrows for this specific combat
+        drawnArrows = drawnArrows.filter(arrow => {
+            if (arrow.targetTerritory === targetTerr) {
+                // Remove the arrow path
+                if (arrow.arrowElement) arrow.arrowElement.remove();
+                // Remove the unit count labels associated with the arrow
+                if (arrow.arrowElement && arrow.arrowElement.id) {
+                    const label = document.querySelector(`.arrow-label-group[data-arrow-id="${arrow.arrowElement.id}"]`);
+                    if (label) label.remove();
+                }
+                return false; // Remove from array
+            }
+            return true; // Keep others
+        });
+
+        // 3. Close the UI
+        if (targetPath) targetPath.classList.remove('combat-target-highlight');
+        overlay.style.opacity = '0';
+        
+        setTimeout(() => {
+            overlay.style.display = 'none';
+            delete combatPhaseData[targetTerr];
+            activeCombatState = null;
+            triggerConductCombatPhase(); // Move to the next battle if any
+        }, 800);
+    }
+
+    // Helper to ensure hits label is updated correctly
+    function updateUnassignedHitsDisplay() {
+        let label = document.getElementById('combat-unassigned-hits-label');
+        if (!label) {
+            label = document.createElement('div');
+            label.id = 'combat-unassigned-hits-label';
+            label.style.cssText = "position:absolute; bottom:140px; left:50%; transform:translateX(-50%); font-family:'Georgia', serif; font-size:22px; font-weight:bold; color:white; text-shadow:2px 2px 10px #ff4400; z-index:1000;";
+            document.getElementById('combat-screen-overlay').appendChild(label);
+        }
+        label.style.display = 'block';
+        const displayHits = Math.max(0, activeCombatState.unassignedHits);
+        label.innerHTML = `🔥 HITS PENDING: ${displayHits}`;
+    }
+
+    function addConfirmButton(callback) {
+        let btn = document.getElementById('combat-confirm-hits-btn');
+        if (!btn) {
+            btn = document.createElement('button');
+            btn.id = 'combat-confirm-hits-btn';
+            btn.textContent = 'CONFIRM CASUALTIES';
+            btn.style.cssText = "position:absolute; bottom:90px; left:50%; transform:translateX(-50%); padding:12px 40px; font-family:'Georgia', serif; font-size:16px; font-weight:bold; background:#8a1a1a; color:white; border:2px solid #ff4444; border-radius:5px; cursor:pointer; z-index:1000; box-shadow: 0 0 15px rgba(255,0,0,0.5);";
+            document.getElementById('combat-screen-overlay').appendChild(btn);
+        }
+        btn.style.display = 'block';
+        updateUnassignedHitsDisplay();
+
+        btn.onclick = () => {
+            if (activeCombatState.unassignedHits > 0) {
+                alert(`You must assign ${activeCombatState.unassignedHits} more hits before continuing!`);
+                return;
+            }
+            btn.style.display = 'none';
+            const hitsLabel = document.getElementById('combat-unassigned-hits-label');
+            if (hitsLabel) hitsLabel.style.display = 'none';
+            callback();
+        };
+    }
+
+    function promptRetreatOrContinue() {
+        if (activeCombatState.Attackers.length === 0 || activeCombatState.Defenders.length === 0) {
+            resolveCombatWinner();
+            return;
+        }
+        
+        let btnBox = document.createElement('div');
+        btnBox.id = 'combat-retreat-box';
+        btnBox.style.cssText = "position:absolute; bottom:90px; left:50%; transform:translateX(-50%); display:flex; gap:20px; z-index:1000;";
+        
+        let retreatBtn = document.createElement('button');
+        retreatBtn.textContent = 'RETREAT';
+        retreatBtn.style.cssText = "padding:12px 40px; font-family:'Georgia', serif; font-size: 16px; background:#4a1a1a; color:white; border:2px solid #ff4444; border-radius:5px; cursor:pointer;";
+        
+        let continueBtn = document.createElement('button');
+        continueBtn.textContent = 'NEXT ROUND';
+        continueBtn.style.cssText = "padding:12px 40px; font-family:'Georgia', serif; font-size: 16px; background:#1a4a1a; color:white; border:2px solid #4CAF50; border-radius:5px; cursor:pointer;";
+        
+        btnBox.appendChild(retreatBtn);
+        btnBox.appendChild(continueBtn);
+        document.getElementById('combat-screen-overlay').appendChild(btnBox);
+        
+        retreatBtn.onclick = () => { btnBox.remove(); resolveCombatWinner(true); };
+        continueBtn.onclick = () => { btnBox.remove(); activeCombatState.phase = 'ATTACKER_ROLL'; executeCombatPhase(); };
     }
 
     // --- Overhauled Phase Progression Logic ---
@@ -9264,7 +10780,12 @@
                     openPurchaseModal();
                 } else if (currentPhaseIndex === 2) {
                     applyBaseMovementBonuses(); // AUTOMATICALLY APPLY BONUSES HERE
+                    combatPhaseData = {}; // Clear previous round's data
+                    window.movedIndicesGlobal = {}; // Reset global transport tracker
                     console.log(`Combat Movement phase started for ${activePowerForTech}.`);
+                } else if (currentPhaseIndex === 3) {
+                    console.log(`Conduct Combat phase started for ${activePowerForTech}.`);
+                    triggerConductCombatPhase();
                 } else {
                     console.log(`Phase ${currentPhaseIndex} started for ${activePowerForTech}.`);
                 }
