@@ -2168,12 +2168,11 @@
         <div class="game-info-section" style="position: relative;">
             <label for="colorSchemeSelect">Scheme:</label>
             <select id="colorSchemeSelect">
-                <option value="default">Default Vintage</option>
-                <option value="pastel">Pastel Comfort</option>
-                <option value="dark">Deep Umber</option>
-                <option value="contrast">High Contrast</option>
-                <option value="mono">Monochromatic</option>
-                <option value="sepia">Sepia Tone</option>
+                <option value="default">Classic Board</option>
+                <option value="darkMode">Midnight Tactical</option>
+                <option value="lightMode">High Contrast Light</option>
+                <option value="vintage">Vintage Parchment</option>
+                <option value="whiteMode">Minimalist White</option>
             </select>
             <div id="main-menu-btn" style="cursor: pointer; font-size: 20px; margin-left: 15px; padding: 0 5px;" onclick="document.getElementById('dropdown-menu').classList.toggle('visible')">☰</div>
             <div id="dropdown-menu" style="display: none; position: absolute; top: 100%; right: 0; background: #282c34; border: 1px solid #555; border-radius: 4px; flex-direction: column; z-index: 2000; box-shadow: 0 5px 15px rgba(0,0,0,0.5);">
@@ -2496,22 +2495,39 @@
 
         const colorSchemes = {
             default: {
-                'US': '#4CAF50', 'UK': '#2199F3', 'USSR': '#DC143C', 'Germany': '#607D8B', 'Japan': '#FFC107', 'Italy': '#9C27B0', 'China': '#FF5722', 'Commonwealth': '#008B8B', 'France': '#3F51B5', 'Neutral': '#757575', 'Pro-Axis Neutral': '#C4A484', 'Pro-Allied Neutral': '#987654', 'Impassable': '#333333'
+                sea: '#2d3139', border: '#000000', label: '#ffffff',
+                'US': '#4CAF50', 'UK': '#2199F3', 'USSR': '#DC143C', 'Germany': '#607D8B', 
+                'Japan': '#FFC107', 'Italy': '#9C27B0', 'China': '#FF5722', 'Commonwealth': '#008B8B', 
+                'France': '#3F51B5', 'Neutral': '#757575', 'Pro-Axis Neutral': '#C4A484', 
+                'Pro-Allied Neutral': '#987654', 'Impassable': '#333333'
             },
-            pastel: {
-                'US': '#A8D8B0', 'UK': '#A2CFFE', 'USSR': '#F6A5A5', 'Germany': '#B0BEC5', 'Japan': '#FFE082', 'Italy': '#CE93D8', 'China': '#FFCCBC', 'Commonwealth': '#B2DFDB', 'France': '#C5CAE9', 'Neutral': '#BDBDBD', 'Pro-Axis Neutral': '#D7CCC8', 'Pro-Allied Neutral': '#BCAAA4', 'Impassable': '#424242'
+            darkMode: {
+                sea: '#0f1115', border: '#33CFFF', label: '#33CFFF',
+                'US': '#2d5a2f', 'UK': '#1a4a7a', 'USSR': '#7a1a1a', 'Germany': '#334455', 
+                'Japan': '#8a6d00', 'Italy': '#5a2a5a', 'China': '#8a3a1a', 'Commonwealth': '#005a5a', 
+                'France': '#2a3a7a', 'Neutral': '#222222', 'Pro-Axis Neutral': '#4a3a2a', 
+                'Pro-Allied Neutral': '#3a2a1a', 'Impassable': '#000000'
             },
-            dark: {
-                'US': '#1B5E20', 'UK': '#0D47A1', 'USSR': '#B71C1C', 'Germany': '#263238', 'Japan': '#FF6F00', 'Italy': '#4A148C', 'China': '#BF360C', 'Commonwealth': '#004D40', 'France': '#1A237E', 'Neutral': '#212121', 'Pro-Axis Neutral': '#4E342E', 'Pro-Allied Neutral': '#3E2723', 'Impassable': '#000000'
+            lightMode: {
+                sea: '#add8e6', border: '#ffffff', label: '#000000',
+                'US': '#a8e4a0', 'UK': '#a0c4ff', 'USSR': '#ffadad', 'Germany': '#d1d1d1', 
+                'Japan': '#ffd6a5', 'Italy': '#bdb2ff', 'China': '#ffc6ff', 'Commonwealth': '#9bf6ff', 
+                'France': '#caffbf', 'Neutral': '#eeeeee', 'Pro-Axis Neutral': '#e2cfea', 
+                'Pro-Allied Neutral': '#fbc4ab', 'Impassable': '#cccccc'
             },
-            contrast: {
-                'US': '#00E676', 'UK': '#2979FF', 'USSR': '#FF1744', 'Germany': '#FFFFFF', 'Japan': '#FFD600', 'Italy': '#D500F9', 'China': '#FF3D00', 'Commonwealth': '#18FFFF', 'France': '#3D5AFE', 'Neutral': '#9E9E9E', 'Pro-Axis Neutral': '#FAFAFA', 'Pro-Allied Neutral': '#BDBDBD', 'Impassable': '#212121'
+            vintage: {
+                sea: '#b8a07e', border: '#5d4037', label: '#3e2723',
+                'US': '#849474', 'UK': '#748494', 'USSR': '#a67c7c', 'Germany': '#8a8a8a', 
+                'Japan': '#b4a074', 'Italy': '#8c7c94', 'China': '#b48c74', 'Commonwealth': '#749494', 
+                'France': '#7c7ca6', 'Neutral': '#c4b494', 'Pro-Axis Neutral': '#a69484', 
+                'Pro-Allied Neutral': '#948474', 'Impassable': '#4a3f35'
             },
-            mono: {
-                'US': '#42A5F5', 'UK': '#90CAF9', 'USSR': '#1E88E5', 'Germany': '#E53935', 'Japan': '#EF5350', 'Italy': '#F44336', 'China': '#BBDEFB', 'Commonwealth': '#64B5F6', 'France': '#2196F3', 'Neutral': '#9E9E9E', 'Pro-Axis Neutral': '#E0E0E0', 'Pro-Allied Neutral': '#BDBDBD', 'Impassable': '#212121'
-            },
-            sepia: {
-                'US': '#8D6E63', 'UK': '#A1887F', 'USSR': '#795548', 'Germany': '#5D4037', 'Japan': '#6D4C41', 'Italy': '#4E342E', 'China': '#BCAAA4', 'Commonwealth': '#9E9D24', 'France': '#D2B48C', 'Neutral': '#A9A9A9', 'Pro-Axis Neutral': '#D7CCC8', 'Pro-Allied Neutral': '#BCAAA4', 'Impassable': '#3E2723'
+            whiteMode: {
+                sea: '#f8f9fa', border: '#2d3139', label: '#212529',
+                'US': '#e6ffed', 'UK': '#eaf5ff', 'USSR': '#fff5f5', 'Germany': '#f1f3f5', 
+                'Japan': '#fff9db', 'Italy': '#f8f0fc', 'China': '#fff4e6', 'Commonwealth': '#e6fcf5', 
+                'France': '#f1f1ff', 'Neutral': '#ffffff', 'Pro-Axis Neutral': '#fff9db', 
+                'Pro-Allied Neutral': '#fff5f5', 'Impassable': '#e9ecef'
             }
         };
 
@@ -4252,15 +4268,14 @@
                         }
                     }
 
-                    // Then, override neutral territory colors
+                    // override neutral territory colors
                     for (const territoryName in neutralTerritoriesMap) {
                         const pathElement = svgDoc.querySelector(`[data-name="${territoryName}"]`);
                         if (pathElement) {
                             const specificNeutralType = neutralTerritoriesMap[territoryName];
-                            if (powerColors[specificNeutralType]) {
-                                pathElement.style.fill = powerColors[specificNeutralType];
-                                pathElement.setAttribute('data-power', specificNeutralType);
-                            }
+                            // Ensure it pulls from the current live powerColors object
+                            pathElement.style.fill = powerColors[specificNeutralType];
+                            pathElement.setAttribute('data-power', specificNeutralType);
                         }
                     }
                 });
@@ -6766,6 +6781,24 @@
                 );
             };
 
+            const getEnemyBlockerCount = (zoneName) => {
+                return placedUnitsData.filter(u =>
+                    u.placedIn === zoneName &&
+                    SEA_UNIT_TYPES.includes(u.unitType) &&
+                    !['TPT', 'SUB'].includes(u.unitType) &&
+                    !unitAlliance.has(u.power)
+                ).reduce((sum, u) => sum + parseInt(u.count), 0);
+            };
+
+            const isSZPinned = (zoneName) => {
+                const blockers = getEnemyBlockerCount(zoneName);
+                if (blockers === 0) return true;
+                const attackers = (combatPhaseData[zoneName]?.Attackers || [])
+                    .filter(u => SEA_UNIT_TYPES.includes(u.unitType))
+                    .reduce((sum, u) => sum + u.count, 0);
+                return attackers >= blockers;
+            };
+
             const hasEnemyCombatUnits = (terrName) => {
                 return placedUnitsData.some(unit =>
                     unit.placedIn === terrName && !unitAlliance.has(unit.power) && !unit.unitType.includes('AAA') && !FACILITY_UNIT_TYPES.includes(unit.unitType) && !SEA_UNIT_TYPES.includes(unit.unitType)
@@ -7053,14 +7086,17 @@
                             if (adj === target) {
                                 stack.push({ name: adj, path: [...curr.path, adj], dist: curr.dist + 1 });
                             } else {
-                                // Enemy spaces can't be passed through
                                 let isEnemy = isSeaZone(adj) ? seaZoneHasEnemyUnits(adj) : isEnemyTerritory(adj, unitPower);
                                 let isValidIntermediate = false;
 
                                 if (getTerritoryPower(adj) === 'Impassable') isValidIntermediate = false;
                                 else if (isLandUnit && !isSeaZone(adj) && !isEnemy) isValidIntermediate = true;
-                                else if (isSeaUnit && isSeaZone(adj) && !isEnemy) isValidIntermediate = true;
-                                else if (isAirUnit) isValidIntermediate = true; // Air flies over anything but impassable
+                                else if (isSeaUnit && isSeaZone(adj)) {
+                                    // NEW PINNING LOGIC: Can only pass through if there are no blockers or if blockers are pinned
+                                    if (!isEnemy) isValidIntermediate = true;
+                                    else if (isSZPinned(adj)) isValidIntermediate = true;
+                                }
+                                else if (isAirUnit) isValidIntermediate = true; 
                                 
                                 if (isValidIntermediate) {
                                     stack.push({ name: adj, path: [...curr.path, adj], dist: curr.dist + 1 });
@@ -7185,6 +7221,15 @@
                                 if (!isAdjacent && clickedName !== lastSpace) {
                                     showCustomModal("Invalid Move", "You must select a space adjacent to the previous one in your path.");
                                     e.stopPropagation(); e.preventDefault(); return;
+                                }
+
+                                // NEW SEA ZONE BLOCKING CHECK
+                                if (isSeaUnit && isSeaZone(clickedName) && clickedName !== window.activePathingState.target) {
+                                    const blockers = getEnemyBlockerCount(clickedName);
+                                    if (blockers > 0 && !isSZPinned(clickedName)) {
+                                        showCustomModal("Sea Zone Blocked", `Enemy combat ships in SZ ${clickedName} prevent movement through this zone. You must first assign at least ${blockers} ship(s) to attack this zone to 'pin' the defenders.`);
+                                        e.stopPropagation(); e.preventDefault(); return;
+                                    }
                                 }
 
                                 // Enforce Land Unit sea zone restriction
@@ -9087,38 +9132,71 @@
     // --- Color Scheme Switching Logic ---
     function applyColorScheme(schemeName) {
         const newScheme = colorSchemes[schemeName];
-        if (!newScheme) {
-            console.error("Unknown color scheme:", schemeName);
-            return;
-        }
+        if (!newScheme) return;
 
-        powerColors = newScheme; // Update the global colors object
-
-        // 1. Recolor territory paths
-        applyTerritoryColors(); // This existing function will now use the new `powerColors`
-
+        powerColors = newScheme;
         const allSvgElements = document.querySelectorAll('.svg-content');
+
         allSvgElements.forEach(svg => {
-            // 2. Regenerate SVG filters for units with new colors
+            // 1. Update Filters for Units
             generateColorFilters(svg);
 
-            // 3. Update the filter on all existing unit images efficiently
-            const allUnitImages = svg.querySelectorAll('.unit-token');
-            allUnitImages.forEach(unitImage => {
-                const unitGroup = unitImage.closest('.unit-stack-group');
-                if (!unitGroup) return;
+            // 2. Update Territories and Sea Zones
+            const paths = svg.querySelectorAll('polygon[data-name], path[data-name]');
+            paths.forEach(path => {
+                const name = path.getAttribute('data-name');
+                const power = path.getAttribute('data-power');
+                
+                // Check if it's a sea zone (contains a number)
+                if (!isNaN(parseInt(name))) {
+                    path.style.fill = newScheme.sea;
+                } else if (powerColors[power]) {
+                    path.style.fill = powerColors[power];
+                }
+                
+                // Update Borders
+                path.style.stroke = newScheme.border;
+                path.style.strokeWidth = schemeName === 'whiteMode' ? '1px' : '0.5px';
+            });
 
+            // 3. Update Text Labels (Names and Words, but NOT IPC tokens)
+            const textLabels = svg.querySelectorAll('.territory-label');
+            textLabels.forEach(label => {
+                label.setAttribute('fill', newScheme.label);
+                // In light/white modes, remove the white stroke/outline for better readability
+                if (schemeName === 'lightMode' || schemeName === 'whiteMode' || schemeName === 'vintage') {
+                    label.setAttribute('stroke', 'none');
+                } else {
+                    label.setAttribute('stroke', 'black');
+                    label.setAttribute('stroke-width', '0.3');
+                }
+            });
+
+            // 4. Recolor Units
+            const units = svg.querySelectorAll('.unit-stack-group');
+            units.forEach(unitGroup => {
                 const power = unitGroup.getAttribute('data-power');
                 const unitType = unitGroup.getAttribute('data-unit-type');
-                
-                if (powerColors[power] && power !== 'Neutral' && !SPECIAL_INFRASTRUCTURE_UNITS.includes(unitType)) {
-                    const filterType = SEA_UNIT_TYPES.includes(unitType) ? 'sea' : 'land';
-                    unitImage.setAttribute('filter', `url(#colorize-${power}-${filterType})`);
-                } else {
-                    unitImage.removeAttribute('filter');
+                const isFacility = SPECIAL_INFRASTRUCTURE_UNITS.includes(unitType);
+                const isSea = SEA_UNIT_TYPES.includes(unitType);
+
+                const circle = unitGroup.querySelector('.unit-background-circle');
+                if (circle) {
+                    const circleFill = (power === 'Neutral') 
+                        ? powerColors['Neutral'] 
+                        : darkenColor(powerColors[power], 0.4);
+                    circle.setAttribute('fill', circleFill);
+                }
+
+                const img = unitGroup.querySelector('image.unit-token');
+                if (img && !isFacility && power !== 'Neutral') {
+                    const filterType = isSea ? 'sea' : 'land';
+                    img.setAttribute('filter', `url(#colorize-${power}-${filterType})`);
                 }
             });
         });
+
+        if (typeof updateVictoryConditions === 'function') updateVictoryConditions();
     }
 
     document.getElementById('colorSchemeSelect').addEventListener('change', function() {
@@ -10083,85 +10161,84 @@
 
         const wrapper = document.createElement('div');
         wrapper.className = 'combat-unit-wrapper';
-        wrapper.dataset.unitId = unitObj.id;
+        // Use groupType for logic, templateId for visual cloning
+        wrapper.dataset.unitType = unitObj.groupType || unitObj.unitType;
         wrapper.dataset.side = side;
         wrapper.dataset.assignedHits = 0; 
         
-        const realElement = unitObj.element || document.getElementById(unitObj.id);
+        // Fix: Locate the map element using the templateId or ID
+        const lookupId = unitObj.templateId || unitObj.id;
+        const realElement = document.getElementById(lookupId);
+        
         if (realElement) {
             const cloneNode = realElement.cloneNode(true);
             const selectionMarker = cloneNode.querySelector('.selection-marker');
             if (selectionMarker) selectionMarker.remove();
+            // Remove existing count text/circle from the template so we can show the grouped count
+            const cTxt = cloneNode.querySelector('.unit-count-text'); if(cTxt) cTxt.remove();
+            const cCir = cloneNode.querySelector('.unit-count-circle'); if(cCir) cCir.remove();
+
             cloneNode.setAttribute('transform', 'translate(40, 40)'); 
-            
             const newSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
             newSvg.setAttribute("viewBox", "0 0 80 80");
             newSvg.appendChild(cloneNode);
+            
+            // Add specific group count label
+            const countLabel = document.createElementNS("http://www.w3.org/2000/svg", "text");
+            countLabel.setAttribute("x", "65"); countLabel.setAttribute("y", "65");
+            countLabel.setAttribute("fill", "#FFEB3B"); countLabel.setAttribute("font-size", "18");
+            countLabel.setAttribute("font-weight", "bold"); countLabel.setAttribute("stroke", "black");
+            countLabel.setAttribute("stroke-width", "1");
+            countLabel.textContent = unitObj.count;
+            newSvg.appendChild(countLabel);
+
             wrapper.appendChild(newSvg);
         }
 
-        // Fire-themed Hit Marker
         const hitMarker = document.createElement('div');
         hitMarker.className = 'fire-hit-marker';
         hitMarker.style.display = 'none';
-        const hitSpan = document.createElement('span');
-        hitMarker.appendChild(hitSpan);
+        hitMarker.appendChild(document.createElement('span'));
         wrapper.appendChild(hitMarker);
 
-        // Restored Interactive Damage Controls
         const controls = document.createElement('div');
         controls.className = 'combat-damage-controls';
-
-        const minusBtn = document.createElement('button');
-        minusBtn.className = 'combat-damage-btn';
-        minusBtn.textContent = '−';
-
-        const valSpan = document.createElement('div');
-        valSpan.className = 'combat-damage-val';
-        valSpan.textContent = '0';
-
-        const plusBtn = document.createElement('button');
-        plusBtn.className = 'combat-damage-btn';
-        plusBtn.textContent = '+';
-
-        controls.appendChild(minusBtn);
-        controls.appendChild(valSpan);
-        controls.appendChild(plusBtn);
-
-        container.appendChild(wrapper);
-        container.appendChild(controls);
+        const minusBtn = document.createElement('button'); minusBtn.className = 'combat-damage-btn'; minusBtn.textContent = '−';
+        const valSpan = document.createElement('div'); valSpan.className = 'combat-damage-val'; valSpan.textContent = '0';
+        const plusBtn = document.createElement('button'); plusBtn.className = 'combat-damage-btn'; plusBtn.textContent = '+';
+        controls.appendChild(minusBtn); controls.appendChild(valSpan); controls.appendChild(plusBtn);
+        container.appendChild(wrapper); container.appendChild(controls);
 
         const assignHit = (delta) => {
             if (!activeCombatState || !activeCombatState.assigningHits || activeCombatState.targetSide !== side) return;
-            if (activeCombatState.phase === 'AAA' && !airUnitTypes.includes(unitObj.unitType)) return;
-            if (activeCombatState.phase === 'AMPHIBIOUS' && side !== 'defender') return;
+            const uType = wrapper.dataset.unitType;
             
+            if (delta > 0) {
+                const isTransport = uType === 'TPT' || uType === 'SBR';
+                if (isTransport) {
+                    const pool = side === 'attacker' ? activeCombatState.Attackers : activeCombatState.Defenders;
+                    if (pool.some(u => u.unitType !== 'TPT' && u.unitType !== 'SBR')) {
+                        showCustomModal("Illegal Casualty", "Transports and Transport Planes must be taken as casualties last.");
+                        return;
+                    }
+                }
+            }
+
             let currentHits = parseInt(wrapper.dataset.assignedHits || 0);
-            
             if (delta > 0 && activeCombatState.unassignedHits > 0 && currentHits < unitObj.count) {
-                currentHits++;
-                activeCombatState.unassignedHits--;
+                currentHits++; activeCombatState.unassignedHits--;
             } else if (delta < 0 && currentHits > 0) {
-                currentHits--;
-                activeCombatState.unassignedHits++;
+                currentHits--; activeCombatState.unassignedHits++;
             }
-            
             wrapper.dataset.assignedHits = currentHits;
-            valSpan.textContent = currentHits; // Sync the button display
-            
-            if (currentHits > 0) {
-                hitMarker.style.display = 'flex';
-                hitSpan.textContent = currentHits; // Sync the visual fire marker
-            } else {
-                hitMarker.style.display = 'none';
-            }
-            
-            if (typeof updateUnassignedHitsDisplay === 'function') updateUnassignedHitsDisplay();
+            valSpan.textContent = currentHits;
+            if (currentHits > 0) { hitMarker.style.display = 'flex'; hitMarker.firstChild.textContent = currentHits; }
+            else { hitMarker.style.display = 'none'; }
+            updateUnassignedHitsDisplay();
         };
 
-        minusBtn.addEventListener('click', (e) => { e.preventDefault(); assignHit(-1); });
-        plusBtn.addEventListener('click', (e) => { e.preventDefault(); assignHit(1); });
-
+        minusBtn.onclick = () => assignHit(-1);
+        plusBtn.onclick = () => assignHit(1);
         return container;
     }
 
@@ -10354,28 +10431,34 @@
             return isNaN(num) ? 0 : Math.min(Math.max(num, 0), 4);
         };
 
-        const attackerRows = {0:[], 1:[], 2:[], 3:[], 4:[]};
-        const defenderRows = {0:[], 1:[], 2:[], 3:[], 4:[]};
+        const groupPool = (pool, isDefender) => {
+            const rows = {0:[], 1:[], 2:[], 3:[], 4:[]};
+            const grouped = {}; 
 
-        activeCombatState.Attackers.forEach(u => {
-            if (FACILITY_UNIT_TYPES.includes(u.unitType)) return;
-            const profile = window.unitProfileData.find(p => p.unit_type.toLowerCase() === (UNIT_ABBREVIATION_TO_PROFILE_NAME[u.unitType] || u.unitType).toLowerCase());
-            
-            let cVal = profile ? parseCombatVal(profile.attack_value, false, u.unitType) : 0;
-            if (u.unitType === 'BTS' && parseInt(u.element?.getAttribute('data-damage') || 0) > 0) cVal = 2; 
-            
-            attackerRows[cVal].push(u);
-        });
+            pool.forEach(u => {
+                if (FACILITY_UNIT_TYPES.includes(u.unitType)) return;
+                const profile = window.unitProfileData.find(p => p.unit_type.toLowerCase() === (UNIT_ABBREVIATION_TO_PROFILE_NAME[u.unitType] || u.unitType).toLowerCase());
+                let cVal = profile ? parseCombatVal(isDefender ? profile.defense_value : profile.attack_value, isDefender, u.unitType) : 0;
+                
+                if (u.unitType === 'BTS' && parseInt(u.element?.getAttribute('data-damage') || 0) > 0) cVal = 2;
+                if (isDefender && u.unitType === 'ACC' && parseInt(u.element?.getAttribute('data-damage') || 0) > 0) cVal = 1;
 
-        activeCombatState.Defenders.forEach(u => {
-            const profile = window.unitProfileData.find(p => p.unit_type.toLowerCase() === (UNIT_ABBREVIATION_TO_PROFILE_NAME[u.unitType] || u.unitType).toLowerCase());
-            
-            let cVal = profile ? parseCombatVal(profile.defense_value, true, u.unitType) : 0;
-            if (u.unitType === 'BTS' && parseInt(u.element?.getAttribute('data-damage') || 0) > 0) cVal = 2; 
-            if (u.unitType === 'ACC' && parseInt(u.element?.getAttribute('data-damage') || 0) > 0) cVal = 1; 
+                const key = `${u.unitType}_${cVal}`;
+                if (!grouped[key]) {
+                    // IMPORTANT: We keep 'templateId' as a real ID from the map to allow cloning
+                    grouped[key] = { ...u, groupType: u.unitType, templateId: u.id, count: 0, cVal: cVal };
+                }
+                grouped[key].count += u.count;
+            });
 
-            defenderRows[cVal].push(u);
-        });
+            Object.values(grouped).forEach(gUnit => {
+                rows[gUnit.cVal].push(gUnit);
+            });
+            return rows;
+        };
+
+        const attackerRows = groupPool(activeCombatState.Attackers, false);
+        const defenderRows = groupPool(activeCombatState.Defenders, true);
 
         const aBoard = document.getElementById('combat-attacker-board');
         const dBoard = document.getElementById('combat-defender-board');
@@ -10567,59 +10650,51 @@
     function applyAssignedDamage(side) {
         const poolKey = side === 'attacker' ? 'Attackers' : 'Defenders';
         const pool = activeCombatState[poolKey];
-        
-        // Use the side-specific wrappers
         const wrappers = document.querySelectorAll(`.combat-unit-wrapper[data-side="${side}"]`);
         
         wrappers.forEach(w => {
             let hitsToApply = parseInt(w.dataset.assignedHits || 0);
             if (hitsToApply <= 0) return;
-
-            const unitId = w.dataset.unitId;
-            // Find the unit in the correct active pool
-            const unitIndex = pool.findIndex(u => u.id === unitId);
+            const uType = w.dataset.unitType;
             
-            if (unitIndex !== -1) {
-                let u = pool[unitIndex];
-                
-                // Multi-hit logic for Battleships/Carriers
+            for (let i = pool.length - 1; i >= 0; i--) {
+                if (hitsToApply <= 0) break;
+                let u = pool[i];
+                if (u.unitType !== uType) continue;
+
                 if (['BTS', 'ACC'].includes(u.unitType)) {
                     let dmg = parseInt(u.element?.getAttribute('data-damage') || 0);
                     while (hitsToApply > 0 && u.count > 0) {
-                        if (dmg === 0) {
-                            dmg = 1; hitsToApply--;
-                            if (u.element) u.element.setAttribute('data-damage', 1);
-                        } else {
-                            u.count--; dmg = 0; hitsToApply--;
-                            if (u.element) u.element.setAttribute('data-damage', 0);
-                        }
+                        if (dmg === 0) { dmg = 1; hitsToApply--; if (u.element) u.element.setAttribute('data-damage', 1); }
+                        else { u.count--; dmg = 0; hitsToApply--; if (u.element) u.element.setAttribute('data-damage', 0); }
                     }
                 } else {
-                    u.count -= hitsToApply;
+                    const sub = Math.min(u.count, hitsToApply);
+                    u.count -= sub; hitsToApply -= sub;
                 }
 
-                // Functional Removal from Game State
                 if (u.count <= 0) {
-                    pool.splice(unitIndex, 1);
-                    // Remove from all 3 map clones
-                    svgWrapper.querySelectorAll(`[id="${unitId}"]`).forEach(el => el.remove());
-                    // Remove from the functional tracking array
-                    placedUnitsData = placedUnitsData.filter(item => item.element.id !== unitId);
-                } else {
-                    // Update remaining count visually on map
-                    svgWrapper.querySelectorAll(`[id="${unitId}"]`).forEach(el => {
-                        el.setAttribute('data-count', u.count);
-                        const txt = el.querySelector('.unit-count-text');
-                        if (txt) txt.textContent = u.count;
-                    });
+                    const rid = u.id;
+                    pool.splice(i, 1);
+                    svgWrapper.querySelectorAll(`[id="${rid}"]`).forEach(el => { el.setAttribute('data-count', 0); el.style.display = 'none'; });
+                    placedUnitsData = placedUnitsData.filter(item => item.element.id !== rid);
                 }
             }
         });
+
+        // NEW: Auto-wipe Transports if only they remain
+        const onlyTransportsLeft = pool.length > 0 && pool.every(u => u.unitType === 'TPT' || u.unitType === 'SBR');
+        if (onlyTransportsLeft) {
+            pool.forEach(u => {
+                const rid = u.id;
+                svgWrapper.querySelectorAll(`[id="${rid}"]`).forEach(el => { el.setAttribute('data-count', 0); el.style.display = 'none'; });
+                placedUnitsData = placedUnitsData.filter(item => item.element.id !== rid);
+            });
+            pool.length = 0; // Clear the array
+        }
         
         activeCombatState.assigningHits = false;
         renderCombatBoard();
-
-        // Check for wipeout after hits are applied
         if (activeCombatState.Attackers.length === 0 || activeCombatState.Defenders.length === 0) {
             setTimeout(() => resolveCombatWinner(), 500);
         }
@@ -10628,42 +10703,62 @@
     function resolveCombatWinner(isRetreat = false) {
         if (!activeCombatState) return;
         
-        const overlay = document.getElementById('combat-screen-overlay');
         const targetTerr = activeCombatState.territory;
-        const targetPath = currentSvgElement.querySelector(`[data-name="${targetTerr}"]`);
+        const isSeaBattle = !isNaN(Number(targetTerr));
 
-        // Fix: Clearer win/loss logic
+        // Update Universal Board State for survivors
+        if (!universalBoardState[targetTerr]) universalBoardState[targetTerr] = [];
+        
+        // 1. Handle Attacker survivors
+        activeCombatState.Attackers.forEach(survivor => {
+            const isSeaUnit = SEA_UNIT_TYPES.includes(survivor.unitType);
+            // Sea units involved in land battles return to their sea zone, others stay in target
+            const finalSpace = (!isSeaBattle && isSeaUnit) ? survivor.currentlyPlacedIn : targetTerr;
+            
+            // Sync map icons visually
+            svgWrapper.querySelectorAll(`[id="${survivor.id}"]`).forEach(el => {
+                el.style.display = 'block';
+                el.setAttribute('data-count', survivor.count);
+                el.setAttribute('data-placed-in', finalSpace);
+                const txt = el.querySelector('.unit-count-text');
+                if (txt) txt.textContent = survivor.count;
+            });
+
+            // Update the functional tracking array
+            const idx = placedUnitsData.findIndex(u => u.element.id === survivor.id);
+            if (idx !== -1) {
+                placedUnitsData[idx].count = survivor.count;
+                placedUnitsData[idx].placedIn = finalSpace;
+            }
+        });
+
+        // 2. Logic for capturing territory
         const attackersGone = activeCombatState.Attackers.length === 0;
         const defendersGone = activeCombatState.Defenders.length === 0;
+        const targetPath = currentSvgElement.querySelector(`[data-name="${targetTerr}"]`);
 
-        if (!isRetreat && defendersGone && !attackersGone) {
+        if (!isRetreat && defendersGone && !attackersGone && !isSeaBattle) {
             showCustomModal("Victory", `${activeCombatState.attackerPower} has captured ${targetTerr}!`);
-            if (targetPath && isNaN(Number(targetTerr))) {
+            if (targetPath) {
                 targetPath.setAttribute('data-power', activeCombatState.attackerPower);
                 applyTerritoryColors(); 
             }
-        } else if (attackersGone) {
-            showCustomModal("Defeat", `The attack on ${targetTerr} has failed.`);
-        } else if (isRetreat) {
-            showCustomModal("Retreat", `Forces have withdrawn from ${targetTerr}.`);
         }
 
-        // 2. NEW: Clean up movement arrows for this specific combat
+        // 3. Cleanup
+        const overlay = document.getElementById('combat-screen-overlay');
         drawnArrows = drawnArrows.filter(arrow => {
             if (arrow.targetTerritory === targetTerr) {
-                // Remove the arrow path
                 if (arrow.arrowElement) arrow.arrowElement.remove();
-                // Remove the unit count labels associated with the arrow
-                if (arrow.arrowElement && arrow.arrowElement.id) {
+                if (arrow.arrowElement?.id) {
                     const label = document.querySelector(`.arrow-label-group[data-arrow-id="${arrow.arrowElement.id}"]`);
                     if (label) label.remove();
                 }
-                return false; // Remove from array
+                return false;
             }
-            return true; // Keep others
+            return true;
         });
 
-        // 3. Close the UI
         if (targetPath) targetPath.classList.remove('combat-target-highlight');
         overlay.style.opacity = '0';
         
@@ -10671,7 +10766,8 @@
             overlay.style.display = 'none';
             delete combatPhaseData[targetTerr];
             activeCombatState = null;
-            triggerConductCombatPhase(); // Move to the next battle if any
+            updateUniversalBoardState(); // Full refresh of logical state
+            triggerConductCombatPhase(); 
         }, 800);
     }
 
@@ -10681,12 +10777,22 @@
         if (!label) {
             label = document.createElement('div');
             label.id = 'combat-unassigned-hits-label';
-            label.style.cssText = "position:absolute; bottom:140px; left:50%; transform:translateX(-50%); font-family:'Georgia', serif; font-size:22px; font-weight:bold; color:white; text-shadow:2px 2px 10px #ff4400; z-index:1000;";
+            // Adjusted for two-line display with center alignment
+            label.style.cssText = "position:absolute; bottom:145px; left:50%; transform:translateX(-50%); font-family:'Georgia', serif; font-weight:bold; color:#E0D8B0; text-shadow:2px 2px 4px rgba(0,0,0,0.8); z-index:1000; letter-spacing:1px; background: rgba(45, 35, 25, 0.9); padding: 8px 25px; border-radius: 4px; border: 1px solid #8C7B6A; text-align: center; line-height: 1.2;";
             document.getElementById('combat-screen-overlay').appendChild(label);
         }
+        
         label.style.display = 'block';
         const displayHits = Math.max(0, activeCombatState.unassignedHits);
-        label.innerHTML = `🔥 HITS PENDING: ${displayHits}`;
+        
+        const targetSide = activeCombatState.targetSide;
+        const powerName = (targetSide === 'attacker') ? activeCombatState.attackerPower : activeCombatState.defenderPower;
+        
+        // Multi-line HTML: Power on top, Hits below
+        label.innerHTML = `
+            <div style="color:#ff6666; font-size: 14px; text-transform: uppercase; margin-bottom: 4px; opacity: 0.9;">${powerName}</div>
+            <div style="font-size: 20px;">HITS PENDING: ${displayHits}</div>
+        `;
     }
 
     function addConfirmButton(callback) {
@@ -10695,7 +10801,12 @@
             btn = document.createElement('button');
             btn.id = 'combat-confirm-hits-btn';
             btn.textContent = 'CONFIRM CASUALTIES';
-            btn.style.cssText = "position:absolute; bottom:90px; left:50%; transform:translateX(-50%); padding:12px 40px; font-family:'Georgia', serif; font-size:16px; font-weight:bold; background:#8a1a1a; color:white; border:2px solid #ff4444; border-radius:5px; cursor:pointer; z-index:1000; box-shadow: 0 0 15px rgba(255,0,0,0.5);";
+            // Styled to match the side-panel "Proceed" buttons
+            btn.style.cssText = "position:absolute; bottom:90px; left:50%; transform:translateX(-50%); padding:12px 45px; font-family:'Georgia', serif; font-size:16px; font-weight:bold; background:#6D5C4C; color:#E0D8B0; border:1px solid #8C7B6A; border-radius:5px; cursor:pointer; z-index:1000; box-shadow: 0 4px 10px rgba(0,0,0,0.5); transition: background 0.2s;";
+            
+            btn.onmouseover = () => btn.style.background = "#8C7B6A";
+            btn.onmouseout = () => btn.style.background = "#6D5C4C";
+            
             document.getElementById('combat-screen-overlay').appendChild(btn);
         }
         btn.style.display = 'block';
@@ -10703,7 +10814,7 @@
 
         btn.onclick = () => {
             if (activeCombatState.unassignedHits > 0) {
-                alert(`You must assign ${activeCombatState.unassignedHits} more hits before continuing!`);
+                showCustomModal("Assignment Incomplete", `You must assign ${activeCombatState.unassignedHits} more hits to your units before confirming.`);
                 return;
             }
             btn.style.display = 'none';
@@ -10723,13 +10834,15 @@
         btnBox.id = 'combat-retreat-box';
         btnBox.style.cssText = "position:absolute; bottom:90px; left:50%; transform:translateX(-50%); display:flex; gap:20px; z-index:1000;";
         
+        // Muted deep red for Retreat
         let retreatBtn = document.createElement('button');
         retreatBtn.textContent = 'RETREAT';
-        retreatBtn.style.cssText = "padding:12px 40px; font-family:'Georgia', serif; font-size: 16px; background:#4a1a1a; color:white; border:2px solid #ff4444; border-radius:5px; cursor:pointer;";
+        retreatBtn.style.cssText = "padding:12px 40px; font-family:'Georgia', serif; font-size: 16px; font-weight:bold; background:#4a1a1a; color:#ffcccc; border:1px solid #7a2a2a; border-radius:5px; cursor:pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.5);";
         
+        // Muted deep green for Next Round
         let continueBtn = document.createElement('button');
         continueBtn.textContent = 'NEXT ROUND';
-        continueBtn.style.cssText = "padding:12px 40px; font-family:'Georgia', serif; font-size: 16px; background:#1a4a1a; color:white; border:2px solid #4CAF50; border-radius:5px; cursor:pointer;";
+        continueBtn.style.cssText = "padding:12px 40px; font-family:'Georgia', serif; font-size: 16px; font-weight:bold; background:#2d4a1a; color:#ccffcc; border:1px solid #3d6a2a; border-radius:5px; cursor:pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.5);";
         
         btnBox.appendChild(retreatBtn);
         btnBox.appendChild(continueBtn);
