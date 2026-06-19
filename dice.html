@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master 3D Flag Dice</title>
+    <style>
+        :root {
+            --die-size: 70px;
+            --die-color: #f5f5f5;
+            --felt-color: #1a331a;
+        }
+
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #0a0a0a;
+            font-family: 'Segoe UI', "Georgia", serif;
+            overflow: hidden;
+            color: white;
+        }
+
+        /* THEME STYLES */
+        .theme-ivory { --die-color: #f5f5f5; --accent: #111; }
+        .theme-victorian { --die-color: #3e2a1c; --accent: #f3e2c7; }
+        .theme-artdeco { --die-color: #111; --accent: gold; }
+        .theme-steampunk { --die-color: #6b4f2a; --accent: #e6c07b; }
+        .theme-medieval { --die-color: #2f3e46; --accent: #d9dcd6; }
+
+        .scene {
+            width: 95vw;
+            height: 65vh;
+            perspective: 1200px;
+            background: radial-gradient(circle at center, #2d5a2d 0%, var(--felt-color) 100%);
+            border-radius: 40px;
+            box-shadow: inset 0 0 100px rgba(0,0,0,0.9), 0 20px 50px rgba(0,0,0,0.5);
+            border: 12px solid #3d2b1f;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #dice-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+        }
+
+        .die-wrapper {
+            position: absolute;
+            width: var(--die-size);
+            height: var(--die-size);
+            transform-style: preserve-3d;
+            transition: left 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+                        top 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+                        transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            top: -200px; 
+        }
+
+        .shadow {
+            position: absolute;
+            width: var(--die-size);
+            height: var(--die-size);
+            background: rgba(0,0,0,0.5);
+            filter: blur(10px);
+            border-radius: 50%;
+            transform: scale(1.2) translateZ(-32px);
+            opacity: 0;
+            transition: opacity 0.6s;
+        }
+
+        .die {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.2, 0, 0.2, 1);
+        }
+
+        .face {
+            position: absolute;
+            width: var(--die-size);
+            height: var(--die-size);
+            background-color: var(--die-color);
+            background-size: cover;
+            background-position: center;
+            background-blend-mode: multiply;
+            border-radius: 12px;
+            display: grid;
+            grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+            padding: 8px;
+            box-sizing: border-box;
+            backface-visibility: hidden;
+            border: 2px solid rgba(0,0,0,0.4);
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.3);
+        }
+
+        /* Decorative Victorian/Steampunk Borders */
+        .face::before {
+            content: "";
+            position: absolute;
+            inset: 5px;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            pointer-events: none;
+        }
+
+        /* DOT STYLES */
+        .dot { 
+            width: 14px; 
+            height: 14px; 
+            background: var(--accent); 
+            border-radius: 50%; 
+            align-self: center; 
+            justify-self: center; 
+            position: relative;
+            z-index: 2;
+            transition: all 0.3s;
+        }
+
+        /* Dot Variations */
+        .dot.outline { box-shadow: 0 0 0 1.5px rgba(255,255,255,0.8), inset 1px 1px 2px rgba(0,0,0,0.5); }
+        
+        /* Backdrop Filters for Advanced Effects */
+        .dot.inverted  { background: transparent; backdrop-filter: invert(1); border: 1px solid rgba(255,255,255,0.2); }
+        .dot.darkened  { background: transparent; backdrop-filter: brightness(0.4) contrast(1.2); }
+        .dot.lightened { background: transparent; backdrop-filter: brightness(1.6); }
+        .dot.glowed    { background: var(--accent); box-shadow: 0 0 10px var(--accent); }
+
+        /* Face Rotations */
+        .f1 { transform: rotateY(0deg) translateZ(35px); }
+        .f6 { transform: rotateY(180deg) translateZ(35px); }
+        .f3 { transform: rotateY(90deg) translateZ(35px); }
+        .f4 { transform: rotateY(-90deg) translateZ(35px); }
+        .f2 { transform: rotateX(90deg) translateZ(35px); }
+        .f5 { transform: rotateX(-90deg) translateZ(35px); }
+
+        .f1 .dot:nth-child(1) { grid-area: 2 / 2; }
+        .f2 .dot:nth-child(1) { grid-area: 1 / 1; } .f2 .dot:nth-child(2) { grid-area: 3 / 3; }
+        .f3 .dot:nth-child(1) { grid-area: 1 / 1; } .f3 .dot:nth-child(2) { grid-area: 2 / 2; } .f3 .dot:nth-child(3) { grid-area: 3 / 3; }
+        .f4 .dot:nth-child(1) { grid-area: 1 / 1; } .f4 .dot:nth-child(2) { grid-area: 1 / 3; } .f4 .dot:nth-child(3) { grid-area: 3 / 1; } .f4 .dot:nth-child(4) { grid-area: 3 / 3; }
+        .f5 .dot:nth-child(1) { grid-area: 1 / 1; } .f5 .dot:nth-child(2) { grid-area: 1 / 3; } .f5 .dot:nth-child(3) { grid-area: 2 / 2; } .f5 .dot:nth-child(4) { grid-area: 3 / 1; } .f5 .dot:nth-child(5) { grid-area: 3 / 3; }
+        .f6 .dot:nth-child(1) { grid-area: 1 / 1; } .f6 .dot:nth-child(2) { grid-area: 1 / 3; } .f6 .dot:nth-child(3) { grid-area: 2 / 1; } .f6 .dot:nth-child(4) { grid-area: 2 / 3; } .f6 .dot:nth-child(5) { grid-area: 3 / 1; } .f6 .dot:nth-child(6) { grid-area: 3 / 3; }
+
+        /* CONTROL PANEL */
+        .controls {
+            margin-top: 20px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            background: #1a1a1a;
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid #333;
+            font-size: 14px;
+        }
+        .control-group { display: flex; flex-direction: column; gap: 5px; }
+        button { 
+            padding: 10px; border-radius: 8px; border: none; cursor: pointer; 
+            background: #e67e22; color: white; font-weight: bold;
+        }
+        select, input[type="number"] { padding: 8px; border-radius: 5px; background: #333; color: white; border: 1px solid #555; }
+        label { font-weight: bold; color: #aaa; text-transform: uppercase; font-size: 11px; }
+    </style>
+</head>
+<body class="theme-ivory">
+
+    <div class="scene">
+        <div id="dice-container"></div>
+    </div>
+
+    <div class="controls">
+        <div class="control-group">
+            <label>Theme & Pool</label>
+            <select id="themeSelect" onchange="updateTheme()">
+                <option value="theme-ivory">Classic Ivory</option>
+                <option value="theme-victorian">Victorian</option>
+                <option value="theme-artdeco">Art Deco</option>
+                <option value="theme-steampunk">Steampunk</option>
+                <option value="theme-medieval">Medieval</option>
+            </select>
+            <label>Flag Pool Size (1-38)</label>
+            <input type="number" id="poolSize" value="38" min="1" max="38">
+        </div>
+
+        <div class="control-group">
+            <label>Dot Style</label>
+            <select id="dotEffect">
+                <option value="standard">Standard Solid</option>
+                <option value="inverted">Inverted</option>
+                <option value="darkened">Darkened Space</option>
+                <option value="lightened">Lightened Space</option>
+                <option value="glowed">Glow</option>
+            </select>
+            <div style="display:flex; align-items:center; gap:10px; margin-top:5px;">
+                <input type="checkbox" id="dotOutline" checked> <span style="font-size:12px">White Rim</span>
+                <input type="checkbox" id="flagsToggle" checked> <span style="font-size:12px">Flags</span>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label>Action</label>
+            <input type="number" id="diceCount" value="5" min="1" max="15">
+            <button onclick="rollAll()">ROLL DICE</button>
+        </div>
+    </div>
+
+    <script>
+        const container = document.getElementById('dice-container');
+        const DIE_RADIUS = 45; 
+
+        const masterFlagList = [
+            "Afghanistan.png", "Argentina.png", "Bolivia.png", "Brazil.png", "Bulgaria.png", 
+            "Chile.png", "China.png", "Colombia.png", "Commonwealth.png", "Crete.png", 
+            "Ecuador.png", "Eire.png", "Finland.png", "France.png", "Germany.png", 
+            "Greece.png", "Iran.png", "Iraq.png", "Italy.png", "Japan.png", 
+            "Liberia.png", "Mongolia.png", "Netherlands.png", "Paraguay.png", "Peru.png", 
+            "Portugal.png", "Saudi Arabia.png", "Spain.png", "Sweden.png", "Switzerland.png", 
+            "Thailand.png", "Turkey.png", "UK.png", "Uruguay.png", "US.png", 
+            "USSR.png", "Venezuela.png", "Yugoslavia.png"
+        ];
+
+        let currentPool = [];
+
+        function updateTheme() {
+            document.body.className = document.getElementById('themeSelect').value;
+        }
+
+        function getDotClasses() {
+            let classes = "dot";
+            if (document.getElementById('dotOutline').checked) classes += " outline";
+            const effect = document.getElementById('dotEffect').value;
+            if (effect !== 'standard') classes += " " + effect;
+            return classes;
+        }
+
+        function getRandomFlagStyle() {
+            if (!document.getElementById('flagsToggle').checked) return "";
+            const flag = currentPool[Math.floor(Math.random() * currentPool.length)];
+            return `background-image: url('flags/${encodeURIComponent(flag)}')`;
+        }
+
+        function createDie() {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'die-wrapper';
+            const dotHTML = `<div class="${getDotClasses()}"></div>`;
+            
+            wrapper.innerHTML = `
+                <div class="shadow"></div>
+                <div class="die">
+                    <div class="face f1" style="${getRandomFlagStyle()}">${dotHTML}</div>
+                    <div class="face f6" style="${getRandomFlagStyle()}">${dotHTML.repeat(6)}</div>
+                    <div class="face f3" style="${getRandomFlagStyle()}">${dotHTML.repeat(3)}</div>
+                    <div class="face f4" style="${getRandomFlagStyle()}">${dotHTML.repeat(4)}</div>
+                    <div class="face f2" style="${getRandomFlagStyle()}">${dotHTML.repeat(2)}</div>
+                    <div class="face f5" style="${getRandomFlagStyle()}">${dotHTML.repeat(5)}</div>
+                </div>
+            `;
+            return wrapper;
+        }
+
+        function rollAll() {
+            container.innerHTML = '';
+            
+            // Generate pool based on input
+            const poolSize = Math.max(1, Math.min(38, parseInt(document.getElementById('poolSize').value)));
+            const shuffled = [...masterFlagList].sort(() => 0.5 - Math.random());
+            currentPool = shuffled.slice(0, poolSize);
+
+            const count = Math.min(parseInt(document.getElementById('diceCount').value), 15);
+            const diceData = [];
+
+            for (let i = 0; i < count; i++) {
+                const x = (Math.random() - 0.5) * (window.innerWidth * 0.5);
+                const y = (Math.random() - 0.5) * (window.innerHeight * 0.3);
+                diceData.push({ x, y, result: Math.floor(Math.random() * 6) + 1, wrapper: createDie() });
+            }
+
+            // Simple Collision
+            for (let it = 0; it < 60; it++) {
+                for (let j = 0; j < diceData.length; j++) {
+                    for (let k = j + 1; k < diceData.length; k++) {
+                        let dx = diceData[k].x - diceData[j].x;
+                        let dy = diceData[k].y - diceData[j].y;
+                        let dist = Math.sqrt(dx*dx + dy*dy);
+                        if (dist < DIE_RADIUS * 1.8) {
+                            let overlap = (DIE_RADIUS * 1.8 - dist) / 2;
+                            diceData[j].x -= (dx/dist) * overlap;
+                            diceData[j].y -= (dy/dist) * overlap;
+                            diceData[k].x += (dx/dist) * overlap;
+                            diceData[k].y += (dy/dist) * overlap;
+                        }
+                    }
+                }
+            }
+
+            diceData.forEach((data, i) => {
+                const { wrapper, x, y, result } = data;
+                container.appendChild(wrapper);
+
+                const rotations = { 1:{x:0,y:0}, 2:{x:-90,y:0}, 3:{x:0,y:90}, 4:{x:0,y:-90}, 5:{x:90,y:0}, 6:{x:180,y:0} };
+                const target = rotations[result];
+                const spinX = (Math.random() > 0.5 ? 720 : 1080) * (Math.random() > 0.5 ? 1 : -1);
+                const spinY = (Math.random() > 0.5 ? 720 : 1080) * (Math.random() > 0.5 ? 1 : -1);
+
+                requestAnimationFrame(() => {
+                    setTimeout(() => {
+                        wrapper.style.left = `calc(50% + ${x}px - var(--die-size)/2)`;
+                        wrapper.style.top = `calc(50% + ${y}px - var(--die-size)/2)`;
+                        wrapper.style.transform = `scale(1) rotateZ(${Math.random()*40-20}deg)`;
+                        wrapper.querySelector('.die').style.transform = `rotateX(${target.x + spinX}deg) rotateY(${target.y + spinY}deg)`;
+                        wrapper.querySelector('.shadow').style.opacity = '1';
+                    }, i * 40);
+                });
+            });
+        }
+
+        window.onload = rollAll;
+    </script>
+</body>
+</html>

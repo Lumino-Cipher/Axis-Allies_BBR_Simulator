@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cinematic Flag Simulator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { margin: 0; overflow: hidden; background-color: #080808; font-family: sans-serif; }
+        canvas { display: block; }
+        .controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(12px);
+            padding: 1rem 1.5rem;
+            border-radius: 3rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            z-index: 100;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .upload-btn {
+            background: #6366f1;
+            padding: 0.6rem 1.4rem;
+            border-radius: 2rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 600;
+            font-size: 0.85rem;
+            display: inline-block;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .upload-btn:hover { background: #4f46e5; transform: scale(1.05); }
+        input[type="file"] { display: none; }
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.7rem;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        .dot {
+            width: 6px;
+            height: 6px;
+            background: #4ade80;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(1.2); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="controls">
+        <label class="upload-btn">
+            Upload Image
+            <input type="file" id="imageUpload" accept="image/*">
+        </label>
+        <div class="status-badge">
+            <div class="dot"></div>
+            <span id="status">Sustained High-Wind Engine</span>
+        </div>
+    </div>
+
+    <script>
+        let scene, camera, renderer, clothGeometry, clothMaterial, mesh;
+        let clock = new THREE.Clock();
+        
+        const params = {
+            baseWind: 2.4, 
+            baseSpeed: 2.0,
+            segments: 140,
+            // Track state for smoothing
+            currentWind: 2.4,
+            currentSpeed: 2.0
+        };
+
+        const vertexShader = `
+            varying vec2 vUv;
+            varying vec3 vNormal;
+            varying vec3 vViewPosition;
+            varying float vDisplacement;
+            
+            uniform float uTime;
+            uniform float uWindStrength;
+            uniform float uWaveSpeed;
+
+            float hash(float n) { return fract(sin(n) * 43758.5453123); }
+            float noise(vec2 x) {
+                vec2 p = floor(x);
+                vec2 f = fract(x);
+                f = f*f*(3.0-2.0*f);
+                float n = p.x + p.y*57.0;
+                return mix(mix(hash(n+0.0), hash(n+1.0), f.x),
+                           mix(hash(n+57.0), hash(n+58.0), f.x), f.y);
+            }
+
+            float fbm(vec2 p) {
+                float f = 0.0;
+                f += 0.5000 * noise(p); p = p * 2.02;
+                f += 0.2500 * noise(p); p = p * 2.03;
+                f += 0.1250 * noise(p); p = p * 2.01;
+                f += 0.0625 * noise(p);
+                return f;
+            }
+
+            void main() {
+                vUv = uv;
+                vec3 pos = position;
+                
+                float anchor = smoothstep(-4.5, -0.5, pos.x);
+                float t = uTime;
+                
+                float wave1 = sin(pos.x * 0.7 - t) * cos(pos.y * 0.3 + t * 0.4);
+                vec2 fbmPos = vec2(pos.x * 0.45 - t * 0.65, pos.y * 0.4);
+                float wave2 = fbm(fbmPos) * 2.0 - 1.0;
+                
+                float displacement = (wave1 * 0.6 + wave2 * 1.2) * uWindStrength * anchor;
+                
+                if(displacement > 0.0) displacement *= 0.5;
+                
+                pos.z += displacement;
+                pos.x -= abs(displacement) * 0.08; 
+                pos.y += sin(pos.x * 0.25 + t) * 0.15 * uWindStrength * anchor;
+                
+                vDisplacement = displacement;
+
+                vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
+                vViewPosition = -mvPosition.xyz;
+                
+                float delta = 0.05;
+                float d1 = (sin((pos.x + delta) * 0.7 - t) * cos(pos.y * 0.3 + t * 0.4) * 0.6 + (fbm(vec2(pos.x + delta * 0.45 - t * 0.65, pos.y * 0.4)) * 2.0 - 1.0) * 1.2) * uWindStrength * anchor;
+                float d2 = (sin(pos.x * 0.7 - t) * cos((pos.y + delta) * 0.3 + t * 0.4) * 0.6 + (fbm(vec2(pos.x * 0.45 - t * 0.65, (pos.y + delta) * 0.4)) * 2.0 - 1.0) * 1.2) * uWindStrength * anchor;
+                
+                vec3 tangent = normalize(vec3(delta, 0.0, d1 - displacement));
+                vec3 bitangent = normalize(vec3(0.0, delta, d2 - displacement));
+                vNormal = normalize(normalMatrix * cross(tangent, bitangent));
+                
+                gl_Position = projectionMatrix * mvPosition;
+            }
+        `;
+
+        const fragmentShader = `
+            varying vec2 vUv;
+            varying vec3 vNormal;
+            varying vec3 vViewPosition;
+            varying float vDisplacement;
+            
+            uniform sampler2D uTexture;
+            uniform vec3 uLightDirection;
+
+            void main() {
+                vec4 texColor = texture2D(uTexture, vUv);
+                
+                vec3 normal = normalize(vNormal);
+                if (!gl_FrontFacing) normal = -normal;
+                
+                vec3 viewDir = normalize(vViewPosition);
+                vec3 lightDir = normalize(uLightDirection);
+                
+                float dotNL = dot(normal, lightDir);
+                
+                float diffuse = smoothstep(-0.4, 0.5, dotNL);
+                diffuse = mix(diffuse, 1.0, 0.15); 
+                
+                float creviceShadow = smoothstep(-2.8, -1.0, vDisplacement);
+                creviceShadow = mix(0.45, 1.0, creviceShadow);
+                
+                vec3 halfDir = normalize(lightDir + viewDir);
+                float spec = pow(max(dot(normal, halfDir), 0.0), 24.0) * 0.3;
+                
+                vec3 ambient = vec3(0.5); 
+                
+                vec3 lightImpact = ambient + (diffuse * 0.6);
+                vec3 color = texColor.rgb * lightImpact * creviceShadow;
+                
+                color += spec * texColor.rgb;
+                
+                gl_FragColor = vec4(color, 1.0);
+            }
+        `;
+
+        function init() {
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(0, 0, 14);
+
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            document.body.appendChild(renderer.domElement);
+
+            const defaultTexture = createDefaultTexture();
+            clothGeometry = new THREE.PlaneGeometry(10, 6, params.segments, params.segments);
+            
+            clothMaterial = new THREE.ShaderMaterial({
+                uniforms: {
+                    uTime: { value: 0 },
+                    uWindStrength: { value: params.baseWind },
+                    uWaveSpeed: { value: params.baseSpeed },
+                    uTexture: { value: defaultTexture },
+                    uLightDirection: { value: new THREE.Vector3(0.3, 0.3, 1.0).normalize() }
+                },
+                vertexShader: vertexShader,
+                fragmentShader: fragmentShader,
+                side: THREE.DoubleSide
+            });
+
+            mesh = new THREE.Mesh(clothGeometry, clothMaterial);
+            scene.add(mesh);
+
+            window.addEventListener('resize', onWindowResize);
+            document.getElementById('imageUpload').addEventListener('change', handleImageUpload);
+
+            mesh.rotation.y = -0.1;
+
+            let isDragging = false;
+            let previousMouse = { x: 0, y: 0 };
+            window.addEventListener('mousedown', () => isDragging = true);
+            window.addEventListener('mouseup', () => isDragging = false);
+            window.addEventListener('mousemove', (e) => {
+                if(isDragging) {
+                    mesh.rotation.y += (e.clientX - previousMouse.x) * 0.005;
+                    mesh.rotation.x += (e.clientY - previousMouse.y) * 0.005;
+                }
+                previousMouse = { x: e.clientX, y: e.clientY };
+            });
+
+            animate();
+        }
+
+        function createDefaultTexture() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 1024;
+            canvas.height = 640;
+            const ctx = canvas.getContext('2d');
+            for(let i=0; i<13; i++) {
+                ctx.fillStyle = i % 2 === 0 ? '#B22234' : '#FFFFFF';
+                ctx.fillRect(0, (i * canvas.height) / 13, canvas.width, canvas.height / 13);
+            }
+            ctx.fillStyle = '#3C3B6E';
+            ctx.fillRect(0, 0, canvas.width * 0.45, (canvas.height * 7) / 13);
+            ctx.fillStyle = "white";
+            for(let i=0; i<6; i++) {
+                for(let j=0; j<5; j++) {
+                    const x = 35 + i * 70;
+                    const y = 35 + j * 65;
+                    ctx.beginPath();
+                    ctx.arc(x, y, 4, 0, Math.PI*2);
+                    ctx.fill();
+                }
+            }
+            const tex = new THREE.CanvasTexture(canvas);
+            tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+            return tex;
+        }
+
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const status = document.getElementById('status');
+            const originalText = status.innerText;
+            status.innerText = "Processing...";
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const tex = new THREE.Texture(img);
+                    tex.needsUpdate = true;
+                    clothMaterial.uniforms.uTexture.value = tex;
+                    const aspect = img.width / img.height;
+                    mesh.scale.set(aspect / 1.66, 1, 1);
+                    status.innerText = "Texture Applied";
+                    setTimeout(() => status.innerText = originalText, 2000);
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        let persistentTime = 0; // Add this global variable
+
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            // Get the time passed since the last frame (usually ~0.016s)
+            const deltaTime = clock.getDelta();
+            
+            if (clothMaterial) {
+                // 1. CALCULATE TARGETS
+                // We keep the wind/speed targets high so it feels "Sustained"
+                const targetWind = params.baseWind + (Math.sin(clock.elapsedTime * 0.15) * 0.4 + 0.3);
+                const targetSpeed = params.baseSpeed + (Math.cos(clock.elapsedTime * 0.1) * 0.3);
+
+                // 2. SMOOTH VALUES (LERP)
+                params.currentWind += (targetWind - params.currentWind) * 0.02;
+                params.currentSpeed += (targetSpeed - params.currentSpeed) * 0.02;
+
+                // 3. ACCUMULATE TIME (The Magic Fix)
+                // Instead of TotalTime * Speed, we add (FrameTime * Speed) to a counter
+                persistentTime += deltaTime * params.currentSpeed;
+
+                // 4. UPDATE UNIFORMS
+                clothMaterial.uniforms.uTime.value = persistentTime;
+                clothMaterial.uniforms.uWindStrength.value = params.currentWind;
+                // uWaveSpeed is now "baked" into persistentTime, but we can pass it 
+                // if the shader needs it for frequency adjustments.
+                clothMaterial.uniforms.uWaveSpeed.value = params.currentSpeed;
+            }
+            
+            renderer.render(scene, camera);
+        }
+        window.onload = init;
+    </script>
+</body>
+</html>

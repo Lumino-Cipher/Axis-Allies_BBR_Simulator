@@ -1712,7 +1712,7 @@
         /* --- Custom Modal --- */
         #custom-modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7); z-index: 4000; display: none;
+            background: rgba(0,0,0,0.7); z-index: 99999; display: none;
             justify-content: center; align-items: center;
         }
         .custom-modal-box {
@@ -1789,9 +1789,9 @@
             transition: opacity 0.8s ease-in-out, transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), backdrop-filter 0.8s ease-in-out;
             pointer-events: auto; /* Catch all clicks while open */
             font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
-            color: #d8c3a5; /* Vintage sand text */
-        }
-        
+                color: #d8c3a5;
+            
+}        
         #combat-screen-overlay.theme-land {
             background: radial-gradient(circle at center, #3d1616 0%, #150404 100%); /* Darker Land */
         }
@@ -1829,13 +1829,13 @@
         }
 
         .combat-header {
-            position: absolute; top: 0; left: 0; width: 100%; height: 180px;
+            position: absolute; top: 0; left: 0; width: 100%; height: 120px; /* Shorter header */
             display: flex; justify-content: space-between; align-items: flex-start;
         }
 
         .combat-corner-text {
-            position: relative; z-index: 2; font-size: 28px; font-weight: bold; 
-            letter-spacing: 4px; padding: 40px; text-shadow: 2px 2px 10px #000;
+            position: relative; z-index: 2; font-size: 20px; font-weight: bold; 
+            letter-spacing: 3px; padding: 25px; text-shadow: 2px 2px 10px #000;
         }
         
         .combat-center-titles {
@@ -1843,24 +1843,20 @@
         }
         
         .combat-title-main { font-size: 22px; letter-spacing: 6px; color: #b59b72; margin-bottom: 5px; opacity: 0.8;}
-        .combat-title-space { font-size: 46px; font-weight: bold; text-transform: uppercase; text-shadow: 0 0 20px rgba(0,0,0,0.9); }
+        .combat-title-space { font-size: 32px; font-weight: bold; text-transform: uppercase; text-shadow: 0 0 20px rgba(0,0,0,0.9); }
 
         .combat-board {
-            position: absolute; top: 120px; left: 0; width: 100%; height: calc(100% - 200px); /* Moved up to create more vertical space */
-            display: flex; justify-content: space-between; padding: 0 30px; box-sizing: border-box;
+            position: absolute; top: 100px; left: 0; width: 100%; height: calc(100% - 150px);
+            display: flex; justify-content: space-between; padding: 0 20px; box-sizing: border-box;
         }
         
-        .combat-side { width: 35%; display: flex; flex-direction: column; gap: 5px; height: 100%; } /* Made responsive to parent height */
-        
-        .combat-row {
-            flex: 1; /* Automatically resize dynamically without scrollbars */
-            min-height: 60px;
-            max-height: 100px;
-            background: rgba(0,0,0,0.25); border: 1px solid rgba(216, 195, 165, 0.08);
-            border-radius: 8px; display: flex; align-items: center; padding: 5px 15px;
-            box-shadow: inset 0 0 15px rgba(0,0,0,0.4);
-            justify-content: space-between;
-            overflow: visible;
+        .combat-side {
+            width: 35%; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 5px; 
+            height: 100%;
+            overflow: visible !important; /* Ensure nothing in the side-column clips the buttons */
         }
 
         .combat-units-area {
@@ -1869,14 +1865,7 @@
             overflow: visible; /* Removes scrollbar */
         }
 
-        .combat-unit-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 8px; /* Spacing between unit and buttons */
-            height: auto; 
-        }
+        
 
         .combat-unit-wrapper {
             width: 80px;  /* Increased 80x80 size */
@@ -1899,87 +1888,158 @@
             font-family: Arial, sans-serif !important; 
         }
 
+        .combat-unit-wrapper {
+            width: 80px;
+            height: 80px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* --- Compact Combat Unit UI --- */
+        .combat-unit-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            width: 64px; /* Narrower width for tighter grouping */
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        /* Fixed Damage Controls: Professional Split-Bar UI */
         .combat-damage-controls {
             display: flex;
-            align-items: center;
+            align-items: stretch;
             justify-content: space-between;
-            background: #1a1a1a;
-            border: 2px solid #8C7B6A;
-            border-radius: 4px;
-            padding: 0;
+            background: #121417;
+            border: 1px solid #8C7B6A;
+            border-radius: 3px;
+            width: 48px; /* Fixed width */
+            height: 18px; /* Fixed height */
+            margin-top: 2px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.5);
             z-index: 10;
-            width: 50px;  /* Much smaller overall width */
-            height: 24px; /* Much smaller height */
-            box-sizing: border-box;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.8);
-            font-family: Arial, sans-serif;
         }
 
         .combat-damage-btn {
-            background: rgba(255,255,255,0.1);
+            background: #2a221d;
             border: none;
-            color: #d8c3a5;
-            width: 35%;
-            height: 100%;
-            font-size: 14px; /* Shrunk font size */
+            color: #ffd700;
+            flex: 0 0 16px; /* Buttons take exactly 16px each */
+            font-size: 14px;
             cursor: pointer;
             font-weight: bold;
-            transition: background 0.2s, color 0.2s;
             display: flex;
             align-items: center;
             justify-content: center;
+            padding: 0;
+            line-height: 1;
         }
 
         .combat-damage-btn:hover {
-            background: rgba(255,255,255,0.2);
-            color: #ffdd00;
+            background: #4a3f35;
+            color: #fff;
         }
 
         .combat-damage-val {
-            color: #fff;
-            font-size: 14px; /* Shrunk font size */
+            background: #000;
+            color: #ff4444; /* Damage numbers in Red */
+            font-size: 12px;
             font-weight: bold;
             flex: 1;
-            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: Arial, sans-serif;
+            border-left: 1px solid #444;
+            border-right: 1px solid #444;
         }
 
-        /* Fire-themed hit markers */
         .fire-hit-marker {
             position: absolute;
-            top: -5px;
-            right: -5px;
-            background: linear-gradient(135deg, #8a0000, #ff4400);
-            color: white;
-            border: 2px solid #3d0000;
-            border-radius: 50% 50% 0 50%;
-            transform: rotate(45deg);
-            width: 28px;
-            height: 28px;
+            top: 2px;
+            right: 2px;
+            background: radial-gradient(circle at center, #ff8c00 0%, #e60000 70%, #3d0000 100%);
+            border: 1.5px solid #ffd700;
+            border-radius: 50% 50% 20% 50%;
+            width: 18px; /* Smaller flame */
+            height: 18px;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-family: Arial, sans-serif;
-            font-weight: bold;
-            font-size: 16px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.8);
-            pointer-events: none;
             z-index: 20;
+            pointer-events: none;
         }
 
-        /* 3D Dice Simulation Layer */
-        #dice-simulation-layer {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 1px;
-            height: 1px;
-            perspective: 1000px;
-            pointer-events: none;
-            z-index: 9999; /* Ensure it stays on top of the combat screen */
+        .fire-hit-marker span {
+            color: white;
+            font-size: 11px;
+            text-shadow: 1px 1px 1px black;
+        }
+
+        /* Ensure row rendering order doesn't hide buttons of the row above */
+        .combat-row:hover {
+            z-index: 10;
+        }/* Fix layering: Ensure rows higher up are "stacked" on top of rows below */
+
+        .combat-row {
+            flex: 1;
+            min-height: 50px;
+            max-height: 90px; /* Tighter rows */
+            background: rgba(0,0,0,0.25); 
+            border: 1px solid rgba(216, 195, 165, 0.08);
+            border-radius: 8px; 
+            display: flex; 
+            align-items: center; 
+            padding: 0 10px;
+            margin-bottom: 2px;
+            position: relative;
+        }
+
+
+        .combat-unit-wrapper svg {
+            display: block; /* Remove baseline whitespace */
+        }
+
+        .combat-unit-wrapper {
+            width: 60px; /* Scaled down from 90 */
+            height: 60px;
+            position: relative;
             display: flex;
             justify-content: center;
             align-items: center;
+        }
+
+        
+
+        .combat-unit-wrapper {
+            width: 60px; /* Scaled down from 90 */
+            height: 60px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+
+        /* Ensure the text inside the flame is never rotated */
+        .fire-hit-marker span {
+            transform: rotate(0deg) !important;
+            text-shadow: 1px 1px 2px #000;
+        }
+
+        /* --- High-Fidelity 3D Dice --- */
+        #dice-simulation-layer {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            perspective: 2000px; /* Strong perspective for 3D depth */
+            pointer-events: none;
+            z-index: 9999;
         }
 
         .die-3d {
@@ -1987,29 +2047,66 @@
             width: 45px;
             height: 45px;
             transform-style: preserve-3d;
-            transition: transform 2s cubic-bezier(.25,.8,.25,1); /* Smooth 2s transition */
+            /* Fast, heavy slam animation */
+            transition: transform 0.7s cubic-bezier(0.2, 0, 0.2, 1.15), opacity 0.2s;
         }
 
         .die-face {
             position: absolute;
             width: 45px;
             height: 45px;
+            background: #ffffff;
+            border: 1px solid #ccc;
+            border-radius: 4px;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 20px;
-            font-weight: bold;
-            border-radius: 6px;
-            border: 2px solid rgba(0,0,0,0.6);
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.5), inset 0 0 15px rgba(255,255,255,0.05), 0 4px 10px rgba(0,0,0,0.6);
-            font-family: 'Georgia', serif;
+            box-sizing: border-box;
+            backface-visibility: visible;
+            /* Subtle gradient makes the 2D surface look like it has lighting */
+            background: radial-gradient(circle at 20% 20%, #ffffff 0%, #e0e0e0 100%);
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
         }
 
-        /* Victorian Theme ported from your snippet */
-        .die-3d.victorian .die-face {
-            background: repeating-radial-gradient(circle at 20% 20%, rgba(255,255,255,0.07) 0 2px, transparent 3px 5px), linear-gradient(145deg, #3e2a1c, #1f140d);
-            color: #f3e2c7;
-            border-color: #b89c6d;
+        /* Inner shadow for the dice when they land */
+        .die-3d.landed-hit .die-face {
+            background: radial-gradient(circle at 20% 20%, #b02020 0%, #8a1a1a 100%) !important;
+            border-color: #631212 !important;
+        }
+
+        /* --- Modern White Dice --- */
+        .die-3d .die-face {
+            background: #ffffff !important;
+            border: 1px solid #d0d0d0 !important;
+            border-radius: 6px;
+            box-shadow: inset 0 0 8px rgba(0,0,0,0.1), 0 2px 4px rgba(0,0,0,0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* Ensure faces don't disappear */
+            backface-visibility: visible; 
+        }
+
+        /* Hit Glow */
+        .die-3d.is-hit .die-face {
+            border-color: #ff4444 !important;
+            box-shadow: inset 0 0 10px rgba(255,0,0,0.1), 0 0 15px rgba(255,68,68,0.5);
+        }
+        .die-3d.is-hit .pip { background-color: #cc0000 !important; }
+
+        .pip-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            width: 28px;
+            height: 28px;
+        }
+        .pip {
+            background-color: #222;
+            border-radius: 50%;
+            width: 6px;
+            height: 6px;
+            margin: auto;
         }
 
         /* Ornamental overlay */
@@ -2063,7 +2160,269 @@
         }
 
 
-        
+        /* Add a "Printed Grain" texture overlay to the map */
+        .svg-content.theme-vintage-tactical::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            opacity: 0.15;
+            background-image: url('https://www.transparenttextures.com/patterns/felt-pads.png'); /* Grainy paper feel */
+        }
+
+        /* Aged Paper Texture for UI */
+        .side-panel, .action-window, .start-box {
+            background-image: url('https://www.transparenttextures.com/patterns/old-mathematics.png') !important;
+            border: 3px double #5d4037 !important;
+            box-shadow: inset 0 0 50px rgba(0,0,0,0.2), 5px 5px 15px rgba(0,0,0,0.5) !important;
+        }
+
+        /* Ornate Text Style */
+        .vintage-header {
+            font-family: 'Georgia', serif;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 2px solid #5d4037;
+            color: #3e2723;
+        }
+
+        /* Enhance unit visibility on dark land */
+        .theme-vintage-tactical .unit-background-circle {
+            stroke: #ffffff !important;
+            stroke-width: 1px !important;
+            fill-opacity: 1 !important;
+        }
+
+        /* Vintage Background for the workspace */
+        body.theme-vintage-tactical-active {
+            background-color: #d2c1a5 !important;
+            background-image: url('https://www.transparenttextures.com/patterns/cream-paper.png');
+        }
+
+        /* Tactical Shading for territories */
+        .theme-vintage-tactical .svg-content {
+            background-color: #9ba7a1 !important; /* The Military Blue-Grey Sea */
+        }
+
+        /* Border Shading Effect: Adds an inner glow to every territory */
+        .tactical-border-shading {
+            filter: drop-shadow(0px 0px 3px rgba(0,0,0,0.5));
+        }
+
+        /* Territory Labels: White, Sans-Serif, All-Caps, NOT Bold */
+        .theme-vintage-tactical .territory-label {
+            font-family: 'Arial', sans-serif !important;
+            font-weight: normal !important;
+            fill: #ffffff !important;
+            stroke: rgba(0,0,0,0.5) !important;
+            stroke-width: 0.3px !important;
+            letter-spacing: 1.5px;
+            paint-order: stroke;
+        }
+
+        /* Neutral Texture Fix: Ensure a parchment base so it doesn't look like water */
+        .theme-vintage-neutral-textured {
+            fill: #c2b280 !important; /* Base Tan */
+            fill-opacity: 1 !important;
+            filter: contrast(1.1) brightness(0.9);
+        }
+
+
+        /* Cinematic rolling power indicator */
+        #rolling-status-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            z-index: 10001;
+            opacity: 0;
+            transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.2, 1, 0.3, 1);
+            pointer-events: none;
+        }
+
+        #rolling-status-indicator.visible {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .rolling-flag-container {
+            width: 110px; /* Added fixed width */
+            height: 70px; 
+            filter: drop-shadow(0 8px 25px rgba(0,0,0,0.9));
+            border: 2px solid #8C7B6A; /* Themed border */
+            border-radius: 4px;
+            overflow: hidden;
+            background-size: cover;      /* Ensure flag fills the box */
+            background-position: center; /* Center the flag crop */
+            background-color: #2d2319;   /* Fallback color */
+        }
+
+        .rolling-label-text {
+            color: #ffd700;
+            font-family: 'Georgia', serif;
+            font-size: 16px;
+            font-weight: bold;
+            letter-spacing: 4px;
+            text-shadow: 2px 2px 8px #000, 0 0 10px rgba(255, 215, 0, 0.3);
+            text-transform: uppercase;
+        }
+
+        /* --- Cinematic Hit Dice --- */
+        .die-3d.landed-hit .die-face {
+            background: #8a1a1a !important; /* Deep Vintage Red */
+            border-color: #631212 !important;
+            transition: background-color 0.5s ease;
+        }
+
+        .die-3d.landed-hit .pip {
+            background-color: #f0f0f0 !important; /* White dots on red */
+        }
+
+        /* --- Victory/Loss Screen --- */
+        /* --- Cinematic Full-Screen Result --- */
+        /* --- Cinematic Full-Screen Result --- */
+        #combat-result-container {
+            position: fixed;
+            top: 0;
+            left: 0; 
+            width: 100vw;
+            height: 100vh;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 6000;
+            background: #000; /* Dark background behind the flag */
+            overflow: hidden;
+        }
+
+        #result-bg-flag {
+            position: absolute;
+            top: -40%;    /* Increased bleed to ensure it fills screen during animation */
+            left: -40%;   /* Increased bleed */
+            width: 180%;  /* Makes the flag significantly larger */
+            height: 180%; 
+            opacity: 0.8; 
+            pointer-events: none;
+            z-index: 1;
+            /* Vintage Dark Effect: Reduces brightness, adds sepia tint, and boosts contrast */
+            filter: brightness(0.35) sepia(0.3) contrast(1.3) saturate(0.8);
+        }
+
+        .result-vertical-block {
+            position: relative;
+            z-index: 2;
+            width: 500px;
+            height: 100%;
+            /* Stronger gradient to ensure text readability against an opaque flag */
+            background: linear-gradient(to right, 
+                rgba(0,0,0,0) 0%, 
+                rgba(0,0,0,0.85) 15%, 
+                rgba(0,0,0,0.95) 50%, 
+                rgba(0,0,0,0.85) 85%, 
+                rgba(0,0,0,0) 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+            backdrop-filter: blur(2px);
+        }
+
+        .result-sub-text {
+            font-size: 16px;
+            color: #aaa;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+            text-transform: none;
+        }
+
+        .result-location {
+            color: #ffcc00; /* Distinct color for territory */
+            font-size: 28px;
+            font-weight: bold;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+        }
+
+        .result-status {
+            font-size: 80px; /* Very large like image */
+            font-weight: bold;
+            letter-spacing: -2px;
+            text-transform: uppercase;
+            margin-bottom: 50px;
+            text-shadow: 0 0 30px rgba(0,0,0,1);
+            font-style: italic; /* Dynamic look without being cursive */
+        }
+
+        .result-status.victory { color: #ffffff; border-top: 1px solid rgba(255,255,255,0.2); border-bottom: 1px solid rgba(255,255,255,0.2); padding: 10px 0; }
+        .result-status.loss { color: #ff4444; border-top: 1px solid rgba(255,68,68,0.2); border-bottom: 1px solid rgba(255,68,68,0.2); padding: 10px 0; }
+
+        .result-stats-row {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin-bottom: 60px;
+        }
+
+        .stat-header {
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            margin-top: 10px;
+        }
+
+        .stat-power-label {
+            font-size: 10px;
+            color: #888;
+            margin-bottom: 5px;
+        }
+
+        .stat-flag {
+            width: 50px; height: 50px;
+            border-radius: 50%; /* Round icons like the screenshot */
+            border: 2px solid #8C7B6A;
+            background-size: cover;
+            background-position: center;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+        }
+
+        .stat-ipc {
+            color: #fff;
+            font-size: 18px;
+            margin-top: 5px;
+        }
+
+        .close-combat-btn {
+            background: #8a1a1a;
+            color: #E0D8B0;
+            border: none;
+            padding: 15px 50px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            letter-spacing: 2px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+
+        /* Centering the flags exactly above the Attacker/Defender text */
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* This forces the flag to center horizontally over the labels */
+            width: 120px; /* Fixed width ensures the two sides stay balanced */
+        }
+
+        #res-sub-msg {
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
     </style>
     <script type="importmap">
         {
@@ -2173,6 +2532,7 @@
                 <option value="lightMode">High Contrast Light</option>
                 <option value="vintage">Vintage Parchment</option>
                 <option value="whiteMode">Minimalist White</option>
+                <option value="vintageTactical">1942 Strategic (Tactical)</option>
             </select>
             <div id="main-menu-btn" style="cursor: pointer; font-size: 20px; margin-left: 15px; padding: 0 5px;" onclick="document.getElementById('dropdown-menu').classList.toggle('visible')">☰</div>
             <div id="dropdown-menu" style="display: none; position: absolute; top: 100%; right: 0; background: #282c34; border: 1px solid #555; border-radius: 4px; flex-direction: column; z-index: 2000; box-shadow: 0 5px 15px rgba(0,0,0,0.5);">
@@ -2180,6 +2540,16 @@
                 <div class="menu-item" onclick="openSidePanel('panel-battle')">Battle Simulator</div>
                 <div class="menu-item" onclick="openSidePanel('panel-notes')">Notes</div>
             </div>
+        </div>
+    </div>
+    <!-- Fixed Title Banner -->
+    <div id="vintage-title-banner" style="position: fixed; top: 50px; left: 50%; transform: translateX(-50%); z-index: 3000; pointer-events: none; display: none;">
+        <div style="background: #d2c1a5; border: 2px solid #3e2723; padding: 5px 25px; box-shadow: 0 10px 20px rgba(0,0,0,0.6); text-align: center; border-radius: 2px; position: relative;">
+            <!-- Ornate Corner Accents -->
+            <div style="position: absolute; top: -5px; left: -5px; color: #3e2723; font-size: 14px;">✥</div>
+            <div style="position: absolute; top: -5px; right: -5px; color: #3e2723; font-size: 14px;">✥</div>
+            <div style="font-family: 'Georgia', serif; font-size: 11px; color: #3e2723; border-bottom: 1px solid #3e2723; margin-bottom: 3px; font-weight: bold;">THE EUROPEAN THEATRE - 1942</div>
+            <div style="font-family: 'Times New Roman', serif; font-weight: bold; font-size: 20px; color: #1a1a1a; letter-spacing: 4px;">GLOBAL WAR STRATEGIC MAP</div>
         </div>
     </div>
     <div id="map-container">
@@ -2337,6 +2707,7 @@
         </div>
     </div>
     <div id="combat-screen-overlay" class="theme-land">
+        <div id="combat-dice-tray" style="position: absolute; left: 36vw; right: 36vw; top: 140px; bottom: 180px; pointer-events: none; z-index: 5;"></div>
         <div class="combat-header">
             <div class="combat-flag-bg attacker" id="combat-attacker-canvas"></div>
             <div class="combat-corner-text">ATTACKER</div>
@@ -2354,6 +2725,33 @@
                 </div>
             <div style="width: 8%;"></div> <div class="combat-side defender-side" id="combat-defender-board">
                 </div>
+        </div>
+
+        <div id="combat-result-container">
+            <div id="result-bg-flag"></div>
+            <div class="result-vertical-block">
+                <div class="result-sub-text" id="res-sub-msg">You were successful in attacking</div>
+                <div class="result-location" id="res-location">BORNEO</div>
+                
+                <div class="result-status" id="res-status">Victory!</div>
+                
+                <div class="result-stats-row">
+                    <div class="stat-item">
+                        <div class="stat-flag" id="res-atk-flag"></div>
+                        <div class="stat-header" style="color: #ffcc00;">ATTACKER</div>
+                        <div class="stat-power-label">YOU</div>
+                        <div class="stat-ipc" id="res-atk-ipc">0 IPC</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-flag" id="res-def-flag"></div>
+                        <div class="stat-header" style="color: #ffcc00;">DEFENDER</div>
+                        <div class="stat-power-label" id="res-def-name">ENEMY</div>
+                        <div class="stat-ipc" id="res-def-ipc">-3 IPC</div>
+                    </div>
+                </div>
+                
+                <button class="close-combat-btn" onclick="finalizeCombatClosure()">CLOSE COMBAT</button>
+            </div>
         </div>
     </div>
     <div id="pathing-ui-panel" style="display: none; position: fixed; bottom: 20px; right: 20px; width: 220px; background: rgba(30, 34, 43, 0.95); border: 2px solid #33CFFF; border-radius: 8px; padding: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.8); z-index: 3001; color: #E0D8B0; font-family: 'Georgia', serif;">
@@ -2495,7 +2893,7 @@
 
         const colorSchemes = {
             default: {
-                sea: '#2d3139', border: '#000000', label: '#ffffff',
+                sea: '#66aadd', border: '#000000', label: '#ffffff',
                 'US': '#4CAF50', 'UK': '#2199F3', 'USSR': '#DC143C', 'Germany': '#607D8B', 
                 'Japan': '#FFC107', 'Italy': '#9C27B0', 'China': '#FF5722', 'Commonwealth': '#008B8B', 
                 'France': '#3F51B5', 'Neutral': '#757575', 'Pro-Axis Neutral': '#C4A484', 
@@ -2528,7 +2926,25 @@
                 'Japan': '#fff9db', 'Italy': '#f8f0fc', 'China': '#fff4e6', 'Commonwealth': '#e6fcf5', 
                 'France': '#f1f1ff', 'Neutral': '#ffffff', 'Pro-Axis Neutral': '#fff9db', 
                 'Pro-Allied Neutral': '#fff5f5', 'Impassable': '#e9ecef'
-            }
+            },
+            vintageTactical: {
+                sea: '#9ba7a1',        // Blue-Grey
+                border: '#000000',
+                label: '#ffffff',
+                'US': '#324034',       // Darkened Olive
+                'UK': '#18212e',       // Near-black Navy
+                'USSR': '#541515',     // Dried Blood Red
+                'Germany': '#0a0a0a',  // Absolute Charcoal
+                'Japan': '#7a602c',    // Dark Gold
+                'Italy': '#2d3b1b',    // Deep Forest
+                'China': '#4a362d',    // Dark Soil
+                'Commonwealth': '#3e4f59', 
+                'France': '#2c3942',
+                'Neutral': '#c2b280',  // Tan Parchment (Different from Sea)
+                'Pro-Axis Neutral': '#8d6e63', 
+                'Pro-Allied Neutral': '#546e7a',
+                'Impassable': '#111111' 
+            },
         };
 
         const LAND_UNIT_SIZE = 30; // SVG units for land unit image width/height
@@ -5637,6 +6053,17 @@
                 console.log("Using setup.json for initial unit placement.");
             }
 
+            // Fetch unit-coordinates-backup.json for arrow pathing
+            try {
+                const backupResponse = await fetch('unit-coordinates-backup.json');
+                if (backupResponse.ok) {
+                    unitCoordinatesBackup = await backupResponse.json();
+                    console.log("Loaded backup coordinates for arrow pathing.");
+                }
+            } catch (e) {
+                console.error("Error loading unit-coordinates-backup.json:", e);
+            }
+
             // Fetch unit-profile.json
             const unitProfileResponse = await fetch('unit-profile.json');
             if (!unitProfileResponse.ok) {
@@ -5923,6 +6350,8 @@
                 landTextureImage.setAttribute('y', '0');
                 landTextureImage.setAttribute('width', '50');
                 landTextureImage.setAttribute('height', '50');
+                // Inside the texture creation logic
+                landTextureImage.setAttributeNS('http://www.w3.org/1999/xlink', 'href', 'https://www.transparenttextures.com/patterns/sandpaper.png');
                 landTexturePattern.appendChild(landTextureImage);
                 defs.appendChild(landTexturePattern);
 
@@ -6292,6 +6721,8 @@
         let selectedUnit = null;
         let highlightedTerritories = [];
         let drawnArrows = [];
+        let unitCoordinatesBackup = null;
+        let usedWaypointRegistry = new Set(); // Tracks which JSON points are in use
         let unitSplitPromiseResolver = null;
 
         let isPanning = false;
@@ -6447,27 +6878,38 @@
             return sharedSegments[0]; 
         }
 
-        function findBorderCrossing(svgDoc, name1, name2, p1, p2) {
-            const borderSegment = getSharedBorderData(svgDoc, name1, name2);
-            if (borderSegment && borderSegment.length > 0) {
-                const midIndex = Math.floor(borderSegment.length / 2);
-                return borderSegment[midIndex]; // Return the exact geometric center of the shared boundary
+        function findBestWayPoint(territoryName, prevPoint, nextPoint) {
+            if (!unitCoordinatesBackup || !unitCoordinatesBackup[territoryName]) {
+                return null; // Fallback to center if territory not in JSON
             }
-            
-            // Fallback to raycast if paths don't mathematically overlap
-            const steps = 40;
-            const dx = p2.x - p1.x;
-            const dy = p2.y - p1.y;
-            const svgPoint = svgDoc.createSVGPoint();
 
-            for (let i = 1; i <= steps; i++) {
-                svgPoint.x = p1.x + (dx * i) / steps;
-                svgPoint.y = p1.y + (dy * i) / steps;
-                const path2s = svgDoc.querySelectorAll(`[data-name="${name2}"]`);
-                const isInside2 = Array.from(path2s).some(path => path.isPointInFill && path.isPointInFill(svgPoint));
-                if (isInside2) return { x: svgPoint.x - dx/(steps*2), y: svgPoint.y - dy/(steps*2) };
+            const candidates = unitCoordinatesBackup[territoryName];
+            let bestPoint = null;
+            let minScore = Infinity;
+
+            candidates.forEach(pt => {
+                // 1. Convenience Score: Distance from this point to the straight line between prev and next
+                // This ensures we don't pick a point that forces the arrow to loop backward
+                const distToLine = Math.abs((nextPoint.y - prevPoint.y) * pt.x - (nextPoint.x - prevPoint.x) * pt.y + nextPoint.x * prevPoint.y - nextPoint.y * prevPoint.x) / 
+                                   Math.sqrt(Math.pow(nextPoint.y - prevPoint.y, 2) + Math.pow(nextPoint.x - prevPoint.x, 2));
+
+                // 2. Uniqueness: Add a "penalty" if the point is already used by another arrow
+                const pointKey = `${pt.x},${pt.y}`;
+                const usagePenalty = usedWaypointRegistry.has(pointKey) ? 5000 : 0;
+
+                const totalScore = distToLine + usagePenalty;
+
+                if (totalScore < minScore) {
+                    minScore = totalScore;
+                    bestPoint = pt;
+                }
+            });
+
+            if (bestPoint) {
+                usedWaypointRegistry.add(`${bestPoint.x},${bestPoint.y}`);
+                return { x: bestPoint.x, y: bestPoint.y };
             }
-            return { x: p1.x + dx/2, y: p1.y + dy/2 };
+            return null;
         }
 
         function drawPathArrow(pathArray, startUnit, color = '#ff4444', isLanding = false) {
@@ -6487,11 +6929,6 @@
                         unitY = parseFloat(match[2]);
                     }
                 }
-                if (unitX === 0 && unitY === 0 && startUnit.transform.baseVal.numberOfItems > 0) {
-                    const matrix = startUnit.transform.baseVal.getItem(0).matrix;
-                    unitX = matrix.e;
-                    unitY = matrix.f;
-                }
                 const unitImage = startUnit.querySelector('.unit-token');
                 if (unitImage) {
                     unitWidth = parseFloat(unitImage.getAttribute('width')) || 30;
@@ -6499,63 +6936,71 @@
                 }
             } catch (e) {}
 
+            const startPoint = { x: unitX + unitWidth / 2, y: unitY + unitHeight / 2 };
+            let points = [startPoint];
+
+            // 2. Build the Waypoint Sequence using Shared Borders
             const getTerritoryCenter = (name) => {
                 const elements = svgDoc.querySelectorAll(`[data-name="${name}"]`);
-                if (!elements || elements.length === 0) return null;
-                let largestElement = elements[0];
-                let maxArea = 0;
-                elements.forEach(el => {
-                    try {
-                        const bbox = el.getBBox();
-                        const area = bbox.width * bbox.height;
-                        if (area > maxArea) { maxArea = area; largestElement = el; }
-                    } catch (e) {} 
-                });
+                if (!elements.length) return null;
                 try {
-                    const bbox = largestElement.getBBox();
+                    const bbox = elements[0].getBBox();
                     return { x: bbox.x + bbox.width / 2, y: bbox.y + bbox.height / 2 };
                 } catch (e) { return null; }
             };
 
-            // 2. Build the STRICT Border Sequence
-            const rawWaypoints = [];
-            for (let i = 0; i < pathArray.length - 1; i++) {
-                const currName = pathArray[i];
-                const nextName = pathArray[i + 1];
+            for (let i = 1; i < pathArray.length; i++) {
+                const prevSpace = pathArray[i - 1];
+                const currSpace = pathArray[i];
+                const nextSpace = pathArray[i + 1]; // Might be undefined if at end
+
+                // 1. Crossing Point: Shared Border
+                const borderSegments = getSharedBorderData(svgDoc, prevSpace, currSpace);
+                let borderMidPoint = null;
+                if (borderSegments && borderSegments.length > 0) {
+                    const midIdx = Math.floor(borderSegments.length / 2);
+                    borderMidPoint = { x: borderSegments[midIdx].x, y: borderSegments[midIdx].y };
+                    points.push(borderMidPoint);
+                }
+
+                // 2. Waypoint: Use findBestWayPoint to avoid detours and overlap
+                // We need a "Next Target" to help the waypoint logic point in the right direction
+                let nextTarget;
+                if (nextSpace) {
+                    const nextBorder = getSharedBorderData(svgDoc, currSpace, nextSpace);
+                    if (nextBorder) {
+                        nextTarget = { x: nextBorder[Math.floor(nextBorder.length/2)].x, y: nextBorder[Math.floor(nextBorder.length/2)].y };
+                    } else {
+                        nextTarget = getTerritoryCenter(nextSpace);
+                    }
+                } else {
+                    nextTarget = getTerritoryCenter(currSpace);
+                }
+
+                // If we have a border crossing, use that as the "prevPoint" for the waypoint calculation
+                const prevRefPoint = borderMidPoint || points[points.length - 1];
                 
-                // Centers are ONLY used to cast the ray to find the border.
-                // They are NOT added to the path.
-                const currCenter = getTerritoryCenter(currName) || { x: unitX + unitWidth/2, y: unitY + unitHeight/2 };
-                const nextCenter = getTerritoryCenter(nextName) || currCenter;
+                // Call existing uniqueness logic
+                const wayPoint = findBestWayPoint(currSpace, prevRefPoint, nextTarget);
                 
-                const borderPoint = findBorderCrossing(svgDoc, currName, nextName, currCenter, nextCenter);
-                
-                rawWaypoints.push(borderPoint);
-                // Force the arrow to route through intermediate spaces, but randomized slightly to prevent overlap
-                if (i < pathArray.length - 2) { 
-                    const offsetX = (Math.random() - 0.5) * 50;
-                    const offsetY = (Math.random() - 0.5) * 50;
-                    rawWaypoints.push({ x: nextCenter.x + offsetX, y: nextCenter.y + offsetY });
+                if (wayPoint) {
+                    points.push(wayPoint);
+                } else {
+                    // Fallback to center only if JSON data is missing
+                    const center = getTerritoryCenter(currSpace);
+                    if (center) points.push(center);
                 }
             }
-            
-            let finalTargetPoint = getTerritoryCenter(pathArray[pathArray.length - 1]);
-            if (!finalTargetPoint) finalTargetPoint = { x: unitX + unitWidth/2, y: unitY + unitHeight/2 };
-
-            const startCenterPoint = { x: unitX + unitWidth / 2, y: unitY + unitHeight / 2 };
-            
-            // Waypoints are strictly: [Start Center, Border 1, Border 2, ..., Target Center]
-            // This eliminates the "center gravity" issue completely.
-            let points = [startCenterPoint, ...rawWaypoints, finalTargetPoint];
 
             // 3. Generate Path Data 
+            // We use generateSmoothPath but with many points to ensure it doesn't "shortcut"
             const pathData = generateSmoothPath(points);
 
-            // 4. Build Visual Elements (NO CLIP PATHS)
+            // 4. Build Visual Elements
             const arrowPath = document.createElementNS(svgNS, 'path');
             arrowPath.setAttribute('d', pathData);
             arrowPath.classList.add('movement-arrow-path');
-            arrowPath.style.stroke = color; // Use style to override the CSS class
+            arrowPath.style.stroke = color;
             arrowPath.style.fill = "none";
 
             const hitboxPath = document.createElementNS(svgNS, 'path');
@@ -7270,20 +7715,27 @@
                                     }
                                     updatePathingUI(window.activePathingState.target, window.activePathingState.remainingMoves);
                                     
-                                    let highlightLayer = clickedPath.ownerSVGElement.querySelector('.top-highlight-layer');
-
-                                    // Add visual feedback for intermediate path spaces
-                                    const clone = clickedPath.cloneNode(true);
-                                    clone.removeAttribute('id');
-                                    clone.style.fill = 'rgba(255, 255, 255, 0.2)'; 
-                                    clone.style.stroke = '#66ccff'; 
-                                    clone.style.strokeWidth = '2px';
-                                    clone.style.pointerEvents = 'none';
-                                    clone.classList.add('manual-path-step');
-                                    clone.setAttribute('data-step', window.activePathingState.currentPath.length - 1);
+                                    // --- FIX: Apply highlight to ALL map clones ---
+                                    const allMatchingPaths = svgWrapper.querySelectorAll(`path[data-name="${clickedName}"], polygon[data-name="${clickedName}"]`);
                                     
-                                    if (highlightLayer) highlightLayer.appendChild(clone);
-                                    else clickedPath.parentNode.insertBefore(clone, clickedPath.nextSibling);
+                                    allMatchingPaths.forEach(targetPath => {
+                                        let highlightLayer = targetPath.ownerSVGElement.querySelector('.top-highlight-layer');
+
+                                        const clone = targetPath.cloneNode(true);
+                                        clone.removeAttribute('id');
+                                        clone.style.fill = 'rgba(255, 255, 255, 0.2)'; 
+                                        clone.style.stroke = '#66ccff'; 
+                                        clone.style.strokeWidth = '2px';
+                                        clone.style.pointerEvents = 'none';
+                                        clone.classList.add('manual-path-step');
+                                        clone.setAttribute('data-step', window.activePathingState.currentPath.length - 1);
+                                        
+                                        if (highlightLayer) {
+                                            highlightLayer.appendChild(clone);
+                                        } else {
+                                            targetPath.parentNode.insertBefore(clone, targetPath.nextSibling);
+                                        }
+                                    });
                                 }
 
                                 if (clickedName === window.activePathingState.target) {
@@ -7479,6 +7931,11 @@
                         
                         newArrowGroup.remove();
                         drawnArrows = drawnArrows.filter(a => a.arrowElement !== newArrowGroup);
+                        if (arrowToRemove && arrowToRemove.fullPathPoints) {
+                            arrowToRemove.fullPathPoints.forEach(pt => {
+                                usedWaypointRegistry.delete(`${pt.x},${pt.y}`);
+                            });
+                        }
                     }
                 });
                 newArrowGroup.style.cursor = 'pointer';
@@ -7646,22 +8103,67 @@
                     combatPhaseData[targetTerr] = { Attackers: [], Defenders: [], loadedCargo: [] };
                 }
 
-                const attackerObj = {
-                    id: unitId,
-                    unitType: unitTypeStr,
-                    power: powerStr,
-                    count: unitsToMove,
-                    originalTerritory: origTerr,
-                    movedFrom: movedFromSpace,           // <--- New Metadata
-                    currentlyPlacedIn: newPlacedIn,      // <--- Updated Location
-                    attackTarget: targetTerr,
-                    hasMoved: true,                      // <--- Updated Status
-                    movementRemaining: remainingMoves,   // <--- Subtracted Logic
-                    loadedCargo: cargo
-                };
+                // Split transports into individual units for precise cargo tracking
+                if (['TPT', 'SBR'].includes(unitTypeStr)) {
+                    for (let i = 0; i < unitsToMove; i++) {
+                        // Get cargo specifically for this single transport index
+                        let individualCargo = [];
+                        const currentIdx = specificTransportIndices ? specificTransportIndices[i] : i;
+                        
+                        const links = (window.loadedUnitsLinks || []).filter(l => l.transportEl === selectedUnit);
+                        links.forEach(link => {
+                            const capForThisIdx = link.capacitiesAdded.find(c => Number(c.idx) === currentIdx);
+                            if (capForThisIdx && capForThisIdx.count > 0) {
+                                individualCargo.push({
+                                    id: link.startUnit.getAttribute('id') + "-cargo-" + Math.random(),
+                                    templateId: link.startUnit.getAttribute('id'),
+                                    unitType: link.landType,
+                                    count: capForThisIdx.count,
+                                    power: link.startUnit.getAttribute('data-power'),
+                                    originalTerritory: link.startUnit.getAttribute('data-original-territory'),
+                                    movedFrom: link.startUnit.getAttribute('data-placed-in') || link.startUnit.getAttribute('data-original-territory'),
+                                    currentlyPlacedIn: targetTerr,
+                                    attackTarget: targetTerr
+                                });
+                            }
+                        });
 
-                combatPhaseData[targetTerr].Attackers.push(attackerObj);
-                cargo.forEach(c => combatPhaseData[targetTerr].loadedCargo.push(c));
+                        const singleAttacker = {
+                            id: unitId + "-inst-" + Math.random(),
+                            templateId: unitId,
+                            unitType: unitTypeStr,
+                            power: powerStr,
+                            count: 1, // Individualized
+                            originalTerritory: origTerr,
+                            movedFrom: movedFromSpace,
+                            currentlyPlacedIn: newPlacedIn,
+                            attackTarget: targetTerr,
+                            hasMoved: true,
+                            movementRemaining: remainingMoves,
+                            loadedCargo: individualCargo
+                        };
+                        combatPhaseData[targetTerr].Attackers.push(singleAttacker);
+                        individualCargo.forEach(c => combatPhaseData[targetTerr].loadedCargo.push(c));
+                    }
+                } else {
+                    // Non-transport units stay grouped by count
+                    const attackerObj = {
+                        id: unitId,
+                        unitType: unitTypeStr,
+                        power: powerStr,
+                        count: unitsToMove,
+                        originalTerritory: origTerr,
+                        movedFrom: movedFromSpace,
+                        currentlyPlacedIn: newPlacedIn,
+                        attackTarget: targetTerr,
+                        hasMoved: true,
+                        movementRemaining: remainingMoves,
+                        loadedCargo: []
+                    };
+                    combatPhaseData[targetTerr].Attackers.push(attackerObj);
+                }
+
+                
                 /* =============================================== */
                 
                 handleUnitClick(selectedUnit); 
@@ -9194,9 +9696,53 @@
                     img.setAttribute('filter', `url(#colorize-${power}-${filterType})`);
                 }
             });
+
+            if (schemeName === 'vintageTactical') {
+                svg.classList.add('theme-vintage-tactical');
+                document.body.classList.add('theme-vintage-tactical-active');
+
+                const paths = svg.querySelectorAll('polygon[data-name], path[data-name]');
+                paths.forEach(path => {
+                    const power = path.getAttribute('data-power');
+                    const isSea = !isNaN(parseInt(path.getAttribute('data-name')));
+
+                    path.style.fillOpacity = "1.0";
+                    
+                    if (!isSea) {
+                        // Apply the "war room" shading to land only
+                        path.classList.add('tactical-border-shading');
+                        
+                        // Handle Neutral Textures
+                        if (power && (power.includes('Neutral') || power === 'Neutral')) {
+                            path.style.fill = "url(#landTexture)";
+                            path.classList.add('theme-vintage-neutral-textured');
+                        }
+                    } else {
+                        path.classList.remove('tactical-border-shading');
+                    }
+                });
+
+                // Force Caps, White color, and Normal weight
+                const labels = svg.querySelectorAll('.territory-label');
+                labels.forEach(label => {
+                    label.style.fontWeight = "normal";
+                    label.style.fontFamily = "Arial, sans-serif";
+                    
+                    const updateText = (node) => {
+                        if (node.nodeType === 3) node.textContent = node.textContent.toUpperCase();
+                        node.childNodes.forEach(child => updateText(child));
+                    };
+                    updateText(label);
+                });
+            } else {
+                svg.classList.remove('theme-vintage-tactical');
+                document.body.classList.remove('theme-vintage-tactical-active');
+                svg.querySelectorAll('.tactical-border-shading').forEach(el => el.classList.remove('tactical-border-shading'));
+            }
         });
 
         if (typeof updateVictoryConditions === 'function') updateVictoryConditions();
+        document.getElementById('vintage-title-banner').style.display = (schemeName === 'vintageTactical') ? 'block' : 'none';
     }
 
     document.getElementById('colorSchemeSelect').addEventListener('change', function() {
@@ -10155,43 +10701,98 @@
     // Global State for the active combat
     let activeCombatState = null;
 
+    // Helper to determine if a unit is currently acting as a transport (combat value 0)
+    const isTransportUnit = (u) => {
+        // Use the persistent tag we created at the start of the battle
+        return u.isActingAsTransport === true || u.unitType === 'TPT';
+    };
+
+    let currentCombatLosses = { atk: 0, def: 0 };
+
     function createCombatUnitVisual(unitObj, side) {
         const container = document.createElement('div');
         container.className = 'combat-unit-container';
 
         const wrapper = document.createElement('div');
         wrapper.className = 'combat-unit-wrapper';
-        // Use groupType for logic, templateId for visual cloning
+        wrapper.style.width = "60px";
+        wrapper.style.height = "60px";
         wrapper.dataset.unitType = unitObj.groupType || unitObj.unitType;
         wrapper.dataset.side = side;
         wrapper.dataset.assignedHits = 0; 
         
-        // Fix: Locate the map element using the templateId or ID
         const lookupId = unitObj.templateId || unitObj.id;
+        // Search the whole wrapper since cargo units might be on clones
         const realElement = document.getElementById(lookupId);
         
         if (realElement) {
             const cloneNode = realElement.cloneNode(true);
+            cloneNode.style.display = 'block'; // Ensure visibility
+            cloneNode.style.opacity = '1';
             const selectionMarker = cloneNode.querySelector('.selection-marker');
             if (selectionMarker) selectionMarker.remove();
-            // Remove existing count text/circle from the template so we can show the grouped count
-            const cTxt = cloneNode.querySelector('.unit-count-text'); if(cTxt) cTxt.remove();
-            const cCir = cloneNode.querySelector('.unit-count-circle'); if(cCir) cCir.remove();
+            
+            // Clean template indicators
+            cloneNode.querySelectorAll('.unit-count-text, .unit-count-circle, .unit-background-circle').forEach(el => el.remove());
 
-            cloneNode.setAttribute('transform', 'translate(40, 40)'); 
+            const unitImg = cloneNode.querySelector('image.unit-token');
+            const uw = parseFloat(unitImg.getAttribute('width')) || 30;
+            const uh = parseFloat(unitImg.getAttribute('height')) || 30;
+
             const newSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-            newSvg.setAttribute("viewBox", "0 0 80 80");
+            newSvg.setAttribute("viewBox", "0 0 60 60"); 
+            newSvg.style.width = "60px";
+            newSvg.style.height = "60px";
+            newSvg.style.overflow = "visible";
+            
+            // 1. Precise Background Circle
+            const backgroundCircle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+            backgroundCircle.setAttribute("r", 24);
+            backgroundCircle.setAttribute("cx", "30");
+            backgroundCircle.setAttribute("cy", "30");
+            
+            // FIX: Pull power directly from the map element of this specific unit, not the global state
+            const powerColor = realElement.getAttribute('data-power');
+            const circleFillColor = (powerColor === 'Neutral' || powerColor.includes('Neutral'))
+                ? powerColors['Neutral']
+                : darkenColor(powerColors[powerColor] || "#555", 0.4);
+            
+            backgroundCircle.setAttribute("fill", circleFillColor);
+            backgroundCircle.setAttribute("stroke", "white");
+            backgroundCircle.setAttribute("stroke-width", "0.8");
+            newSvg.appendChild(backgroundCircle);
+
+            // 2. Mathematical Centering (Fixes the "Off-Center" bug)
+            const internalX = parseFloat(unitImg.getAttribute('x')) || 0;
+            const internalY = parseFloat(unitImg.getAttribute('y')) || 0;
+            const translateX = 30 - (uw / 2) - internalX;
+            const translateY = 30 - (uh / 2) - internalY;
+            cloneNode.setAttribute('transform', `translate(${translateX}, ${translateY})`);
             newSvg.appendChild(cloneNode);
             
-            // Add specific group count label
-            const countLabel = document.createElementNS("http://www.w3.org/2000/svg", "text");
-            countLabel.setAttribute("x", "65"); countLabel.setAttribute("y", "65");
-            countLabel.setAttribute("fill", "#FFEB3B"); countLabel.setAttribute("font-size", "18");
-            countLabel.setAttribute("font-weight", "bold"); countLabel.setAttribute("stroke", "black");
-            countLabel.setAttribute("stroke-width", "1");
-            countLabel.textContent = unitObj.count;
-            newSvg.appendChild(countLabel);
-
+            // 3. Scaled Count Circle (Anchored correctly)
+            if (unitObj.count > 1) {
+                const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                circle.setAttribute("cx", "46"); 
+                circle.setAttribute("cy", "46");
+                circle.setAttribute("r", "8"); 
+                circle.setAttribute("fill", "#FFEB3B");
+                circle.setAttribute("stroke", "black");
+                circle.setAttribute("stroke-width", "0.5");
+                
+                const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                text.setAttribute("x", "46"); 
+                text.setAttribute("y", "46");
+                text.setAttribute("text-anchor", "middle");
+                text.setAttribute("dominant-baseline", "middle");
+                text.setAttribute("fill", "black");
+                text.setAttribute("font-size", "10");
+                text.setAttribute("font-weight", "bold");
+                text.style.fontFamily = "Arial";
+                text.textContent = unitObj.count;
+                newSvg.appendChild(circle);
+                newSvg.appendChild(text);
+            }
             wrapper.appendChild(newSvg);
         }
 
@@ -10209,19 +10810,21 @@
         controls.appendChild(minusBtn); controls.appendChild(valSpan); controls.appendChild(plusBtn);
         container.appendChild(wrapper); container.appendChild(controls);
 
-        const assignHit = (delta) => {
+        const assignHit = async (delta) => {
+            if (activeCombatState.phase === 'AAA' && unitObj.unitType === 'SBR' && delta > 0) {
+                const cargoNames = unitObj.loadedCargo.map(c => c.unitType).join(" & ") || "No Cargo";
+                const confirm = await showCustomModal("Destroy Transport Plane?", 
+                    `This plane is carrying: ${cargoNames}. If destroyed, all cargo is lost. Proceed?`, true);
+                if (!confirm) return;
+            }
+
+            if (activeCombatState.isTotalWipeout) return; // Prevent adjustment if wiped out
             if (!activeCombatState || !activeCombatState.assigningHits || activeCombatState.targetSide !== side) return;
-            const uType = wrapper.dataset.unitType;
             
-            if (delta > 0) {
-                const isTransport = uType === 'TPT' || uType === 'SBR';
-                if (isTransport) {
-                    const pool = side === 'attacker' ? activeCombatState.Attackers : activeCombatState.Defenders;
-                    if (pool.some(u => u.unitType !== 'TPT' && u.unitType !== 'SBR')) {
-                        showCustomModal("Illegal Casualty", "Transports and Transport Planes must be taken as casualties last.");
-                        return;
-                    }
-                }
+            // AAA Restriction check
+            if (activeCombatState.phase === 'AAA' && side === 'attacker' && !airUnitTypes.includes(unitObj.unitType)) {
+                if (delta > 0) showCustomModal("Invalid Target", "Anti-Aircraft fire can only target Air Units (Fighters and Bombers).");
+                return;
             }
 
             let currentHits = parseInt(wrapper.dataset.assignedHits || 0);
@@ -10232,52 +10835,118 @@
             }
             wrapper.dataset.assignedHits = currentHits;
             valSpan.textContent = currentHits;
-            if (currentHits > 0) { hitMarker.style.display = 'flex'; hitMarker.firstChild.textContent = currentHits; }
-            else { hitMarker.style.display = 'none'; }
+            if (currentHits > 0) { 
+                hitMarker.style.display = 'flex'; 
+                hitMarker.firstChild.textContent = currentHits; 
+            } else { hitMarker.style.display = 'none'; }
             updateUnassignedHitsDisplay();
         };
 
-        minusBtn.onclick = () => assignHit(-1);
-        plusBtn.onclick = () => assignHit(1);
+        minusBtn.onclick = (e) => { e.stopPropagation(); assignHit(-1); };
+        plusBtn.onclick = (e) => { e.stopPropagation(); assignHit(1); };
         return container;
     }
 
     // --- Balanced Dice Bag System ---
-        let diceBag = [];
-        function getBalancedDieRoll() {
-            if (diceBag.length === 0) {
-                // Fill the bag with 10 of each number from 1 to 6 (60 total)
-                for (let i = 1; i <= 6; i++) {
-                    for (let j = 0; j < 10; j++) {
-                        diceBag.push(i);
-                    }
+    let diceBag = [];
+    function getBalancedDieRoll() {
+        if (diceBag.length === 0) {
+            // Fill the bag with 10 of each number from 1 to 6 (60 total)
+            for (let i = 1; i <= 6; i++) {
+                for (let j = 0; j < 10; j++) {
+                    diceBag.push(i);
                 }
-                // Fisher-Yates Shuffle
-                for (let i = diceBag.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [diceBag[i], diceBag[j]] = [diceBag[j], diceBag[i]];
-                }
-                console.log("Dice bag depleted. Refilled and reshuffled 60 dice.");
             }
-            return diceBag.pop();
+            // Fisher-Yates Shuffle
+            for (let i = diceBag.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [diceBag[i], diceBag[j]] = [diceBag[j], diceBag[i]];
+            }
+            console.log("Dice bag depleted. Refilled and reshuffled 60 dice.");
+        }
+        return diceBag.pop();
+    }
+
+    /**
+     * Resolves overlaps between dice using a repulsion algorithm.
+     * Treats dice as circles and pushes them apart until they no longer collide.
+     */
+    function resolveDieCollisions(count, trayRect, dieSize) {
+        const minDistance = dieSize + 12; // Extra padding to ensure no overlaps
+        const points = [];
+        const centerX = trayRect.width / 2;
+        const centerY = trayRect.height / 2;
+
+        for (let i = 0; i < count; i++) {
+            // Start all dice with a slight random offset from center
+            points.push({
+                x: centerX + (Math.random() * 20 - 10),
+                y: centerY + (Math.random() * 20 - 10)
+            });
         }
 
+        // Run 100 iterations of "pushing" dice away from each other
+        for (let iter = 0; iter < 100; iter++) {
+            for (let i = 0; i < points.length; i++) {
+                for (let j = i + 1; j < points.length; j++) {
+                    let dx = points[j].x - points[i].x;
+                    let dy = points[j].y - points[i].y;
+                    let dist = Math.sqrt(dx * dx + dy * dy) || 1;
+
+                    if (dist < minDistance) {
+                        let force = (minDistance - dist) / 2;
+                        let nx = dx / dist;
+                        let ny = dy / dist;
+                        points[i].x -= nx * force;
+                        points[i].y -= ny * force;
+                        points[j].x += nx * force;
+                        points[j].y += ny * force;
+                    }
+                }
+                // Constrain to tray boundaries
+                points[i].x = Math.max(10, Math.min(points[i].x, trayRect.width - dieSize - 10));
+                points[i].y = Math.max(10, Math.min(points[i].y, trayRect.height - dieSize - 10));
+            }
+        }
+        return points;
+    }
+
     // 3D DOM Dice Roller using Poisson drop distribution
-    function rollCombatDice(diceData) {
+    function rollCombatDice(diceData, side) {
         return new Promise(resolve => {
             let layer = document.getElementById('dice-simulation-layer');
             if (!layer) {
                 layer = document.createElement('div');
                 layer.id = 'dice-simulation-layer';
-                document.getElementById('combat-screen-overlay').appendChild(layer);
+                document.body.appendChild(layer);
             }
-            
-            // Constrain layer to the middle 20% of the screen height-wise and width-wise
-            layer.style.cssText = "position:absolute; top:20%; left:42%; width:16%; height:60%; perspective:1200px; pointer-events:none; z-index:9999; display:flex; flex-wrap:wrap; justify-content:center; align-content:center; gap:10px;";
             layer.innerHTML = '';
+            layer.style.opacity = '1';
+
+            const tray = document.getElementById('combat-dice-tray');
+            const rect = tray.getBoundingClientRect();
+            const solvedPositions = resolveDieCollisions(diceData.length, rect, 45);
+            const activePower = (side === 'attacker') ? activeCombatState.attackerPower : activeCombatState.defenderPower;
             
+            // Rolling Indicator
+            const bottomStatus = document.createElement('div');
+            bottomStatus.id = "rolling-status-indicator";
+            bottomStatus.className = 'visible';
+            bottomStatus.innerHTML = `<div class="rolling-flag-container" style="background-image: url('flags/${activePower}.png')"></div><div class="rolling-label-text">${activePower} ROLLING...</div>`;
+            document.getElementById('combat-screen-overlay').appendChild(bottomStatus);
+
             let hits = 0;
-            const faceNumbers = [1, 6, 3, 4, 2, 5];
+            const pipMap = { 1:[4], 2:[0,8], 3:[0,4,8], 4:[0,2,6,8], 5:[0,2,4,6,8], 6:[0,2,3,5,6,8] };
+            const createPips = (num) => {
+                const container = document.createElement('div');
+                container.className = 'pip-container';
+                for (let i = 0; i < 9; i++) {
+                    const pip = document.createElement('div');
+                    if (pipMap[num].includes(i)) pip.className = 'pip';
+                    container.appendChild(pip);
+                }
+                return container;
+            };
 
             diceData.forEach((die, index) => {
                 const val = getBalancedDieRoll();
@@ -10285,54 +10954,108 @@
                 if (isHit) hits++;
                 
                 const dieEl = document.createElement('div');
-                dieEl.className = 'die-3d victorian';
-                dieEl.style.position = "relative"; // Let flexbox handle positioning
-                dieEl.style.width = "40px";
-                dieEl.style.height = "40px";
-                dieEl.style.transition = "none";
+                dieEl.className = 'die-3d';
                 
-                // Random start rotation
-                dieEl.style.transform = `translateZ(400px) rotateX(${Math.random()*1000}deg) rotateY(${Math.random()*1000}deg)`;
-                
-                faceNumbers.forEach((num, idx) => {
+                const targetX = rect.left + solvedPositions[index].x;
+                const targetY = rect.top + solvedPositions[index].y;
+
+                // Important: Real Cube Face Mapping
+                const faces = [
+                    { v: 1, trans: 'rotateY(0deg) translateZ(22.5px)' },
+                    { v: 6, trans: 'rotateY(180deg) translateZ(22.5px)' },
+                    { v: 3, trans: 'rotateY(90deg) translateZ(22.5px)' },
+                    { v: 4, trans: 'rotateY(-90deg) translateZ(22.5px)' },
+                    { v: 2, trans: 'rotateX(90deg) translateZ(22.5px)' },
+                    { v: 5, trans: 'rotateX(-90deg) translateZ(22.5px)' }
+                ];
+
+                faces.forEach(face => {
                     const f = document.createElement('div');
                     f.className = 'die-face';
-                    f.style.width = "40px"; f.style.height = "40px";
-                    f.style.background = '#3e2a1c'; 
-                    f.style.borderColor = '#b89c6d';
-                    const rotations = [
-                        'translateZ(20px)', 'rotateY(180deg) translateZ(20px)',
-                        'rotateY(90deg) translateZ(20px)', 'rotateY(-90deg) translateZ(20px)',
-                        'rotateX(90deg) translateZ(20px)', 'rotateX(-90deg) translateZ(20px)'
-                    ];
-                    f.style.transform = rotations[idx];
-                    f.textContent = num;
+                    f.style.transform = face.trans;
+                    f.appendChild(createPips(face.v));
                     dieEl.appendChild(f);
                 });
                 
+                // Set spawn point: Above screen, randomized tumble
+                dieEl.style.transform = `translate3d(${targetX}px, -200px, 1000px) rotateX(${Math.random()*720}deg) rotateY(${Math.random()*720}deg)`;
                 layer.appendChild(dieEl);
                 
                 requestAnimationFrame(() => {
                     setTimeout(() => {
-                        dieEl.style.transition = "transform 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
+                        // Calculate rotation to show correct face on top
                         let rotY = val === 1 ? 0 : val === 6 ? 180 : val === 3 ? -90 : val === 4 ? 90 : 0;
                         let rotX = val === 2 ? -90 : val === 5 ? 90 : 0;
-                        dieEl.style.transform = `translateZ(0px) rotateX(${rotX}deg) rotateY(${rotY}deg) rotateZ(${(Math.random()*20)-10}deg)`;
                         
+                        // Add massive tumble (1080 degrees) so it spins while falling
+                        const tumbleX = (Math.random() > 0.5 ? 1080 : -1080);
+                        const tumbleY = (Math.random() > 0.5 ? 1080 : -1080);
+
+                        dieEl.style.transform = `translate3d(${targetX}px, ${targetY}px, 0px) rotateX(${rotX + tumbleX}deg) rotateY(${rotY + tumbleY}deg) rotateZ(${(Math.random()*20)-10}deg)`;
+
                         setTimeout(() => {
-                            if (isHit) {
-                                dieEl.querySelectorAll('.die-face').forEach(face => {
-                                    face.style.background = '#8a0000';
-                                    face.style.borderColor = '#ff4444';
-                                });
-                            }
-                        }, 1100);
-                    }, index * 50);
+                            if (isHit) dieEl.classList.add('landed-hit');
+                        }, 700);
+                    }, index * 40); // Faster stagger
                 });
             });
             
-            setTimeout(() => resolve(hits), 2000);
+            setTimeout(() => {
+                const indicator = document.getElementById("rolling-status-indicator");
+                if (indicator) indicator.remove();
+                resolve(hits);
+            }, 2200);
         });
+    }
+
+    function calculateCombatLuck() {
+        const ITERATIONS = 10000;
+        let outcomesBetterThanActual = 0;
+        
+        // Use a local "Simulation Bag" so we don't mess with the game's actual diceBag
+        const getSimRoll = () => Math.floor(Math.random() * 6) + 1;
+
+        // Current real outcome score: (Initial Defender Value - Survivors) - (Initial Attacker Value - Survivors)
+        const actualLuckScore = currentCombatLosses.def - currentCombatLosses.atk;
+
+        for (let i = 0; i < ITERATIONS; i++) {
+            let atk = JSON.parse(JSON.stringify(activeCombatState.initialAttackers));
+            let def = JSON.parse(JSON.stringify(activeCombatState.initialDefenders));
+            let atkLost = 0;
+            let defLost = 0;
+
+            // Simplified standard combat loop for speed (Standard Attack vs Standard Defense)
+            while (atk.length > 0 && def.length > 0) {
+                let aHits = 0, dHits = 0;
+                atk.forEach(u => {
+                    const prof = window.unitProfileData.find(p => p.unit_type.toLowerCase() === (UNIT_ABBREVIATION_TO_PROFILE_NAME[u.unitType] || u.unitType).toLowerCase());
+                    if (getSimRoll() <= (parseInt(prof?.attack_value) || 1)) aHits++;
+                });
+                def.forEach(u => {
+                    const prof = window.unitProfileData.find(p => p.unit_type.toLowerCase() === (UNIT_ABBREVIATION_TO_PROFILE_NAME[u.unitType] || u.unitType).toLowerCase());
+                    if (getSimRoll() <= (parseInt(prof?.defense_value) || 1)) dHits++;
+                });
+
+                // Apply hits (Simple removal: cheapest first logic)
+                const apply = (pool, hits, isAtk) => {
+                    for(let h=0; h<hits && pool.length > 0; h++) {
+                        const u = pool[0];
+                        const prof = window.unitProfileData.find(p => p.unit_type.toLowerCase() === (UNIT_ABBREVIATION_TO_PROFILE_NAME[u.unitType] || u.unitType).toLowerCase());
+                        const cost = parseInt(prof?.cost || 3);
+                        u.count--; 
+                        if (isAtk) atkLost += cost; else defLost += cost;
+                        if (u.count <= 0) pool.shift();
+                    }
+                };
+                apply(def, aHits, false);
+                apply(atk, dHits, true);
+            }
+            
+            if ((defLost - atkLost) >= actualLuckScore) outcomesBetterThanActual++;
+        }
+        // Inverts the logic: 100% means you performed better than all simulations (Maximum Luck)
+        let performance = 100 - (outcomesBetterThanActual / ITERATIONS * 100);
+        return performance.toFixed(1);
     }
 
     function triggerConductCombatPhase() {
@@ -10402,11 +11125,23 @@
             defenderPower: defenderPower,
             Attackers: combatInfo.Attackers,
             Defenders: combatInfo.Defenders,
+            // Deep copy for luck simulation
+            initialAttackers: JSON.parse(JSON.stringify(combatInfo.Attackers)),
+            initialDefenders: JSON.parse(JSON.stringify(combatInfo.Defenders)),
             phase: 'AAA',
             assigningHits: false,
             unassignedHits: 0,
             targetSide: null
         };
+
+        // Permanently tag units acting as transports for the duration of this specific battle
+        [activeCombatState.Attackers, activeCombatState.Defenders].forEach(pool => {
+            pool.forEach(u => {
+                if (u.unitType === 'TPT' || (u.unitType === 'SBR' && u.loadedCargo && u.loadedCargo.length > 0)) {
+                    u.isActingAsTransport = true;
+                }
+            });
+        });
 
         renderCombatBoard();
         overlay.style.display = 'block';
@@ -10420,7 +11155,15 @@
             overlay.style.backdropFilter = 'blur(6px)'; // Cinematic background blur
         }, 50);
 
-        // Start Combat Loop
+        // Determine if AAA phase is valid
+        let hasAtkAir = activeCombatState.Attackers.some(u => airUnitTypes.includes(u.unitType));
+        let hasDefAA = activeCombatState.Defenders.some(u => u.unitType.includes('AAA') || FACILITY_UNIT_TYPES.includes(u.unitType) || u.unitType === 'BTS');
+
+        if (!hasAtkAir || !hasDefAA) {
+            activeCombatState.phase = 'AMPHIBIOUS'; // Change phase BEFORE render
+        }
+
+        renderCombatBoard(); // This will now correctly hide SBRs if phase is AMPHIBIOUS or TPTs if land battle
         executeCombatPhase();
     }
 
@@ -10437,35 +11180,56 @@
 
             pool.forEach(u => {
                 if (FACILITY_UNIT_TYPES.includes(u.unitType)) return;
+
+                // 1. RULE: Never show Sea Transports in land battles
+                if (u.unitType === 'TPT' && !activeCombatState.isSeaSpace) {
+                    return; 
+                }
+
+                // 2. ALWAYS process cargo so they appear on the board
+                if (u.loadedCargo && u.loadedCargo.length > 0) {
+                    u.loadedCargo.forEach(cargo => {
+                        const cProfile = window.unitProfileData.find(p => p.unit_type.toLowerCase() === (UNIT_ABBREVIATION_TO_PROFILE_NAME[cargo.unitType] || cargo.unitType).toLowerCase());
+                        const cargoVal = parseCombatVal(isDefender ? cProfile.defense_value : cProfile.attack_value, isDefender, cargo.unitType);
+                        const cKey = `cargo_inst_${cargo.id}`; 
+                        if (!grouped[cKey]) {
+                            grouped[cKey] = { ...cargo, templateId: cargo.templateId, count: cargo.count, cVal: cargoVal };
+                        }
+                    });
+                }
+
+                // 3. RULE: Hide Air Transports (SBR acting as transport) once AAA round is over
+                if (u.unitType === 'SBR' && u.isActingAsTransport && activeCombatState.phase !== 'AAA') {
+                    return; 
+                }
+
+                // 4. Process the transport unit itself or standard units
                 const profile = window.unitProfileData.find(p => p.unit_type.toLowerCase() === (UNIT_ABBREVIATION_TO_PROFILE_NAME[u.unitType] || u.unitType).toLowerCase());
-                let cVal = profile ? parseCombatVal(isDefender ? profile.defense_value : profile.attack_value, isDefender, u.unitType) : 0;
+                let cVal = isTransportUnit(u) ? 0 : (profile ? parseCombatVal(isDefender ? profile.defense_value : profile.attack_value, isDefender, u.unitType) : 0);
                 
                 if (u.unitType === 'BTS' && parseInt(u.element?.getAttribute('data-damage') || 0) > 0) cVal = 2;
                 if (isDefender && u.unitType === 'ACC' && parseInt(u.element?.getAttribute('data-damage') || 0) > 0) cVal = 1;
 
-                const key = `${u.unitType}_${cVal}`;
+                const key = isTransportUnit(u) ? `trans_inst_${u.id}` : `${u.unitType}_${cVal}_${u.id}`;
                 if (!grouped[key]) {
-                    // IMPORTANT: We keep 'templateId' as a real ID from the map to allow cloning
-                    grouped[key] = { ...u, groupType: u.unitType, templateId: u.id, count: 0, cVal: cVal };
+                    grouped[key] = { ...u, templateId: u.templateId || u.id, count: 0, cVal: cVal };
                 }
                 grouped[key].count += u.count;
             });
 
-            Object.values(grouped).forEach(gUnit => {
-                rows[gUnit.cVal].push(gUnit);
-            });
+            Object.values(grouped).forEach(gUnit => rows[gUnit.cVal].push(gUnit));
             return rows;
         };
-
-        const attackerRows = groupPool(activeCombatState.Attackers, false);
-        const defenderRows = groupPool(activeCombatState.Defenders, true);
 
         const aBoard = document.getElementById('combat-attacker-board');
         const dBoard = document.getElementById('combat-defender-board');
         aBoard.innerHTML = ''; dBoard.innerHTML = '';
 
+        const attackerRows = groupPool(activeCombatState.Attackers, false);
+        const defenderRows = groupPool(activeCombatState.Defenders, true);
+
         for (let i = 0; i <= 4; i++) {
-            const aRow = document.createElement('div'); aRow.className = 'combat-row';
+            const aRow = document.createElement('div'); aRow.className = 'combat-row'; aRow.style.zIndex = (20 - i); 
             const aUnits = document.createElement('div'); aUnits.className = 'combat-units-area';
             attackerRows[i].forEach(u => aUnits.appendChild(createCombatUnitVisual(u, 'attacker')));
             aRow.appendChild(aUnits);
@@ -10483,6 +11247,7 @@
 
     // --- The Async Combat Loop Engine ---
     async function executeCombatPhase() {
+        if (!activeCombatState) return;
         switch(activeCombatState.phase) {
             case 'AAA':
                 await runAAALogic();
@@ -10496,45 +11261,189 @@
             case 'DEFENDER_ROLL':
                 await runStandardRolls('defender');
                 break;
+            case 'REMOVE_CASUALTIES':
+                finalRemovalSequence();
+                break;
             case 'RESOLUTION':
-                promptRetreatOrContinue();
+                // Check if anyone is left OR if a wipeout was flag-triggered
+                if (activeCombatState.Attackers.length === 0 || activeCombatState.Defenders.length === 0 || activeCombatState.isTotalWipeout) {
+                    resolveCombatWinner();
+                } else {
+                    promptRetreatOrContinue();
+                }
                 break;
         }
     }
 
-    // --- CORRECTED COMBAT ENGINE ---
+    async function runStandardRolls(side) {
+        const isAttacker = side === 'attacker';
+        const pool = isAttacker ? activeCombatState.Attackers : activeCombatState.Defenders;
+        let diceData = [];
+
+        const getDiceForUnit = (unitObj) => {
+            const profile = window.unitProfileData.find(p => p.unit_type.toLowerCase() === (UNIT_ABBREVIATION_TO_PROFILE_NAME[unitObj.unitType] || unitObj.unitType).toLowerCase());
+            let cVal = profile ? parseInt(isAttacker ? profile.attack_value : profile.defense_value) : 0;
+            
+            // Apply damage modifiers for capital ships
+            if (unitObj.unitType === 'BTS' && parseInt(unitObj.element?.getAttribute('data-damage') || 0) > 0) cVal = 2;
+            if (!isAttacker && unitObj.unitType === 'ACC' && parseInt(unitObj.element?.getAttribute('data-damage') || 0) > 0) cVal = 1;
+            
+            if (cVal > 0) {
+                for(let i=0; i < (unitObj.count || 1); i++) diceData.push({ targetVal: cVal });
+            }
+        };
+
+        pool.forEach(u => {
+            // Roll dice for the unit ONLY if it is NOT currently acting as a transport
+            if (!isTransportUnit(u)) {
+                getDiceForUnit(u);
+            }
+            
+            // Cargo always rolls (Cargo itself is never a transport)
+            if (u.loadedCargo && u.loadedCargo.length > 0) {
+                u.loadedCargo.forEach(cargoItem => getDiceForUnit(cargoItem));
+            }
+        });
+
+        let hits = 0;
+        if (diceData.length > 0) {
+            hits = await rollCombatDice(diceData, side);
+        }
+
+        if (hits > 0) {
+            const targetSide = isAttacker ? 'defender' : 'attacker';
+            const targetPool = isAttacker ? activeCombatState.Defenders : activeCombatState.Attackers;
+            
+            // Calculate total HP by ignoring Transports and counting Cargo
+            const calculatePoolHealth = (currentPool) => {
+                let health = 0;
+                currentPool.forEach(u => {
+                    if (!isTransportUnit(u)) {
+                        const hp = (['BTS', 'ACC'].includes(u.unitType)) ? 2 : 1;
+                        health += (u.count * hp);
+                    }
+                    if (u.loadedCargo) {
+                        u.loadedCargo.forEach(cargo => {
+                            health += (cargo.count || 1);
+                        });
+                    }
+                });
+                return health;
+            };
+
+            const totalHealth = calculatePoolHealth(targetPool);
+
+            activeCombatState.unassignedHits = hits;
+            activeCombatState.assigningHits = true;
+            activeCombatState.targetSide = targetSide;
+
+            if (hits >= totalHealth) {
+                activeCombatState.isTotalWipeout = true;
+                activeCombatState.unassignedHits = 0;
+                
+                // Auto-assign markers visually based on INDIVIDUAL unit capacity
+                document.querySelectorAll(`.combat-unit-wrapper[data-side="${targetSide}"]`).forEach(w => {
+                    // Logic: Transports (SBR/TPT) are count 1 in this context, cargo units are their specific count
+                    const hitCount = w.querySelector('.unit-count-text') ? parseInt(w.querySelector('.unit-count-text').textContent) : 1;
+                    
+                    w.dataset.assignedHits = hitCount;
+                    const hitMarker = w.querySelector('.fire-hit-marker');
+                    if (hitMarker) {
+                        hitMarker.style.display = 'flex';
+                        hitMarker.firstChild.textContent = hitCount;
+                    }
+                    const valSpan = w.parentElement.querySelector('.combat-damage-val');
+                    if (valSpan) valSpan.textContent = hitCount;
+                });
+
+                document.querySelectorAll(`.combat-damage-btn`).forEach(btn => btn.style.pointerEvents = 'none');
+                showCustomModal("TOTAL WIPEOUT", `The entire ${targetSide} force has been eliminated!`, false);
+            } else {
+                activeCombatState.isTotalWipeout = false;
+            }
+
+            addConfirmButton(() => {
+                document.querySelectorAll(`.combat-damage-btn`).forEach(btn => btn.style.pointerEvents = 'auto');
+                if (isAttacker) {
+                    activeCombatState.phase = 'DEFENDER_ROLL';
+                } else {
+                    activeCombatState.phase = 'REMOVE_CASUALTIES';
+                }
+                executeCombatPhase();
+            });
+        } else {
+            activeCombatState.isTotalWipeout = false;
+        }
+
+        addConfirmButton(() => {
+            // Re-enable buttons for next phase/combat
+            document.querySelectorAll(`.combat-damage-btn`).forEach(btn => btn.style.pointerEvents = 'auto');
+            
+            if (isAttacker) {
+                activeCombatState.phase = 'DEFENDER_ROLL';
+            } else {
+                activeCombatState.phase = 'REMOVE_CASUALTIES';
+            }
+            executeCombatPhase();
+        });
+    }
+
+    // --- COMBAT ENGINE ---
 
     async function runAAALogic() {
-        let defAAAUnits = activeCombatState.Defenders.filter(u => u.unitType.includes('AAA') || FACILITY_UNIT_TYPES.includes(u.unitType) || u.unitType === 'BTS');
-        let totalAAADice = defAAAUnits.reduce((sum, u) => sum + (u.count * 3), 0);
         let atkAirUnits = activeCombatState.Attackers.filter(u => airUnitTypes.includes(u.unitType));
         let totalAirCount = atkAirUnits.reduce((sum, u) => sum + u.count, 0);
         
-        let diceCount = Math.min(totalAAADice, totalAirCount);
-        
-        if (diceCount > 0) {
-            const diceData = Array.from({length: diceCount}, () => ({ targetVal: 1 }));
-            let hits = await rollCombatDice(diceData); // Calls visual 3D dice
-            
-            if (hits > 0) {
-                activeCombatState.unassignedHits = hits;
-                activeCombatState.assigningHits = true;
-                activeCombatState.targetSide = 'attacker';
+        if (totalAirCount > 0) {
+            let defAAAUnits = activeCombatState.Defenders.filter(u => u.unitType.includes('AAA') || FACILITY_UNIT_TYPES.includes(u.unitType) || u.unitType === 'BTS');
+            let totalAAADice = defAAAUnits.reduce((sum, u) => sum + (u.count * 3), 0);
+            let diceCount = Math.min(totalAAADice, totalAirCount);
+
+            if (diceCount > 0) {
+                const diceData = Array.from({length: diceCount}, () => ({ targetVal: 1 }));
+                let hits = await rollCombatDice(diceData);
                 
-                addConfirmButton(() => {
-                    applyAssignedDamage('attacker'); // This now handles removal and auto-victory
-                    removeDefenderFacilities();
-                    if (activeCombatState) { // Only continue if auto-victory didn't close the window
-                        activeCombatState.phase = 'AMPHIBIOUS';
+                if (hits > 0) {
+                    // NEW: Fade non-air units visually
+                    document.querySelectorAll('.combat-unit-wrapper[data-side="attacker"]').forEach(w => {
+                        if (!airUnitTypes.includes(w.dataset.unitType)) {
+                            w.style.opacity = "0.2";
+                            w.style.filter = "grayscale(100%)";
+                        }
+                    });
+
+                    activeCombatState.unassignedHits = hits;
+                    activeCombatState.assigningHits = true;
+                    activeCombatState.targetSide = 'attacker';
+                    
+                    addConfirmButton(() => {
+                        // 1. Remove units from logic and map FIRST while data-assigned-hits still exists in DOM
+                        forceImmediateRemoval('attacker'); 
+
+                        // 2. Restore visibility and clean up UI
+                        document.querySelectorAll('.combat-unit-wrapper').forEach(w => {
+                            w.style.opacity = "1";
+                            w.style.filter = "none";
+                        });
+                        
+                        applyAssignedDamage('attacker');
+                        // Rule: Air Transports (SBR) exit the battle overlay after AAA
+                        activeCombatState.Attackers = activeCombatState.Attackers.filter(u => u.unitType !== 'SBR');
+                        activeCombatState.phase = 'AMPHIBIOUS';                        
+                        removeDefenderFacilities(); // This calls renderCombatBoard() internally
                         executeCombatPhase();
-                    }
-                });
-                return;
+                    });
+                    // Rule: Transport Planes disappear functionally after AAA
+                    activeCombatState.Attackers = activeCombatState.Attackers.filter(u => u.unitType !== 'SBR');
+                    // Re-render to clear them from the board before standard rolls begin
+                    renderCombatBoard();
+                    return;
+                }
             }
         }
         
-        removeDefenderFacilities();
         activeCombatState.phase = 'AMPHIBIOUS';
+        removeDefenderFacilities();
         executeCombatPhase();
     }
 
@@ -10566,7 +11475,7 @@
                     activeCombatState.targetSide = 'defender';
                     
                     addConfirmButton(() => {
-                        applyAssignedDamage('defender'); 
+                        forceImmediateRemoval('defender'); 
                         activeCombatState.phase = 'ATTACKER_ROLL';
                         executeCombatPhase();
                     });
@@ -10578,76 +11487,121 @@
         executeCombatPhase();
     }
 
-    async function runStandardRolls(side) {
-        const isAttacker = side === 'attacker';
-        const pool = isAttacker ? activeCombatState.Attackers : activeCombatState.Defenders;
-        let diceData = [];
+    function applyAssignedDamage(side) {
+        // This now just cleans up UI state for the assignment phase
+        activeCombatState.assigningHits = false;
+        renderCombatBoard();
+    }
 
-        pool.forEach(u => {
-            const profile = window.unitProfileData.find(p => p.unit_type.toLowerCase() === (UNIT_ABBREVIATION_TO_PROFILE_NAME[u.unitType] || u.unitType).toLowerCase());
-            let cVal = profile ? parseInt(isAttacker ? profile.attack_value : profile.defense_value) : 0;
+    function finalRemovalSequence() {
+        const sides = ['attacker', 'defender'];
+        
+        sides.forEach(side => {
+            const poolKey = side === 'attacker' ? 'Attackers' : 'Defenders';
+            const pool = activeCombatState[poolKey];
+            const wrappers = document.querySelectorAll(`.combat-unit-wrapper[data-side="${side}"]`);
             
-            if (u.unitType === 'BTS' && parseInt(u.element?.getAttribute('data-damage') || 0) > 0) cVal = 2;
-            if (!isAttacker && u.unitType === 'ACC' && parseInt(u.element?.getAttribute('data-damage') || 0) > 0) cVal = 1;
+            wrappers.forEach(w => {
+                let hitsToApply = parseInt(w.dataset.assignedHits || 0);
+                if (hitsToApply <= 0) return;
+                const uType = w.dataset.unitType;
 
-            if (cVal > 0) {
-                for(let i=0; i<u.count; i++) diceData.push({ targetVal: cVal });
+                // Look up unit cost for IPC loss tracking
+                const profileName = UNIT_ABBREVIATION_TO_PROFILE_NAME[uType] || uType;
+                const profile = window.unitProfileData.find(p => p.unit_type.toLowerCase() === profileName.toLowerCase());
+                const unitCost = parseInt(profile?.cost || 0);
+                
+                for (let i = pool.length - 1; i >= 0; i--) {
+                    if (hitsToApply <= 0) break;
+                    let u = pool[i];
+
+                    // 1. Check if the parent unit matches the type
+                    if (u.unitType === uType) {
+                        applyHitsToUnit(u, side, pool, i);
+                    } 
+                    // 2. Check if any cargo inside this unit matches the type
+                    else if (u.loadedCargo && u.loadedCargo.length > 0) {
+                        for (let j = u.loadedCargo.length - 1; j >= 0; j--) {
+                            if (hitsToApply <= 0) break;
+                            let cargo = u.loadedCargo[j];
+                            if (cargo.unitType === uType) {
+                                const sub = Math.min(cargo.count, hitsToApply);
+                                cargo.count -= sub;
+                                hitsToApply -= sub;
+                                
+                                const profileName = UNIT_ABBREVIATION_TO_PROFILE_NAME[uType] || uType;
+                                const cost = parseInt(window.unitProfileData.find(p => p.unit_type.toLowerCase() === profileName.toLowerCase())?.cost || 0);
+                                if (side === 'attacker') currentCombatLosses.atk += (sub * cost);
+                                else currentCombatLosses.def += (sub * cost);
+
+                                if (cargo.count <= 0) {
+                                    const cargoRealId = cargo.templateId || cargo.id;
+                                    u.loadedCargo.splice(j, 1);
+                                    // Hide from ALL map clones
+                                    svgWrapper.querySelectorAll(`[id="${cargoRealId}"]`).forEach(el => { 
+                                        el.style.display = 'none'; 
+                                        el.setAttribute('data-count', 0); 
+                                    });
+                                    placedUnitsData = placedUnitsData.filter(item => item.element.id !== cargoRealId);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Helper to handle standard unit hit application (logic moved from original loop)
+                function applyHitsToUnit(u, side, currentPool, index) {
+                    const profileName = UNIT_ABBREVIATION_TO_PROFILE_NAME[uType] || uType;
+                    const unitCost = parseInt(window.unitProfileData.find(p => p.unit_type.toLowerCase() === profileName.toLowerCase())?.cost || 0);
+
+                    if (['BTS', 'ACC'].includes(u.unitType)) {
+                        let dmg = parseInt(u.element?.getAttribute('data-damage') || 0);
+                        while (hitsToApply > 0 && u.count > 0) {
+                            if (dmg === 0) { dmg = 1; hitsToApply--; u.element?.setAttribute('data-damage', 1); }
+                            else { 
+                                u.count--; dmg = 0; hitsToApply--; u.element?.setAttribute('data-damage', 0); 
+                                if (side === 'attacker') currentCombatLosses.atk += unitCost; else currentCombatLosses.def += unitCost;
+                            }
+                        }
+                    } else {
+                        const sub = Math.min(u.count, hitsToApply);
+                        u.count -= sub; hitsToApply -= sub;
+                        if (side === 'attacker') currentCombatLosses.atk += (sub * unitCost); else currentCombatLosses.def += (sub * unitCost);
+                    }
+
+                    if (u.count <= 0) {
+                        const rid = u.id;
+                        currentPool.splice(index, 1);
+                        svgWrapper.querySelectorAll(`[id="${rid}"]`).forEach(el => { el.setAttribute('data-count', 0); el.style.display = 'none'; });
+                        placedUnitsData = placedUnitsData.filter(item => item.element.id !== rid);
+                    }
+                }
+            });
+
+            // Auto-wipe Transports if they are the only units remaining AND have no survivors inside
+            const onlyTransportsLeft = pool.length > 0 && pool.every(u => isTransportUnit(u) && (!u.loadedCargo || u.loadedCargo.length === 0));
+            if (onlyTransportsLeft) {
+                pool.forEach(u => {
+                    const profileName = UNIT_ABBREVIATION_TO_PROFILE_NAME[u.unitType] || u.unitType;
+                    const profile = window.unitProfileData.find(p => p.unit_type.toLowerCase() === profileName.toLowerCase());
+                    const cost = parseInt(profile?.cost || 0);
+                    
+                    if (side === 'attacker') currentCombatLosses.atk += (u.count * cost);
+                    else currentCombatLosses.def += (u.count * cost);
+
+                    svgWrapper.querySelectorAll(`[id="${u.id}"]`).forEach(el => { el.style.display = 'none'; });
+                    placedUnitsData = placedUnitsData.filter(item => item.element.id !== u.id);
+                });
+                pool.length = 0;
             }
         });
 
-        if (diceData.length > 0) {
-            let hits = await rollCombatDice(diceData); // Calls visual 3D dice
-            if (hits > 0) {
-                const poolToHit = isAttacker ? activeCombatState.Defenders : activeCombatState.Attackers;
-                const totalHP = poolToHit.reduce((sum, u) => {
-                    let hp = u.count;
-                    if (['BTS', 'ACC'].includes(u.unitType)) hp += u.count; // Count 2 for capital ships
-                    return sum + hp;
-                }, 0);
-
-                if (hits >= totalHP) {
-                    // AUTO-WIPE: Don't prompt, just kill everyone and resolve
-                    activeCombatState.targetSide = isAttacker ? 'defender' : 'attacker';
-                    // Mark all units with max hits in the DOM for applyAssignedDamage to see
-                    document.querySelectorAll(`.combat-unit-wrapper[data-side="${activeCombatState.targetSide}"]`).forEach(w => {
-                        w.dataset.assignedHits = 99; 
-                    });
-                    applyAssignedDamage(activeCombatState.targetSide);
-                    
-                    if (isAttacker) {
-                        activeCombatState.phase = 'DEFENDER_ROLL';
-                        executeCombatPhase();
-                    } else {
-                        activeCombatState.phase = 'RESOLUTION';
-                        executeCombatPhase();
-                    }
-                    return;
-                }
-
-                // Otherwise, proceed to manual assignment
-                activeCombatState.unassignedHits = hits;
-                activeCombatState.assigningHits = true;
-                activeCombatState.targetSide = isAttacker ? 'defender' : 'attacker';
-                
-                addConfirmButton(() => {
-                    applyAssignedDamage(activeCombatState.targetSide); 
-                    if (isAttacker) {
-                        activeCombatState.phase = 'DEFENDER_ROLL';
-                        executeCombatPhase();
-                    } else {
-                        activeCombatState.phase = 'RESOLUTION';
-                        executeCombatPhase();
-                    }
-                });
-                return;
-            }
-        } 
-        
-        activeCombatState.phase = isAttacker ? 'DEFENDER_ROLL' : 'RESOLUTION';
+        activeCombatState.phase = 'RESOLUTION';
+        renderCombatBoard();
         executeCombatPhase();
     }
 
-    function applyAssignedDamage(side) {
+    function forceImmediateRemoval(side) {
         const poolKey = side === 'attacker' ? 'Attackers' : 'Defenders';
         const pool = activeCombatState[poolKey];
         const wrappers = document.querySelectorAll(`.combat-unit-wrapper[data-side="${side}"]`);
@@ -10655,54 +11609,91 @@
         wrappers.forEach(w => {
             let hitsToApply = parseInt(w.dataset.assignedHits || 0);
             if (hitsToApply <= 0) return;
-            const uType = w.dataset.unitType;
             
+            const uType = w.dataset.unitType;
+
+            // Process hits against the logical pool (activeCombatState)
             for (let i = pool.length - 1; i >= 0; i--) {
                 if (hitsToApply <= 0) break;
                 let u = pool[i];
                 if (u.unitType !== uType) continue;
 
-                if (['BTS', 'ACC'].includes(u.unitType)) {
-                    let dmg = parseInt(u.element?.getAttribute('data-damage') || 0);
-                    while (hitsToApply > 0 && u.count > 0) {
-                        if (dmg === 0) { dmg = 1; hitsToApply--; if (u.element) u.element.setAttribute('data-damage', 1); }
-                        else { u.count--; dmg = 0; hitsToApply--; if (u.element) u.element.setAttribute('data-damage', 0); }
+                const sub = Math.min(u.count, hitsToApply);
+                u.count -= sub;
+                hitsToApply -= sub;
+
+                const rid = u.id; // This is the ID of the unit on the map
+                if (u.count <= 0) {
+
+                    // If this was a transport being carrying cargo, we need to ensure the cargo 
+                    // is also removed from the logical pool if the transport is destroyed.
+                    if (u.loadedCargo && u.loadedCargo.length > 0) {
+                        u.loadedCargo.forEach(cargoItem => {
+                            activeCombatState[poolKey] = activeCombatState[poolKey].filter(item => item.id !== cargoItem.id);
+                        });
                     }
+
+                    // Remove from the combat pool
+                    pool.splice(i, 1);
+                    
+                    // 1. Hide from ALL map clones
+                    svgWrapper.querySelectorAll(`[id="${rid}"]`).forEach(el => {
+                        el.setAttribute('data-count', 0);
+                        el.style.display = 'none';
+                    });
+                    
+                    // 2. Remove from functional placedUnitsData array
+                    placedUnitsData = placedUnitsData.filter(item => item.element.id !== rid);
                 } else {
-                    const sub = Math.min(u.count, hitsToApply);
-                    u.count -= sub; hitsToApply -= sub;
+                    // Update map visuals for remaining stack across all clones
+                    svgWrapper.querySelectorAll(`[id="${rid}"]`).forEach(el => {
+                        el.setAttribute('data-count', u.count);
+                        const txt = el.querySelector('.unit-count-text');
+                        const circle = el.querySelector('.unit-count-circle');
+                        
+                        if (u.count > 1) {
+                            if (txt) txt.textContent = u.count;
+                        } else {
+                            if (txt) txt.remove();
+                            if (circle) circle.remove();
+                        }
+                    });
                 }
 
-                if (u.count <= 0) {
-                    const rid = u.id;
-                    pool.splice(i, 1);
-                    svgWrapper.querySelectorAll(`[id="${rid}"]`).forEach(el => { el.setAttribute('data-count', 0); el.style.display = 'none'; });
-                    placedUnitsData = placedUnitsData.filter(item => item.element.id !== rid);
+                // Rule for Transport Plane AAA Hits
+                if (side === 'attacker' && u.unitType === 'SBR' && u.loadedCargo) {
+                    u.loadedCargo.forEach(cargoItem => {
+                        // Remove cargo from the global combat pool
+                        activeCombatState.Attackers = activeCombatState.Attackers.filter(atk => atk.id !== cargoItem.id);
+                        
+                        // Remove from map
+                        const cargoTemplateId = cargoItem.templateId;
+                        svgWrapper.querySelectorAll(`[id="${cargoTemplateId}"]`).forEach(el => {
+                            el.style.display = 'none';
+                            el.setAttribute('data-count', 0);
+                        });
+                        placedUnitsData = placedUnitsData.filter(p => p.element.id !== cargoTemplateId);
+                    });
                 }
             }
+            // Reset the visual assignment counter
+            w.dataset.assignedHits = 0; 
+            const valSpan = w.parentElement.querySelector('.combat-damage-val');
+            if (valSpan) valSpan.textContent = "0";
         });
-
-        // NEW: Auto-wipe Transports if only they remain
-        const onlyTransportsLeft = pool.length > 0 && pool.every(u => u.unitType === 'TPT' || u.unitType === 'SBR');
-        if (onlyTransportsLeft) {
-            pool.forEach(u => {
-                const rid = u.id;
-                svgWrapper.querySelectorAll(`[id="${rid}"]`).forEach(el => { el.setAttribute('data-count', 0); el.style.display = 'none'; });
-                placedUnitsData = placedUnitsData.filter(item => item.element.id !== rid);
-            });
-            pool.length = 0; // Clear the array
-        }
-        
-        activeCombatState.assigningHits = false;
-        renderCombatBoard();
-        if (activeCombatState.Attackers.length === 0 || activeCombatState.Defenders.length === 0) {
-            setTimeout(() => resolveCombatWinner(), 500);
-        }
     }
 
     function resolveCombatWinner(isRetreat = false) {
         if (!activeCombatState) return;
         
+        // --- FORCIBLY REMOVE DICE IMMEDIATELY ---
+        const diceLayer = document.getElementById('dice-simulation-layer');
+        if (diceLayer) {
+            diceLayer.style.opacity = '0';
+            diceLayer.innerHTML = ''; // Immediate clear
+        }
+        // ---------------------------------------------
+
         const targetTerr = activeCombatState.territory;
         const isSeaBattle = !isNaN(Number(targetTerr));
 
@@ -10733,40 +11724,75 @@
         });
 
         // 2. Logic for capturing territory
-        const attackersGone = activeCombatState.Attackers.length === 0;
         const defendersGone = activeCombatState.Defenders.length === 0;
-        const targetPath = currentSvgElement.querySelector(`[data-name="${targetTerr}"]`);
-
-        if (!isRetreat && defendersGone && !attackersGone && !isSeaBattle) {
-            showCustomModal("Victory", `${activeCombatState.attackerPower} has captured ${targetTerr}!`);
-            if (targetPath) {
-                targetPath.setAttribute('data-power', activeCombatState.attackerPower);
-                applyTerritoryColors(); 
-            }
+        const attackersGone = activeCombatState.Attackers.length === 0;
+        
+        let status = "DRAW";
+        let isVictory = false;
+        if (isRetreat) {
+            status = "RETREAT";
+        } else if (defendersGone && !attackersGone) {
+            status = "VICTORY";
+            isVictory = true;
+        } else if (attackersGone) {
+            status = "DEFEAT";
         }
 
-        // 3. Cleanup
-        const overlay = document.getElementById('combat-screen-overlay');
-        drawnArrows = drawnArrows.filter(arrow => {
-            if (arrow.targetTerritory === targetTerr) {
-                if (arrow.arrowElement) arrow.arrowElement.remove();
-                if (arrow.arrowElement?.id) {
-                    const label = document.querySelector(`.arrow-label-group[data-arrow-id="${arrow.arrowElement.id}"]`);
-                    if (label) label.remove();
-                }
-                return false;
-            }
-            return true;
-        });
+        showCombatResults(status, isVictory);
+    }
 
-        if (targetPath) targetPath.classList.remove('combat-target-highlight');
+    function showCombatResults(statusText, isVictory) {
+        const winChance = calculateCombatLuck();
+        const container = document.getElementById('combat-result-container');
+        const subMsg = document.getElementById('res-sub-msg');
+        
+        // Set text based on outcome
+        // 1. Set the top message (Clean, no probability here)
+        if (statusText === "RETREAT") {
+            subMsg.textContent = "Your forces have withdrawn from";
+        } else {
+            subMsg.textContent = isVictory ? "You were successful in attacking" : "Your assault has failed in";
+        }
+
+        // 2. Set the location
+        document.getElementById('res-location').textContent = activeCombatState.territory;
+
+        // 3. Set the status and move probability here
+        const statusEl = document.getElementById('res-status');
+        statusEl.innerHTML = `${statusText}!<br><div style="font-size: 14px; color: #66ccff; letter-spacing: 1px; margin-top: 5px; font-style: normal; text-transform: none; opacity: 0.8;">Performance Rating: ${winChance}%</div>`;
+        statusEl.className = `result-status ${isVictory ? 'victory' : 'loss'}`;
+
+        // Set Data
+        document.getElementById('res-atk-flag').style.backgroundImage = `url('flags/${activeCombatState.attackerPower}.png')`;
+        document.getElementById('res-def-flag').style.backgroundImage = `url('flags/${activeCombatState.defenderPower}.png')`;
+        document.getElementById('res-def-name').textContent = activeCombatState.defenderPower.toUpperCase();
+        
+        document.getElementById('res-atk-ipc').textContent = `-${currentCombatLosses.atk} IPC`;
+        document.getElementById('res-def-ipc').textContent = `-${currentCombatLosses.def} IPC`;
+
+        // Render the faded animated flag in background
+        // Use the player's flag (activePowerForTech) as the backdrop
+        renderCombatFlag('result-bg-flag', `flags/${activePowerForTech}.png`);
+        
+        container.style.display = 'flex';
+    }
+
+    function finalizeCombatClosure() {
+        // Reset losses for next battle
+        currentCombatLosses = { atk: 0, def: 0 };
+        
+        const overlay = document.getElementById('combat-screen-overlay');
+        const resultContainer = document.getElementById('combat-result-container');
+        
+        resultContainer.style.display = 'none';
         overlay.style.opacity = '0';
         
         setTimeout(() => {
             overlay.style.display = 'none';
+            const targetTerr = activeCombatState?.territory;
             delete combatPhaseData[targetTerr];
             activeCombatState = null;
-            updateUniversalBoardState(); // Full refresh of logical state
+            updateUniversalBoardState();
             triggerConductCombatPhase(); 
         }, 800);
     }
@@ -10789,9 +11815,15 @@
         const powerName = (targetSide === 'attacker') ? activeCombatState.attackerPower : activeCombatState.defenderPower;
         
         // Multi-line HTML: Power on top, Hits below
+        const isWiped = activeCombatState.isTotalWipeout && activeCombatState.unassignedHits === 0;
+        const statusText = isWiped ? "TOTAL WIPEOUT" : `HITS PENDING: ${displayHits}`;
+        const statusColor = isWiped ? "#ff4444" : "#ff6666";
+
         label.innerHTML = `
-            <div style="color:#ff6666; font-size: 14px; text-transform: uppercase; margin-bottom: 4px; opacity: 0.9;">${powerName}</div>
-            <div style="font-size: 20px;">HITS PENDING: ${displayHits}</div>
+            <div style="color:${statusColor}; font-size: 14px; text-transform: uppercase; margin-bottom: 4px; opacity: 0.9; font-weight: bold;">
+                ${powerName} ${isWiped ? 'DESTROYED' : ''}
+            </div>
+            <div style="font-size: 20px;">${statusText}</div>
         `;
     }
 

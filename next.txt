@@ -1,0 +1,4 @@
+has moved/movement remaining not being restored
+Let's make edits to combatPhaseData earlier, store all combat move units and metadata there. Once each unit has been assigned spaces to attack (with metadata edited, like currentlyPlacedIn, hasMoved, and movementRemaining), add all metadata for them to the combatPhaseData. All units on the board directly don't change metadata; rather, it's that these units are first added into combatPhaseData, THEN currentlyPlacedIn, hasMoved, and movementRemaining gets updated. When it's next phase, make an exception for each unit on the board sharing the same ID as the ones in combatPhaseData, so for each unit with **same ID**, subtract like this:
+[number of units on map] - [number of units on combatPhaseData].
+Then, add the unit information in combatPhaseData (excluding coordinates) to universalBoardState, except each unit is added to spaces that their currentlyPlacedIn metadata has them as.

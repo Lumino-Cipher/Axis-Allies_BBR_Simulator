@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tactical Coordinate Mapper</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: #121417;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #E0D8B0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #map-container {
+            flex: 1;
+            overflow: auto;
+            position: relative;
+            scrollbar-width: none;
+            cursor: grab;
+        }
+
+        #map-container:active { cursor: grabbing; }
+        #map-container::-webkit-scrollbar { display: none; }
+
+        .svg-wrapper { display: flex; position: relative; }
+
+        .svg-content {
+            display: block;
+            background-color: #1a1c1f;
+            filter: drop-shadow(0 0 20px rgba(0,0,0,0.5));
+        }
+
+        /* Tactical Visuals for Map Elements */
+        polygon, path {
+            fill: #23272e !important;
+            stroke: #3e4451 !important;
+            stroke-width: 0.7;
+            transition: fill 0.2s;
+        }
+
+        /* Visual distinction for Sea Zones (based on data-name containing numbers) */
+        [data-name*="0"], [data-name*="1"], [data-name*="2"], [data-name*="3"], [data-name*="4"], 
+        [data-name*="5"], [data-name*="6"], [data-name*="7"], [data-name*="8"], [data-name*="9"] {
+            fill: #1a1e24 !important;
+        }
+
+        polygon:hover, path:hover {
+            fill: #2c313a !important;
+            stroke: #61afef !important;
+        }
+
+        /* Marker Styles - Matching Index.html logic */
+        .coord-marker {
+            fill: rgba(0, 123, 255, 0.5);
+            stroke: #ffffff;
+            stroke-width: 1.5;
+            cursor: crosshair;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .coord-marker:hover {
+            fill: rgba(255, 215, 0, 0.8);
+            filter: drop-shadow(0 0 5px #ffd700);
+            r: 15;
+        }
+
+        /* UI Elements */
+        .toolbar {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 12px;
+            z-index: 1000;
+            background: rgba(30, 34, 40, 0.9);
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #3e4451;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+
+        .btn {
+            background-color: #2c313a;
+            color: #abb2bf;
+            border: 1px solid #3e4451;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+
+        .btn:hover {
+            background-color: #61afef;
+            color: #fff;
+            border-color: #fff;
+        }
+
+        #status-bar {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(30, 34, 40, 0.95);
+            padding: 8px 20px;
+            border-radius: 4px;
+            font-size: 12px;
+            pointer-events: none;
+            z-index: 1000;
+            border: 1px solid #61afef;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .highlight { color: #61afef; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="toolbar">
+        <button class="btn" onclick="document.getElementById('fileInput').click()">UPLOAD JSON</button>
+        <button class="btn" onclick="downloadJSON()">DOWNLOAD JSON</button>
+        <input type="file" id="fileInput" style="display:none" accept=".json" onchange="handleUpload(event)">
+    </div>
+
+    <div id="status-bar">
+        WASD <span class="highlight">Pan</span> | 
+        -+ <span class="highlight">Zoom</span> | 
+        Click <span class="highlight">Add</span> | 
+        Right-Click <span class="highlight">Remove</span>
+    </div>
+
+    <div id="map-container">
+        <div class="svg-wrapper" id="svgWrapper"></div>
+    </div>
+
+    <script>
+        const mapContainer = document.getElementById('map-container');
+        const svgWrapper = document.getElementById('svgWrapper');
+        
+        let zoomLevel = 1.0;
+        const zoomStep = 0.08;
+        const PAN_SPEED = 40;
+        const MARKER_RADIUS = 12; // Matching the index.html background circle
+        
+        let originalViewBox = null;
+        let isAdjustingScroll = false;
+        let currentSvgElement = null;
+
+        // Interaction state
+        let isPanning = false;
+        let mouseDownX, mouseDownY;
+        let scrollStartX, scrollStartY;
+        let markerData = {};
+
+        async function init() {
+            try {
+                const svgResponse = await fetch('map.svg');
+                const svgText = await svgResponse.text();
+                const parser = new DOMParser();
+                const svgDoc = parser.parseFromString(svgText, 'image/svg+xml');
+                const masterSvg = svgDoc.documentElement;
+
+                masterSvg.classList.add('svg-content');
+                masterSvg.removeAttribute('width');
+                masterSvg.removeAttribute('height');
+
+                const vb = masterSvg.getAttribute('viewBox').split(' ').map(Number);
+                originalViewBox = { x: vb[0], y: vb[1], width: vb[2], height: vb[VB_LENGTH = 3] };
+
+                svgWrapper.innerHTML = '';
+                for (let i = 0; i < 3; i++) {
+                    const clone = masterSvg.cloneNode(true);
+                    const layer = document.createElementNS("http://www.w3.org/2000/svg", "g");
+                    layer.classList.add('marker-layer');
+                    clone.appendChild(layer);
+                    svgWrapper.appendChild(clone);
+                }
+
+                currentSvgElement = svgWrapper.children[1];
+                applyZoom();
+                setupListeners();
+                mapContainer.scrollLeft = currentSvgElement.clientWidth;
+            } catch (e) {
+                alert("Failed to load map.svg. Ensure it is in the same folder.");
+            }
+        }
+
+        function applyZoom() {
+            if (!originalViewBox) return;
+            const scaledWidth = originalViewBox.width * zoomLevel;
+            const scaledHeight = originalViewBox.height * zoomLevel;
+
+            svgWrapper.querySelectorAll('.svg-content').forEach(svg => {
+                svg.setAttribute('width', scaledWidth);
+                svg.setAttribute('height', scaledHeight);
+            });
+            svgWrapper.style.width = `${scaledWidth * 3}px`;
+            renderMarkers();
+        }
+
+        function setupListeners() {
+            // Drag Panning Logic
+            mapContainer.addEventListener('mousedown', (e) => {
+                if (e.button !== 0) return;
+                isPanning = true;
+                mouseDownX = e.clientX;
+                mouseDownY = e.clientY;
+                scrollStartX = mapContainer.scrollLeft;
+                scrollStartY = mapContainer.scrollTop;
+            });
+
+            window.addEventListener('mousemove', (e) => {
+                if (!isPanning) return;
+                mapContainer.scrollLeft = scrollStartX - (e.clientX - mouseDownX);
+                mapContainer.scrollTop = scrollStartY - (e.clientY - mouseDownY);
+            });
+
+            window.addEventListener('mouseup', (e) => {
+                if (!isPanning) return;
+                isPanning = false;
+
+                // Only add marker if mouse didn't move significantly (it was a click, not a drag)
+                const moveDist = Math.hypot(e.clientX - mouseDownX, e.clientY - mouseDownY);
+                if (moveDist < 5 && !e.target.classList.contains('coord-marker')) {
+                    handleMapClick(e);
+                }
+            });
+
+            // Keyboard Shortcuts
+            window.addEventListener('keydown', (e) => {
+                const key = e.key.toLowerCase();
+                if (key === 'w') mapContainer.scrollTop -= PAN_SPEED;
+                if (key === 's') mapContainer.scrollTop += PAN_SPEED;
+                if (key === 'a') mapContainer.scrollLeft -= PAN_SPEED;
+                if (key === 'd') mapContainer.scrollLeft += PAN_SPEED;
+                if (key === '=' || key === '+') { zoomLevel = Math.min(5, zoomLevel + zoomStep); applyZoom(); }
+                if (key === '-') { zoomLevel = Math.max(0.2, zoomLevel - zoomStep); applyZoom(); }
+            });
+
+            // Standard Zoom (Wheel)
+            mapContainer.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                if (e.deltaY < 0) zoomLevel = Math.min(5, zoomLevel + zoomStep);
+                else zoomLevel = Math.max(0.2, zoomLevel - zoomStep);
+                applyZoom();
+            }, { passive: false });
+
+            // Wrap-around
+            mapContainer.addEventListener('scroll', () => {
+                if (isAdjustingScroll) return;
+                const w = currentSvgElement.clientWidth;
+                if (mapContainer.scrollLeft >= w * 2) {
+                    isAdjustingScroll = true;
+                    mapContainer.scrollLeft -= w;
+                    requestAnimationFrame(() => isAdjustingScroll = false);
+                } else if (mapContainer.scrollLeft <= 0) {
+                    isAdjustingScroll = true;
+                    mapContainer.scrollLeft += w;
+                    requestAnimationFrame(() => isAdjustingScroll = false);
+                }
+            });
+
+            svgWrapper.querySelectorAll('.svg-content').forEach(svg => {
+                svg.addEventListener('contextmenu', (e) => e.preventDefault());
+            });
+        }
+
+        function getSvgCoords(e, svg) {
+            const pt = svg.createSVGPoint();
+            pt.x = e.clientX;
+            pt.y = e.clientY;
+            return pt.matrixTransform(svg.getScreenCTM().inverse());
+        }
+
+        function handleMapClick(e) {
+            const svg = e.target.closest('svg');
+            if (!svg) return;
+            const coords = getSvgCoords(e, svg);
+
+            let territory = "Sea Zone / Unknown";
+            const hit = svg.querySelectorAll('path, polygon');
+            for (let p of hit) {
+                if (p.isPointInFill(coords)) {
+                    territory = p.getAttribute('data-name') || territory;
+                    break;
+                }
+            }
+
+            if (!markerData[territory]) markerData[territory] = [];
+            markerData[territory].push({ x: Number(coords.x.toFixed(2)), y: Number(coords.y.toFixed(2)) });
+            renderMarkers();
+        }
+
+        function renderMarkers() {
+            const layers = svgWrapper.querySelectorAll('.marker-layer');
+            layers.forEach(l => l.innerHTML = '');
+
+            Object.keys(markerData).forEach(territory => {
+                markerData[territory].forEach((pos, idx) => {
+                    layers.forEach(layer => {
+                        const c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                        c.setAttribute('cx', pos.x);
+                        c.setAttribute('cy', pos.y);
+                        c.setAttribute('r', MARKER_RADIUS);
+                        c.classList.add('coord-marker');
+                        
+                        c.addEventListener('contextmenu', (e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            markerData[territory].splice(idx, 1);
+                            if (markerData[territory].length === 0) delete markerData[territory];
+                            renderMarkers();
+                        });
+
+                        const t = document.createElementNS("http://www.w3.org/2000/svg", "title");
+                        t.textContent = territory;
+                        c.appendChild(t);
+                        layer.appendChild(c);
+                    });
+                });
+            });
+        }
+
+        function downloadJSON() {
+            const blob = new Blob([JSON.stringify(markerData, null, 2)], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'unit-coordinates.json';
+            a.click();
+        }
+
+        function handleUpload(e) {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                try {
+                    markerData = JSON.parse(event.target.result);
+                    renderMarkers();
+                } catch (err) { alert("Error parsing JSON."); }
+            };
+            reader.readAsText(file);
+        }
+
+        init();
+    </script>
+</body>
+</html>
