@@ -4,7 +4,7 @@ An interactive, browser-based strategy board game simulator modeled after *Axis 
 
 This project is currently under active construction. Future development plans include integrating a custom-trained AI to support single-player offline play.
 
-[**Live Demo (GitHub Pages)**](https://lumino-cipher.github.io/map/)
+[**Live Demo (GitHub Pages)**](https://lumino-cipher.github.io/Axis-Allies_BBR_Simulator/)
 
 ---
 
@@ -47,10 +47,10 @@ While this began primarily as a personal hobby and passion project, it also serv
 ### Purchase & Repair Phase Window
 *Manage production queues, repairs, and industrial complexes dynamically during the purchase phase.*
 
+![tech](./screenshots/10-tech.png)
+
 ### Technology Research Phase Window
 *The "Technology Research" phase menu for Italy. The window details rules, progression phases, and breakthrough mechanics, with selectable cards for active projects like Self-Propelled Artillery and Improved Transports.*
-
-![tech](./screenshots/10-tech.png)
 
 ![Purchase](./screenshots/02-purchase.png)
 
