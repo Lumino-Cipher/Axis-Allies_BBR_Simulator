@@ -2423,6 +2423,183 @@
             line-height: 1.5;
             margin-bottom: 10px;
         }
+
+        /* Submarine Surprise Popup Styles */
+        /* Expanded Submarine Surprise Styles */
+        #sub-surprise-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 10000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(8px);
+        }
+
+        /* Smaller, centered popup box */
+        .sub-surprise-box {
+            background-color: #1e222b;
+            background-image: url('https://www.transparenttextures.com/patterns/old-mathematics.png');
+            border: 3px double #6d5c4c;
+            border-radius: 8px;
+            padding: 20px;
+            width: 450px; /* Reduced from 1100px */
+            max-width: 90vw;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.9);
+            color: #e0d8b0;
+            font-family: 'Georgia', serif;
+            text-align: center;
+        }
+
+        /* Simplified layout for sub icons only */
+        .sub-surprise-flex {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+            height: auto; /* Remove fixed height */
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .sub-left-panel {
+            flex: 0 0 350px;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid rgba(140, 123, 106, 0.3);
+            padding-right: 20px;
+        }
+
+        .sub-right-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .sub-target-marker {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #8a1a1a;
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid #ffd700;
+            font-size: 12px;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 30;
+            pointer-events: none;
+        }
+
+        .sub-targetable-unit {
+            cursor: crosshair;
+            transition: transform 0.1s;
+        }
+
+        .sub-targetable-unit:hover {
+            transform: scale(1.05);
+            filter: brightness(1.2);
+        }
+
+        .sub-counter-bar {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 4px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+
+
+        .sub-icon-container {
+            display: flex;
+            flex-direction: column; /* Line up vertically */
+            gap: 15px;
+            margin: 25px 0;
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .sub-decision-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(140, 123, 106, 0.3);
+            padding: 10px;
+            border-radius: 6px;
+        }
+
+        .sub-choice-group {
+            display: flex;
+            background: #121417;
+            border: 1px solid #8C7B6A;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .sub-btn {
+            background: transparent;
+            border: none;
+            color: #8C7B6A;
+            padding: 6px 12px;
+            font-family: 'Georgia', serif;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .sub-btn.active {
+            background: #6d5c4c;
+            color: #ffd700;
+            text-shadow: 1px 1px 2px black;
+        }
+
+        .sub-btn:hover:not(.active) {
+            background: rgba(255,255,255,0.05);
+        }
+
+        /* Specific style for Submarine Target Select markers */
+        .target-select-marker {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 25;
+            pointer-events: none;
+            filter: drop-shadow(0 0 4px #ffcc00);
+        }
+        .target-select-marker span {
+            position: absolute;
+            background: red;
+            color: white;
+            font-size: 9px;
+            font-weight: bold;
+            border-radius: 50%;
+            width: 12px;
+            height: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            top: -4px;
+            right: -4px;
+            border: 1.5px solid white;
+            font-family: Arial, sans-serif;
+            text-shadow: none;
+        }
+
+/*    Has to be each round    */
     </style>
     <script type="importmap">
         {
@@ -2767,6 +2944,31 @@
         <div style="font-size: 10px; color: #8899a6; text-align: center; font-style: italic;">Select adjacent spaces to build path. Click target again to execute.</div>
     </div>
     <button id="next-phase-combat-btn" onclick="promptNextCombatPhase()">Next Phase: Combat ➔</button>
+    <div id="sub-surprise-overlay">
+        <div class="sub-surprise-box">
+            <div class="sub-surprise-title">⚓ Submarine Surprise Engagement</div>
+            <div style="font-size: 14px; opacity: 0.8; margin-bottom: 10px;">
+                For each submarine set to <b>TARGET SELECT</b>, you may assign one marker to a defender.
+            </div>
+
+            <div class="sub-surprise-flex">
+                <!-- Left: Decisions -->
+                <div class="sub-left-panel">
+                    <h4 style="margin:0 0 10px 0; color:#66ccff;">Submarine Commands</h4>
+                    <div class="sub-icon-container" id="sub-surprise-icons"></div>
+                </div>
+
+                <!-- Right: Defender Table -->
+                <div class="sub-right-panel" id="sub-defender-table">
+                    <!-- Dice table generated here -->
+                </div>
+            </div>
+            
+            <div style="margin-top:20px;">
+                <button class="btn-action" onclick="document.getElementById('sub-surprise-overlay').style.display='none'">Confirm & Start Combat</button>
+            </div>
+        </div>
+    </div>
     <script>
         // --- Loading Screen Logic ---
         let loadProgress = 0;
@@ -11004,19 +11206,11 @@
                 if (!confirm) return;
             }
 
-            if (activeCombatState.isTotalWipeout) return; // Prevent adjustment if wiped out
+            if (activeCombatState.isTotalWipeout) return; 
             if (!activeCombatState || !activeCombatState.assigningHits || activeCombatState.targetSide !== side) return;
             
-            // AAA Restriction check
-            if (activeCombatState.phase === 'AAA' && side === 'attacker' && !airUnitTypes.includes(unitObj.unitType)) {
-                if (delta > 0) showCustomModal("Invalid Target", "Anti-Aircraft fire can only target Air Units (Fighters and Bombers).");
-                return;
-            }
-
             const isCapitalShip = ['BTS', 'ACC'].includes(unitObj.unitType);
-            // Calculate how many hits this stack has already taken in previous sub-phases
             const alreadyDeadCount = (unitObj.pendingCountAdjustment || 0);
-            // Subtract those from the total capacity so we don't assign a 2nd hit to a dead unit
             const maxHitsAllowed = isCapitalShip ? (unitObj.count * 2) - existingDamage - (alreadyDeadCount * 2) : unitObj.count - alreadyDeadCount;
             
             let currentRoundHits = parseInt(wrapper.dataset.assignedHits || 0);
@@ -11028,12 +11222,30 @@
             
             wrapper.dataset.assignedHits = currentRoundHits;
             valSpan.textContent = currentRoundHits;
-            // UI Visual: Show Existing Damage + Assigned Hits
-            const totalDisplayHits = existingDamage + currentRoundHits;
-            if (totalDisplayHits > 0) { 
-                hitMarker.style.display = 'flex'; 
-                hitMarker.firstChild.textContent = totalDisplayHits; 
-            } else { hitMarker.style.display = 'none'; }
+
+            if (activeCombatState.assigningSubTargets) {
+                // VISUAL FOR SUBMARINE SELECTION (Target Emoji Design)
+                let tsMarker = wrapper.querySelector('.target-select-marker');
+                if (currentRoundHits > 0) {
+                    if (!tsMarker) {
+                        tsMarker = document.createElement('div');
+                        tsMarker.className = 'target-select-marker';
+                        tsMarker.innerHTML = '🎯<span>0</span>';
+                        wrapper.appendChild(tsMarker);
+                    }
+                    tsMarker.style.display = 'flex';
+                    tsMarker.querySelector('span').textContent = currentRoundHits;
+                } else if (tsMarker) {
+                    tsMarker.style.display = 'none';
+                }
+            } else {
+                // VISUAL FOR STANDARD DAMAGE (Red)
+                const totalDisplayHits = existingDamage + currentRoundHits;
+                if (totalDisplayHits > 0) { 
+                    hitMarker.style.display = 'flex'; 
+                    hitMarker.firstChild.textContent = totalDisplayHits; 
+                } else { hitMarker.style.display = 'none'; }
+            }
             updateUnassignedHitsDisplay();
         };
 
@@ -11155,7 +11367,7 @@
             };
 
             diceData.forEach((die, index) => {
-                const val = getBalancedDieRoll();
+                const val = (die.rollValue !== undefined) ? die.rollValue : getBalancedDieRoll();
                 const isHit = val <= die.targetVal;
                 if (isHit) hits++;
                 
@@ -11331,7 +11543,6 @@
             defenderPower: defenderPower,
             Attackers: combatInfo.Attackers,
             Defenders: combatInfo.Defenders,
-            // Deep copy for luck simulation
             initialAttackers: JSON.parse(JSON.stringify(combatInfo.Attackers)),
             initialDefenders: JSON.parse(JSON.stringify(combatInfo.Defenders)),
             phase: 'AAA',
@@ -11383,7 +11594,161 @@
         }
 
         renderCombatBoard(); // This will now correctly hide SBRs if phase is AMPHIBIOUS or TPTs if land battle
-        executeCombatPhase();
+        // Check for Submarine Surprise condition
+        const hasAtkSubs = activeCombatState.Attackers.some(u => u.unitType === 'SUB');
+        const hasDefDestroyers = activeCombatState.Defenders.some(u => u.unitType === 'DTR');
+
+        if (hasAtkSubs && !hasDefDestroyers) {
+            showSubmarineSurprisePopup();
+            // STOP here. The popup and subsequent "Confirm" button will trigger executeCombatPhase.
+        } else {
+            executeCombatPhase();
+        }
+    }
+
+    function showSubmarineSurprisePopup() {
+        const overlay = document.getElementById('sub-surprise-overlay');
+        const container = document.getElementById('sub-surprise-icons');
+        
+        activeCombatState.subDecisions = [];
+        container.innerHTML = '';
+
+        const attackerSubs = activeCombatState.Attackers.filter(u => u.unitType === 'SUB');
+        let subIndex = 0;
+
+        attackerSubs.forEach(subGroup => {
+            for (let i = 0; i < subGroup.count; i++) {
+                const currentIdx = subIndex;
+                activeCombatState.subDecisions.push({ id: subGroup.id + "-" + i, action: 'Attack' });
+
+                const row = document.createElement('div');
+                row.className = 'sub-decision-row';
+                const visual = createCombatUnitVisual({ ...subGroup, count: 1 }, 'attacker');
+                visual.querySelector('.combat-damage-controls')?.remove();
+
+                row.appendChild(visual);
+                row.insertAdjacentHTML('beforeend', `
+                    <div class="sub-choice-group">
+                        <button class="sub-btn" id="btn-sub-${currentIdx}">SUBMERGE</button>
+                        <button class="sub-btn active" id="btn-atk-${currentIdx}">TARGET SELECT</button>
+                    </div>
+                `);
+                container.appendChild(row);
+
+                const bSub = row.querySelector(`#btn-sub-${currentIdx}`);
+                const bAtk = row.querySelector(`#btn-atk-${currentIdx}`);
+                bSub.onclick = () => { activeCombatState.subDecisions[currentIdx].action = 'Submerge'; bSub.classList.add('active'); bAtk.classList.remove('active'); };
+                bAtk.onclick = () => { activeCombatState.subDecisions[currentIdx].action = 'Attack'; bAtk.classList.add('active'); bSub.classList.remove('active'); };
+                subIndex++;
+            }
+        });
+
+        // Use the existing footer button and change it to NEXT
+        const footer = overlay.querySelector('div[style*="margin-top:20px"]');
+        footer.innerHTML = `<button class="btn-action" onclick="startTargetSelectionPhase()">NEXT</button>`;
+        overlay.style.display = 'flex';
+    }
+
+    function startTargetSelectionPhase() {
+        document.getElementById('sub-surprise-overlay').style.display = 'none';
+        
+        const targetCount = activeCombatState.subDecisions.filter(d => d.action === 'Attack').length;
+        if (targetCount === 0) {
+            // Unload transport cargo even if no subs attack
+            activeCombatState.phase = 'AAA'; 
+            executeCombatPhase();
+            return;
+        }
+
+        activeCombatState.assigningSubTargets = true;
+        activeCombatState.assigningHits = true; 
+        activeCombatState.targetSide = 'defender';
+        activeCombatState.unassignedHits = targetCount;
+        activeCombatState.subTargetsTotal = targetCount;
+
+        renderCombatBoard();
+
+        // FORCE the UI to show the labels and the Confirm button immediately
+        updateUnassignedHitsDisplay();
+        addConfirmButton(() => {
+            // This callback is intentionally empty because the logic is 
+            // now handled inside the specialized addConfirmButton onclick
+        });
+
+        showCustomModal("Target Selection", `Assign ${targetCount} Submarine Target Selects using the [+] and [-] buttons on the enemy units.`);
+    }
+
+    function assignSubTargetToBoard(unitWrapper) {
+        if (!activeCombatState.assigningSubTargets || activeCombatState.subTargetsRemaining <= 0) return;
+
+        const currentHits = parseInt(unitWrapper.dataset.assignedHits || 0);
+        // Note: We use assignedHits so standard combat logic handles these as "pre-assigned casualties"
+        unitWrapper.dataset.assignedHits = currentHits + 1;
+        activeCombatState.subTargetsRemaining--;
+
+        // Visual: Use the fire-hit-marker (damage marker)
+        const hitMarker = unitWrapper.querySelector('.fire-hit-marker');
+        if (hitMarker) {
+            hitMarker.style.display = 'flex';
+            hitMarker.firstChild.textContent = (parseInt(hitMarker.firstChild.textContent) || 0) + 1;
+        }
+
+        // Update UI labels
+        updateUnassignedHitsDisplay();
+
+        if (activeCombatState.subTargetsRemaining === 0) {
+            // Complete the phase
+            addConfirmButton(() => {
+                activeCombatState.assigningSubTargets = false;
+                document.querySelectorAll('.combat-unit-wrapper[data-side="defender"]').forEach(u => {
+                    u.onclick = null;
+                    u.style.cursor = 'default';
+                });
+                executeCombatPhase(); // Continue combat
+            });
+        }
+    }
+
+    function renderSurpriseMarkers(wrapper, id) {
+        wrapper.querySelector('.sub-target-marker')?.remove();
+        const count = activeCombatState.targetAssignments[id] || 0;
+        if (count > 0) {
+            const marker = document.createElement('div');
+            marker.className = 'sub-target-marker';
+            marker.textContent = '🎯';
+            wrapper.appendChild(marker);
+        }
+    }
+
+    function updateSubSurpriseCounters() {
+        const total = activeCombatState.subDecisions.filter(d => d.action === 'Attack').length;
+        const assigned = Object.values(activeCombatState.targetAssignments).reduce((a,b) => a+b, 0);
+        
+        document.getElementById('sub-total-count').textContent = total;
+        document.getElementById('sub-assigned-count').textContent = assigned;
+        
+        // If assigned exceeds new total (user switched an Attacker to submerge), clear assignments
+        if (assigned > total) {
+            activeCombatState.targetAssignments = {};
+            document.querySelectorAll('.sub-target-marker').forEach(m => m.remove());
+            document.getElementById('sub-assigned-count').textContent = 0;
+        }
+    }
+
+    // Helper specific for the Surprise Popup to avoid modifying main render logic
+    function groupPoolForSurprise(pool, isDefender) {
+        const rows = {0:[], 1:[], 2:[], 3:[], 4:[]};
+        const grouped = {};
+        pool.forEach(u => {
+            const profile = window.unitProfileData.find(p => p.unit_type.toLowerCase() === (UNIT_ABBREVIATION_TO_PROFILE_NAME[u.unitType] || u.unitType).toLowerCase());
+            let cVal = profile ? parseInt(profile.defense_value) : 0;
+            if (cVal > 4) cVal = 4;
+            const key = `${u.power}_${u.unitType}_${cVal}`;
+            if (!grouped[key]) grouped[key] = { ...u, cVal };
+            else grouped[key].count += u.count;
+        });
+        Object.values(grouped).forEach(g => rows[g.cVal].push(g));
+        return rows;
     }
 
     function renderCombatBoard() {
@@ -12055,21 +12420,38 @@
         }
         
         label.style.display = 'block';
-        const displayHits = Math.max(0, activeCombatState.unassignedHits);
         
-        const targetSide = activeCombatState.targetSide;
-        const powerName = (targetSide === 'attacker') ? activeCombatState.attackerPower : activeCombatState.defenderPower;
-        
-        // Multi-line HTML: Power on top, Hits below
-        const isWiped = activeCombatState.isTotalWipeout && activeCombatState.unassignedHits === 0;
-        const statusText = isWiped ? "TOTAL WIPEOUT" : `HITS PENDING: ${displayHits}`;
-        const statusColor = isWiped ? "#ff4444" : "#ff6666";
+        let statusText, statusColor, powerName, subNote = "";
+
+        if (activeCombatState.assigningSubTargets) {
+            const remaining = activeCombatState.unassignedHits;
+            const total = activeCombatState.subTargetsTotal;
+            
+            statusText = `SELECT TARGETS: ${remaining} / ${total}`;
+            statusColor = "#33CFFF"; 
+            powerName = activeCombatState.attackerPower;
+            subNote = `<div style="font-size: 11px; color: #aaa; margin-top: 4px; font-style: italic;">Use +/- buttons on defenders</div>`;
+        } else {
+            // === Standard Combat Hit Assignment Mode ===
+            const displayHits = Math.max(0, activeCombatState.unassignedHits);
+            const isWiped = activeCombatState.isTotalWipeout && activeCombatState.unassignedHits === 0;
+            
+            statusText = isWiped ? "TOTAL WIPEOUT" : `HITS PENDING: ${displayHits}`;
+            statusColor = isWiped ? "#ff4444" : "#ff6666";
+
+            const targetSide = activeCombatState.targetSide;
+            powerName = (targetSide === 'attacker') ? activeCombatState.attackerPower : activeCombatState.defenderPower;
+            
+            // Add "DESTROYED" suffix only in standard mode wipeouts
+            if (isWiped) powerName += " DESTROYED";
+        }
 
         label.innerHTML = `
             <div style="color:${statusColor}; font-size: 14px; text-transform: uppercase; margin-bottom: 4px; opacity: 0.9; font-weight: bold;">
-                ${powerName} ${isWiped ? 'DESTROYED' : ''}
+                ${powerName}
             </div>
             <div style="font-size: 20px;">${statusText}</div>
+            ${subNote}
         `;
     }
 
@@ -12078,7 +12460,12 @@
         if (!btn) {
             btn = document.createElement('button');
             btn.id = 'combat-confirm-hits-btn';
-            btn.textContent = 'CONFIRM CASUALTIES';
+            // Dynamic button text based on phase
+            if (activeCombatState.assigningSubTargets) {
+                btn.textContent = 'CONFIRM TARGET SELECTS';
+            } else {
+                btn.textContent = 'CONFIRM CASUALTIES';
+            }
             // Styled to match the side-panel "Proceed" buttons
             btn.style.cssText = "position:absolute; bottom:90px; left:50%; transform:translateX(-50%); padding:12px 45px; font-family:'Georgia', serif; font-size:16px; font-weight:bold; background:#6D5C4C; color:#E0D8B0; border:1px solid #8C7B6A; border-radius:5px; cursor:pointer; z-index:1000; box-shadow: 0 4px 10px rgba(0,0,0,0.5); transition: background 0.2s;";
             
@@ -12092,13 +12479,102 @@
 
         btn.onclick = () => {
             if (activeCombatState.unassignedHits > 0) {
-                showCustomModal("Assignment Incomplete", `You must assign ${activeCombatState.unassignedHits} more hits to your units before confirming.`);
+                const type = activeCombatState.assigningSubTargets ? "target selects" : "hits";
+                showCustomModal("Assignment Incomplete", `You must assign ${activeCombatState.unassignedHits} more ${type} before confirming.`);
                 return;
             }
+            
             btn.style.display = 'none';
             const hitsLabel = document.getElementById('combat-unassigned-hits-label');
             if (hitsLabel) hitsLabel.style.display = 'none';
-            
+
+            // --- BRANCH 1: Finishing Submarine Target Selection ---
+            if (activeCombatState.assigningSubTargets) {
+                const wrappers = document.querySelectorAll('.combat-unit-wrapper[data-side="defender"]');
+                const targetedUnits = [];
+                
+                wrappers.forEach(w => {
+                    const hits = parseInt(w.dataset.assignedHits || 0);
+                    if (hits > 0) {
+                        const uType = w.dataset.unitType;
+                        const uPower = w.dataset.power;
+                        const unit = activeCombatState.Defenders.find(d => d.unitType === uType && d.power === uPower);
+                        if (unit) {
+                            targetedUnits.push({ unit, hits });
+                        }
+                        w.dataset.assignedHits = 0; // Reset temporary session count
+                    }
+                });
+
+                activeCombatState.assigningSubTargets = false;
+                activeCombatState.assigningHits = false;
+
+                if (targetedUnits.length > 0) {
+                    // 1. Determine Submarine attack target value (check if active power has Super Submarines)
+                    const subProfile = window.unitProfileData.find(p => p.unit_type === 'Submarine');
+                    let subAttackVal = subProfile ? parseInt(subProfile.attack_value) : 2;
+                    
+                    const attackerPower = activeCombatState.attackerPower;
+                    const techStatus = technologyResearchStatus[attackerPower];
+                    if (techStatus && techStatus.activeTech === "Super Submarines") {
+                        subAttackVal = 3;
+                    }
+
+                    // 2. Pre-roll values in background so we know exactly which defender takes hits
+                    let diceData = [];
+                    targetedUnits.forEach(item => {
+                        item.successfulHits = 0;
+                        for (let i = 0; i < item.hits; i++) {
+                            const rollVal = getBalancedDieRoll();
+                            const isHit = rollVal <= subAttackVal;
+                            if (isHit) {
+                                item.successfulHits++;
+                            }
+                            diceData.push({
+                                targetVal: subAttackVal,
+                                rollValue: rollVal
+                            });
+                        }
+                    });
+
+                    // 3. Trigger 3D Dice Simulation on screen and apply successful hits upon resolution
+                    rollCombatDice(diceData, 'attacker').then(() => {
+                        targetedUnits.forEach(item => {
+                            if (item.successfulHits > 0) {
+                                const unit = item.unit;
+                                const isCapitalShip = ['BTS', 'ACC'].includes(unit.unitType);
+                                if (isCapitalShip) {
+                                    let h = item.successfulHits;
+                                    while (h > 0 && unit.count > 0) {
+                                        let totalDamageFound = (unit.damage || 0) + (unit.pendingDamage || 0);
+                                        if (totalDamageFound >= 1) { 
+                                            unit.pendingCountAdjustment = (unit.pendingCountAdjustment || 0) + 1;
+                                            unit.pendingDamage = 0;
+                                            h--; 
+                                        } else { 
+                                            unit.pendingDamage = 1; 
+                                            h--; 
+                                        }
+                                    }
+                                } else {
+                                    const remainingHealth = unit.count - (unit.pendingCountAdjustment || 0);
+                                    const sub = Math.min(remainingHealth, item.successfulHits);
+                                    unit.pendingCountAdjustment = (unit.pendingCountAdjustment || 0) + sub;
+                                }
+                            }
+                        });
+
+                        renderCombatBoard(); // Clean up target markers and draw red fire-damage markers
+                        executeCombatPhase(); // Move to standard combat phases (AAA / standard rolls)
+                    });
+                } else {
+                    renderCombatBoard();
+                    executeCombatPhase();
+                }
+                return; 
+            }
+
+            // --- BRANCH 2: Standard Casualty Logic (Dice Hits) ---
             const sideToHit = activeCombatState.targetSide;
             const pool = sideToHit === 'attacker' ? activeCombatState.Attackers : activeCombatState.Defenders;
             const wrappers = document.querySelectorAll(`.combat-unit-wrapper[data-side="${sideToHit}"]`);
@@ -12112,7 +12588,7 @@
                 for (let i = pool.length - 1; i >= 0; i--) {
                     if (hits <= 0) break;
                     let u = pool[i];
-                    const rid = u.id; // DECLARED ONCE HERE
+                    const rid = u.id; 
 
                     // 1. APPLY HITS TO TOP-LEVEL UNIT
                     if (u.unitType === uType && u.power === uPower) {
@@ -12151,12 +12627,10 @@
                         }
                     }
 
-                    // SYNC MAP Visuals IMMEDIATELY (REUSING 'rid')
+                    // 3. SYNC MAP VISUALS (Clones)
                     svgWrapper.querySelectorAll(`[id="${rid}"]`).forEach(el => {
                         const unitType = el.getAttribute('data-unit-type');
-                        const isDamageable = ['BTS', 'ACC'].includes(unitType) || SPECIAL_INFRASTRUCTURE_UNITS.includes(unitType);
-                        
-                        if (isDamageable) {
+                        if (['BTS', 'ACC'].includes(unitType) || SPECIAL_INFRASTRUCTURE_UNITS.includes(unitType)) {
                             el.setAttribute('data-damage', u.damage);
                             updateMapUnitDamageMarker(el);
                         }
