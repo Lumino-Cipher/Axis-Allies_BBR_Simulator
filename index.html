@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editable Full Screen SVG Viewer</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
     <style>
         html, body {
             margin: 0;
@@ -11163,11 +11164,43 @@
             
             const isCapitalShip = ['BTS', 'ACC'].includes(unitObj.unitType);
             const alreadyDeadCount = (unitObj.pendingCountAdjustment || 0);
-            const maxHitsAllowed = isCapitalShip ? (unitObj.count * 2) - existingDamage - (alreadyDeadCount * 2) : unitObj.count - alreadyDeadCount;
+            const maxHitsAllowed = activeCombatState.assigningSubTargets 
+                ? Infinity 
+                : (isCapitalShip ? (unitObj.count * 2) - existingDamage - (alreadyDeadCount * 2) : unitObj.count - alreadyDeadCount);
             
             let currentRoundHits = parseInt(wrapper.dataset.assignedHits || 0);
             if (delta > 0 && activeCombatState.unassignedHits > 0 && currentRoundHits < maxHitsAllowed) {
                 
+                // Enforce Air Casualty limits if shooting side has submarines
+                if (airUnitTypes.includes(unitObj.unitType)) {
+                    const shootingSide = activeCombatState.targetSide === 'defender' ? 'attacker' : 'defender';
+                    const shootingPool = shootingSide === 'attacker' ? activeCombatState.Attackers : activeCombatState.Defenders;
+                    
+                    const shootingUnitsTotal = getVisibleCombatUnitsCount(shootingPool, shootingSide === 'defender');
+                    const shootingSubsCount = shootingPool.filter(u => {
+                        if (u.unitType === 'SBR' && u.isActingAsTransport && activeCombatState.phase !== 'AAA') return false;
+                        const isShip = ['BTS', 'ACC'].includes(u.unitType);
+                        if (!activeCombatState.isSeaSpace && isShip && activeCombatState.phase !== 'AMPHIBIOUS') return false;
+                        if (FACILITY_UNIT_TYPES.includes(u.unitType)) return false;
+                        return u.unitType === 'SUB';
+                    }).reduce((sum, u) => sum + parseInt(u.count || 0, 10), 0);
+
+                    const maxAirCasualties = Math.max(0, shootingUnitsTotal - shootingSubsCount);
+
+                    // Count currently assigned hits on all air units
+                    let currentAirHits = 0;
+                    document.querySelectorAll(`.combat-unit-wrapper[data-side="${activeCombatState.targetSide}"]`).forEach(w => {
+                        if (airUnitTypes.includes(w.dataset.unitType)) {
+                            currentAirHits += parseInt(w.dataset.assignedHits || 0);
+                        }
+                    });
+
+                    if (currentAirHits >= maxAirCasualties) {
+                        showCustomModal("Illegal Casualty Selection", `Air units cannot be assigned more than ${maxAirCasualties} hit(s) because submarines cannot target aircraft.`);
+                        return;
+                    }
+                }
+
                 // Enforce Submarine hit restrictions based on ASW rules
                 if (unitObj.unitType === 'SUB') {
                     const shootingSide = activeCombatState.targetSide === 'defender' ? 'attacker' : 'defender';
@@ -11221,11 +11254,14 @@
                     if (!tsMarker) {
                         tsMarker = document.createElement('div');
                         tsMarker.className = 'target-select-marker';
-                        tsMarker.innerHTML = '🎯<span>0</span>';
+                        tsMarker.innerHTML = '🎯<span></span>';
                         wrapper.appendChild(tsMarker);
                     }
                     tsMarker.style.display = 'flex';
-                    tsMarker.querySelector('span').textContent = currentRoundHits;
+                    const numSpan = tsMarker.querySelector('span');
+                    if (numSpan) {
+                        numSpan.textContent = String(currentRoundHits);
+                    }
                 } else if (tsMarker) {
                     tsMarker.style.display = 'none';
                 }
@@ -13014,26 +13050,40 @@
             // Add "DESTROYED" suffix only in standard mode wipeouts
             if (isWiped) powerName += " DESTROYED";
 
-            // Calculate Submarine Hit Limit for standard rolls hit assignment
+            // Calculate Casualty Limits (Subs & Air Units) for standard rolls hit assignment
             if (!isWiped && activeCombatState.phase !== 'AAA') {
-                // Get the pool of the opponent receiving the hits
                 const targetPool = targetSide === 'attacker' ? activeCombatState.Attackers : activeCombatState.Defenders;
+                const shootingSide = targetSide === 'defender' ? 'attacker' : 'defender';
+                const shootingPool = shootingSide === 'attacker' ? activeCombatState.Attackers : activeCombatState.Defenders;
+
                 const opponentHasSubs = targetPool ? targetPool.some(u => u.unitType === 'SUB') : false;
+                const shootingHasSubs = shootingPool ? shootingPool.some(u => u.unitType === 'SUB') : false;
+                const opponentHasAir = targetPool ? targetPool.some(u => airUnitTypes.includes(u.unitType)) : false;
+
+                let notes = [];
+
+                const getUnitCountInPool = (pool, type) => {
+                    return pool.filter(u => {
+                        if (u.unitType === 'SBR' && u.isActingAsTransport && activeCombatState.phase !== 'AAA') return false;
+                        const isShip = ['BTS', 'ACC'].includes(u.unitType);
+                        if (!activeCombatState.isSeaSpace && isShip && activeCombatState.phase !== 'AMPHIBIOUS') return false;
+                        if (FACILITY_UNIT_TYPES.includes(u.unitType)) return false;
+                        return u.unitType === type;
+                    }).reduce((sum, u) => sum + parseInt(u.count || 0, 10), 0);
+                };
 
                 if (opponentHasSubs) {
-                    const shootingSide = targetSide === 'defender' ? 'attacker' : 'defender';
-                    const shootingPool = shootingSide === 'attacker' ? activeCombatState.Attackers : activeCombatState.Defenders;
-                    
                     let seaDiceCount = 0;
                     shootingPool.forEach(u => {
+                        if (u.unitType === 'SBR' && u.isActingAsTransport && activeCombatState.phase !== 'AAA') return;
+                        const isShip = ['BTS', 'ACC'].includes(u.unitType);
+                        if (!activeCombatState.isSeaSpace && isShip && activeCombatState.phase !== 'AMPHIBIOUS') return;
+                        if (FACILITY_UNIT_TYPES.includes(u.unitType)) return;
+
                         if (SEA_UNIT_TYPES.includes(u.unitType) && !isTransportUnit(u)) {
                             seaDiceCount += u.count;
                         }
                     });
-
-                    const getUnitCountInPool = (pool, type) => {
-                        return pool.filter(u => u.unitType === type).reduce((sum, u) => sum + u.count, 0);
-                    };
 
                     const ftrCount = getUnitCountInPool(shootingPool, 'FTR');
                     const tbrCount = getUnitCountInPool(shootingPool, 'TBR');
@@ -13043,10 +13093,18 @@
                     const numCompleteSets = Math.min(ftrCount, tbrCount, sbrCount, dtrCount);
                     const maxHitsAllowedOnSubs = seaDiceCount + (numCompleteSets * 3);
 
-                    subNote = `<div style="font-size: 11px; color: #aaa; margin-top: 4px; font-style: italic;">Max sub casualties allowed: ${maxHitsAllowedOnSubs}</div>`;
-                } else {
-                    subNote = "";
+                    notes.push(`<div style="font-size: 11px; color: #aaa; margin-top: 4px; font-style: italic;">Max sub casualties allowed: ${maxHitsAllowedOnSubs}</div>`);
                 }
+
+                if (shootingHasSubs && opponentHasAir) {
+                    const shootingUnitsTotal = getVisibleCombatUnitsCount(shootingPool, shootingSide === 'defender');
+                    const shootingSubsCount = getUnitCountInPool(shootingPool, 'SUB');
+                    const maxAirCasualties = Math.max(0, shootingUnitsTotal - shootingSubsCount);
+
+                    notes.push(`<div style="font-size: 11px; color: #aaa; margin-top: 4px; font-style: italic;">Max air casualties allowed: ${maxAirCasualties}</div>`);
+                }
+
+                subNote = notes.join("");
             }
         }
 
@@ -13164,38 +13222,114 @@
 
                     // 3. Trigger 3D Dice Simulation on screen and apply successful hits upon resolution
                     rollCombatDice(diceData, 'attacker', true).then(() => {
+                        let totalExcessHits = 0;
                         targetedUnits.forEach(item => {
                             if (item.successfulHits > 0) {
                                 const unit = item.unit;
                                 const isCapitalShip = ['BTS', 'ACC'].includes(unit.unitType);
+                                
+                                // Retrieve the exact unit profile to get its IPC cost
+                                const profileName = UNIT_ABBREVIATION_TO_PROFILE_NAME[unit.unitType] || unit.unitType;
+                                const profile = window.unitProfileData.find(p => p.unit_type.toLowerCase() === profileName.toLowerCase());
+                                const unitCost = parseInt(profile?.cost || 0, 10);
+                                
                                 if (isCapitalShip) {
-                                    let h = item.successfulHits;
-                                    while (h > 0 && unit.count > 0) {
-                                        let totalDamageFound = (unit.damage || 0) + (unit.pendingDamage || 0);
-                                        if (totalDamageFound >= 1) { 
-                                            unit.pendingCountAdjustment = (unit.pendingCountAdjustment || 0) + 1;
-                                            unit.pendingDamage = 0;
-                                            h--; 
-                                        } else { 
-                                            unit.pendingDamage = 1; 
-                                            h--; 
+                                    let hits = item.successfulHits;
+                                    let currentDamage = parseInt(unit.damage || 0, 10);
+                                    
+                                    while (hits > 0 && unit.count > 0) {
+                                        if (currentDamage === 1) {
+                                            // Capital ship takes its second hit and is destroyed
+                                            unit.count--;
+                                            currentDamage = 0;
+                                            hits--;
+                                            // Record the IPC loss for the defender
+                                            currentCombatLosses.def += unitCost;
+                                        } else {
+                                            // Capital ship absorbs its first hit as damage
+                                            currentDamage = 1;
+                                            hits--;
                                         }
                                     }
+                                    
+                                    unit.damage = currentDamage;
+                                    
+                                    if (hits > 0) {
+                                        totalExcessHits += hits;
+                                    }
+                                    
+                                    // Sync this logical change back to the map immediately
+                                    const mapIcons = svgWrapper.querySelectorAll(`[id="${unit.id}"]`);
+                                    if (unit.count <= 0) {
+                                        mapIcons.forEach(el => {
+                                            el.style.display = 'none';
+                                            el.setAttribute('data-count', '0');
+                                        });
+                                        placedUnitsData = placedUnitsData.filter(item => item.element.id !== unit.id);
+                                    } else {
+                                        mapIcons.forEach(el => {
+                                            el.setAttribute('data-count', unit.count);
+                                            el.setAttribute('data-damage', unit.damage);
+                                            updateMapUnitDamageMarker(el);
+                                        });
+                                    }
                                 } else {
-                                    const remainingHealth = unit.count - (unit.pendingCountAdjustment || 0);
-                                    const sub = Math.min(remainingHealth, item.successfulHits);
-                                    unit.pendingCountAdjustment = (unit.pendingCountAdjustment || 0) + sub;
+                                    // Standard 1-HP unit logic
+                                    const killed = Math.min(unit.count, item.successfulHits);
+                                    unit.count -= killed;
+                                    
+                                    // Record the IPC losses for the defender
+                                    currentCombatLosses.def += (killed * unitCost);
+                                    
+                                    const excess = item.successfulHits - killed;
+                                    if (excess > 0) {
+                                        totalExcessHits += excess;
+                                    }
+                                    
+                                    // Sync this logical change back to the map immediately
+                                    const mapIcons = svgWrapper.querySelectorAll(`[id="${unit.id}"]`);
+                                    if (unit.count <= 0) {
+                                        mapIcons.forEach(el => {
+                                            el.style.display = 'none';
+                                            el.setAttribute('data-count', '0');
+                                        });
+                                        placedUnitsData = placedUnitsData.filter(item => item.element.id !== unit.id);
+                                    } else {
+                                        mapIcons.forEach(el => {
+                                            el.setAttribute('data-count', unit.count);
+                                            const countText = el.querySelector('.unit-count-text');
+                                            if (countText) countText.textContent = unit.count;
+                                        });
+                                    }
                                 }
                             }
                         });
 
+                        // Clean up any fully eliminated units from the active defending pool
+                        activeCombatState.Defenders = activeCombatState.Defenders.filter(u => u.count > 0);
+
                         renderCombatBoard(); 
 
-                        // Force immediate removal of target-select casualties before proceeding
-                        forceImmediateRemoval('defender');
+                        // Clear temporary selection metrics safely
                         applyAssignedDamage('defender');
 
-                        runNextSurpriseStep(); // Check if defender submarines now get their surprise round
+                        if (totalExcessHits > 0) {
+                            // These excess hits carry over as regular unassigned hits!
+                            activeCombatState.unassignedHits = totalExcessHits;
+                            activeCombatState.assigningHits = true;
+                            activeCombatState.targetSide = 'defender';
+                            
+                            renderCombatBoard();
+                            updateUnassignedHitsDisplay();
+                            
+                            addConfirmButton(() => {
+                                forceImmediateRemoval('defender');
+                                applyAssignedDamage('defender');
+                                runNextSurpriseStep();
+                            });
+                        } else {
+                            runNextSurpriseStep(); // Check if defender submarines now get their surprise round
+                        }
                     });
                 } else {
                     renderCombatBoard();
